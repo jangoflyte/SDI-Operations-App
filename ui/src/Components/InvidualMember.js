@@ -19,7 +19,7 @@ const IndividualMember= () => {
         .then((data) => setMember(data[0]))
     }, [triggerFetch]);
 
-    if (member === undefined) {
+    if (member === undefined || member.length === 0) {
         return (      
             <Box sx={{ width: '100%' }}>
                 <LinearProgress />
