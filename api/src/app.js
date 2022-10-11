@@ -17,6 +17,8 @@ const {
     getScheduleByDate,
     getAllposition,
     searchUsers,
+    patchSchedule,
+    deleteScheduleById,
     patchPosition,
 } = require('./controller.js');
 
@@ -46,6 +48,21 @@ app.get('/schedule', (request, response) => {
 app.post('/schedule/date', (req, res) => {
     console.log('recieved schedule date req', req.body)
     getScheduleByDate(req.body)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+});
+
+app.patch('/schedule/', (req, res) => {
+    console.log('recieved schedule patch', req.body)
+    patchSchedule(req.body)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+});
+
+app.delete('/schedule/:id', (req, res) => {
+    let { id } = req.params
+    console.log('recieved schedule patch', req.body)
+    deleteScheduleById( id)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err))
 });
