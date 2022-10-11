@@ -1,10 +1,10 @@
-import React, {useState} from "react";
-//import { MemberContext } from "./MemberContext";
+import React, {useState, useContext} from "react";
+import { MemberContext } from "./MemberContext";
 import {Box, Typography, Modal, Button, FormControl, FormControlLabel, FormLabel, FormGroup, Checkbox} from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 
 export const Filter = () => {
-  //const {API} = useContext(MemberContext);
+  const {usersArray} = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -26,6 +26,16 @@ export const Filter = () => {
         borderRadius: 4,
     };
 
+    const entry = usersArray.filter(member => member.cert_id === 1)
+    const patrol = usersArray.filter(member => member.cert_id === 2)
+    const desk = usersArray.filter(member => member.cert_id === 3)
+    const sergeant = usersArray.filter(member => member.cert_id === 4)
+
+    const arm = usersArray.filter(member => member.weapon_arming === true)
+    const noarm = usersArray.filter(member => member.weapon_arming === false)
+
+    //console.log(noarm)
+
   return (
       <>
           <Button onClick={handleOpen} variant="outlined" color="secondary" sx={{borderRadius: "30px"}}>Filter</Button>
@@ -43,62 +53,62 @@ export const Filter = () => {
                 <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
                     <FormLabel component="legend">By Certification</FormLabel>
                     <FormGroup>
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="bdoc" />
-                        }
-                        label="BDOC"
-                    />
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="flight chief" />
-                        }
-                        label="Flight Chief"
-                    />
-                    <FormControlLabel
+                        <FormControlLabel
                         control={
                         <Checkbox name="ecp" />
                         }
-                        label="Entry Control Point"
-                    />
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="patrol" />
-                        }
-                        label="Patrol"
-                    />
+                        label="Entry Controller"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="patrol" />
+                            }
+                            label="Patrol"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="desk" />
+                            }
+                            label="Desk Sergeant"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="flight chief" />
+                            }
+                            label="Flight Chief"
+                        />
                     </FormGroup>
 
                     <FormLabel component="legend">By Weapon Qualification</FormLabel>
                     <FormGroup>
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="m4" />
-                        }
-                        label="M-4"
-                    />
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="m18" />
-                        }
-                        label="M-18"
-                    />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="m4" />
+                            }
+                            label="M-4"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="m18" />
+                            }
+                            label="M-18"
+                        />
                     </FormGroup>
 
                     <FormLabel component="legend">Arming Status</FormLabel>
                     <FormGroup>
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="arm" />
-                        }
-                        label="Can Arm"
-                    />
-                    <FormControlLabel
-                        control={
-                        <Checkbox name="no arm" />
-                        }
-                        label="Cannot Arm"
-                    />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="arm" />
+                            }
+                            label="Can Arm"
+                        />
+                        <FormControlLabel
+                            control={
+                            <Checkbox name="no arm" />
+                            }
+                            label="Cannot Arm"
+                        />
                     </FormGroup>
                 </FormControl>
                 

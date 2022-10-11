@@ -17,6 +17,7 @@ const {
     getScheduleByDate,
     getAllposition,
     searchUsers,
+    patchPosition,
 } = require('./controller.js');
 
 app.use(cors({
@@ -91,6 +92,13 @@ app.get('/onlyweaponusertable', (req, res) => {
 app.get('/position', (req, res) => {
 
     getAllposition()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+});
+
+app.patch('/position/:id', (req, res) => {
+
+    patchPosition(req)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err))
 });

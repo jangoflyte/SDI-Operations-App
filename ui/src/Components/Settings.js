@@ -2,10 +2,8 @@ import React, { useContext, useState, useEffect } from "react";
 import { MemberContext } from "./MemberContext";
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import BasicCard from '../Features/Card';
-import {Box, LinearProgress, Button, Typography, Modal, TextField, InputLabel, MenuItem, Select, InputAdornment, Stack, Alert} from "@mui/material"
+import {Box, LinearProgress, Button, Typography, Stack, Card, CardContent, Modal, FormControl, TextField} from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
 import { PostCard } from "./PostCard";
 
 export const Settings = () => {
@@ -73,15 +71,112 @@ export const Settings = () => {
         </>)
     })}
 
-</>):(
-<>desk Sergeant page</>
+    </>):(
+      <>
+        <Stack direction="row" sx={{marginTop: "5%", display: "flex", justifyContent: "space-between", width: 1080}}>
+          <Typography variant="h4" ml={10} pb={4} sx={{}}>Contact Details</Typography>
+          {/* <Button variant="contained" color="secondary" sx={{borderRadius: "30px", marginLeft: "30%", width: "300px", height: "50px"}}>
+            EDIT DESK SERGEANT
+          </Button> */}
+          <Edit/>
+        </Stack>
 
-)}
+        <Stack ml={10} direction="row">
+          <p>Desk Sergeants receive daily emails when an entire post has been finalized successfully.</p>
+        </Stack>
 
+        <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 , width: 1000}}>
+          <CardContent>
+            <Stack direction="row" sx={{display: "flex"}}>
+              <Typography variant="h5" ml={10} pb={4} sx={{fontWeight: "bold"}}>Role</Typography>
+              <Typography variant="h5" ml={20} pb={4} sx={{fontWeight: "bold"}}>Name</Typography>
+              <Typography variant="h5" ml={22} pb={4} sx={{fontWeight: "bold"}}>Email</Typography>
+            </Stack>
 
-
+            <Stack direction="row" sx={{display: "flex"}}>
+              <Typography variant="h6" ml={10} pb={4} sx={{}}>Desk Sergeant</Typography>
+              <Typography variant="h6" ml={10} pb={4} sx={{}}>Ronald McDonald</Typography>
+              <Typography variant="h6" ml={10} pb={4} sx={{}}>r.mcdonald@spaceforce.mil</Typography>
+            </Stack>
+          </CardContent>
+        </Card>
+      </>)}
 
     </Box>
   );
 }
 };
+
+const Edit = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+//   const [cert, setCert] = useState(0);
+//   const [weapon, setWeapon] = useState(0);
+//   const [status, setStatus] = useState(false);
+
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500,
+        height: 600,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+        borderRadius: 4,
+    };
+
+    //console.log(noarm)
+
+  return (
+      <>
+          <Button onClick={handleOpen} variant="contained" color="secondary" sx={{borderRadius: "30px", marginLeft: "30%", width: "300px", height: "50px"}}>
+            EDIT DESK SERGEANT
+          </Button>
+          <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+          >
+              <Box sx={style}>
+                    <Box sx={{display: "flex", justifyContent: "right"}}>
+                      <CloseIcon onClick={handleClose} sx={{cursor: "pointer"}} />
+                    </Box>
+                    
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: "center"}}>
+                      POSTS
+                    </Typography>
+                    <Typography id="modal-modal-description" variant="h4" sx={{ mt: 1 , textAlign: "center", fontWeight: "bold"}}>
+                      Edit Post
+                    </Typography>
+                    
+  
+                    <Stack direction="row" mt={3}  sx={{display: "flex", justifyContent: "center", justifyContent:"space-between"}}>
+                      <FormControl sx={{ width: '40ch' }}>
+                        <TextField 
+                        id="outlined-basic" 
+                        label="First Name" 
+                        //value={postName}
+                        variant="outlined" 
+                        //onChange={(e) => setPostName(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '40ch' }}>
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Number of Positions" 
+                        //value={manReq}
+                        variant="outlined" 
+                        //onChange={(e) => setManReq(e.target.value)}
+                        />
+                      </FormControl>
+                    </Stack>
+              </Box>
+          </Modal>
+      </>
+  );
+}

@@ -89,7 +89,7 @@ const getScheduleByDate = async props => {
 }
 
 const getAllposition = async () => {
-  let positions = await knex('position').select('*')
+  let positions = await knex('position').select('*').orderBy('name', 'asc')
   let positionsWeapon = await postWeapon(positions)
   let positionsCerts = await postCert(positionsWeapon)
   return positionsCerts;
@@ -120,6 +120,13 @@ const updateUser = (req) => {
   console.log("this is req.body for update user: ", req.body)
   knex.raw("TRUNCATE users_table CASCADE");
   return knex ('user_table')
+  .where({id : req.params.id})
+  .update(req.body)
+}
+
+const patchPosition = req => {
+  console.log("this is req.body for patch position: ", req.body)
+  return knex ('position')
   .where({id : req.params.id})
   .update(req.body)
 }
@@ -177,4 +184,5 @@ module.exports = {
   getScheduleByDate,
   searchUsers,
   getAllposition,
+  patchPosition,
 }

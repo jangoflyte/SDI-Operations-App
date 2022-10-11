@@ -15,9 +15,9 @@ const UserCard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    setPage(0);
-  }, []);
+  // useEffect(() => {
+  //   setPage(0);
+  // }, []);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -30,13 +30,13 @@ const UserCard = () => {
 
 
   useEffect(() => {
-    fetch(`${API}/alluserdata`, {
+    fetch(`${API}/users`, {
     method: 'GET',
     })
     .then (res => res.json())
     .then(setPage(0))
     .catch (err => console.log(err))
-  }, [API, triggerFetch]);
+  }, [API, triggerFetch, idArray]);
   //console.log("allusers", user)
 
   const navigateToMember = (member) => {
@@ -50,7 +50,6 @@ const UserCard = () => {
       fetch(`${API}/deleteuser/${userId}`, {
         method: "DELETE",
       })
-      // .then(window.location.reload(false))
       .then((res) => res.json())
       .then(() => {
           setTriggerFetch(curr => !curr)
@@ -58,13 +57,15 @@ const UserCard = () => {
           // handleClose()
         })
       .then(navigate("/sfmembers"))
+      .then(window.location.reload(false))
       .catch(err => {
           console.log('Error: ', err);
       });
     }
   }
 
-  useEffect(()=>{console.log(idArray)},[idArray])
+  //useEffect(()=>{console.log(idArray)},[idArray])
+  let users = usersArray.filter(member => member.admin == false);
 
   return (
     <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 }}>
@@ -117,7 +118,7 @@ const UserCard = () => {
         </Stack>
 
         <Stack container rowSpacing={8} sx={{ py: 5 }}>
-          {usersArray
+          {users
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((member, index) => (
               member.admin === false ? (
@@ -244,7 +245,7 @@ const UserCard = () => {
 
           <Box>
             <Pagination
-              count={Math.ceil(usersArray.length / rowsPerPage)}
+              count={Math.ceil(users.length / rowsPerPage)}
               onChange={onDataPageChange}
               page={page + 1}
               color="secondary"
@@ -256,7 +257,7 @@ const UserCard = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10]}
               component="div"
-              count={usersArray.length}
+              count={users.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

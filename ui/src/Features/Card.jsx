@@ -15,9 +15,9 @@ const BasicCard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    setPage(0);
-  }, []);
+  // useEffect(() => {
+  //   setPage(0);
+  // }, []);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -30,13 +30,13 @@ const BasicCard = () => {
 
 
   useEffect(() => {
-    fetch(`${API}/alluserdata`, {
+    fetch(`${API}/users`, {
     method: 'GET',
     })
     .then (res => res.json())
     .then(setPage(0))
     .catch (err => console.log(err))
-  }, [API, triggerFetch]);
+  }, [API, triggerFetch, idArray]);
   //console.log("allusers", user)
 
   const navigateToMember = (member) => {
@@ -50,7 +50,6 @@ const BasicCard = () => {
       fetch(`${API}/deleteuser/${userId}`, {
         method: "DELETE",
       })
-      // .then(window.location.reload(false))
       .then((res) => res.json())
       .then(() => {
           setTriggerFetch(curr => !curr)
@@ -58,13 +57,15 @@ const BasicCard = () => {
           // handleClose()
         })
       .then(navigate("/sfmembers"))
+      .then(window.location.reload(false))
       .catch(err => {
           console.log('Error: ', err);
       });
     }
   }
 
-  useEffect(()=>{console.log(idArray)},[idArray])
+  // useEffect(()=>{console.log(idArray)},[idArray])
+
 
   return (
     <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 }}>

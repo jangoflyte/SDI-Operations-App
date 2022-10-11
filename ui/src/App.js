@@ -2,15 +2,13 @@ import React, {useState, useEffect} from 'react'
 import Home from './Components/Home.js'
 import { MemberDetails } from './Components/MembersDetail.js';
 import {Settings} from './Components/Settings.js'
-// import {Navbar} from './Components/Navbar.js'
 import { BrowserRouter as  Router, Routes, Route } from "react-router-dom";
 import { MemberContext } from './Components/MemberContext.js';
 import  PersistentDrawerLeft from './Components/Navbar.jsx'
-import { FlightStatus } from './Components/FlightStatus.js';
+import { DataSources } from './Components/DataSources.js';
 import Schedule from './Components/Schedule.js';
 import IndividualMember from './Components/InvidualMember.js';
 // import Home from './Components/Home';
-
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -49,11 +47,11 @@ const App = () => {
         <PersistentDrawerLeft />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/sfmembers" element={<MemberDetails />} />
-          <Route path="/flightstatus" element={<FlightStatus />} />
+          <Route path="/data" element={<DataSources />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/sfmembers" element={<MemberDetails />} />
           <Route path="/sfmembers/:memberId" element={<IndividualMember />} />
-          <Route path="/Settings" element={<Settings />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </Router>
     </MemberContext.Provider>

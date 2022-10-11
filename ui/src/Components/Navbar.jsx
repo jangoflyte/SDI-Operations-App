@@ -83,7 +83,7 @@ export default function PersistentDrawerLeft() {
   return (
     <Box  sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} onClose={handleDrawerClose}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -141,21 +141,21 @@ export default function PersistentDrawerLeft() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-          <ListItemButton onClick={() => navigate("/flightstatus")}>
+          <ListItemButton onClick={() => navigate("/data")}>
               <ListItemIcon>
                 <SignalWifiStatusbar4BarIcon/>
               </ListItemIcon>
-              <ListItemText primary="Flight Status" />
+              <ListItemText primary="Data Sources" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick ={() => navigate ('/Schedule')}>
+          {/* <ListItem disablePadding>
+            <ListItemButton onClick ={() => navigate ('/schedule')}>
               <ListItemIcon>
                 <CalendarTodayIcon />
               </ListItemIcon>
               <ListItemText primary="Schedule" />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate('/sfmembers')}>
               <ListItemIcon>
@@ -165,7 +165,7 @@ export default function PersistentDrawerLeft() {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => navigate('/Settings')}>
+            <ListItemButton onClick={() => navigate('/settings')}>
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
@@ -197,7 +197,7 @@ export default function PersistentDrawerLeft() {
           ))}
         </List> */}
       </Drawer>
-      <Main open={open}>
+      <Main open={open} onClose={handleDrawerClose}>
         <DrawerHeader />
       </Main>
     </Box>

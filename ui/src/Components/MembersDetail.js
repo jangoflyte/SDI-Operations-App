@@ -12,6 +12,7 @@ export const MemberDetails = () => {
   const {API, setUsersArray, usersArray, triggerFetch, toggle} = useContext(MemberContext);
   const [searchText, setSearchText]= useState('')
   const [changeView, setChangeView] = useState(0)
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     fetch(`${API}/usersearch/${searchText}`, {
@@ -22,6 +23,11 @@ export const MemberDetails = () => {
     .catch (err => console.log(err))
   }, [searchText, triggerFetch]);
 
+  const handleView = (view) => {
+    setChangeView(view);
+    setFlag(!flag);
+  }
+  
   const viewArray = [
     <BasicCard />,
     <AdminCard />,
@@ -30,6 +36,14 @@ export const MemberDetails = () => {
   // useEffect(()=> {
   //   console.log("users array: ", usersArray)
   // },[usersArray])
+
+  const buttonSX = {
+    borderRadius: "30px", 
+    marginRight: "10px",
+    '&:hover': {
+      color: 'secondary',
+  },
+  }
 
   if (!usersArray) {
       return (
@@ -92,29 +106,35 @@ export const MemberDetails = () => {
 
       <Box justifyContent="left" sx={{ display: "flex", mx: "80px" }} pt={3}>
         <Button
-          color="secondary"
+          // color="secondary"
+          // color={flag ? "primary" : "secondary"}
+          color={changeView === 0 ? "secondary" : "primary"}
           variant="contained"
           size="large"
-          sx={{ borderRadius: "30px", marginRight: "10px" }}
-          onClick={() => setChangeView(0)}
+          sx={buttonSX}
+          onClick={() => handleView(0)}
         >
           All
         </Button>
         <Button
-          color="primary"
+          // color="primary"
+          // color={flag ? "secondary" :  "primary"}
+          color={changeView === 2 ? "secondary" : "primary" }
           variant="contained"
           size="large"
-          sx={{ borderRadius: "30px", marginRight: "10px" }}
-          onClick={() => setChangeView(2)}
+          sx={buttonSX}
+          onClick={() => handleView(2)}
         >
           User
         </Button>
         <Button
-          color="primary"
+          // color="primary"
+          // color={flag ? "secondary" :  "primary"}
+          color={changeView === 1 ? "secondary" : "primary" }
           variant="contained"
           size="large"
-          sx={{ borderRadius: "30px" }}
-          onClick={() => setChangeView(1)}
+          sx={buttonSX}
+          onClick={() => handleView(1)}
         >
           Admins
         </Button>

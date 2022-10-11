@@ -15,9 +15,9 @@ const AdminCard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    setPage(0);
-  }, []);
+  // useEffect(() => {
+  //   setPage(0);
+  // }, []);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -30,13 +30,13 @@ const AdminCard = () => {
 
 
   useEffect(() => {
-    fetch(`${API}/alluserdata`, {
+    fetch(`${API}/users`, {
     method: 'GET',
     })
     .then (res => res.json())
     .then(setPage(0))
     .catch (err => console.log(err))
-  }, [API, triggerFetch]);
+  }, [API, triggerFetch, idArray]);
   //console.log("allusers", user)
 
   const navigateToMember = (member) => {
@@ -50,7 +50,6 @@ const AdminCard = () => {
       fetch(`${API}/deleteuser/${userId}`, {
         method: "DELETE",
       })
-      // .then(window.location.reload(false))
       .then((res) => res.json())
       .then(() => {
           setTriggerFetch(curr => !curr)
@@ -58,13 +57,16 @@ const AdminCard = () => {
           // handleClose()
         })
       .then(navigate("/sfmembers"))
+      .then(window.location.reload(false))
       .catch(err => {
           console.log('Error: ', err);
       });
     }
   }
 
-  useEffect(()=>{console.log(idArray)},[idArray])
+  // useEffect(()=>{console.log(idArray)},[idArray])
+  let admins = usersArray.filter(member => member.admin == true);
+  // console.log(admins)
 
   return (
     <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 }}>
@@ -78,7 +80,7 @@ const AdminCard = () => {
         >
           <Box justifyContent="left" pb={2} sx={{ display: "flex" }}>
             <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-              Admin Users
+              Admins
             </Typography>
           </Box>
 
@@ -117,7 +119,7 @@ const AdminCard = () => {
         </Stack>
 
         <Stack container rowSpacing={8} sx={{ py: 5 }}>
-          {usersArray
+          {admins
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((member, index) => (
               member.admin === true ? (
@@ -244,7 +246,7 @@ const AdminCard = () => {
 
           <Box>
             <Pagination
-              count={Math.ceil(usersArray.length / rowsPerPage)}
+              count={Math.ceil(admins.length / rowsPerPage)}
               onChange={onDataPageChange}
               page={page + 1}
               color="secondary"
@@ -256,7 +258,7 @@ const AdminCard = () => {
             <TablePagination
               rowsPerPageOptions={[5, 10]}
               component="div"
-              count={usersArray.length}
+              count={admins.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
