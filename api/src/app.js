@@ -18,6 +18,7 @@ const {
     getAllposition,
     searchUsers,
     patchSchedule,
+    deleteScheduleById,
 } = require('./controller.js');
 
 app.use(cors({
@@ -53,6 +54,14 @@ app.post('/schedule/date', (req, res) => {
 app.patch('/schedule/', (req, res) => {
     console.log('recieved schedule patch', req.body)
     patchSchedule(req.body)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+});
+
+app.delete('/schedule/:id', (req, res) => {
+    let { id } = req.params
+    console.log('recieved schedule patch', req.body)
+    deleteScheduleById( id)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err))
 });

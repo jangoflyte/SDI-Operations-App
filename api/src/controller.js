@@ -93,6 +93,12 @@ const patchSchedule = async (schedule) => {
   return results;
 }
 
+const deleteScheduleById = async (id) => {
+  console.log('deleteing schedule', id )
+  let results = await knex('post_schedule').where('id', id).del(['*'])
+  return results;
+}
+
 const getAllposition = async () => {
   let positions = await knex('position').select('*')
   let positionsWeapon = await postWeapon(positions)
@@ -183,4 +189,5 @@ module.exports = {
   searchUsers,
   getAllposition,
   patchSchedule,
+  deleteScheduleById,
 }

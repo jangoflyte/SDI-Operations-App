@@ -16,6 +16,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { MemberContext } from '../Components/MemberContext';
 import PostMemberModal from './AddMember';
+import EditSchedule from './EditSchedule';
 
 export default function CollapsibleTable() {
   const { API } = useContext(MemberContext)
@@ -29,12 +30,10 @@ export default function CollapsibleTable() {
   let dateEnd = new Date()
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7)).toISOString().split("T")[0];
 
-
   // console.log('todays date, date end', currentDate, dateEnd);
-   
-
+ 
   const fetchPosts = () => {
-    // console.log('fetching positions')
+    console.log('fetching positions')
     fetch(`${API}/position`, {
       method: 'GET',
       // credentials: 'include',
@@ -57,7 +56,7 @@ export default function CollapsibleTable() {
   }
 
   const fetchSchedule = () => {
-    // console.log('fetching schedule')
+    console.log('fetching schedule')
     fetch(`${API}/schedule/date`, {
       method: 'POST',
       // credentials: 'include',
@@ -79,6 +78,27 @@ export default function CollapsibleTable() {
       console.log('error: ', err);
     });
   }
+  const delSchedule = (id) => {
+    console.log(`deleting schedule ${id}`)
+    fetch(`${API}/schedule/${id}`, {
+      method: 'DELETE',
+      // credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+    })
+      .then(res => {
+       // console.log(res.status);
+       return res.json();
+    })
+    .then(data => {
+       console.log(data);
+    })
+    .catch(err => {
+      console.log('error: ', err);
+    });
+  }
 
   useEffect(() => {
     fetchSchedule()
@@ -87,7 +107,7 @@ export default function CollapsibleTable() {
   }, [currentDate])
 
   
-  const PostList = (name, man_req, weapon_req, cert_req, users) => {
+  const PostList = (name, man_req, weapon_req, cert_req, users, post_id, fetchSchedule, delSchedule, currentDate) => {
     let weapons = weapon_req.map(weapon => weapon.weapon )
     weapons = weapons.join(' ')
     let cert = cert_req
@@ -98,6 +118,10 @@ export default function CollapsibleTable() {
       weapons,
       cert,
       users,
+      post_id,
+      fetchSchedule,
+      delSchedule,
+      currentDate,
     };
   }
 
@@ -108,18 +132,19 @@ export default function CollapsibleTable() {
         // figure out personnel position and push to postlist generation
         // console.log('selectedDate', selectedDate)
 
-        if (schedule[0] !== undefined)  console.log('schedule date', schedule[0].date)
+        // if (schedule[0] !== undefined)  console.log('schedule date', schedule[0].date)
         let filUsers = schedule.filter(sched => sched.position_id === position.id && sched.date.split("T")[0] === selectedDate )
         // console.log(position.name)
         while (filUsers.length < position.man_req ) {
           filUsers.push({ noUser: true})
         } 
-        console.log('fil schedule', filUsers)
-        return PostList(position.name, position.man_req, position.weapon_req, position.cert_req, filUsers)
+        // console.log('fil schedule', filUsers)
+        return PostList(position.name, position.man_req, position.weapon_req, 
+          position.cert_req, filUsers, position.id, fetchSchedule, delSchedule, currentDate)
       })
     }
     return row
-  }, [positions])
+  }, [positions, schedule])
 
   return (
     <TableContainer component={Paper}>
@@ -188,7 +213,12 @@ const Row = (props) => {
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
                       {/* {!userRow.noUser ? `${userRow.role}` : <Button onClick={() => PostMemberModal()} sx={{ backgroundColor: 'orange' }}>Add User</Button>} */}
-                    {!userRow.noUser ? `${userRow.role}` : <PostMemberModal role={index} post={row.name} weapon_req={row.weapons} cert_req={row.cert}/>}
+                    {!userRow.noUser ? (
+                      <span>
+                        <EditSchedule role={index} post={row.name} weapon_req={row.weapons} cert_req={row.cert} post_id={row.post_id} fetchSchedule={row.fetchSchedule} currentDate={row.currentDate} userRow={userRow} delSchedule={row.delSchedule}/>
+                        {`${userRow.role}`}
+                      </span>
+                    ) : <PostMemberModal role={index} post={row.name} weapon_req={row.weapons} cert_req={row.cert} post_id={row.post_id} fetchSchedule={row.fetchSchedule}/>}
                       </TableCell>
                       <TableCell>
                         {!userRow.noUser ? `${userRow.user_info[0].first_name} ${userRow.user_info[0].last_name}` : `No One Posted`}
