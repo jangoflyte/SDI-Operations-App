@@ -30,11 +30,11 @@ export default function CollapsibleTable() {
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7)).toISOString().split("T")[0];
 
 
-  console.log('todays date, date end', currentDate, dateEnd);
+  // console.log('todays date, date end', currentDate, dateEnd);
    
 
   const fetchPosts = () => {
-    console.log('fetching positions')
+    // console.log('fetching positions')
     fetch(`${API}/position`, {
       method: 'GET',
       // credentials: 'include',
@@ -57,7 +57,7 @@ export default function CollapsibleTable() {
   }
 
   const fetchSchedule = () => {
-    console.log('fetching schedule')
+    // console.log('fetching schedule')
     fetch(`${API}/schedule/date`, {
       method: 'POST',
       // credentials: 'include',
@@ -90,7 +90,7 @@ export default function CollapsibleTable() {
   const PostList = (name, man_req, weapon_req, cert_req, users) => {
     let weapons = weapon_req.map(weapon => weapon.weapon )
     weapons = weapons.join(' ')
-    let cert = cert_req[0].cert
+    let cert = cert_req
 
     return {
       name,
@@ -106,15 +106,15 @@ export default function CollapsibleTable() {
     if (positions.length > 0) {
       row = positions.map(position => {
         // figure out personnel position and push to postlist generation
-        console.log('selectedDate', selectedDate)
+        // console.log('selectedDate', selectedDate)
 
-        if (schedule[0] !== undefined) console.log('schedule date', schedule[0].date)
+        if (schedule[0] !== undefined)  console.log('schedule date', schedule[0].date)
         let filUsers = schedule.filter(sched => sched.position_id === position.id && sched.date.split("T")[0] === selectedDate )
-        console.log(position.name)
+        // console.log(position.name)
         while (filUsers.length < position.man_req ) {
           filUsers.push({ noUser: true})
         } 
-        console.log('filUsers', filUsers)
+        console.log('fil schedule', filUsers)
         return PostList(position.name, position.man_req, position.weapon_req, position.cert_req, filUsers)
       })
     }
@@ -165,7 +165,7 @@ const Row = (props) => {
         </TableCell>
         <TableCell align="right">{row.man_req}</TableCell>
         <TableCell align="right">{row.weapons}</TableCell>
-        <TableCell align="right">{row.cert}</TableCell>
+        <TableCell align="right">{row.cert[0].cert}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -188,7 +188,7 @@ const Row = (props) => {
                     <TableRow key={index}>
                       <TableCell component="th" scope="row">
                       {/* {!userRow.noUser ? `${userRow.role}` : <Button onClick={() => PostMemberModal()} sx={{ backgroundColor: 'orange' }}>Add User</Button>} */}
-                    {!userRow.noUser ? `${userRow.role}` : <PostMemberModal role={index} post={row.name}/>}
+                    {!userRow.noUser ? `${userRow.role}` : <PostMemberModal role={index} post={row.name} weapon_req={row.weapons} cert_req={row.cert}/>}
                       </TableCell>
                       <TableCell>
                         {!userRow.noUser ? `${userRow.user_info[0].first_name} ${userRow.user_info[0].last_name}` : `No One Posted`}

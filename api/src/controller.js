@@ -48,7 +48,6 @@ const postCert = async posts => {
 }
 
 
-
 const getAllUsers = async () => {
   let users = await knex('user_table').select('*').orderBy('last_name', 'asc')
   let wepUsers = await addWeapon(users);
@@ -86,6 +85,12 @@ const getScheduleByDate = async props => {
   let schedules = await knex('post_schedule').select('*').whereBetween('date', [props.date, props.dateEnd]);
   let schedUsers = await schedAddUsers(schedules);
   return schedUsers;
+}
+
+const patchSchedule = async (schedule) => {
+  console.log(schedule)
+  let results = await knex('post_schedule').insert(schedule, ['*']);
+  return results;
 }
 
 const getAllposition = async () => {
@@ -177,4 +182,5 @@ module.exports = {
   getScheduleByDate,
   searchUsers,
   getAllposition,
+  patchSchedule,
 }

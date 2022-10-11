@@ -2,10 +2,10 @@ import React, { useContext, useState, useEffect } from "react";
 import { MemberContext } from "./MemberContext";
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import BasicCard from '../Features/Card';
+// import BasicCard from '../Features/Card';
 import {Box, LinearProgress, Button, Typography, Modal, TextField, InputLabel, MenuItem, Select, InputAdornment, Stack, Alert} from "@mui/material"
-import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
+// import CloseIcon from '@mui/icons-material/Close';
+// import SearchIcon from '@mui/icons-material/Search';
 
 export const PostCard = props => {
   const {API, triggerFetch} = useContext(MemberContext);
