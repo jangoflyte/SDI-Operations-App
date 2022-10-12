@@ -4,10 +4,14 @@ import '../styles/MembersDetail.css';
 import BasicCard from '../Features/Card';
 import AdminCard from "../Features/AdminCard";
 import UserCard from "../Features/UserCard";
-import {Box, LinearProgress, Button, Typography, Modal, TextField, InputLabel, MenuItem, Select, InputAdornment, Stack, Alert, FormControl} from "@mui/material"
+import {Box, LinearProgress, Button, Typography, Modal, TextField, InputLabel, MenuItem, InputAdornment, Stack, Alert, FormControl} from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
 
 const style = {
     position: 'absolute',
@@ -22,10 +26,35 @@ const style = {
     borderRadius: 4,
   };
 
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
+
+
 export const EditPost = props => {
     const post = props.post
 
-    const {API, setTriggerFetch, setToggle} = useContext(MemberContext);
+    const {API, setTriggerFetch, setToggle, allWeapons} = useContext(MemberContext);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -63,6 +92,21 @@ export const EditPost = props => {
             console.log('Error: ', err);
         });
     };
+
+
+    const [personName, setPersonName] = useState();
+
+    const handleChange = (event) => {
+      const {
+        target: { value },
+      } = event;
+      setPersonName(
+        // On autofill we get a stringified value.
+        typeof value === 'string' ? value.split(',') : value,
+      );
+    };
+
+
   
     return (
         <>
@@ -125,7 +169,7 @@ export const EditPost = props => {
                         </Select>
                       </FormControl>
   
-                      <FormControl sx={{ width: '40ch' }}>
+                      {/* <FormControl sx={{ width: '40ch' }}>
                         <InputLabel id="demo-simple-select-label">Weapon Qualifications</InputLabel>
                         <Select
   
@@ -144,7 +188,36 @@ export const EditPost = props => {
                             <MenuItem value={6}>M107</MenuItem>
                             <MenuItem value={7}>M320</MenuItem>
                         </Select>
-                      </FormControl>
+                      </FormControl> */}
+
+                      <FormControl sx={{ width: '40ch' }}>
+        <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value= {weapon.map(weap => weap.weapon)}
+          onChange={handleChange}
+          input={<OutlinedInput label="Tag" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {allWeapons.map((weaponObject) => (
+            <MenuItem key={weaponObject.id} value={weaponObject.weapon}>
+              <Checkbox defaultChecked={weapon.forEach(weap => {
+                if( weap.weapon === weaponObject.weapon){
+                    return true
+                }
+              })} />
+              <ListItemText primary={weaponObject.weapon} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+
+
+
                     </Stack>
       
                   <Stack direction="row" mt={3} sx={{borderRadius: "30px", display: "flex", justifyContent: "right"}}>

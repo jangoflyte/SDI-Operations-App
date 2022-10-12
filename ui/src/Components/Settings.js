@@ -111,17 +111,18 @@ const Edit = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-//   const [cert, setCert] = useState(0);
-//   const [weapon, setWeapon] = useState(0);
-//   const [status, setStatus] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [cert, setCert] = useState(0);
 
     const style = {
         position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 500,
-        height: 600,
+        width: 600,
+        height: 400,
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
@@ -147,11 +148,11 @@ const Edit = () => {
                       <CloseIcon onClick={handleClose} sx={{cursor: "pointer"}} />
                     </Box>
                     
-                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: "center"}}>
-                      POSTS
-                    </Typography>
                     <Typography id="modal-modal-description" variant="h4" sx={{ mt: 1 , textAlign: "center", fontWeight: "bold"}}>
-                      Edit Post
+                      Edit Desk Sergeant
+                    </Typography>
+                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: "center"}}>
+                      Desk Sergeant
                     </Typography>
                     
   
@@ -168,7 +169,28 @@ const Edit = () => {
                       <FormControl sx={{ width: '40ch' }}>
                         <TextField 
                         id="outlined-basic" 
-                        label="Number of Positions" 
+                        label="Last Name" 
+                        //value={manReq}
+                        variant="outlined" 
+                        //onChange={(e) => setManReq(e.target.value)}
+                        />
+                      </FormControl>
+                    </Stack>
+
+                    <Stack direction="row" mt={3}  sx={{display: "flex", justifyContent: "center", justifyContent:"space-between"}}>
+                      <FormControl sx={{ width: '40ch' }}>
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Email" 
+                        //value={postName}
+                        variant="outlined" 
+                        //onChange={(e) => setPostName(e.target.value)}
+                        />
+                      </FormControl>
+                      <FormControl sx={{ width: '40ch' }}>
+                        <TextField 
+                        id="outlined-basic" 
+                        label="Role" 
                         //value={manReq}
                         variant="outlined" 
                         //onChange={(e) => setManReq(e.target.value)}

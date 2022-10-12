@@ -16,6 +16,7 @@ const App = () => {
   const [usersArray, setUsersArray]=useState([])
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [allWeapons, setAllWeapons] = useState([])
   const API = "http://localhost:8080";
 
   useEffect(() => {
@@ -25,7 +26,18 @@ const App = () => {
     .then (res => res.json())
     .then (data => setData(data))
     .catch (err => console.log(err))
+  }, [API, triggerFetch]);
+  
+  useEffect(() => {
+    fetch(`${API}/allweapons`, {
+    method: 'GET',
+    })
+    .then (res => res.json())
+    .then (data => setAllWeapons(data))
+    .catch (err => console.log(err))
   }, [API]);
+
+
 
     const obj = {
       data,
@@ -39,6 +51,7 @@ const App = () => {
       setTriggerFetch,
       toggle,
       setToggle,
+      allWeapons
     };
 
   return (
