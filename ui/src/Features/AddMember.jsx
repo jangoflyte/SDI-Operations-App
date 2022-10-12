@@ -4,7 +4,16 @@ import { Button, Modal, Box, Paper, Typography } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 
 const PostMemberModal = props => {
-  const { role, post, weapon_req, cert_req, post_id, fetchSchedule } = props;
+  const {
+    role,
+    post,
+    weapon_req,
+    cert_req,
+    post_id,
+    fetchSchedule,
+    currentDate,
+    shift,
+  } = props;
   const { API, data } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -35,10 +44,6 @@ const PostMemberModal = props => {
 
   // console.log('flight filter', filterFlight, weapon_req)
 
-  let currentDate = new Date().toISOString().split('T')[0];
-  let splitDate = currentDate.split('-');
-  let date = new Date(splitDate[0], splitDate[1], splitDate[2]);
-
   const style = {
     position: 'absolute',
     top: '0',
@@ -53,7 +58,7 @@ const PostMemberModal = props => {
   };
 
   const patchSchedule = patchInfo => {
-    // console.log('fetching schedule')
+    console.log('patching schedule');
     fetch(`${API}/schedule`, {
       method: 'PATCH',
       // credentials: 'include',
@@ -135,7 +140,7 @@ const PostMemberModal = props => {
                 p: 3,
               }}
             >
-              {date.toDateString()}
+              {currentDate.toDateString()}
               <br />
               Post: {post}
               <br />
@@ -203,14 +208,16 @@ const PostMemberModal = props => {
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
             <Button
               onClick={() => {
-                console.log('clicked save');
                 handleClose();
-                console.log('selected person', selected);
+                // console.log('selected person', selected);
+                let shiftTime;
+                if (shift === 'Days') shiftTime = '06:00:00';
+                if (shift === 'Mids') shiftTime = '18:00:00';
                 let postUser = {
                   position_id: post_id,
                   user_id: selected,
                   date: currentDate,
-                  time: '06:00:00',
+                  time: shiftTime,
                   role: role,
                 };
                 {

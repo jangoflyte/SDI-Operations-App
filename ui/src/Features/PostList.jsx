@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 // import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Button } from '@mui/material/';
+import { Button, Divider } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -23,8 +23,11 @@ export default function CollapsibleTable() {
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
+  const [shift, setShift] = useState('Days');
+  const [schedDate, setSchedDate] = useState(new Date());
 
-  let currentDate = new Date().toISOString().split('T')[0];
+  // let currentDate = new Date().toISOString().split('T')[0];
+  let currentDate = new Date();
   let dateEnd = new Date();
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
     .toISOString()
@@ -56,7 +59,8 @@ export default function CollapsibleTable() {
   };
 
   const fetchSchedule = () => {
-    console.log('fetching schedule');
+    console.log('fetching schedule', schedDate);
+    let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
       // credentials: 'include',
@@ -64,7 +68,7 @@ export default function CollapsibleTable() {
         'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify({ date: currentDate, dateEnd: dateEnd }),
+      body: JSON.stringify({ date: fetchDate, dateEnd: dateEnd }),
     })
       .then(res => {
         // console.log(res.status);
@@ -78,6 +82,7 @@ export default function CollapsibleTable() {
         console.log('error: ', err);
       });
   };
+
   const delSchedule = id => {
     console.log(`deleting schedule ${id}`);
     fetch(`${API}/schedule/${id}`, {
@@ -94,6 +99,7 @@ export default function CollapsibleTable() {
       })
       .then(data => {
         console.log(data);
+        fetchSchedule();
       })
       .catch(err => {
         console.log('error: ', err);
@@ -103,8 +109,7 @@ export default function CollapsibleTable() {
   useEffect(() => {
     fetchSchedule();
     fetchPosts();
-    setSelectedDate(currentDate);
-  }, [currentDate]);
+  }, [schedDate]);
 
   const PostList = (
     name,
@@ -115,7 +120,8 @@ export default function CollapsibleTable() {
     post_id,
     fetchSchedule,
     delSchedule,
-    currentDate
+    currentDate,
+    shift
   ) => {
     let weapons = weapon_req.map(weapon => weapon.weapon);
     weapons = weapons.join(' ');
@@ -131,11 +137,16 @@ export default function CollapsibleTable() {
       fetchSchedule,
       delSchedule,
       currentDate,
+      shift,
     };
   };
 
   const rows = useMemo(() => {
     let row = [];
+    let shiftTime;
+    if (shift === 'Days') shiftTime = '06:00:00';
+    if (shift === 'Mids') shiftTime = '18:00:00';
+
     if (positions.length > 0) {
       row = positions.map(position => {
         // figure out personnel position and push to postlist generation
@@ -145,7 +156,9 @@ export default function CollapsibleTable() {
         let filUsers = schedule.filter(
           sched =>
             sched.position_id === position.id &&
-            sched.date.split('T')[0] === selectedDate
+            sched.date.split('T')[0] ===
+              schedDate.toISOString().split('T')[0] &&
+            sched.time === shiftTime
         );
         // console.log(position.name)
         while (filUsers.length < position.man_req) {
@@ -161,32 +174,163 @@ export default function CollapsibleTable() {
           position.id,
           fetchSchedule,
           delSchedule,
-          currentDate
+          schedDate,
+          shift
         );
       });
     }
     return row;
-  }, [positions, schedule]);
+  }, [positions, schedule, schedDate, shift]);
+
+  let dateRange = [];
+  for (let i = 0; i < 7; i++) {
+    let workingDate = new Date();
+    workingDate = new Date(workingDate.setDate(workingDate.getDate() + i));
+    dateRange.push(workingDate);
+  }
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label='collapsible table'>
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Post</TableCell>
-            <TableCell align='right'>Manning Requirements</TableCell>
-            <TableCell align='right'>Weapon Requirements</TableCell>
-            <TableCell align='right'>Certification Required</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(row => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 3,
+      }}
+    >
+      <Typography variant='h1' component='h2'>
+        {schedDate.toDateString()}
+      </Typography>
+      {shift === 'Days' && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant='h5'>{`Panama 12's `}</Typography>
+          <Typography
+            variant='h5'
+            ml={2}
+            sx={{ color: '#29b6f6', fontWeight: 'bold' }}
+          >
+            {shift}
+          </Typography>
+        </Box>
+      )}
+      {shift === 'Mids' && (
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Typography variant='h5'>{`Panama 12's `}</Typography>
+          <Typography
+            variant='h5'
+            ml={2}
+            sx={{ color: '#ffa726', fontWeight: 'bold' }}
+          >
+            {shift}
+          </Typography>
+        </Box>
+      )}
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 3,
+        }}
+      >
+        {dateRange.map((date, index) => (
+          <Paper key={index}>
+            <Box
+              sx={
+                schedDate.toDateString() === date.toDateString()
+                  ? {
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: 2,
+                      borderColor: 'Blue',
+                      borderRadius: 1,
+                    }
+                  : {
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }
+              }
+            >
+              <Typography sx={{ px: 3, py: 2 }}>
+                {date.toDateString()}
+              </Typography>
+              <Divider flexItem={true}>SHIFT</Divider>
+              <Button
+                fullWidth={true}
+                color='info'
+                onClick={e => {
+                  setSchedDate(date);
+                  setShift('Days');
+                  fetchSchedule();
+                }}
+              >
+                Days
+              </Button>
+              <Button
+                fullWidth={true}
+                color='warning'
+                onClick={e => {
+                  setSchedDate(date);
+                  setShift('Mids');
+                  fetchSchedule();
+                }}
+              >
+                Mids
+              </Button>
+            </Box>
+          </Paper>
+        ))}
+      </Box>
+      <TableContainer
+        component={Paper}
+        sx={{
+          boxShadow: 3,
+        }}
+      >
+        <Table aria-label='collapsible table'>
+          <TableHead>
+            <TableRow>
+              <TableCell />
+              <TableCell>Post</TableCell>
+              <TableCell align='right'>Manning Requirements</TableCell>
+              <TableCell align='right'>Weapon Requirements</TableCell>
+              <TableCell align='right'>Certification Required</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map(row => (
+              <Row key={row.name} row={row} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 }
 
@@ -207,16 +351,50 @@ const Row = props => {
           </IconButton>
         </TableCell>
         {/* change color to needs edited icon */}
-        <TableCell
-          component='th'
-          scope='row'
-          sx={
-            row.users.filter(user => user.noUser === true).length > 0
-              ? { backgroundColor: 'orange' }
-              : {}
-          }
-        >
-          {row.name}
+        <TableCell component='th' scope='row'>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {row.name}
+            {row.users.filter(user => user.noUser === true).length > 0 && (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: '#f44336',
+                  borderRadius: 20,
+                  ml: 3,
+                  px: 1,
+                }}
+              >
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  strokeWidth={1.5}
+                  stroke='currentColor'
+                  className='w-6 h-6'
+                  style={{ width: 30 }}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    d='M12
+                  9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73
+                  0 2.813-1.874 1.948-3.374L13.949
+                  3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12
+                  15.75h.007v.008H12v-.008z'
+                  />
+                </svg>
+              </Box>
+            )}
+          </Box>
         </TableCell>
         <TableCell align='right'>{row.man_req}</TableCell>
         <TableCell align='right'>{row.weapons}</TableCell>
@@ -257,6 +435,7 @@ const Row = props => {
                               currentDate={row.currentDate}
                               userRow={userRow}
                               delSchedule={row.delSchedule}
+                              shift={row.shift}
                             />
                             {`${userRow.role}`}
                           </span>
@@ -268,6 +447,8 @@ const Row = props => {
                             cert_req={row.cert}
                             post_id={row.post_id}
                             fetchSchedule={row.fetchSchedule}
+                            currentDate={row.currentDate}
+                            shift={row.shift}
                           />
                         )}
                       </TableCell>

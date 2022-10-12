@@ -18,19 +18,18 @@ const Home = () => {
     );
   } else {
     return (
-      <>
-        <h3> {Date()}</h3>
-        <div>Panama 12s</div>
-        {/* {data.map((item, index) => (
-        <div key={index}>
-          <div ></div>
-        </div>
-      ))} */}
-
-        <Box sx={{ m: 2, p: 5, borderRadius: 3, boxShadow: 3 }}>
-          <PostList />
-        </Box>
-      </>
+      <Box
+        sx={{
+          p: 2,
+          display: 'flex',
+          flexWrap: 'wrap',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <PostList />
+      </Box>
     );
   }
 };

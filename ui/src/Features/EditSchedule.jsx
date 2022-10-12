@@ -14,6 +14,7 @@ const EditSchedule = props => {
     delSchedule,
     currentDate,
     userRow,
+    shift,
   } = props;
   const { API, data } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
@@ -33,9 +34,9 @@ const EditSchedule = props => {
     p: 4,
   };
 
-  console.log(userRow);
-  let splitDate = currentDate.split('-');
-  let date = new Date(splitDate[0], splitDate[1], splitDate[2]);
+  // console.log(userRow);
+  // let splitDate = currentDate.split('-');
+  // let date = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
 
   return (
     <>
@@ -91,7 +92,7 @@ const EditSchedule = props => {
                 p: 3,
               }}
             >
-              {date.toDateString()}
+              {currentDate.toDateString()}
               <br />
               Post: {post}
               <br />
@@ -104,7 +105,7 @@ const EditSchedule = props => {
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
             <Button
               onClick={() => {
-                console.log('clicked save', userRow.id);
+                // console.log('clicked save', userRow.id);
                 handleClose();
                 delSchedule(userRow.id);
               }}
@@ -116,7 +117,7 @@ const EditSchedule = props => {
             </Button>
             <Button
               onClick={() => {
-                console.log('clicked save');
+                // console.log('clicked save');
                 handleClose();
               }}
               color='error'
