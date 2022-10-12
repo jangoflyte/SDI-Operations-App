@@ -36,7 +36,7 @@ export const MemberDetails = () => {
       .then(res => res.json())
       .then(data => setUsersArray(data))
       .catch(err => console.log(err));
-  }, [searchText, triggerFetch]);
+  }, [searchText, triggerFetch, toggle]);
 
   const handleView = view => {
     setChangeView(view);

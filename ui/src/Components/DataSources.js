@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
+import { MemberContext } from '../Components/MemberContext';
 import {
   Stack,
   Box,
@@ -8,12 +9,23 @@ import {
   CardActions,
   Button,
   Modal, 
-  FormControl} from '@mui/material';
+  Alert} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const DataSources = () => {
+  const {toggler, setToggler} = useContext(MemberContext)
+
+  useEffect(() => {}, [toggler]) 
+
   return (
     <Box>
+        {toggler === false ? null : (
+          <Stack sx={{ width: '100%' }}>
+            <Alert severity='success' spacing={2} mb={2}>
+              Your data source, has successfully been added.
+            </Alert>
+          </Stack>
+        )}
       <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
         Data Sources
       </Typography>
@@ -28,9 +40,6 @@ export const DataSources = () => {
           </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
-            UPLOAD .CSV
-          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
@@ -46,9 +55,6 @@ export const DataSources = () => {
           </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
-            UPLOAD .CSV
-          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
@@ -64,9 +70,6 @@ export const DataSources = () => {
           </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
-            UPLOAD .CSV
-          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
@@ -77,6 +80,7 @@ export const DataSources = () => {
 
 
 const Upload = () => {
+  const {setToggler} = useContext(MemberContext)
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -105,8 +109,14 @@ const Upload = () => {
     setFlag(!flag)
   }
 
+  const handleClickAdd = () => {
+    setToggler(true)
+    handleClose();
+  }
+
   return (
       <>
+
         <Button onClick={handleOpen} variant="outlined" color="secondary" sx={buttonSX}>
           UPLOAD .CSV
         </Button>
@@ -129,7 +139,9 @@ const Upload = () => {
             </Typography>
 
             <Stack direction="column" mt={3}  sx={{display: "flex", justifyContent: "center"}}>
-              <p>To add a data source, download this template, copy and paste your data into the corresponding tabs, save, 
+              <p>To add a data source, download&nbsp; 
+                <a href="/assets/Template.xlsx" target="_blank" download="Template.xlsx" style={{textDecoration: "none"}}>this template</a>
+                , copy and paste your data into the corresponding tabs, save, 
                 export as a .csv, and re-upload into this container
               </p>
             </Stack>
@@ -141,7 +153,7 @@ const Upload = () => {
             
             <Box mt={3} sx={{display: "flex", justifyContent: "end"}}>
               {flag === false ?  <Button variant="contained" color={flag ? "secondary" : "primary"} sx={{borderRadius: "30px"}} disabled>ADD DATA</Button>
-              : <Button variant="contained" color={flag ? "secondary" : "primary"} sx={{borderRadius: "30px"}}>ADD DATA</Button>}
+              : <Button variant="contained" color={flag ? "secondary" : "primary"} sx={{borderRadius: "30px"}} onClick={() => handleClickAdd()}>ADD DATA</Button>}
             </Box>
           </Box>
         </Modal>

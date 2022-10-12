@@ -16,6 +16,7 @@ const App = () => {
   const [usersArray, setUsersArray] = useState([]);
   const [triggerFetch, setTriggerFetch] = useState(false);
   const [toggle, setToggle] = useState(false);
+  const [toggler, setToggler] = useState(false);
   const [allWeapons, setAllWeapons] = useState([])
   const API = 'http://localhost:8080';
 
@@ -51,7 +52,9 @@ const App = () => {
     setTriggerFetch,
     toggle,
     setToggle,
-      allWeapons
+    allWeapons,
+    toggler, 
+    setToggler
   };
 
   return (

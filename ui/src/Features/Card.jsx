@@ -75,7 +75,7 @@ const BasicCard = () => {
   // useEffect(()=>{console.log(idArray)},[idArray])
 
   return (
-    <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 }}>
+    <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, backgroundColor: 'white' }}>
       <Box sx={{ px: 5, py: 5 }}>
         <Stack
           component='span'

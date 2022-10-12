@@ -57,6 +57,7 @@ export const PostCard = props => {
         width: 800,
         boxShadow: 3,
         borderRadius: 3,
+        backgroundColor: 'white',
         pl: 5,
         pt: 2,
         pb: 5,

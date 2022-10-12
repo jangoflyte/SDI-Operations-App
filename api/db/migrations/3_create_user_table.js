@@ -15,6 +15,7 @@ exports.up = function(knex) {
         table.boolean('weapon_arming');
         table.boolean('admin');
         table.string('notes');
+        table.string('email');
     })
 };
 

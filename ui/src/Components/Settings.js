@@ -139,9 +139,6 @@ export const Settings = () => {
               <Typography variant='h4' ml={10} pb={4} sx={{}}>
                 Contact Details
               </Typography>
-              {/* <Button variant="contained" color="secondary" sx={{borderRadius: "30px", marginLeft: "30%", width: "300px", height: "50px"}}>
-            EDIT DESK SERGEANT
-          </Button> */}
               <Edit />
             </Stack>
 
@@ -212,21 +209,19 @@ const Edit = () => {
   const [email, setEmail] = useState("");
   const [cert, setCert] = useState(0);
 
-    const style = {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: 600,
-        height: 400,
-        bgcolor: 'background.paper',
-        border: '2px solid #000',
-        boxShadow: 24,
-        p: 4,
-        borderRadius: 4,
-    };
-
-  //console.log(noarm)
+  const style = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: 700,
+      height: 400,
+      bgcolor: 'background.paper',
+      border: '2px solid #000',
+      boxShadow: 24,
+      p: 4,
+      borderRadius: 4,
+  };
 
   return (
       <>
@@ -244,52 +239,52 @@ const Edit = () => {
                       <CloseIcon onClick={handleClose} sx={{cursor: "pointer"}} />
                     </Box>
                     
-                    <Typography id="modal-modal-description" variant="h4" sx={{ mt: 1 , textAlign: "center", fontWeight: "bold"}}>
+                    <Typography id="modal-modal-description" variant="h6" sx={{ mt: 1 , textAlign: "center"}}>
                       Edit Desk Sergeant
                     </Typography>
-                    <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign: "center"}}>
+                    <Typography id="modal-modal-title" variant="h4" component="h2" sx={{textAlign: "center", fontWeight: "bold"}}>
                       Desk Sergeant
                     </Typography>
                     
   
                     <Stack direction="row" mt={3}  sx={{display: "flex", justifyContent: "center", justifyContent:"space-between"}}>
-                      <FormControl sx={{ width: '40ch' }}>
+                      <FormControl sx={{ width: '35ch' }}>
                         <TextField 
                         id="outlined-basic" 
                         label="First Name" 
-                        //value={postName}
+                        value={firstName}
                         variant="outlined" 
-                        //onChange={(e) => setPostName(e.target.value)}
+                        onChange={(e) => setFirstName(e.target.value)}
                         />
                       </FormControl>
-                      <FormControl sx={{ width: '40ch' }}>
+                      <FormControl sx={{ width: '35ch' }}>
                         <TextField 
                         id="outlined-basic" 
                         label="Last Name" 
-                        //value={manReq}
+                        value={lastName}
                         variant="outlined" 
-                        //onChange={(e) => setManReq(e.target.value)}
+                        onChange={(e) => setLastName(e.target.value)}
                         />
                       </FormControl>
                     </Stack>
 
                     <Stack direction="row" mt={3}  sx={{display: "flex", justifyContent: "center", justifyContent:"space-between"}}>
-                      <FormControl sx={{ width: '40ch' }}>
+                      <FormControl sx={{ width: '35ch' }}>
                         <TextField 
                         id="outlined-basic" 
                         label="Email" 
-                        //value={postName}
+                        value={email}
                         variant="outlined" 
-                        //onChange={(e) => setPostName(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         />
                       </FormControl>
-                      <FormControl sx={{ width: '40ch' }}>
+                      <FormControl sx={{ width: '35ch' }}>
                         <TextField 
                         id="outlined-basic" 
                         label="Role" 
-                        //value={manReq}
+                        value={cert}
                         variant="outlined" 
-                        //onChange={(e) => setManReq(e.target.value)}
+                        onChange={(e) => setCert(e.target.value)}
                         />
                       </FormControl>
                     </Stack>

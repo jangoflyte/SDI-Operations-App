@@ -15,7 +15,7 @@ exports.seed = async function(knex) {
           {first_name: 'Nick', last_name: 'Swartson', rank: 'e5', flight: 'bravo-1' , cert_id: 3, weapon_arming: true, admin: false },
           {first_name: 'Jermiah', last_name: 'Lastname', rank: 'e5', flight: 'bravo-2', cert_id: 4, weapon_arming: true, admin: false },
           {first_name: 'Logan', last_name: 'Paul', rank: 'e6', flight: 'bravo-2' , cert_id: 1 ,weapon_arming: true, admin: false },
-
+          {first_name: 'Ronald', last_name: 'McDonald', rank: 'e6', flight: 'bravo-2' , cert_id: 3 ,weapon_arming: true, admin: true, email: 'r.mcdonald@spaceforce.mil' },
         ]);
       }
     })

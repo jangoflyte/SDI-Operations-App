@@ -63,6 +63,7 @@ const IndividualMember = () => {
             boxShadow: 3,
             borderRadius: 3,
             p: 5,
+            backgroundColor: 'white',
           }}
         >
           <Stack
