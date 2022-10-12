@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from "react";
-import { MemberContext } from "../Components/MemberContext";
+import React, { useContext, useState, useEffect } from 'react';
+import { MemberContext } from '../Components/MemberContext';
 import '../styles/MembersDetail.css';
 import BasicCard from '../Features/Card';
 import AdminCard from "../Features/AdminCard";
@@ -14,17 +14,17 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 
 const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 4,
-  };
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 4,
+};
 
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -52,7 +52,7 @@ const style = {
 
 
 export const EditPost = props => {
-    const post = props.post
+  const post = props.post;
 
     const {API, setTriggerFetch, setToggle, allWeapons} = useContext(MemberContext);
     const [open, setOpen] = React.useState(false);

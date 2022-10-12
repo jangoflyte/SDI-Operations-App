@@ -1,7 +1,19 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Drawer, CssBaseline, Toolbar, List, Divider, IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Box,
+  Drawer,
+  CssBaseline,
+  Toolbar,
+  List,
+  Divider,
+  IconButton,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -11,18 +23,16 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import "../styles/MembersDetail.css";
+import '../styles/MembersDetail.css';
 import logo from '../logo.svg';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Unstable_Grid2';
 import Badge from '@mui/material/Badge';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
-
-
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+const Main = styled('main', { shouldForwardProp: prop => prop !== 'open' })(
   ({ theme, open }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -38,11 +48,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       }),
       marginLeft: 0,
     }),
-  }),
+  })
 );
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
+  shouldForwardProp: prop => prop !== 'open',
 })(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
@@ -81,36 +91,31 @@ export default function PersistentDrawerLeft() {
   };
 
   return (
-    <Box  sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} onClose={handleDrawerClose}>
+      <AppBar position='fixed' open={open} onClose={handleDrawerClose}>
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             sx={{ mr: 2, ...(open && { display: 'none' }) }}
           >
             <MenuIcon />
-            
           </IconButton>
 
           <div>
-            <img src={logo} alt="logo" />
+            <img src={logo} alt='logo' />
           </div>
 
-          <Grid xs display="flex" justifyContent="flex-end" alignItems="center" >
-          <Badge sx={{ m: 2 }} color="secondary" badgeContent={0} showZero>
-            <NotificationsIcon />
-          </Badge>
-            <Avatar alt="Security Forces Member" src="" />
+          <Grid xs display='flex' justifyContent='flex-end' alignItems='center'>
+            <Badge sx={{ m: 2 }} color='secondary' badgeContent={0} showZero>
+              <NotificationsIcon />
+            </Badge>
+            <Avatar alt='Security Forces Member' src='' />
           </Grid>
-
-              
         </Toolbar>
-
-
       </AppBar>
       <Drawer
         sx={{
@@ -121,13 +126,17 @@ export default function PersistentDrawerLeft() {
             boxSizing: 'border-box',
           },
         }}
-        variant="persistent"
-        anchor="left"
+        variant='persistent'
+        anchor='left'
         open={open}
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            {theme.direction === 'ltr' ? (
+              <ChevronLeftIcon />
+            ) : (
+              <ChevronRightIcon />
+            )}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -137,15 +146,15 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Dash Board" />
+              <ListItemText primary='Dash Board' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-          <ListItemButton onClick={() => navigate("/data")}>
+            <ListItemButton onClick={() => navigate('/data')}>
               <ListItemIcon>
-                <SignalWifiStatusbar4BarIcon/>
+                <SignalWifiStatusbar4BarIcon />
               </ListItemIcon>
-              <ListItemText primary="Data Sources" />
+              <ListItemText primary='Data Sources' />
             </ListItemButton>
           </ListItem>
           {/* <ListItem disablePadding>
@@ -161,7 +170,7 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <GroupsIcon />
               </ListItemIcon>
-              <ListItemText primary="People" />
+              <ListItemText primary='People' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -169,7 +178,7 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
+              <ListItemText primary='Settings' />
             </ListItemButton>
           </ListItem>
           {/* {['Dash Board', 'Flight Status', 'Flight Calender', 'Master Schedule', 'Map of Post','Edit Help', 'Edit FAQ'].map((text, index) => (

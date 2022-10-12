@@ -1,46 +1,78 @@
-import React, {useState} from "react";
-import {Stack, Box, Typography, Card, CardContent, CardActions, Button, Modal, FormControl} from '@mui/material'
+import React, {useState} from 'react';
+import {
+  Stack,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CardActions,
+  Button,
+, Modal, FormControl} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const DataSources = () => {
   return (
-    <Box >
-      <Typography variant="h3" ml={10} pb={4} sx={{fontWeight: "bold"}}>Data Sources</Typography>
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000}}>
+    <Box>
+      <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
+        Data Sources
+      </Typography>
+      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
         <CardContent>
-          <Typography variant="h5" sx={{fontWeight: "bold"}}>Arming Status</Typography>
-          <p>Upload your .csv file indicating your recent Do Not Arm airment status.</p>
+          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+            Arming Status
+          </Typography>
+          <p>
+            Upload your .csv file indicating your recent Do Not Arm airment
+            status.
+          </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant="outlined" sx={buttonSX}>UPLOAD .CSV</Button> */}
+          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
+            UPLOAD .CSV
+          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
 
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000}}>
+      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
         <CardContent>
-          <Typography variant="h5" sx={{fontWeight: "bold"}}>Certifications</Typography>
-          <p>Upload your .csv file including airman name and corresponding certifications.</p>
+          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+            Certifications
+          </Typography>
+          <p>
+            Upload your .csv file including airman name and corresponding
+            certifications.
+          </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant="outlined" sx={buttonSX}>UPLOAD .CSV</Button> */}
+          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
+            UPLOAD .CSV
+          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
 
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000}}>
+      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
         <CardContent>
-          <Typography variant="h5" sx={{fontWeight: "bold"}}>Weapon Qualifications</Typography>
-          <p>Upload your .csv file including airman name and current weapons certifications.</p>
+          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+            Weapon Qualifications
+          </Typography>
+          <p>
+            Upload your .csv file including airman name and current weapons
+            certifications.
+          </p>
         </CardContent>
         <CardActions>
-          {/* <Button color='secondary' variant="outlined" sx={buttonSX}>UPLOAD .CSV</Button> */}
+          {/* <Button color='secondary' variant='outlined' sx={buttonSX}>
+            UPLOAD .CSV
+          </Button> */}
           <Upload/>
         </CardActions>
       </Card>
     </Box>
   );
 };
+
 
 
 const Upload = () => {
