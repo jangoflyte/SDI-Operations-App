@@ -18,7 +18,8 @@ const App = () => {
   const [toggle, setToggle] = useState(false);
   const [toggler, setToggler] = useState(false);
   const [allWeapons, setAllWeapons] = useState([]);
-  const API = 'http://localhost:8080';
+  // const API = 'http://localhost:8080';
+  const API = 'https://api.cyberhelmn.com';
 
   useEffect(() => {
     fetch(`${API}/users`, {
