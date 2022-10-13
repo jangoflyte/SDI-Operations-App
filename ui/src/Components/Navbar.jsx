@@ -13,6 +13,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -140,7 +141,9 @@ export default function PersistentDrawerLeft() {
           </IconButton>
         </DrawerHeader>
         <Divider />
+
         <List>
+          <Typography>Admin View</Typography>
           <ListItem disablePadding>
             <ListItemButton onClick={() => navigate('/')}>
               <ListItemIcon>
