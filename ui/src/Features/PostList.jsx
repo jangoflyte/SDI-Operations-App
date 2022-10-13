@@ -22,12 +22,11 @@ export default function CollapsibleTable() {
   const { API } = useContext(MemberContext);
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
-  const [selectedDate, setSelectedDate] = useState('');
   const [shift, setShift] = useState('Days');
   const [schedDate, setSchedDate] = useState(new Date());
 
   // let currentDate = new Date().toISOString().split('T')[0];
-  let currentDate = new Date();
+
   let dateEnd = new Date();
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
     .toISOString()
@@ -254,7 +253,7 @@ export default function CollapsibleTable() {
         }}
       >
         {dateRange.map((date, index) => (
-          <Paper key={index}>
+          <Paper key={index} elevation={5}>
             <Box
               sx={
                 schedDate.toDateString() === date.toDateString()
@@ -328,7 +327,7 @@ export default function CollapsibleTable() {
       <TableContainer
         component={Paper}
         sx={{
-          boxShadow: 3,
+          boxShadow: 5,
         }}
       >
         <Table aria-label='collapsible table'>

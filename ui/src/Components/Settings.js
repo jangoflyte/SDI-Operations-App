@@ -61,14 +61,13 @@ export const Settings = () => {
           display: 'flex',
           // flexWrap: 'wrap',
           flexDirection: 'column',
-          // alignItems: 'center',
+          alignItems: 'center',
           // justifyContent: 'left',
         }}
       >
         <Typography
           variant='h3'
           component='span'
-          ml={10}
           pb={4}
           sx={{ fontWeight: 'bold' }}
         >
@@ -79,7 +78,6 @@ export const Settings = () => {
             <>
               <Typography
                 variant='h7'
-                ml={10}
                 pb={4}
                 onClick={() => setPostsPage(true)}
                 sx={{
@@ -108,7 +106,6 @@ export const Settings = () => {
             <>
               <Typography
                 variant='h7'
-                ml={10}
                 pb={4}
                 onClick={() => setPostsPage(true)}
                 sx={{
@@ -120,8 +117,8 @@ export const Settings = () => {
               </Typography>
               <Typography
                 variant='h7'
-                ml={10}
                 pb={4}
+                ml={10}
                 onClick={() => setPostsPage(false)}
                 sx={{
                   fontWeight: 'bold',
@@ -138,10 +135,8 @@ export const Settings = () => {
 
         {postsPage === true ? (
           <>
-            <Box sx={{ mt: 4 }}>
-              <Typography variant='h5' ml={10} pb={4} sx={{}}>
-                {postArray.length} Posts
-              </Typography>
+            <Box sx={{ my: 4 }}>
+              <Typography variant='h5'>{postArray.length} Posts</Typography>
             </Box>
 
             {postArray.map((post, index) => {
@@ -156,16 +151,16 @@ export const Settings = () => {
                 marginTop: '5%',
                 display: 'flex',
                 justifyContent: 'space-between',
-                width: 1080,
+                width: '55%',
               }}
             >
-              <Typography variant='h4' ml={10} pb={4} sx={{}}>
+              <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
                 Contact Details
               </Typography>
               <Edit memberObject={sgt} />
             </Stack>
 
-            <Stack ml={10} direction='row'>
+            <Stack direction='row' pt={3}>
               <p>
                 Desk Sergeants receive daily emails when an entire post has been
                 finalized successfully.
@@ -181,7 +176,7 @@ export const Settings = () => {
                     variant='h5'
                     ml={10}
                     pb={4}
-                    sx={{ fontWeight: 'bold' }}
+                    sx={{ fontWeight: 'bold', width: '5%' }}
                   >
                     Role
                   </Typography>
@@ -189,7 +184,7 @@ export const Settings = () => {
                     variant='h5'
                     ml={20}
                     pb={4}
-                    sx={{ fontWeight: 'bold' }}
+                    sx={{ fontWeight: 'bold', width: '10%' }}
                   >
                     Name
                   </Typography>
@@ -197,7 +192,7 @@ export const Settings = () => {
                     variant='h5'
                     ml={22}
                     pb={4}
-                    sx={{ fontWeight: 'bold' }}
+                    sx={{ fontWeight: 'bold', width: '20%' }}
                   >
                     Email
                   </Typography>
@@ -212,13 +207,28 @@ export const Settings = () => {
                       }}
                       key={index}
                     >
-                      <Typography variant='h6' ml={10} pb={4} sx={{}}>
+                      <Typography
+                        variant='h6'
+                        ml={10}
+                        pb={4}
+                        sx={{ width: '5%' }}
+                      >
                         {user.certs.map(cert => `${cert.cert}`)}
                       </Typography>
-                      <Typography variant='h6' ml={10} pb={4} sx={{}}>
+                      <Typography
+                        variant='h6'
+                        ml={21}
+                        pb={4}
+                        sx={{ width: '20%' }}
+                      >
                         {user.first_name} {user.last_name}
                       </Typography>
-                      <Typography variant='h6' ml={10} pb={4} sx={{}}>
+                      <Typography
+                        variant='h6'
+                        ml={15}
+                        pb={4}
+                        sx={{ width: '20%' }}
+                      >
                         {user.email}
                       </Typography>
                     </span>

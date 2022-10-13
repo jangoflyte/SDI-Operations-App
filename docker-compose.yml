@@ -37,10 +37,10 @@ services:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_PORT=5432
       - POSTGRES_DB=capstone
-    # volumes:
-    #   - type: bind
-    #     source: ./api/src
-    #     target: /app/src
+    volumes:
+      - type: bind
+        source: ./api/src
+        target: /app/src
     command: npm run start
 
   capstone-ui:
@@ -49,7 +49,7 @@ services:
       - 'capstone-api'
     ports:
       - '3001:3000'
-    # volumes:
-    #   - type: bind
-    #     source: ./ui/src
-    #     target: /app/src
+    volumes:
+      - type: bind
+        source: ./ui/src
+        target: /app/src

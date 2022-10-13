@@ -1,32 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
 // import BasicCard from '../Features/Card';
-import {
-  Box,
-  LinearProgress,
-  Button,
-  Typography,
-  Modal,
-  TextField,
-  InputLabel,
-  MenuItem,
-  Select,
-  InputAdornment,
-  Stack,
-  Alert,
-  Chip,
-} from '@mui/material';
+import { Box, Typography, Stack, Chip } from '@mui/material';
 // import CloseIcon from '@mui/icons-material/Close';
 // import SearchIcon from '@mui/icons-material/Search';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+// import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { EditPost } from '../Features/EditPost';
 
 export const PostCard = props => {
-  const { API, triggerFetch } = useContext(MemberContext);
+  // const { API, triggerFetch } = useContext(MemberContext);
   const post = props.post;
   // console.log("post ", post)
 
@@ -55,7 +41,7 @@ export const PostCard = props => {
         mx: 10,
         mb: 5,
         width: 800,
-        boxShadow: 3,
+        boxShadow: 5,
         borderRadius: 3,
         backgroundColor: 'white',
         pl: 5,
@@ -142,12 +128,15 @@ export const PostCard = props => {
                 />
               ) : (
                 post.weapon_req.map((weapon, index) => (
-                  <Chip
-                    key={index}
-                    icon={<SecurityIcon />}
-                    label={weapon.weapon.toUpperCase()}
-                    color='secondary'
-                  />
+                  <span>
+                    <Chip
+                      key={index}
+                      icon={<SecurityIcon />}
+                      label={weapon.weapon.toUpperCase()}
+                      color='secondary'
+                    />
+                    &nbsp;
+                  </span>
                 ))
               )}
             </Typography>

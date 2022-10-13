@@ -138,13 +138,23 @@ const updateUser = req => {
 };
 
 const deleteWeaponPosition = async positionId => {
-  return await knex('weapon_position')
+  let results = await knex('weapon_position')
     .where({ position_id: positionId })
-    .delete();
+    .delete(['*']);
+  return results;
 };
 
-const postWeaponPosition = async positionId => {
-  return knex('weapon_position').where({ position_id: positionId }).delete();
+const postWeaponPosition = async (positionId, wepArray) => {
+  let insertInfo = wepArray.map(wep => {
+    postObject = {
+      position_id: parseInt(positionId),
+      weapon_id: wep,
+    };
+    return postObject;
+  });
+  let result = await knex('weapon_position').insert(insertInfo, ['*']);
+  console.log('results of insert to weapon_position', result);
+  return result;
 };
 
 const patchPosition = async req => {
@@ -154,10 +164,13 @@ const patchPosition = async req => {
     man_req: req.body.man_req,
     cert_id: req.body.cert_id,
   };
-  // await deleteWeaponPosition(req.params.id);
+  await deleteWeaponPosition(req.params.id);
+  console.log('between delete and post');
+  await postWeaponPosition(req.params.id, req.body.weapon_req);
+  console.log('between post and patch');
   let result = await knex('position')
     .where({ id: req.params.id })
-    .update(patchObject);
+    .update(patchObject, ['*']);
   return result;
 };
 

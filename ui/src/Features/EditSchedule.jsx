@@ -7,19 +7,14 @@ const EditSchedule = props => {
   const {
     role,
     post,
-    weapon_req,
-    cert_req,
-    post_id,
-    fetchSchedule,
+
     delSchedule,
     currentDate,
     userRow,
-    shift,
   } = props;
-  const { API, data } = useContext(MemberContext);
+  // const { API, data } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  const [selected, setSelected] = useState({});
 
   const style = {
     position: 'absolute',

@@ -34,7 +34,9 @@ export const MemberDetails = () => {
       method: 'GET',
     })
       .then(res => res.json())
-      .then(data => setUsersArray(data))
+      .then(data => {
+        setUsersArray(data);
+      })
       .catch(err => console.log(err));
   }, [searchText, triggerFetch, toggle]);
 

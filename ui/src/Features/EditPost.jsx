@@ -1,27 +1,22 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import '../styles/MembersDetail.css';
-import BasicCard from '../Features/Card';
-import AdminCard from '../Features/AdminCard';
-import UserCard from '../Features/UserCard';
+
 import {
   Box,
-  LinearProgress,
   Button,
   Typography,
   Modal,
   TextField,
   InputLabel,
   MenuItem,
-  InputAdornment,
   Stack,
-  Alert,
   FormControl,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
+// import SearchIcon from '@mui/icons-material/Search';
 import BorderColorIcon from '@mui/icons-material/BorderColor';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
@@ -88,6 +83,7 @@ export const EditPost = props => {
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
+      .then(window.location.reload(false))
       .then(() => {
         setTriggerFetch(curr => !curr);
         setToggle(true);
@@ -268,6 +264,8 @@ export const EditPost = props => {
                       // checked={weapon.some(
                       //   wep => wep.weapon_id === weaponObject.id
                       // )}
+
+                      // make seperate component
                     />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>

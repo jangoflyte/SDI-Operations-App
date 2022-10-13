@@ -40,7 +40,7 @@ export const DataSources = () => {
       <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
         Data Sources
       </Typography>
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
+      <Card sx={{ boxShadow: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Arming Status
@@ -55,7 +55,7 @@ export const DataSources = () => {
         </CardActions>
       </Card>
 
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
+      <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Certifications
@@ -70,7 +70,7 @@ export const DataSources = () => {
         </CardActions>
       </Card>
 
-      <Card sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3, width: 1000 }}>
+      <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Weapon Qualifications
@@ -101,7 +101,7 @@ const Upload = () => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 800,
-    height: 550,
+    height: 530,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,

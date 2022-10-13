@@ -109,23 +109,25 @@ const AdminCard = () => {
           component='span'
           direction='row'
           alignItems='center'
-          justifyContent='space-around'
+          justifyContent='space-between'
           pt={2}
           sx={{ display: 'flex' }}
         >
-          <Box>
+          <Box ml={10} sx={{ width: '15%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
           </Box>
-          <Box>
+          <Box sx={{ width: '20%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
           </Box>
-          <Box>
+          <Box sx={{ width: '25%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
           </Box>
-          <Box>
+          <Box sx={{ width: '20%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
           </Box>
-          <Box>
+          <Box
+            sx={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>
               Weapon Qualification
             </Typography>
@@ -222,12 +224,15 @@ const AdminCard = () => {
                         />
                       ) : (
                         member.weapons.map((weapon, index) => (
-                          <Chip
-                            key={index}
-                            icon={<SecurityIcon />}
-                            label={weapon.weapon.toUpperCase()}
-                            color='secondary'
-                          />
+                          <span>
+                            <Chip
+                              key={index}
+                              icon={<SecurityIcon />}
+                              label={weapon.weapon.toUpperCase()}
+                              color='secondary'
+                            />
+                            &nbsp;
+                          </span>
                         ))
                       )}
                       {/* <Chip icon={<SecurityIcon />} label={member.weapons.map(weapon => (weapon.weapon))} color="secondary"/> */}
