@@ -149,9 +149,16 @@ const postWeaponPosition = async positionId => {
 
 const patchPosition = async req => {
   console.log('this is req.body for patch position: ', req.body);
+  let patchObject = {
+    name: req.body.name,
+    man_req: req.body.man_req,
+    cert_id: req.body.cert_id,
+  };
   // await deleteWeaponPosition(req.params.id);
-
-  return await knex('position').where({ id: req.params.id }).update(req.body);
+  let result = await knex('position')
+    .where({ id: req.params.id })
+    .update(patchObject);
+  return result;
 };
 
 const updateWeaponUser = req => {
