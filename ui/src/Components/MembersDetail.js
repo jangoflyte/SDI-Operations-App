@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 
 export const MemberDetails = () => {
-  const { API, setUsersArray, usersArray, triggerFetch, toggle } =
+  const { API, setUsersArray, usersArray, triggerFetch, toggle, setToggle } =
     useContext(MemberContext);
   const [searchText, setSearchText] = useState('');
   const [changeView, setChangeView] = useState(0);
