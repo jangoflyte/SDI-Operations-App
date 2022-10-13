@@ -92,7 +92,7 @@ export default function PersistentDrawerLeft() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <AppBar position='fixed' open={open} onClose={handleDrawerClose}>
         <Toolbar>
           <IconButton

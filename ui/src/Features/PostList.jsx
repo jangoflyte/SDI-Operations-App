@@ -265,7 +265,7 @@ export default function CollapsibleTable() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 2,
-                      borderColor: 'Blue',
+                      borderColor: '#4fc3f7',
                       borderRadius: 1,
                     }
                   : {
@@ -284,6 +284,15 @@ export default function CollapsibleTable() {
               <Button
                 fullWidth={true}
                 color='info'
+                sx={
+                  shift === 'Days' &&
+                  schedDate.toDateString() === date.toDateString()
+                    ? {
+                        backgroundColor: 'rgba(66, 135, 245, 0.2)',
+                        borderRadius: 0,
+                      }
+                    : { borderRadius: 0 }
+                }
                 onClick={e => {
                   setSchedDate(date);
                   setShift('Days');
@@ -295,6 +304,15 @@ export default function CollapsibleTable() {
               <Button
                 fullWidth={true}
                 color='warning'
+                sx={
+                  shift === 'Mids' &&
+                  schedDate.toDateString() === date.toDateString()
+                    ? {
+                        backgroundColor: 'rgba(229, 115, 115, 0.2)',
+                        borderRadius: 0,
+                      }
+                    : { borderRadius: 0 }
+                }
                 onClick={e => {
                   setSchedDate(date);
                   setShift('Mids');

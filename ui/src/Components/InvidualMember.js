@@ -127,7 +127,9 @@ const IndividualMember = () => {
                 </Typography>
               )}
 
-              <Typography sx={{ fontWeight: 'bold' }}>Arm Status:</Typography>
+              <Typography component='span' sx={{ fontWeight: 'bold' }}>
+                Arm Status:
+              </Typography>
               {member.weapon_arming === true ? (
                 // <Typography sx={{mb:5, color:"green"}}>Arm</Typography>
                 <Chip label='Arm' color='success' />
@@ -160,7 +162,7 @@ const style = {
 const EditMemberModal = props => {
   let memberObject = props;
   memberObject = memberObject.memberObject;
-  //console.log("member object, ", memberObject)
+  console.log('member object, ', memberObject);
 
   const { API, member, setTriggerFetch } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);

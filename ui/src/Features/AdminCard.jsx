@@ -77,7 +77,15 @@ const AdminCard = () => {
   // console.log(admins)
 
   return (
-    <Box sx={{ boxShadow: 3, mx: 10, my: 5, borderRadius: 3 }}>
+    <Box
+      sx={{
+        boxShadow: 3,
+        mx: 10,
+        my: 5,
+        borderRadius: 3,
+        backgroundColor: 'white',
+      }}
+    >
       <Box sx={{ px: 5, py: 5 }}>
         <Stack
           component='span'
@@ -124,7 +132,7 @@ const AdminCard = () => {
           </Box>
         </Stack>
 
-        <Stack container rowSpacing={8} sx={{ py: 5 }}>
+        <Stack sx={{ py: 5 }}>
           {admins
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((member, index) =>
@@ -183,7 +191,7 @@ const AdminCard = () => {
                     width='30%'
                     sx={{ display: 'flex' }}
                   >
-                    <Typography sx={{ textAlign: 'center' }}>
+                    <Typography component='span' sx={{ textAlign: 'center' }}>
                       {member.certs.length === 0 ? (
                         <Chip
                           icon={<WorkspacePremiumIcon />}
@@ -205,7 +213,7 @@ const AdminCard = () => {
                     width='30%'
                     sx={{ display: 'flex' }}
                   >
-                    <Typography sx={{ textAlign: 'center' }}>
+                    <Typography component='span' sx={{ textAlign: 'center' }}>
                       {member.weapons.length === 0 ? (
                         <Chip
                           color='secondary'
@@ -213,8 +221,9 @@ const AdminCard = () => {
                           label='No Weapons'
                         />
                       ) : (
-                        member.weapons.map(weapon => (
+                        member.weapons.map((weapon, index) => (
                           <Chip
+                            key={index}
                             icon={<SecurityIcon />}
                             label={weapon.weapon.toUpperCase()}
                             color='secondary'

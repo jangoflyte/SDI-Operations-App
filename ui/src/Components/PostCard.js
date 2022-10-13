@@ -103,56 +103,56 @@ export const PostCard = props => {
           </Typography>
         </Box>
       </Stack>
-      {roleArray(post).map(role => (
-        <>
-          <Stack
-            component='span'
-            direction='row'
-            alignItems='center'
-            pt={2}
-            sx={{ display: 'flex' }}
-          >
-            <Box width='33%'>
-              <Typography>{role.name}</Typography>
-            </Box>
-            <Box width='33%'>
-              <Typography sx={{ fontWeight: 'bold' }}>
-                {post.cert_req.length === 0 ? (
+      {roleArray(post).map((role, index) => (
+        <Stack
+          key={index}
+          component='span'
+          direction='row'
+          alignItems='center'
+          pt={2}
+          sx={{ display: 'flex' }}
+        >
+          <Box width='33%'>
+            <Typography>{role.name}</Typography>
+          </Box>
+          <Box width='33%'>
+            <Typography component='span' sx={{ fontWeight: 'bold' }}>
+              {post.cert_req.length === 0 ? (
+                <Chip
+                  icon={<WorkspacePremiumIcon />}
+                  label='No Certs'
+                  color='success'
+                />
+              ) : (
+                <Chip
+                  icon={<WorkspacePremiumIcon />}
+                  label={post.cert_req.map(cert => cert.cert)}
+                  color='success'
+                />
+              )}
+            </Typography>
+          </Box>
+          <Box width='33%'>
+            <Typography component='span' sx={{ fontWeight: 'bold' }}>
+              {post.weapon_req.length === 0 ? (
+                <Chip
+                  color='secondary'
+                  icon={<SecurityIcon />}
+                  label='No Weapons'
+                />
+              ) : (
+                post.weapon_req.map((weapon, index) => (
                   <Chip
-                    icon={<WorkspacePremiumIcon />}
-                    label='No Certs'
-                    color='success'
-                  />
-                ) : (
-                  <Chip
-                    icon={<WorkspacePremiumIcon />}
-                    label={post.cert_req.map(cert => cert.cert)}
-                    color='success'
-                  />
-                )}
-              </Typography>
-            </Box>
-            <Box width='33%'>
-              <Typography sx={{ fontWeight: 'bold' }}>
-                {post.weapon_req.length === 0 ? (
-                  <Chip
-                    color='secondary'
+                    key={index}
                     icon={<SecurityIcon />}
-                    label='No Weapons'
+                    label={weapon.weapon.toUpperCase()}
+                    color='secondary'
                   />
-                ) : (
-                  post.weapon_req.map(weapon => (
-                    <Chip
-                      icon={<SecurityIcon />}
-                      label={weapon.weapon.toUpperCase()}
-                      color='secondary'
-                    />
-                  ))
-                )}
-              </Typography>
-            </Box>
-          </Stack>
-        </>
+                ))
+              )}
+            </Typography>
+          </Box>
+        </Stack>
       ))}
     </Box>
   );

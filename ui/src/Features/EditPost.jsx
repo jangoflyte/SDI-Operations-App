@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import '../styles/MembersDetail.css';
 import BasicCard from '../Features/Card';
@@ -39,17 +39,16 @@ const style = {
   borderRadius: 4,
 };
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
     },
-  };
-  
+  },
+};
 
 export const EditPost = props => {
   const post = props.post;
@@ -59,11 +58,16 @@ export const EditPost = props => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   const [postName, setPostName] = useState(post.name);
   const [weapon, setWeapon] = useState(post.weapon_req);
+  const [weaponIdArray, setWeaponIdArray] = useState(
+    post.weapon_req.map(wep => wep.id)
+  );
   const [manReq, setManReq] = useState(post.man_req);
   const [cert, setCert] = useState(post.cert_id);
+  // const [checkedArray, setCheckedArray] = useState(
+  //   makeCheckedArray(allWeapons)
+  // );
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
@@ -71,6 +75,7 @@ export const EditPost = props => {
       name: postName,
       man_req: manReq,
       cert_id: cert,
+      weapon_req: weaponIdArray,
     };
     console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
@@ -93,17 +98,33 @@ export const EditPost = props => {
       });
   };
 
-  const [personName, setPersonName] = useState();
-
   const handleChange = event => {
     const {
-      target: { value },
+      target: { value, checked },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value
+    console.log(event);
+    console.log(
+      'value: checked ',
+      event.target.parentNode.parentNode.id,
+      checked
     );
+    let wepId = parseInt(event.target.parentNode.parentNode.id);
+    if (checked) {
+      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeapon(curr => [
+        ...curr,
+        allWeapons.filter(weapon => weapon.id === wepId)[0],
+      ]);
+    } else {
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+    }
   };
+
+  useEffect(() => {
+    // console.log('the weapons ', weapon);
+    console.log('weapon id Array ', weaponIdArray);
+  }, [weaponIdArray]);
 
   return (
     <>
@@ -227,25 +248,26 @@ export const EditPost = props => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weapon.map(weap => weap.weapon)}
-                onChange={handleChange}
+                // onChange={handleChange}
+                // onClick={handleChange}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
               >
-                {allWeapons.map(weaponObject => (
-                  <MenuItem key={weaponObject.id} value={weaponObject.weapon}>
+                {allWeapons.map((weaponObject, index) => (
+                  <MenuItem
+                    id={weaponObject.id}
+                    key={index}
+                    value={weaponObject.id}
+                  >
                     <Checkbox
-                      defaultChecked={
-                        weapon.filter(wep => wep.weapon_id === weaponObject.id)
-                          .length > 0
-                      }
-                      // checked={
-                      //   weapon.filter(wep => wep.weapon_id === weaponObject.id)
-                      //     .length > 0
-                      // }
-                      // mess with this to change temp state of weapon array then push the state
-                      // to the data base when save button clicked
-                      onClick={e => console.log(e.target.checked)}
+                      onChange={handleChange}
+                      defaultChecked={weapon.some(
+                        wep => wep.weapon_id === weaponObject.id
+                      )}
+                      // checked={weapon.some(
+                      //   wep => wep.weapon_id === weaponObject.id
+                      // )}
                     />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>

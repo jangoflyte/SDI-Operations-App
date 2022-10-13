@@ -43,6 +43,10 @@ export const MemberDetails = () => {
     setFlag(!flag);
   };
 
+  useEffect(() => {
+    setToggle(false);
+  }, []);
+
   const viewArray = [<BasicCard />, <AdminCard />, <UserCard />];
 
   // useEffect(()=> {
@@ -92,7 +96,7 @@ export const MemberDetails = () => {
               display: 'flex',
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            <FormControl sx={{ width: '40ch', backgroundColor: 'white' }}>
               <TextField
                 label='Search People'
                 id='fullWidth'
