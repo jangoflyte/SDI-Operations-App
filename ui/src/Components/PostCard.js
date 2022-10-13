@@ -128,15 +128,13 @@ export const PostCard = props => {
                 />
               ) : (
                 post.weapon_req.map((weapon, index) => (
-                  <span>
-                    <Chip
-                      key={index}
-                      icon={<SecurityIcon />}
-                      label={weapon.weapon.toUpperCase()}
-                      color='secondary'
-                    />
-                    &nbsp;
-                  </span>
+                  <Chip
+                    key={index}
+                    icon={<SecurityIcon />}
+                    label={weapon.weapon.toUpperCase()}
+                    color='secondary'
+                    sx={{ m: 1 / 4 }}
+                  />
                 ))
               )}
             </Typography>

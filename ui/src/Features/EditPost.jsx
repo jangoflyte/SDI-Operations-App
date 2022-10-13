@@ -46,7 +46,7 @@ const MenuProps = {
 };
 
 export const EditPost = props => {
-  const post = props.post;
+  const { post } = props;
 
   const { API, setTriggerFetch, setToggle, allWeapons } =
     useContext(MemberContext);
@@ -83,7 +83,7 @@ export const EditPost = props => {
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
-      .then(window.location.reload(false))
+      // .then(window.location.reload(false))
       .then(() => {
         setTriggerFetch(curr => !curr);
         setToggle(true);
@@ -117,10 +117,10 @@ export const EditPost = props => {
     }
   };
 
-  useEffect(() => {
-    // console.log('the weapons ', weapon);
-    console.log('weapon id Array ', weaponIdArray);
-  }, [weaponIdArray]);
+  // useEffect(() => {
+  //   // console.log('the weapons ', weapon);
+  //   console.log('weapon id Array ', weaponIdArray);
+  // }, [weaponIdArray]);
 
   return (
     <>

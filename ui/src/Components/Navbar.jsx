@@ -151,6 +151,13 @@ export default function PersistentDrawerLeft() {
         open={open}
       >
         <DrawerHeader>
+          {flag === false ? null : (
+            <Box>
+              <Button onClick={() => handleNavigate('/')}>
+                <img src={logo} alt='logo' style={{ width: '100%' }} />
+              </Button>
+            </Box>
+          )}
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? (
               <ChevronLeftIcon sx={{ color: 'white' }} />
@@ -159,13 +166,7 @@ export default function PersistentDrawerLeft() {
             )}
           </IconButton>
         </DrawerHeader>
-        {flag === false ? null : (
-          <Box>
-            <Button onClick={() => handleNavigate('/')}>
-              <img src={logo} alt='logo' />
-            </Button>
-          </Box>
-        )}
+
         <Typography
           sx={{ display: 'flex', justifyContent: 'center', color: 'white' }}
         >

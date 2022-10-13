@@ -222,15 +222,13 @@ const BasicCard = () => {
                       />
                     ) : (
                       member.weapons.map((weapon, index) => (
-                        <span>
-                          <Chip
-                            key={index}
-                            icon={<SecurityIcon />}
-                            label={weapon.weapon.toUpperCase()}
-                            color='secondary'
-                          />
-                          &nbsp;
-                        </span>
+                        <Chip
+                          key={index}
+                          icon={<SecurityIcon />}
+                          label={weapon.weapon.toUpperCase()}
+                          color='secondary'
+                          sx={{ m: 1 / 4 }}
+                        />
                       ))
                     )}
                     {/* <Chip icon={<SecurityIcon />} label={member.weapons.map(weapon => (weapon.weapon))} color="secondary"/> */}

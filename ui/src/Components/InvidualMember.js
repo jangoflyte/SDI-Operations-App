@@ -19,6 +19,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch } = useContext(MemberContext);
@@ -41,14 +44,23 @@ const IndividualMember = () => {
     );
   } else {
     return (
-      <>
-        <Stack direction='row' spacing={2} ml={3}>
-          <a href='/sfmembers' style={{ textDecoration: 'none' }}>
-            People&nbsp;
-          </a>
-          {'>'} {member.first_name} {member.last_name}
-        </Stack>
-        <Stack direction='row' alignItems='center' spacing={2} mt={4} ml={3}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Box>
+          <Stack direction='row' spacing={2}>
+            <a href='/sfmembers' style={{ textDecoration: 'none' }}>
+              People&nbsp;
+            </a>
+            {'>'} {member.first_name} {member.last_name}
+          </Stack>
+        </Box>
+        <Stack direction='row' alignItems='center' spacing={2} mt={6}>
           <Avatar />
           <h1>
             {member.first_name} {member.last_name}
@@ -140,7 +152,7 @@ const IndividualMember = () => {
             </Box>
           </Grid>
         </Box>
-      </>
+      </Box>
     );
   }
 };
@@ -159,12 +171,24 @@ const style = {
   borderRadius: 4,
 };
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 const EditMemberModal = props => {
   let memberObject = props;
   memberObject = memberObject.memberObject;
   console.log('member object, ', memberObject);
 
-  const { API, member, setTriggerFetch } = useContext(MemberContext);
+  const { API, member, setTriggerFetch, allWeapons } =
+    useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -174,8 +198,12 @@ const EditMemberModal = props => {
   const [rank, setRank] = useState(memberObject.rank);
   const [cert, setCert] = useState(memberObject.cert_id);
   const [weapon, setWeapon] = useState('');
+  const [weaponArr, setWeaponArr] = useState(memberObject.weapons);
   const [status, setStatus] = useState(memberObject.weapon_arming);
   const [notes, setNotes] = useState(memberObject.notes);
+  const [weaponIdArray, setWeaponIdArray] = useState(
+    memberObject.weapons.map(wep => wep.id)
+  );
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
@@ -208,6 +236,34 @@ const EditMemberModal = props => {
         console.log('Error: ', err);
       });
   };
+
+  const handleChange = event => {
+    const {
+      target: { value, checked },
+    } = event;
+    console.log(event);
+    console.log(
+      'value: checked ',
+      event.target.parentNode.parentNode.id,
+      checked
+    );
+    let wepId = parseInt(event.target.parentNode.parentNode.id);
+    if (checked) {
+      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeapon(curr => [
+        ...curr,
+        allWeapons.filter(weapon => weapon.id === wepId)[0],
+      ]);
+    } else {
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+    }
+  };
+
+  useEffect(() => {
+    // console.log('the weapons ', weapon);
+    console.log('weapon id Array ', weaponIdArray);
+  }, [weaponIdArray]);
 
   return (
     <>
@@ -376,24 +432,38 @@ const EditMemberModal = props => {
             </FormControl>
 
             <FormControl sx={{ width: '40ch' }}>
-              <InputLabel id='demo-simple-select-label'>
-                Weapon Qualifications
-              </InputLabel>
+              <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={weapon}
-                label='Weapon'
-                onChange={e => setWeapon(e.target.value)}
+                labelId='demo-multiple-checkbox-label'
+                id='demo-multiple-checkbox'
+                multiple
+                value={weaponArr.map(weap => weap.weapon)}
+                // onChange={handleChange}
+                // onClick={handleChange}
+                input={<OutlinedInput label='Tag' />}
+                renderValue={selected => selected.join(', ')}
+                MenuProps={MenuProps}
               >
-                <MenuItem value={null}></MenuItem>
-                <MenuItem value={1}>M4</MenuItem>
-                <MenuItem value={2}>M18</MenuItem>
-                <MenuItem value={3}>X26P Tazer</MenuItem>
-                <MenuItem value={4}>M249</MenuItem>
-                <MenuItem value={5}>M240</MenuItem>
-                <MenuItem value={6}>M107</MenuItem>
-                <MenuItem value={7}>M320</MenuItem>
+                {allWeapons.map((weaponObject, index) => (
+                  <MenuItem
+                    id={weaponObject.id}
+                    key={index}
+                    value={weaponObject.id}
+                  >
+                    <Checkbox
+                      onChange={handleChange}
+                      defaultChecked={weaponArr.some(
+                        wep => wep.id === weaponObject.id
+                      )}
+                      // checked={weapon.some(
+                      //   wep => wep.weapon_id === weaponObject.id
+                      // )}
+
+                      // make seperate component
+                    />
+                    <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Stack>
