@@ -89,7 +89,7 @@ const IndividualMember = () => {
             <EditMemberModal memberObject={member} />
           </Stack>
 
-          <Grid container justifyContent='space-between' sx={{ mt: 5 }}>
+          <Grid container justifyContent='space-evenly' sx={{ mt: 5 }}>
             <Box display='flex' flexDirection='column'>
               <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
               <Typography sx={{ mb: 5 }}>
@@ -306,8 +306,8 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -341,8 +341,8 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -407,8 +407,8 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
