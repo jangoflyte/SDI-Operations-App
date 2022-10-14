@@ -271,8 +271,7 @@ const AddMemberModal = () => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -300,8 +299,7 @@ const AddMemberModal = () => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -369,8 +367,8 @@ const AddMemberModal = () => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
-              justifyContent: 'space-between',
+
+              justifyContent: 'space-evenly',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
