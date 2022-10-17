@@ -14,7 +14,7 @@ exports.up = function(knex) {
         table.foreign('cert_id').references('id').inTable('certification');
         table.boolean('weapon_arming');
         table.boolean('admin');
-        table.string('notes');
+        table.string('notes',1024);
         table.string('email');
     })
 };

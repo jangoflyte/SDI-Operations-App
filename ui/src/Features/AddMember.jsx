@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { MemberContext } from '../Components/MemberContext';
-import { Button, Modal, Box, Paper, Typography } from '@mui/material/';
+import { Button, Modal, Box, Paper, Typography, Chip, TablePagination,Pagination , Stack} from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SecurityIcon from '@mui/icons-material/Security';
 
 const PostMemberModal = props => {
   const {
@@ -19,6 +21,8 @@ const PostMemberModal = props => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = useState({});
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   //  console.log(cert_req)
   let weaponsReq = weapon_req.split(' ');
@@ -42,13 +46,22 @@ const PostMemberModal = props => {
     }
   });
 
+  const onDataPageChange = (event, page) => setPage(page - 1);
+
+  const handleChangePage = (event, newPage) => setPage(newPage);
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   // console.log('flight filter', filterFlight, weapon_req)
 
   const style = {
     position: 'absolute',
     top: '0',
     right: '0',
-    width: '50vw',
+    width: '60vw',
     height: 'auto',
     minHeight: '100%',
     bgcolor: 'background.paper',
@@ -148,13 +161,16 @@ const PostMemberModal = props => {
               {role === 1 && `Shift: Alpha`}
               {role === 2 && `Shift: Bravo`}
               {role === 3 && `Shift: Charle`}
+              <br />
+              Panama 12
             </Box>
           </Box>
 
-          <Box
+          <Stack
             sx={{
               display: 'flex',
-              justifyContent: 'center',
+              //justifyContent: 'center',
+              justifyContent: 'space-between',
               flexDirection: 'column',
               gap: 1,
               mt: 10,
@@ -162,7 +178,9 @@ const PostMemberModal = props => {
             }}
           >
             {filterFlight.length > 0
-              ? filterFlight.map((user, index) => (
+              ? filterFlight
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((user, index) => (
                   <Button
                     key={index}
                     sx={
@@ -194,19 +212,45 @@ const PostMemberModal = props => {
                       <Box
                         sx={{ textAlign: 'left', minWidth: '30%' }}
                       >{`${user.first_name} ${user.last_name}`}</Box>
+                      
+                      {/* <Box
+                        sx={{ textAlign: 'left', minWidth: '30%' }}
+                      >{`${user.certs[0].cert}`}</Box> */}
                       <Box
                         sx={{ textAlign: 'center', minWidth: '30%' }}
-                      >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box>
+                      >{<Chip
+                        icon={<WorkspacePremiumIcon />}
+                        label={user.certs[0].cert}
+                        color='success'
+                        />}</Box>
+
+                      {/* <Box
+                        sx={{ textAlign: 'center', minWidth: '30%' }}
+                      >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
                       <Box
-                        sx={{ textAlign: 'left', minWidth: '30%' }}
-                      >{`${user.certs[0].cert}`}</Box>
+                        sx={{ textAlign: 'right', minWidth: '40%' }}
+                      >{user.weapons.map(wep => 
+                        <span>
+                          <Chip
+                          icon={<SecurityIcon />}
+                          label={wep.weapon.toUpperCase()}
+                          color='secondary'
+                          />&nbsp;
+                        </span>)}
+                        </Box>
                     </Paper>
                   </Button>
                 ))
               : `Loading`}
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
-            <Button
+          </Stack>
+
+          <Stack direction="row" mt={3} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Box 
+              justifyContent='left'
+              // width='10%'
+              alignItems='center'
+              sx={{ borderRadius: '30px', display: 'flex'  }}>
+              <Button
               onClick={() => {
                 handleClose();
                 // console.log('selected person', selected);
@@ -237,11 +281,41 @@ const PostMemberModal = props => {
               }}
               color='secondary'
               variant='contained'
-              sx={{ borderRadius: '30px', mt: 5 }}
-            >
-              ADD TO SCHEDULE
-            </Button>
-          </Box>
+              sx={{ borderRadius: '30px'}}
+              >
+                ADD TO SCHEDULE
+              </Button>
+            </Box>
+            
+            <Box 
+                justifyContent='left'
+                // width='35%'
+                alignItems='center'
+                sx={{ display: 'flex', justifyContent: 'space-between' }}>
+              <Pagination
+                count={Math.ceil(filterFlight.length / rowsPerPage)}
+                onChange={onDataPageChange}
+                page={page + 1}
+                color='secondary'
+              />      
+            </Box>
+            
+            <Box 
+                justifyContent='right'
+                // width='30%'
+                sx={{ display: 'flex' }}>
+              <TablePagination
+                rowsPerPageOptions={[5, 10]}
+                component='div'
+                count={filterFlight.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Box>
+             
+          </Stack>
         </Box>
       </Modal>
     </>

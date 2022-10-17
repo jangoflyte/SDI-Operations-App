@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 // import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Button, Divider } from '@mui/material/';
+import { Button, Divider, Chip } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -17,6 +17,8 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { MemberContext } from '../Components/MemberContext';
 import PostMemberModal from './AddMember';
 import EditSchedule from './EditSchedule';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SecurityIcon from '@mui/icons-material/Security';
 
 export default function CollapsibleTable() {
   const { API } = useContext(MemberContext);
@@ -334,10 +336,10 @@ export default function CollapsibleTable() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Post</TableCell>
-              <TableCell align='right'>Manning Requirements</TableCell>
-              <TableCell align='right'>Weapon Requirements</TableCell>
-              <TableCell align='right'>Certification Required</TableCell>
+              <TableCell sx={{fontWeight: "bold"}}>Post</TableCell>
+              <TableCell align='right' sx={{fontWeight: "bold"}}>Manning Requirements</TableCell>
+              <TableCell align='right' sx={{fontWeight: "bold"}}>Weapon Requirements</TableCell>
+              <TableCell align='right' sx={{fontWeight: "bold"}}>Certification Required</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -354,6 +356,8 @@ export default function CollapsibleTable() {
 const Row = props => {
   const { row } = props;
   const [open, setOpen] = useState(false);
+
+  const splitArr = row.weapons.split(" ");
 
   return (
     <React.Fragment>
@@ -414,8 +418,26 @@ const Row = props => {
           </Box>
         </TableCell>
         <TableCell align='right'>{row.man_req}</TableCell>
-        <TableCell align='right'>{row.weapons}</TableCell>
-        <TableCell align='right'>{row.cert[0].cert}</TableCell>
+        {/* <TableCell align='right'>{row.weapons.toUpperCase()}</TableCell> */}
+        <TableCell align='right'>
+          {splitArr.map(wep => (
+            <span>
+              <Chip
+              icon={<SecurityIcon />}
+              label={wep.toUpperCase()}
+              color='secondary'
+              />&nbsp;
+            </span>
+         ))}
+        </TableCell>
+        {/* <TableCell align='right'>{row.cert[0].cert}</TableCell> */}
+        <TableCell align='right'>
+          <Chip
+          icon={<WorkspacePremiumIcon />}
+          label={row.cert[0].cert}
+          color='success'
+          />
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -477,7 +499,7 @@ const Row = props => {
                       <TableCell align='right'>
                         {!userRow.noUser &&
                           `${userRow.user_info[0].weapons.map(
-                            wep => `${wep.weapon} `
+                            wep => `${wep.weapon.toUpperCase()} `
                           )}`}
                       </TableCell>
                       <TableCell align='right'>

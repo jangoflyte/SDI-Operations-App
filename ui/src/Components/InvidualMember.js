@@ -248,13 +248,13 @@ const EditMemberModal = props => {
       checked
     );
     let wepId = parseInt(event.target.parentNode.parentNode.id);
-    if (checked) {
+    if (checked && !weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
       setWeapon(curr => [
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else {
+    } else if(!checked) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
@@ -432,7 +432,7 @@ const EditMemberModal = props => {
             </FormControl>
 
             <FormControl sx={{ width: '40ch' }}>
-              <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
+              <InputLabel id='demo-multiple-checkbox-label'>Weapons</InputLabel>
               <Select
                 labelId='demo-multiple-checkbox-label'
                 id='demo-multiple-checkbox'
