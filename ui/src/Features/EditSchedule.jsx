@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import { Button, Modal, Box, Paper, Typography } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
+import ReplaceMemberModal from './ReplaceMember';
 
 const EditSchedule = props => {
   const {
@@ -72,12 +73,25 @@ const EditSchedule = props => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
-          <Typography sx={{ textAlign: 'center', fontSize: '2.2rem' }}>
-            Edit Position
+          <Typography
+            sx={{ textAlign: 'center', fontSize: '2.2rem', fontWeight: 'bold' }}
+          >
+            Edit Post Assignment
           </Typography>
           <Typography
             sx={{ textAlign: 'center', fontSize: '1.2rem' }}
-          >{`Do you want to remove ${userRow.user_info[0].rank} ${userRow.user_info[0].first_name} ${userRow.user_info[0].last_name}`}</Typography>
+          >{`Are you sure you want to modify ${post} position 
+            ${
+              (role === 0 && `Lead`) ||
+              (role === 1 && `Alpha`) ||
+              (role === 2 && `Bravo`) ||
+              (role === 3 && `Charle`)
+            } assignment?`}</Typography>
+          {/* <Typography
+            sx={{ textAlign: 'center', fontSize: '1.2rem' }}
+          >{`Do you want to remove ${userRow.user_info[0].rank.toUpperCase()} ${
+            userRow.user_info[0].first_name
+          } ${userRow.user_info[0].last_name}?`}</Typography> */}
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box
               sx={{
@@ -89,15 +103,32 @@ const EditSchedule = props => {
             >
               {currentDate.toDateString()}
               <br />
-              Post: {post}
+              {userRow.user_info[0].first_name} {userRow.user_info[0].last_name}
               <br />
+              Post: {post}&nbsp;&nbsp;&nbsp;
               {role === 0 && `Shift: Lead`}
               {role === 1 && `Shift: Alpha`}
               {role === 2 && `Shift: Bravo`}
               {role === 3 && `Shift: Charle`}
+              <br />
+              Panama 12
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
+            <Button
+              onClick={() => {
+                // console.log('clicked save');
+                //handleClose();
+              }}
+              // color='error'
+              color='secondary'
+              variant='contained'
+              // variant='text'
+              sx={{ mt: 5, borderRadius: '30px' }}
+            >
+              Replace Airman
+            </Button>
+            {/* <ReplaceMemberModal /> */}
             <Button
               onClick={() => {
                 // console.log('clicked save', userRow.id);
@@ -105,21 +136,10 @@ const EditSchedule = props => {
                 delSchedule(userRow.id);
               }}
               color='secondary'
-              variant='contained'
+              variant='outlined'
               sx={{ borderRadius: '30px', mt: 5 }}
             >
-              Remove User
-            </Button>
-            <Button
-              onClick={() => {
-                // console.log('clicked save');
-                handleClose();
-              }}
-              color='error'
-              variant='text'
-              sx={{ mt: 5 }}
-            >
-              cancel
+              Remove Airman
             </Button>
           </Box>
         </Box>

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -24,6 +25,7 @@ const {
   patchSchedule,
   deleteScheduleById,
   patchPosition,
+  userCheck,
 } = require('./controller.js');
 
 // middleware ////////////////////////////////
@@ -84,13 +86,13 @@ app.post('/login', async (req, res) => {
 //{first_name: 'John', last_name: 'Doe', rank: 'e5', flight: 'alpha-1',cert_id: 4, weapon_arming: true, admin: true }
 app.post('/register', async (req, res) => {
   try {
-    const { first_name, last_name, user_name, password, rank } = req.body;
+    const { first_name, last_name, email, password, rank } = req.body;
     // check if all information is provided
-    if (!(user_name && password && first_name && last_name && rank)) {
+    if (!(email && password && first_name && last_name && rank)) {
       res.status(400).send('All input is required');
     }
     // check if user exists already
-    const userExist = await userCheck(user_name);
+    const userExist = await userCheck(email);
     if (userExist !== null) {
       return res.status(409).send('User Already Exist. Please Login');
     }
@@ -102,14 +104,14 @@ app.post('/register', async (req, res) => {
     const user = {
       first_name: first_name,
       last_name: last_name,
-      user_name: user_name,
+      email: email,
       password: hashedPassword,
       rank: rank,
     };
     // push user to db
     postUsers(user)
       .then(results => {
-        const userToken = { user_name: user.user_name };
+        const userToken = { email: user.email };
         const accessToken = jwt.sign(
           userToken,
           process.env.ACCESS_TOKEN_SECRET
@@ -128,7 +130,6 @@ app.post('/register', async (req, res) => {
     res.status(500).send();
   }
 });
-
 
 app.get('/', (request, response) => {
   response.set('Access-Control-Allow-Origin', '*');

@@ -111,7 +111,7 @@ export const EditPost = props => {
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else if(!checked) {
+    } else if (!checked) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
