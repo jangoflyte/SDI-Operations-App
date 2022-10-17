@@ -106,7 +106,7 @@ const deleteScheduleById = async id => {
 };
 
 const getAllposition = async () => {
-  let positions = await knex('position').select('*').orderBy('name', 'asc');
+  let positions = await knex('position').select('*').orderBy('id', 'asc');
   let positionsWeapon = await postWeapon(positions);
   let positionsCerts = await postCert(positionsWeapon);
   return positionsCerts;

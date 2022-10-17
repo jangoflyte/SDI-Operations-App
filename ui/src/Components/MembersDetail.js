@@ -21,6 +21,9 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
 
 export const MemberDetails = () => {
   const { API, setUsersArray, usersArray, triggerFetch, toggle, setToggle } =
@@ -172,7 +175,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 800,
+  width: 650,
   height: 600,
   bgcolor: 'background.paper',
   border: '2px solid #000',
@@ -181,8 +184,19 @@ const style = {
   borderRadius: 4,
 };
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 const AddMemberModal = () => {
-  const { API, setTriggerFetch, setToggle } = useContext(MemberContext);
+  const { API, setTriggerFetch, setToggle, allWeapons } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -195,6 +209,8 @@ const AddMemberModal = () => {
   const [weapon, setWeapon] = useState(0);
   const [status, setStatus] = useState();
   const [notes, setNotes] = useState('');
+  const [weaponArr, setWeaponArr] = useState([]);
+  const [weaponIdArray, setWeaponIdArray] = useState();
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
@@ -228,13 +244,41 @@ const AddMemberModal = () => {
       });
   };
 
+  const handleChange = event => {
+    const {
+      target: { value, checked },
+    } = event;
+    console.log(event);
+    console.log(
+      'value: checked ',
+      event.target.parentNode.parentNode.id,
+      checked
+    );
+    let wepId = parseInt(event.target.parentNode.parentNode.id);
+    if (checked) {
+      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeapon(curr => [
+        ...curr,
+        allWeapons.filter(weapon => weapon.id === wepId)[0],
+      ]);
+    } else {
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+    }
+  };
+
+  useEffect(() => {
+    // console.log('the weapons ', weapon);
+    console.log('weapon id Array ', weaponIdArray);
+  }, [weaponIdArray]);
+
   return (
     <>
       <Button
         onClick={handleOpen}
         variant='contained'
         color='secondary'
-        size='large'
+        size='medium'
         sx={{ borderRadius: '30px' }}
       >
         Add User
@@ -245,7 +289,7 @@ const AddMemberModal = () => {
         aria-labelledby='modal-modal-title'
         aria-describedby='modal-modal-description'
       >
-        <Box sx={style}>
+        <Box sx={style} p={3}>
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
@@ -271,7 +315,7 @@ const AddMemberModal = () => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-between',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -299,7 +343,7 @@ const AddMemberModal = () => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-between',
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -368,7 +412,7 @@ const AddMemberModal = () => {
             sx={{
               display: 'flex',
 
-              justifyContent: 'space-evenly',
+              justifyContent: 'space-between',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -392,24 +436,40 @@ const AddMemberModal = () => {
             </FormControl>
 
             <FormControl sx={{ width: '40ch' }}>
-              <InputLabel id='demo-simple-select-label'>
-                Weapon Qualifications
-              </InputLabel>
+              <InputLabel id='demo-multiple-checkbox-label'>Tag</InputLabel>
               <Select
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={weapon}
-                label='Weapon'
-                onChange={e => setWeapon(e.target.value)}
+                labelId='demo-multiple-checkbox-label'
+                id='demo-multiple-checkbox'
+                multiple
+                value={weaponArr.map(weap => weap)}
+                defaultValue={"None Selected"}
+                // value={weaponArr}
+                // onChange={handleChange}
+                // onClick={handleChange}
+                input={<OutlinedInput label='Tag' />}
+                // renderValue={selected => selected.join(', ')}
+                MenuProps={MenuProps}
               >
-                <MenuItem value={null}></MenuItem>
-                <MenuItem value={1}>M4</MenuItem>
-                <MenuItem value={2}>M18</MenuItem>
-                <MenuItem value={3}>X26P Tazer</MenuItem>
-                <MenuItem value={4}>M249</MenuItem>
-                <MenuItem value={5}>M240</MenuItem>
-                <MenuItem value={6}>M107</MenuItem>
-                <MenuItem value={7}>M320</MenuItem>
+                {allWeapons.map((weaponObject, index) => (
+                  <MenuItem
+                    id={weaponObject.id}
+                    key={index}
+                    value={weaponObject.id}
+                  >
+                    <Checkbox
+                      onChange={handleChange}
+                      // defaultChecked={weaponArr.some(
+                      //   wep => wep.id === weaponObject.id
+                      // )}
+                      // checked={weapon.some(
+                      //   wep => wep.weapon_id === weaponObject.id
+                      // )}
+
+                      // make seperate component
+                    />
+                    <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Stack>

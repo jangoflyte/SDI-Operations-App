@@ -429,8 +429,8 @@ const Row = props => {
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Posted</TableCell>
-                    <TableCell>Members</TableCell>
+                    <TableCell sx={{fontWeight: "bold"}}>Posted</TableCell>
+                    <TableCell sx={{fontWeight: "bold"}}>Members</TableCell>
                     <TableCell align='right'> </TableCell>
                     <TableCell align='right'> </TableCell>
                   </TableRow>

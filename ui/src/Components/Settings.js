@@ -25,6 +25,8 @@ export const Settings = () => {
   const [postArray, setPostArray] = useState([]);
   const [postsPage, setPostsPage] = useState(true);
   const [sgt, setSgt] = useState([]);
+  const [day, setDay] = useState("Day");
+  const [flag, setFlag] = useState(false);
 
   useEffect(() => {
     fetch(`${API}/position`, {
@@ -40,6 +42,7 @@ export const Settings = () => {
   }, [postArray]);
 
   useEffect(() => {
+    //placeholder for desk sergeant
     fetch(`${API}/users/9`, {
       method: 'GET',
     })
@@ -47,6 +50,12 @@ export const Settings = () => {
       .then(data => setSgt(data))
       .catch(err => console.log(err));
   }, [triggerFetch]);
+
+  const dayArr = ["Day", "Night"]
+  const handleClick = (day) => {
+    setFlag(!flag)
+    setDay(dayArr[day])
+  }
 
   if (postArray.length === 0) {
     return (
@@ -73,12 +82,11 @@ export const Settings = () => {
         >
           Settings
         </Typography>
-        <Box>
+        <Box sx={{width: 500, display: "flex", justifyContent: "space-between"}}>
           {postsPage === true ? (
             <>
               <Typography
                 variant='h7'
-                pb={4}
                 onClick={() => setPostsPage(true)}
                 sx={{
                   fontWeight: 'bold',
@@ -91,8 +99,6 @@ export const Settings = () => {
               </Typography>
               <Typography
                 variant='h7'
-                ml={10}
-                pb={4}
                 onClick={() => setPostsPage(false)}
                 sx={{
                   fontWeight: 'bold',
@@ -106,7 +112,6 @@ export const Settings = () => {
             <>
               <Typography
                 variant='h7'
-                pb={4}
                 onClick={() => setPostsPage(true)}
                 sx={{
                   fontWeight: 'bold',
@@ -117,8 +122,6 @@ export const Settings = () => {
               </Typography>
               <Typography
                 variant='h7'
-                pb={4}
-                ml={10}
                 onClick={() => setPostsPage(false)}
                 sx={{
                   fontWeight: 'bold',
@@ -132,11 +135,29 @@ export const Settings = () => {
             </>
           )}
         </Box>
+              
+       
 
         {postsPage === true ? (
           <>
+            <Stack direction="row" mt={3} sx={{width: 300, display: "flex", justifyContent: "space-between"}}>
+              <Button 
+                //color='secondary'
+                color={flag ?  'primary' : 'secondary'}
+                variant='contained'
+                sx={{ borderRadius: '30px' }}
+                onClick={() => handleClick(0)}
+                >Day Posts</Button>
+              <Button 
+                //color='secondary'
+                color={flag ? 'secondary' : 'primary'}
+                variant='contained'
+                sx={{ borderRadius: '30px' }}
+                onClick={() => handleClick(1)}
+                >Night Posts</Button>
+            </Stack>
             <Box sx={{ my: 4 }}>
-              <Typography variant='h5'>{postArray.length} Posts</Typography>
+              <Typography variant='h5'>{postArray.length} {day} Posts</Typography>
             </Box>
 
             {postArray.map((post, index) => {
@@ -151,7 +172,7 @@ export const Settings = () => {
                 marginTop: '5%',
                 display: 'flex',
                 justifyContent: 'space-between',
-                width: '55%',
+                width: 1000,
               }}
             >
               <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
@@ -265,7 +286,7 @@ const Edit = props => {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 700,
-    height: 400,
+    height: 350,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
