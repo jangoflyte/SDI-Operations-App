@@ -481,7 +481,7 @@ const EditMemberModal = props => {
               fullWidth
               multiline
               rows={4}
-              value={notes}
+              value={notes === null ? 'N/A' : notes}
               sx={{ mb: 2 }}
               inputProps={{
                 defaultValue: `${memberObject.notes}`,

@@ -16,7 +16,7 @@ const PostMemberModal = props => {
     currentDate,
     shift,
   } = props;
-  const { API, data } = useContext(MemberContext);
+  const { API, data, setPostAlert} = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -88,7 +88,9 @@ const PostMemberModal = props => {
       .then(data => {
         console.log(data);
         // call update for users
-        fetchSchedule();
+        fetchSchedule()
+        setPostAlert(true)
+        ;
       })
       .catch(err => {
         console.log('error: ', err);

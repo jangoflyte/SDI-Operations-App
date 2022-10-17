@@ -1,7 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
+// controller imports ///////////////////////////
 const {
   getAllUsers,
   postUsers,
@@ -22,18 +26,109 @@ const {
   patchPosition,
 } = require('./controller.js');
 
+// middleware ////////////////////////////////
 app.use(
   cors({
+    credentials: true,
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    // credentials: true
   })
 );
+app.use(cookieParser());
 app.use(express.json());
 
-// const env = process.env.NODE_ENV || 'development'
-// const config = require('../knexfile')[env]
-// const knex = require('knex')(config)
+// auth check middleware /////////////////////////////////////
+const authenticateToken = (req, res, next) => {
+  // const authHeader = req.headers['authorization'];
+  // const token = authHeader && authHeader.split(' ')[1];
+  // dont know auth headers yet so using cookie instead
+  // console.log(req.cookies);
+  const token = req.cookies.auth;
+  // console.log(token);
+  if (token === undefined) return res.status(401).send('no token');
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).send(err);
+    req.user = user;
+    next();
+  });
+};
+
+app.post('/login', async (req, res) => {
+  // authenticate user
+  const user = await userCheck(req.body.user_name);
+  if (user === null) return res.status(400).send('Cannot find user');
+  try {
+    // console.log(user);
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      const userToken = { user_name: user.user_name };
+      const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET);
+      res
+        .status(200)
+        // .cookie('auth', accessToken, { maxAge: 900000 })
+        .send({
+          status: 'success',
+          user: user,
+          cookie: ['auth', accessToken, { maxAge: 900000 }],
+        });
+    } else {
+      res.status(403).send({
+        status: 'not allowed',
+      });
+    }
+  } catch {
+    err => res.status(500).send({ status: err });
+  }
+});
+
+//{first_name: 'John', last_name: 'Doe', rank: 'e5', flight: 'alpha-1',cert_id: 4, weapon_arming: true, admin: true }
+app.post('/register', async (req, res) => {
+  try {
+    const { first_name, last_name, user_name, password, rank } = req.body;
+    // check if all information is provided
+    if (!(user_name && password && first_name && last_name && rank)) {
+      res.status(400).send('All input is required');
+    }
+    // check if user exists already
+    const userExist = await userCheck(user_name);
+    if (userExist !== null) {
+      return res.status(409).send('User Already Exist. Please Login');
+    }
+    // create user
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    console.log('salt', salt);
+    console.log('hashed pw', hashedPassword);
+    const user = {
+      first_name: first_name,
+      last_name: last_name,
+      user_name: user_name,
+      password: hashedPassword,
+      rank: rank,
+    };
+    // push user to db
+    postUsers(user)
+      .then(results => {
+        const userToken = { user_name: user.user_name };
+        const accessToken = jwt.sign(
+          userToken,
+          process.env.ACCESS_TOKEN_SECRET
+        );
+        res
+          .status(201)
+          // .cookie('auth', accessToken, { maxAge: 900000 })
+          .send({
+            status: 'success',
+            user: results,
+            cookie: ['auth', accessToken, { maxAge: 900000 }],
+          });
+      })
+      .catch(err => res.status(500).send(err));
+  } catch {
+    res.status(500).send();
+  }
+});
+
 
 app.get('/', (request, response) => {
   response.set('Access-Control-Allow-Origin', '*');

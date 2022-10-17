@@ -2,6 +2,25 @@ const knex = require('knex')(
   require('../knexfile.js')[process.env.NODE_ENV || 'development']
 );
 
+// login or registration ////////////////////////////////////////
+const postNewUser = async userInfo => {
+  console.log(userInfo);
+  results = await knex('user_table').insert(userInfo, ['*']);
+  return results;
+};
+
+const userCheck = async username => {
+  console.log(username);
+  results = await knex('user_table').select('*').where('user_name', username);
+  if (results[0] === undefined) {
+    return null;
+  } else {
+    console.log('user found');
+    return results[0];
+  }
+};
+
+// helper functions //////////////////////////////////////
 const addWeapon = async users => {
   let modifiedUsers = users;
   for (let user of modifiedUsers) {
@@ -49,6 +68,8 @@ const postCert = async posts => {
   return modifiedPosts;
 };
 
+
+// user /////////////////////////////////////////////////////////////
 const getAllUsers = async () => {
   let users = await knex('user_table').select('*').orderBy('last_name', 'asc');
   let wepUsers = await addWeapon(users);
@@ -68,6 +89,34 @@ const searchUsers = async searchInput => {
   return certUsers;
 };
 
+const individualUser = async id => {
+  let users = await knex('user_table').where({ id: id });
+  let wepUsers = await addWeapon(users);
+  let certUsers = await addCerts(wepUsers);
+  return certUsers;
+};
+
+const postUsers = body => {
+  return knex('user_table').insert(body);
+};
+
+const updateUser = req => {
+  console.log('TEST this is req.body for update user: ', req.body);
+const newUser = {
+  first_name: req.body.first_name,
+  last_name:req.body.last_name,
+  admin: req.body.admin,
+  rank: req.body.rank,
+  cert_id: req.body.cert_id,
+  weapon_arming: req.body.weapon_arming,
+  notes: req.body.notes
+}
+
+  knex.raw('TRUNCATE users_table CASCADE');
+  return knex('user_table').where({ id: req.params.id }).update(req.body);
+};
+
+// schedules //////////////////////////////////////////////
 const getAllSchedule = async () => {
   let schedules = await knex('post_schedule').select('*');
   let schedUsers = await schedAddUsers(schedules);
@@ -105,6 +154,13 @@ const deleteScheduleById = async id => {
   return results;
 };
 
+const deleteUser = async id => {
+  await deleteWeaponUserByUser(id);
+  await deletePostSchedule(id);
+  return await knex('user_table').where({ id: id }).delete();
+};
+
+// position /////////////////////////////////////////////////////////////
 const getAllposition = async () => {
   let positions = await knex('position').select('*').orderBy('id', 'asc');
   let positionsWeapon = await postWeapon(positions);
@@ -112,16 +168,6 @@ const getAllposition = async () => {
   return positionsCerts;
 };
 
-const individualUser = async id => {
-  let users = await knex('user_table').where({ id: id });
-  let wepUsers = await addWeapon(users);
-  let certUsers = await addCerts(wepUsers);
-  return certUsers;
-};
-
-const postUsers = body => {
-  return knex('user_table').insert(body);
-};
 
 const postWeaponUser = body => {
   return knex('weapon_user').insert(body);
@@ -131,11 +177,6 @@ const allWeapons = () => {
   return knex('weapon').select('*');
 };
 
-const updateUser = req => {
-  console.log('this is req.body for update user: ', req.body);
-  knex.raw('TRUNCATE users_table CASCADE');
-  return knex('user_table').where({ id: req.params.id }).update(req.body);
-};
 
 const deleteWeaponPosition = async positionId => {
   let results = await knex('weapon_position')
@@ -191,11 +232,7 @@ const deletePostSchedule = async userId => {
   return knex('post_schedule').where({ user_id: userId }).delete();
 };
 
-const deleteUser = async id => {
-  await deleteWeaponUserByUser(id);
-  await deletePostSchedule(id);
-  return await knex('user_table').where({ id: id }).delete();
-};
+
 
 module.exports = {
   getAllUsers,

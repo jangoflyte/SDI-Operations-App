@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 // import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Button, Divider, Chip } from '@mui/material/';
+import { Button, Divider, Chip, Alert, Stack } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -21,7 +21,7 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 
 export default function CollapsibleTable() {
-  const { API } = useContext(MemberContext);
+  const { API, postAlert, setPostAlert } = useContext(MemberContext);
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
@@ -52,7 +52,9 @@ export default function CollapsibleTable() {
       })
       .then(data => {
         // console.log(data);
-        setPositions(data);
+        setPositions(data)
+        setPostAlert(false)
+        ;
       })
       .catch(err => {
         console.log('error: ', err);
@@ -201,6 +203,13 @@ export default function CollapsibleTable() {
         gap: 3,
       }}
     >
+      {postAlert === false ? null : (
+          <Stack sx={{ width: '100%' }}>
+            <Alert severity='success' spacing={2} mb={2}>
+              Airman has been successfully assigned to the post position.
+            </Alert>
+          </Stack>
+        )}
       <Typography variant='h1' component='h2'>
         {schedDate.toDateString()}
       </Typography>

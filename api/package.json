@@ -12,8 +12,11 @@
   "author": "Avery Pears, Eric Sheridan, Matthew Greenup, Miguel Castro, Nicholas Sexton, and Pariss Youngblood",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^2.3.0",
     "pg": "^8.7.3"
   },
