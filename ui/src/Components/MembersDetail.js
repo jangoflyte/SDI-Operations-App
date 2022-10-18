@@ -58,10 +58,6 @@ export const MemberDetails = () => {
     <UserCard key={3} />,
   ];
 
-  // useEffect(()=> {
-  //   console.log("users array: ", usersArray)
-  // },[usersArray])
-
   const buttonSX = {
     borderRadius: '30px',
     marginRight: '10px',
@@ -227,6 +223,7 @@ const AddMemberModal = () => {
       cert_id: cert,
       weapon_arming: status,
       notes: notes,
+      weaponIdArray: weaponIdArray,
     };
     //console.log("updated user, ", updatedUser)
 
@@ -273,7 +270,6 @@ const AddMemberModal = () => {
   };
 
   useEffect(() => {
-    // console.log('the weapons ', weapon);
     console.log('weapon id Array ', weaponIdArray);
   }, [weaponIdArray]);
 

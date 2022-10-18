@@ -26,9 +26,6 @@ import Checkbox from '@mui/material/Checkbox';
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch } = useContext(MemberContext);
   const { memberId } = useParams();
-  //console.log(member);
-  // console.log(typeof(member));
-  // console.log("params: ", memberId)
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
@@ -120,6 +117,9 @@ const IndividualMember = () => {
               ) : (
                 <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
               )}
+
+              <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
+              <Typography sx={{ mb: 5 }}>{member.email}</Typography>
             </Box>
 
             <Box display='flex' flexDirection='column'>
@@ -149,6 +149,9 @@ const IndividualMember = () => {
                 // <Typography sx={{ mb: 5, color: "red" }}>Do Not Arm</Typography>
                 <Chip label='Do Not Arm' color='secondary' />
               )}
+
+              <Typography sx={{ fontWeight: 'bold' }}>Flight:</Typography>
+              <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
             </Box>
           </Grid>
         </Box>
@@ -262,7 +265,6 @@ const EditMemberModal = props => {
   };
 
   useEffect(() => {
-    // console.log('the weapons ', weapon);
     console.log('weapon id Array ', weaponIdArray);
   }, [weaponIdArray]);
 
@@ -456,11 +458,6 @@ const EditMemberModal = props => {
                       defaultChecked={weaponArr.some(
                         wep => wep.id === weaponObject.id
                       )}
-                      // checked={weapon.some(
-                      //   wep => wep.weapon_id === weaponObject.id
-                      // )}
-
-                      // make seperate component
                     />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>

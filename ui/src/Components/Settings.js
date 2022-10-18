@@ -68,10 +68,8 @@ export const Settings = () => {
       <Box
         sx={{
           display: 'flex',
-          // flexWrap: 'wrap',
           flexDirection: 'column',
           alignItems: 'center',
-          // justifyContent: 'left',
         }}
       >
         <Typography
@@ -93,7 +91,7 @@ export const Settings = () => {
                 sx={{
                   fontWeight: 'bold',
                   cursor: 'pointer',
-                  color: '#BD5334',
+                  color: '#BD5336',
                   textDecoration: 'underline',
                 }}
               >
@@ -150,7 +148,6 @@ export const Settings = () => {
               }}
             >
               <Button
-                //color='secondary'
                 color={flag ? 'primary' : 'secondary'}
                 variant='contained'
                 sx={{ borderRadius: '30px' }}
@@ -159,7 +156,6 @@ export const Settings = () => {
                 Day Posts
               </Button>
               <Button
-                //color='secondary'
                 color={flag ? 'secondary' : 'primary'}
                 variant='contained'
                 sx={{ borderRadius: '30px' }}
@@ -281,7 +277,6 @@ export const Settings = () => {
 const Edit = props => {
   let memberObject = props;
   memberObject = memberObject.memberObject[0];
-  //console.log('member object, ', memberObject);
 
   const { API, setTriggerFetch } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
@@ -291,8 +286,6 @@ const Edit = props => {
   const [lastName, setLastName] = useState(memberObject.last_name);
   const [email, setEmail] = useState(memberObject.email);
   const [cert, setCert] = useState(memberObject.cert_id);
-
-  //console.log(memberObject.first_name);
 
   const style = {
     position: 'absolute',
@@ -324,8 +317,6 @@ const Edit = props => {
         'Content-Type': 'application/json; charset=utf-8',
       },
     })
-      // .then(window.location.reload(false))
-      // .then(navigate(`/sfmembers/${member.id}`))
       .then(res => res.json())
       .then(() => {
         setTriggerFetch(curr => !curr);

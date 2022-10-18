@@ -46,7 +46,7 @@ export const DataSources = () => {
             Arming Status
           </Typography>
           <p>
-            Upload your .csv file indicating your recent Do Not Arm airment
+            Upload your .csv file indicating your recent Do Not Arm airmen
             status.
           </p>
         </CardContent>

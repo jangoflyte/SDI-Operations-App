@@ -17,40 +17,22 @@ import { useContext } from 'react';
 const theme = createTheme();
 
 export default function SignIn() {
-  // data,
-  // setData,
-  // member,
-  // setMember,
-  // API,
-  // usersArray,
-  // setUsersArray,
-  // triggerFetch,
-  // setTriggerFetch,
-  // toggle,
-  // setToggle,
-  // allWeapons,
-  // toggler,
-  // setToggler,
-  // postAlert,
-  // setPostAlert
   const { API } = useContext(MemberContext);
   // const { userData, setUserData, cookies, apiServer } = useContext(AppContext);
   let navigate = useNavigate();
 
   const handleSubmit = event => {
+    console.log(event);
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     let loginData = {
-      username: data.get('username'),
+      email: data.get('email'),
       password: data.get('password'),
     };
     fetch(`${API}/login`, {
       method: 'POST',
       credentials: 'include',
-      body: JSON.stringify({
-        user_name: loginData.username,
-        password: loginData.password,
-      }),
+      body: JSON.stringify(loginData),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
@@ -61,7 +43,7 @@ export default function SignIn() {
           navigate('/home');
           return res.json();
         } else if (res.status === 404) {
-          alert('Wrong username or password, please try again.');
+          alert('Wrong email or password, please try again.');
           navigate('/signin');
           return;
         }
@@ -69,7 +51,7 @@ export default function SignIn() {
       .then(data => {
         console.log('data', data);
         // cookies.set('user_id', `${data.id}`);
-        // cookies.set('user', `${data.username}`);
+        // cookies.set('user', `${data.email}`);
       })
       .catch(error => {
         console.log(error);
@@ -93,7 +75,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5' align='center'>
-            Welcome to our Human People tracker, please sign in!
+            Welcome to 45SFS Scheduling App.
           </Typography>
           <Box
             component='form'
@@ -105,10 +87,10 @@ export default function SignIn() {
               margin='normal'
               required
               fullWidth
-              id='username'
-              label='Username'
-              name='username'
-              autoComplete='username'
+              id='user_name'
+              label='email'
+              name='user_name'
+              autoComplete='user_name'
               autoFocus
             />
             <TextField
@@ -127,7 +109,10 @@ export default function SignIn() {
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => handleSubmit}
+              onClick={e => {
+                console.log('clicked');
+                handleSubmit(e);
+              }}
             >
               Sign In
             </Button>

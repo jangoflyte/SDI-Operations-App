@@ -6,9 +6,6 @@ import PostList from '../Features/PostList';
 
 const Home = () => {
   const { data } = useContext(MemberContext);
-  // const [data, setData] = value;
-
-  // console.log(data)
 
   if (data === undefined) {
     return (

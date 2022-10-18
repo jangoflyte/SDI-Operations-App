@@ -2,19 +2,14 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-// import BasicCard from '../Features/Card';
 import { Box, Typography, Stack, Chip } from '@mui/material';
-// import CloseIcon from '@mui/icons-material/Close';
-// import SearchIcon from '@mui/icons-material/Search';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
-// import BorderColorIcon from '@mui/icons-material/BorderColor';
 import { EditPost } from '../Features/EditPost';
 
 export const PostCard = props => {
-  // const { API, triggerFetch } = useContext(MemberContext);
+  const { setPostsPage } = useContext(MemberContext);
   const post = props.post;
-  // console.log("post ", post)
 
   const roleArray = postInput => {
     let manReq = parseInt(postInput.man_req);
@@ -144,5 +139,3 @@ export const PostCard = props => {
     </Box>
   );
 };
-
-// post.cert_req.map((cert) => cert.cert)

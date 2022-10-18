@@ -22,7 +22,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HomeIcon from '@mui/icons-material/Home';
-//import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -183,6 +182,7 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary='Dash Board' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding>
             <ListItemButton onClick={() => handleNavigate('/data')}>
               <ListItemIcon>
@@ -191,14 +191,7 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary='Data Sources' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
-          {/* <ListItem disablePadding>
-            <ListItemButton onClick ={() => navigate ('/schedule')}>
-              <ListItemIcon>
-                <CalendarTodayIcon />
-              </ListItemIcon>
-              <ListItemText primary="Schedule" />
-            </ListItemButton>
-          </ListItem> */}
+
           <ListItem disablePadding>
             <ListItemButton onClick={() => handleNavigate('/sfmembers')}>
               <ListItemIcon>
@@ -207,6 +200,7 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary='People' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
+
           <ListItem disablePadding>
             <ListItemButton onClick={() => handleNavigate('/settings')}>
               <ListItemIcon>
@@ -215,30 +209,8 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary='Post Settings' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
-          {/* {['Dash Board', 'Flight Status', 'Flight Calender', 'Master Schedule', 'Map of Post','Edit Help', 'Edit FAQ'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))} */}
         </List>
         <Divider light />
-        {/* <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open} onClose={handleDrawerClose}>
         <DrawerHeader />

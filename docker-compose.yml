@@ -1,7 +1,7 @@
 version: '3'
 
-volumes:
-  pgdatasource:
+# volumes:
+#   pgdatasource:
 
 services:
   capstone-db:
@@ -20,8 +20,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    volumes:
-      - pgdatasource:/var/lib/postgresql/data
+    # volumes:
+    #   - pgdatasource:/var/lib/postgresql/data
 
   capstone-api:
     build: api/

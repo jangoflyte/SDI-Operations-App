@@ -15,66 +15,70 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 
 export default function SignUp() {
-  const { API } = useContext(MemberContext);
+  const { API, setCookie, setUserAccount } = useContext(MemberContext);
   let navigate = useNavigate();
+  const [failedRegister, setFailedRegister] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: '',
+    rank: '',
+  });
 
-  const handleSignUp = event => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    let signUpData = {
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname'),
-      email: data.get('email'),
-      password: data.get('password'),
-      rank: data.get('rank'),
-    };
-    fetch(`${API}/register`, {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify({
-        first_name: signUpData.firstname,
-        last_name: signUpData.lastname,
-        email: signUpData.email,
-        password: signUpData.password,
-        rank: signUpData.rank,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then(response => response.json())
-      .then(() => {
-        console.log('Data', signUpData);
-        alert(
-          `Thanks for signing up for our post scheduler ${signUpData.first_name}! Please sign in to continue.`
-        );
-        navigate('');
-      })
-      .catch(error => {
-        console.log(error);
-        alert('User already exists.');
-      });
-  };
+  // const handleSignUp = event => {
+  //   console.log('handleSignUp', event);
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   let signUpData = {
+  //     first_name: data.get('firstname'),
+  //     last_name: data.get('lastname'),
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //     rank: data.get('rank'),
+  //   };
+  //   fetch(`${API}/register`, {
+  //     method: 'POST',
+  //     credentials: 'include',
+  //     body: JSON.stringify(signUpData),
+  //     headers: {
+  //       'Content-type': 'application/json; charset=UTF-8',
+  //     },
+  //   })
+  //     .then(response => response.json())
+  //     .then(() => {
+  //       console.log('Data', signUpData);
+  //       alert(
+  //         `Thanks for signing up for our post scheduler ${signUpData.first_name}! Please sign in to continue.`
+  //       );
+  //       navigate('');
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //       alert('User already exists.');
+  //     });
+  // };
 
   const postUser = () => {
     console.log('posting user');
     setFailedRegister(false);
-    const { first_name, last_name, user_name, password } = userInfo;
+    const { first_name, last_name, email, password, rank } = userInfo;
     if (
       first_name === '' ||
       last_name === '' ||
-      user_name === '' ||
-      password === ''
+      email === '' ||
+      password === '' ||
+      rank === ''
     ) {
       setFailedRegister(true);
       return;
     }
-    fetch(`${apiServer}/register`, {
+    fetch(`${API}/register`, {
       method: 'POST',
-      credentials: 'include',
+      // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -91,25 +95,25 @@ export default function SignUp() {
         return res.json();
       })
       .then(data => {
-        // console.log(data);
+        console.log('fetch data', data);
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
           let user_id = data.user;
-          // console.log(user_id);
-          setCookie(cookieInfo[0], cookieInfo[1], {
-            maxAge: cookieInfo[2].maxAge,
-            sameSite: 'None',
-          });
-          setCookie('user', userInfo.user_name, {
-            maxAge: cookieInfo[2].maxAge,
-            sameSite: 'None',
-          });
-          setCookie('user_id', user_id[0].id, {
-            maxAge: cookieInfo[2].maxAge,
-            sameSite: 'None',
-          });
-          setUserAccount(userInfo.user_name);
-          navigate('/items');
+          console.log(user_id);
+          // setCookie(cookieInfo[0], cookieInfo[1], {
+          //   maxAge: cookieInfo[2].maxAge,
+          //   sameSite: 'None',
+          // });
+          // setCookie('user', userInfo.email, {
+          //   maxAge: cookieInfo[2].maxAge,
+          //   sameSite: 'None',
+          // });
+          // setCookie('user_id', user_id[0].id, {
+          //   maxAge: cookieInfo[2].maxAge,
+          //   sameSite: 'None',
+          // });
+          setUserAccount(userInfo.email);
+          navigate('/');
         }
       });
   };
@@ -132,7 +136,8 @@ export default function SignUp() {
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        <Box component='form' noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
+        {/* <Box component='form' noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}> */}
+        <Box sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -142,6 +147,11 @@ export default function SignUp() {
                 label='eMail'
                 name='email'
                 autoComplete='email'
+                onChange={e => {
+                  setUserInfo(prev => {
+                    return { ...prev, email: e.target.value };
+                  });
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -153,6 +163,11 @@ export default function SignUp() {
                 id='firstname'
                 label='First Name'
                 autoFocus
+                onChange={e => {
+                  setUserInfo(prev => {
+                    return { ...prev, first_name: e.target.value };
+                  });
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -162,6 +177,11 @@ export default function SignUp() {
                 id='lastname'
                 label='Last Name'
                 name='lastname'
+                onChange={e => {
+                  setUserInfo(prev => {
+                    return { ...prev, last_name: e.target.value };
+                  });
+                }}
               />
             </Grid>
             <Grid item xs={6}>
@@ -171,7 +191,13 @@ export default function SignUp() {
                 id='rank'
                 label='Rank'
                 name='rank'
+                defaultValue=''
                 select
+                onChange={e => {
+                  setUserInfo(prev => {
+                    return { ...prev, rank: e.target.value };
+                  });
+                }}
               >
                 <MenuItem value='e1'>AB</MenuItem>
                 <MenuItem value='e2'>Amn</MenuItem>
@@ -199,6 +225,11 @@ export default function SignUp() {
                 type='password'
                 id='password'
                 autoComplete='new-password'
+                onChange={e => {
+                  setUserInfo(prev => {
+                    return { ...prev, password: e.target.value };
+                  });
+                }}
               />
             </Grid>
           </Grid>
@@ -207,6 +238,7 @@ export default function SignUp() {
             fullWidth
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
+            onClick={() => postUser()}
           >
             Sign Up
           </Button>

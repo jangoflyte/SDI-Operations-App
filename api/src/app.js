@@ -28,14 +28,29 @@ const {
   userCheck,
 } = require('./controller.js');
 
+const whitelist = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://www.cyberhelm.com',
+  'http://www.cyberhelm.com',
+  'https://api.cyberhelm.com',
+  'http://api.cyberhelm.com',
+];
+const corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    // console.log(origin);
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else if (origin === undefined) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
 // middleware ////////////////////////////////
-app.use(
-  cors({
-    credentials: true,
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  })
-);
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -82,6 +97,7 @@ app.post('/login', async (req, res) => {
 
 //{first_name: 'John', last_name: 'Doe', rank: 'e5', flight: 'alpha-1',cert_id: 4, weapon_arming: true, admin: true }
 app.post('/register', async (req, res) => {
+  console.log('recieved registration request', req.body);
   try {
     const { first_name, last_name, email, password, rank } = req.body;
     // check if all information is provided
@@ -90,6 +106,7 @@ app.post('/register', async (req, res) => {
     }
     // check if user exists already
     const userExist = await userCheck(email);
+    console.log('user exists', userExist);
     if (userExist !== null) {
       return res.status(409).send('User Already Exist. Please Login');
     }
@@ -106,9 +123,12 @@ app.post('/register', async (req, res) => {
       rank: rank,
     };
     // push user to db
+
     postUsers(user)
       .then(results => {
+        console.log('creating token');
         const userToken = { email: user.email };
+
         const accessToken = jwt.sign(
           userToken,
           process.env.ACCESS_TOKEN_SECRET
@@ -212,7 +232,7 @@ app.patch('/position/:id', (req, res) => {
 });
 
 app.post('/postusers', (req, res) => {
-  postUsers(req.body)
+  postUsers(req)
     .then(() => res.send({ message: 'We have posted a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });

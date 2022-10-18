@@ -9,7 +9,6 @@ import { DataSources } from './Components/DataSources.js';
 import IndividualMember from './Components/InvidualMember.js';
 import SignIn from './Components/SignIn.jsx';
 import SignUp from './Components/SignUp';
-// import Home from './Components/Home';
 import { useCookies } from 'react-cookie';
 
 const App = () => {
