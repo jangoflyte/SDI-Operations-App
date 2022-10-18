@@ -21,6 +21,7 @@ export default function SignUp() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);
   let navigate = useNavigate();
   const [failedRegister, setFailedRegister] = useState(false);
+  const [userExists, setUserExists] = useState(false);
   const [userInfo, setUserInfo] = useState({
     first_name: '',
     last_name: '',
@@ -29,42 +30,10 @@ export default function SignUp() {
     rank: '',
   });
 
-  // const handleSignUp = event => {
-  //   console.log('handleSignUp', event);
-  //   event.preventDefault();
-  //   const data = new FormData(event.currentTarget);
-  //   let signUpData = {
-  //     first_name: data.get('firstname'),
-  //     last_name: data.get('lastname'),
-  //     email: data.get('email'),
-  //     password: data.get('password'),
-  //     rank: data.get('rank'),
-  //   };
-  //   fetch(`${API}/register`, {
-  //     method: 'POST',
-  //     credentials: 'include',
-  //     body: JSON.stringify(signUpData),
-  //     headers: {
-  //       'Content-type': 'application/json; charset=UTF-8',
-  //     },
-  //   })
-  //     .then(response => response.json())
-  //     .then(() => {
-  //       console.log('Data', signUpData);
-  //       alert(
-  //         `Thanks for signing up for our post scheduler ${signUpData.first_name}! Please sign in to continue.`
-  //       );
-  //       navigate('');
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //       alert('User already exists.');
-  //     });
-  // };
-
   const postUser = () => {
     console.log('posting user');
     setFailedRegister(false);
+    setUserExists(false);
     const { first_name, last_name, email, password, rank } = userInfo;
     if (
       first_name === '' ||
@@ -86,11 +55,11 @@ export default function SignUp() {
       body: JSON.stringify(userInfo),
     })
       .then(res => {
-        // console.log(res.status);
+        console.log(res.status);
         if (res.status === 201) {
           return res.json();
         } else if (res.status === 409) {
-          setFailedRegister(true);
+          setUserExists(true);
         }
         return res.json();
       })
@@ -100,19 +69,18 @@ export default function SignUp() {
           let cookieInfo = data.cookie;
           let user_id = data.user;
           console.log(user_id);
-          // setCookie(cookieInfo[0], cookieInfo[1], {
-          //   maxAge: cookieInfo[2].maxAge,
-          //   sameSite: 'None',
-          // });
-          // setCookie('user', userInfo.email, {
-          //   maxAge: cookieInfo[2].maxAge,
-          //   sameSite: 'None',
-          // });
-          // setCookie('user_id', user_id[0].id, {
-          //   maxAge: cookieInfo[2].maxAge,
-          //   sameSite: 'None',
-          // });
-          setUserAccount(userInfo.email);
+          setCookie('user', JSON.stringify(data.user), {
+            maxAge: cookieInfo[2].maxAge,
+            sameSite: 'None',
+            secure: 'true',
+          });
+
+          setCookie(cookieInfo[0], cookieInfo[1], {
+            maxAge: cookieInfo[2].maxAge,
+            sameSite: 'None',
+            secure: 'true',
+          });
+          setUserAccount(data.user);
           navigate('/');
         }
       });
@@ -136,7 +104,37 @@ export default function SignUp() {
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
-        {/* <Box component='form' noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}> */}
+        {failedRegister && (
+          <>
+            <Typography
+              component='span'
+              variant='h5'
+              align='center'
+              color='error'
+            >
+              All info required.
+            </Typography>
+          </>
+        )}
+        {userExists && (
+          <>
+            <Typography
+              component='span'
+              variant='h5'
+              align='center'
+              color='error'
+            >
+              User Exists
+            </Typography>
+            <Button
+              variant='outlined'
+              color='error'
+              onClick={() => navigate('/login')}
+            >
+              Sign In
+            </Button>
+          </>
+        )}
         <Box sx={{ mt: 3 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -229,6 +227,11 @@ export default function SignUp() {
                   setUserInfo(prev => {
                     return { ...prev, password: e.target.value };
                   });
+                }}
+                onKeyPress={event => {
+                  if (event.key === 'Enter') {
+                    postUser();
+                  }
                 }}
               />
             </Grid>

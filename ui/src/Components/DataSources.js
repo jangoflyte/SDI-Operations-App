@@ -94,6 +94,8 @@ const Upload = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [flag, setFlag] = useState(false);
+  const [selectedFile, setSelectedFile] = useState('');
+  const [isFilePicked, setIsFilePicked] = useState(false);
 
   const style = {
     position: 'absolute',
@@ -121,6 +123,32 @@ const Upload = () => {
   const handleClickAdd = () => {
     setToggler(true);
     handleClose();
+  };
+
+  const changeHandler = event => {
+    setSelectedFile(event.target.files[0]);
+    setIsFilePicked(true);
+    console.log('This is our selected file', selectedFile);
+  };
+  const handleSubmission = () => {
+    // let fileOutputName = 'myOutputFile.json';
+    // let fileInputName = selectedFile;
+    // csvToJson.generateJsonFileFromCsv(fileInputName, fileOutputName);
+    // console.log.log('json file generated', fileOutputName);
+    // console.log('This is our selected file', selectedFile);
+    // const formData = new FormData();
+    // formData.append('users', selectedFile);
+    fetch('http://localhost:8080/postusers', {
+      method: 'POST',
+      body: selectedFile,
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('Success:', result);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
 
   return (
@@ -193,13 +221,16 @@ const Upload = () => {
               <p style={{ textAlign: 'center' }}>
                 Drag file here or click to upload.
               </p>
-              <Button
+              {/* <Button
                 variant='text'
                 color='secondary'
                 onClick={() => handleClick()}
               >
-                UPLOAD
-              </Button>
+                UPLOAD{' '}
+                
+              </Button> */}
+              <input type='file' id='input' onChange={changeHandler} />
+              <Button onClick={handleSubmission}>Submit</Button>
             </Stack>
           ) : (
             <Stack

@@ -20,14 +20,17 @@ const App = () => {
   const [toggler, setToggler] = useState(false); //for alerts
   const [postAlert, setPostAlert] = useState(false);
   const [allWeapons, setAllWeapons] = useState([]);
+  const [allFlights, setAllFlights] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
+  const [userAccount, setUserAccount] = useState(null);
+
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
-  const [cookies, setCookie, removeCookie] = useCookies(['auth']);
-  const [userAccount, setUserAccount] = useState(null);
 
   useMemo(() => {
     if (cookies.user) {
       setUserAccount(cookies.user);
+      // console.log('cookies ', cookies);
     }
   }, [cookies]);
 
@@ -48,6 +51,19 @@ const App = () => {
       .then(data => setAllWeapons(data))
       .catch(err => console.log(err));
   }, [API]);
+
+  useEffect(() => {
+    fetch(`${API}/flight`, {
+      method: 'GET',
+    })
+      .then(res => res.json())
+      .then(data => setAllFlights(data))
+      .catch(err => console.log(err));
+  }, [API]);
+
+  // useEffect(() => {
+  //   console.log(userAccount);
+  // }, [userAccount]);
 
   const obj = {
     data,
@@ -71,6 +87,7 @@ const App = () => {
     removeCookie,
     userAccount,
     setUserAccount,
+    allFlights,
   };
 
   return (
@@ -79,7 +96,7 @@ const App = () => {
         <PersistentDrawerLeft />
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/signin' element={<SignIn />} />
+          <Route path='/login' element={<SignIn />} />
           <Route path='/signup' element={<SignUp />} />
           <Route path='/data' element={<DataSources />} />
           <Route path='/sfmembers' element={<MemberDetails />} />

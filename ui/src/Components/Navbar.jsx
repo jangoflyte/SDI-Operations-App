@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
+import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import {
@@ -16,6 +17,10 @@ import {
   Button,
   Avatar,
   Badge,
+  Modal,
+  Card,
+  CardContent,
+  Stack,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -29,6 +34,8 @@ import '../styles/MembersDetail.css';
 import logo from '../logo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import CloseIcon from '@mui/icons-material/Close';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 const drawerWidth = 240;
 
@@ -81,6 +88,8 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
+  const { userAccount, removeCookie, setUserAccount } =
+    useContext(MemberContext);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -122,15 +131,52 @@ export default function PersistentDrawerLeft() {
           )}
 
           <Grid xs display='flex' justifyContent='flex-end' alignItems='center'>
-            <Badge
-              sx={{ m: 2, marginRight: 3 }}
-              color='secondary'
-              badgeContent={0}
-              showZero
-            >
-              <NotificationsIcon />
-            </Badge>
-            <Avatar alt='Security Forces Member' src='' />
+            {userAccount === null ? (
+              <Typography variant='h5' component='h6'>
+                <Button
+                  variant='text'
+                  color='secondary'
+                  onClick={() => {
+                    navigate('/login');
+                  }}
+                >
+                  Login
+                </Button>
+              </Typography>
+            ) : (
+              <>
+                <Badge
+                  sx={{ m: 2, marginRight: 3 }}
+                  color='secondary'
+                  //increment this with number of notifications
+                  badgeContent={0}
+                  showZero
+                >
+                  {/* <NotificationsIcon /> */}
+                  <NotificationModal />
+                </Badge>
+                {/* <Avatar
+                  onClick={() => navigate(`/sfmembers/${userAccount.id}`)}
+                  alt='Security Forces Member'
+                  src=''
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                /> */}
+                <EditAccount />
+                <Button
+                  variant='text'
+                  color='secondary'
+                  onClick={() => {
+                    removeCookie('user');
+                    removeCookie('auth');
+                    setUserAccount(null);
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
+            )}
           </Grid>
         </Toolbar>
       </AppBar>
@@ -169,6 +215,7 @@ export default function PersistentDrawerLeft() {
         <Typography
           sx={{ display: 'flex', justifyContent: 'center', color: 'white' }}
         >
+          {/* {userAccount.admin === true ? 'Admin View' : 'User View'} */}
           Admin View
         </Typography>
         <Divider light />
@@ -218,3 +265,157 @@ export default function PersistentDrawerLeft() {
     </Box>
   );
 }
+
+const EditAccount = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const { userAccount } = useContext(MemberContext);
+  const navigate = useNavigate();
+  // console.log(userAccount);
+
+  const style = {
+    position: 'absolute',
+    top: '20%',
+    right: '1%',
+    transform: 'translate(-50%, -50%)',
+    width: 200,
+    height: 100,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 4,
+  };
+
+  const handleCloseModal = path => {
+    navigate(path);
+    handleClose();
+  };
+
+  return (
+    <>
+      <Avatar
+        onClick={handleOpen}
+        alt='Security Forces Member'
+        src=''
+        sx={{
+          cursor: 'pointer',
+        }}
+      />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={style}>
+          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
+          </Box>
+
+          <Typography
+            id='modal-modal-description'
+            variant='h6'
+            sx={{ mt: 1, textAlign: 'left' }}
+          >
+            {`${userAccount.rank.toUpperCase()} ${userAccount.first_name} ${
+              userAccount.last_name
+            }`}
+          </Typography>
+
+          <Button
+            onClick={() => handleCloseModal(`/sfmembers/${userAccount.id}`)}
+            color='secondary'
+            variant='text'
+          >
+            My Profile
+          </Button>
+        </Box>
+      </Modal>
+    </>
+  );
+};
+
+const NotificationModal = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute',
+    top: '35%',
+    right: '1%',
+    transform: 'translate(-50%, -50%)',
+    width: 600,
+    height: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+    borderRadius: 4,
+    overflowY: 'scroll',
+    maxHeight: '90%',
+  };
+
+  return (
+    <>
+      <NotificationsIcon
+        onClick={handleOpen}
+        alt='notification'
+        src=''
+        sx={{
+          cursor: 'pointer',
+        }}
+      />
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
+      >
+        <Box sx={style}>
+          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
+          </Box>
+
+          <Typography
+            id='modal-modal-description'
+            variant='h6'
+            sx={{ mt: 1, textAlign: 'left' }}
+          >
+            Notifications
+          </Typography>
+
+          <Typography
+            id='modal-modal-description'
+            variant='h6'
+            sx={{ mt: 1, textAlign: 'center' }}
+          >
+            Today
+          </Typography>
+          <Stack direction='row'>
+            <Card sx={{ width: '100%' }}>
+              <CalendarTodayIcon />
+              <CardContent>Schedule to be posted</CardContent>
+            </Card>
+          </Stack>
+
+          <Typography
+            id='modal-modal-description'
+            variant='h6'
+            sx={{ mt: 1, textAlign: 'center' }}
+          >
+            Yesterday
+          </Typography>
+          <Stack direction='row'>
+            <Card sx={{ width: '100%' }}>
+              <CalendarTodayIcon />
+              <CardContent>Schedule to be posted</CardContent>
+            </Card>
+          </Stack>
+        </Box>
+      </Modal>
+    </>
+  );
+};

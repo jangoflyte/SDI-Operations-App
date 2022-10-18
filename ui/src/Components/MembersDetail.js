@@ -125,8 +125,6 @@ export const MemberDetails = () => {
 
         <Box justifyContent='left' sx={{ display: 'flex', mx: '80px' }} pt={3}>
           <Button
-            // color="secondary"
-            // color={flag ? "primary" : "secondary"}
             color={changeView === 0 ? 'secondary' : 'primary'}
             variant='contained'
             size='large'
@@ -136,8 +134,6 @@ export const MemberDetails = () => {
             All
           </Button>
           <Button
-            // color="primary"
-            // color={flag ? "secondary" :  "primary"}
             color={changeView === 2 ? 'secondary' : 'primary'}
             variant='contained'
             size='large'
@@ -147,8 +143,6 @@ export const MemberDetails = () => {
             User
           </Button>
           <Button
-            // color="primary"
-            // color={flag ? "secondary" :  "primary"}
             color={changeView === 1 ? 'secondary' : 'primary'}
             variant='contained'
             size='large'
@@ -159,12 +153,7 @@ export const MemberDetails = () => {
           </Button>
         </Box>
 
-        <Stack>
-          {viewArray[changeView]}
-          {/* <BasicCard />
-        <AdminCard />
-        <UserCard /> */}
-        </Stack>
+        <Stack>{viewArray[changeView]}</Stack>
       </Box>
     );
   }
@@ -196,7 +185,7 @@ const MenuProps = {
 };
 
 const AddMemberModal = () => {
-  const { API, setTriggerFetch, setToggle, allWeapons } =
+  const { API, setTriggerFetch, setToggle, allWeapons, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -208,9 +197,10 @@ const AddMemberModal = () => {
   const [rank, setRank] = useState('');
   const [cert, setCert] = useState('');
   const [weapon, setWeapon] = useState([]);
+  const [email, setEmail] = useState('');
+  const [flight, setFlight] = useState([]);
   const [status, setStatus] = useState('');
   const [notes, setNotes] = useState('');
-  // const [weaponArr, setWeaponArr] = useState([]);
   const [weaponIdArray, setWeaponIdArray] = useState([]);
 
   //need to modify this so old data is persisted
@@ -222,10 +212,11 @@ const AddMemberModal = () => {
       rank: rank,
       cert_id: cert,
       weapon_arming: status,
+      email: email,
+      flight: flight,
       notes: notes,
       weaponIdArray: weaponIdArray,
     };
-    //console.log("updated user, ", updatedUser)
 
     fetch(`${API}/postusers/`, {
       method: 'POST',
@@ -234,7 +225,6 @@ const AddMemberModal = () => {
         'Content-Type': 'application/json; charset=utf-8',
       },
     })
-      // .then(window.location.reload(false))
       .then(res => res.json())
       .then(() => {
         setTriggerFetch(curr => !curr);
@@ -469,6 +459,48 @@ const AddMemberModal = () => {
                       // make seperate component
                     />
                     <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack
+            direction='row'
+            pt={2}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <TextField
+                id='outlined-basic'
+                label='Email'
+                value={email}
+                variant='outlined'
+                onChange={e => setEmail(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>Flight</InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={flight}
+                label='Flight'
+                onChange={e => setFlight(e.target.value)}
+              >
+                {allFlights.map((flightObject, index) => (
+                  <MenuItem
+                    id={flightObject.id}
+                    key={index}
+                    value={flightObject.flight}
+                  >
+                    {flightObject.flight}
+                    {/* <ListItemText primary={flightObject.flight} /> */}
                   </MenuItem>
                 ))}
               </Select>

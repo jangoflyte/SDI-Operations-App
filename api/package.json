@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/index.js",
   "scripts": {
-    "start": "knex migrate:rollback && knex migrate:latest && knex seed:run && node ./src/index.js",
+    "start": "knex migrate:rollback && knex migrate:latest && knex seed:run && nodemon --watch ./ ./src/index.js",
     "start:dev": "export NODE_ENV=development && npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run && nodemon --watch ./ ./src/index.js",
     "test": "jest",
     "lint": "eslint ./src/**/*.js ./db/**/*.js ./*.js"

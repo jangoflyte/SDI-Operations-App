@@ -168,7 +168,7 @@ export const EditPost = props => {
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='First Name'
+                label='Post Name'
                 value={postName}
                 variant='outlined'
                 onChange={e => setPostName(e.target.value)}
@@ -281,6 +281,15 @@ export const EditPost = props => {
               justifyContent: 'right',
             }}
           >
+            <Button
+              onClick={() => handleAdd()}
+              color='secondary'
+              variant='contained'
+              sx={{ borderRadius: '30px', mr: 2 }}
+            >
+              Delete Post
+            </Button>
+
             <Button
               onClick={() => handleAdd()}
               color='secondary'

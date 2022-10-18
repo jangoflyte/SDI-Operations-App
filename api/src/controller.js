@@ -4,8 +4,9 @@ const knex = require('knex')(
 
 // login or registration ////////////////////////////////////////
 const postNewUser = async userInfo => {
-  console.log(userInfo);
+  // console.log(userInfo);
   let results = await knex('user_table').insert(userInfo, ['*']);
+  delete results.password;
   return results;
 };
 
@@ -127,6 +128,7 @@ const postUsers = async req => {
       admin: req.body.admin,
       rank: req.body.rank,
       cert_id: req.body.cert_id,
+      email: req.body.email,
       weapon_arming: req.body.weapon_arming,
       notes: req.body.notes,
     };
@@ -152,6 +154,7 @@ const updateUser = async req => {
     admin: req.body.admin,
     rank: req.body.rank,
     cert_id: req.body.cert_id,
+    email: req.body.email,
     weapon_arming: req.body.weapon_arming,
     notes: req.body.notes,
   };
@@ -216,6 +219,10 @@ const getAllposition = async () => {
 
 const allWeapons = () => {
   return knex('weapon').select('*');
+};
+
+const allFlights = () => {
+  return knex('flight').select('*');
 };
 
 const deleteWeaponPosition = async positionId => {
@@ -286,4 +293,5 @@ module.exports = {
   deleteScheduleById,
   patchPosition,
   userCheck,
+  allFlights,
 };

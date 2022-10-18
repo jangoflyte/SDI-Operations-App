@@ -26,6 +26,7 @@ const {
   deleteScheduleById,
   patchPosition,
   userCheck,
+  allFlights,
 } = require('./controller.js');
 
 const whitelist = [
@@ -71,12 +72,14 @@ const authenticateToken = (req, res, next) => {
 app.post('/login', async (req, res) => {
   // authenticate user
   const user = await userCheck(req.body.email);
+  console.log('usercheck', user);
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     // console.log(user);
     if (await bcrypt.compare(req.body.password, user.password)) {
       const userToken = { email: user.email };
       const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET);
+      delete user.password;
       res
         .status(200)
         // .cookie('auth', accessToken, { maxAge: 900000 })
@@ -106,7 +109,7 @@ app.post('/register', async (req, res) => {
     }
     // check if user exists already
     const userExist = await userCheck(email);
-    console.log('user exists', userExist);
+    // console.log('user exists', userExist);
     if (userExist !== null) {
       return res.status(409).send('User Already Exist. Please Login');
     }
@@ -133,12 +136,13 @@ app.post('/register', async (req, res) => {
           userToken,
           process.env.ACCESS_TOKEN_SECRET
         );
+        delete results[0].password;
         res
           .status(201)
           // .cookie('auth', accessToken, { maxAge: 900000 })
           .send({
             status: 'success',
-            user: results,
+            user: results[0],
             cookie: ['auth', accessToken, { maxAge: 900000 }],
           });
       })
@@ -220,6 +224,12 @@ app.get('/onlyweaponusertable', (req, res) => {
 
 app.get('/position', (req, res) => {
   getAllposition()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.get('/flight', (req, res) => {
+  allFlights()
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });

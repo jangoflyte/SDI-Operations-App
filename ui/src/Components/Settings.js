@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { PostCard } from './PostCard';
+import { UpdatePosts } from '../Features/UpdatePosts';
 
 export const Settings = () => {
   const { API, triggerFetch } = useContext(MemberContext);
@@ -164,6 +165,9 @@ export const Settings = () => {
                 Night Posts
               </Button>
             </Stack>
+
+            <UpdatePosts />
+
             <Box sx={{ my: 4 }}>
               <Typography variant='h5'>
                 {postArray.length} {day} Posts

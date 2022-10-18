@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Modal, Box, Typography } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
+//import { MemberContext } from '../Components/MemberContext';
+//import ReplaceMemberModal from './ReplaceMember';
 
 const EditSchedule = props => {
   const { role, post, delSchedule, currentDate, userRow } = props;
-  // const { API, data } = useContext(MemberContext);
+  //const { API, data } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
 
@@ -109,7 +111,7 @@ const EditSchedule = props => {
             <Button
               onClick={() => {
                 // console.log('clicked save');
-                //handleClose();
+                handleClose();
               }}
               // color='error'
               color='secondary'
@@ -117,7 +119,7 @@ const EditSchedule = props => {
               // variant='text'
               sx={{ mt: 5, borderRadius: '30px' }}
             >
-              Replace Airman
+              Cancel
             </Button>
             {/* <ReplaceMemberModal /> */}
             <Button

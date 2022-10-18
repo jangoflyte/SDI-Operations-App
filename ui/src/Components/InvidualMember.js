@@ -92,12 +92,10 @@ const IndividualMember = () => {
               <Typography sx={{ mb: 5 }}>
                 {member.first_name} {member.last_name}
               </Typography>
-
               <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
               <Typography sx={{ mb: 5 }}>
                 {member.rank.toUpperCase()}
               </Typography>
-
               <Typography sx={{ fontWeight: 'bold' }}>
                 Weapons Qualifications:
               </Typography>
@@ -110,16 +108,8 @@ const IndividualMember = () => {
                     .join(', ')}
                 </Typography>
               )}
-
-              <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
-              {member.notes === null ? (
-                <Typography sx={{ mb: 5 }}>N/A</Typography>
-              ) : (
-                <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
-              )}
-
               <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
-              <Typography sx={{ mb: 5 }}>{member.email}</Typography>
+              <Typography sx={{ mb: 5 }}>{member.email}</Typography>{' '}
             </Box>
 
             <Box display='flex' flexDirection='column'>
@@ -143,17 +133,25 @@ const IndividualMember = () => {
                 Arm Status:
               </Typography>
               {member.weapon_arming === true ? (
-                // <Typography sx={{mb:5, color:"green"}}>Arm</Typography>
                 <Chip label='Arm' color='success' />
               ) : (
-                // <Typography sx={{ mb: 5, color: "red" }}>Do Not Arm</Typography>
                 <Chip label='Do Not Arm' color='secondary' />
               )}
 
-              <Typography sx={{ fontWeight: 'bold' }}>Flight:</Typography>
+              <Typography mt={4} sx={{ fontWeight: 'bold' }}>
+                Flight:
+              </Typography>
               <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
             </Box>
           </Grid>
+          <Box display='flex' marginLeft={6} flexDirection='column'>
+            <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
+            {member.notes === null ? (
+              <Typography sx={{ mb: 5 }}>N/A</Typography>
+            ) : (
+              <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
+            )}
+          </Box>
         </Box>
       </Box>
     );
@@ -166,7 +164,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 650,
-  height: 600,
+  height: 650,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -190,7 +188,7 @@ const EditMemberModal = props => {
   memberObject = memberObject.memberObject;
   console.log('member object, ', memberObject);
 
-  const { API, member, setTriggerFetch, allWeapons } =
+  const { API, member, setTriggerFetch, allWeapons, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -200,13 +198,16 @@ const EditMemberModal = props => {
   const [userType, setUserType] = useState(memberObject.admin);
   const [rank, setRank] = useState(memberObject.rank);
   const [cert, setCert] = useState(memberObject.cert_id);
-
   const [weaponArr, setWeaponArr] = useState(memberObject.weapons);
   const [status, setStatus] = useState(memberObject.weapon_arming);
+  const [flight, setFlight] = useState(memberObject.flight);
+  const [email, setEmail] = useState(memberObject.email);
   const [notes, setNotes] = useState(memberObject.notes);
   const [weaponIdArray, setWeaponIdArray] = useState(
     memberObject.weapons.map(wep => wep.id)
   );
+
+  console.log(memberObject);
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
@@ -217,6 +218,8 @@ const EditMemberModal = props => {
       rank: rank,
       cert_id: cert,
       weapon_arming: status,
+      flight: flight,
+      email: email,
       notes: notes,
       weaponIdArray: weaponIdArray,
     };
@@ -229,8 +232,6 @@ const EditMemberModal = props => {
         'Content-Type': 'application/json; charset=utf-8',
       },
     })
-      // .then(window.location.reload(false))
-      // .then(navigate(`/sfmembers/${member.id}`))
       .then(res => res.json())
       .then(() => {
         setTriggerFetch(curr => !curr);
@@ -265,8 +266,8 @@ const EditMemberModal = props => {
   };
 
   useEffect(() => {
-    console.log('weapon id Array ', weaponIdArray);
-  }, [weaponIdArray]);
+    console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
+  }, [weaponIdArray, allFlights]);
 
   return (
     <>
@@ -410,7 +411,6 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-
               justifyContent: 'space-between',
             }}
           >
@@ -441,8 +441,6 @@ const EditMemberModal = props => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weaponArr.map(weap => weap.weapon)}
-                // onChange={handleChange}
-                // onClick={handleChange}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -460,6 +458,51 @@ const EditMemberModal = props => {
                       )}
                     />
                     <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack
+            direction='row'
+            pt={2}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <TextField
+                id='outlined-basic'
+                label='Email'
+                value={email}
+                inputProps={{
+                  defaultValue: `${memberObject.email}`,
+                }}
+                variant='outlined'
+                onChange={e => setEmail(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>Flight</InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={flight}
+                label='Flight'
+                onChange={e => setFlight(e.target.value)}
+              >
+                {allFlights.map((flightObject, index) => (
+                  <MenuItem
+                    id={flightObject.id}
+                    key={index}
+                    value={flightObject.flight}
+                  >
+                    {flightObject.flight}
+                    {/* <ListItemText primary={flightObject.flight} /> */}
                   </MenuItem>
                 ))}
               </Select>
