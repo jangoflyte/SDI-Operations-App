@@ -116,7 +116,7 @@ app.post('/register', async (req, res) => {
     // create user
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
-    console.log('salt', salt);
+    // console.log('salt', salt);
     console.log('hashed pw', hashedPassword);
     const user = {
       first_name: first_name,
@@ -242,6 +242,7 @@ app.patch('/position/:id', (req, res) => {
 });
 
 app.post('/postusers', (req, res) => {
+  console.log('posting users');
   postUsers(req)
     .then(() => res.send({ message: 'We have posted a user.' }))
     .catch(err => res.status(500).send(console.log(err)));

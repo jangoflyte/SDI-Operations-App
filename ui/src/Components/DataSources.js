@@ -12,6 +12,7 @@ import {
   Alert,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import Papa from 'papaparse';
 
 export const DataSources = () => {
   const { toggler, setToggler } = useContext(MemberContext);
@@ -89,13 +90,14 @@ export const DataSources = () => {
 };
 
 const Upload = () => {
-  const { setToggler } = useContext(MemberContext);
+  const { setToggler, API } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [flag, setFlag] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
   const [isFilePicked, setIsFilePicked] = useState(false);
+  const [parsed, setParsed] = useState([]);
 
   const style = {
     position: 'absolute',
@@ -131,16 +133,22 @@ const Upload = () => {
     console.log('This is our selected file', selectedFile);
   };
   const handleSubmission = () => {
-    // let fileOutputName = 'myOutputFile.json';
-    // let fileInputName = selectedFile;
-    // csvToJson.generateJsonFileFromCsv(fileInputName, fileOutputName);
-    // console.log.log('json file generated', fileOutputName);
-    // console.log('This is our selected file', selectedFile);
-    // const formData = new FormData();
-    // formData.append('users', selectedFile);
-    fetch('http://localhost:8080/postusers', {
+    Papa.parse(selectedFile, {
+      header: true,
+      complete: function (results) {
+        setParsed(results.data);
+        console.log(JSON.stringify(parsed));
+        // console.log('This is our parsed file', parsed);
+        // console.log('json stringify stuff', JSON.stringify(parsed));
+      },
+    });
+
+    fetch(`${API}/postusers`, {
       method: 'POST',
-      body: selectedFile,
+      body: JSON.stringify(parsed),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
       .then(response => response.json())
       .then(result => {

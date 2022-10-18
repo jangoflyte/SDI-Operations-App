@@ -121,7 +121,7 @@ const postWeaponUser = async (userId, wepArray) => {
 
 const postUsers = async req => {
   let newUser;
-  if (req.body) {
+  if (req.body.first_name) {
     newUser = {
       first_name: req.body.first_name,
       last_name: req.body.last_name,
@@ -137,7 +137,7 @@ const postUsers = async req => {
   }
 
   let result = await knex('user_table').insert(newUser, ['*']);
-  console.log('This is result id: ', result[0].id);
+  console.log('This is result, newusers: ', result, newUser);
   console.log('result: ', result);
   if (req.body && req.body.weaponIdArray) {
     await postWeaponUser(result[0].id, req.body.weaponIdArray);

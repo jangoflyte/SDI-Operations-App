@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import Avatar from '@mui/material/Avatar';
+//import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -77,13 +78,23 @@ export default function SignIn() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
+          //backgroundColor: '#212121',
         }}
       >
         {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar> */}
         <Box>
-          <img src={logo} alt='logo' style={{ width: '100%' }} />
+          <img
+            src={logo}
+            alt='logo'
+            style={{
+              width: '100%',
+              backgroundColor: '#212121',
+              height: '100%',
+              borderRadius: '20px',
+            }}
+          />
         </Box>
         {/* <Typography component='h1' variant='h5' align='center'>
           Welcome to 45SFS Scheduling App.
@@ -144,21 +155,42 @@ export default function SignIn() {
             }}
           />
 
-          <Button
-            fullWidth
-            variant='contained'
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => postLogin()}
+          <Stack
+            ml={13}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
           >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href='/signup' variant='body2'>
-                {"Don't have an account? Sign Up"}
-              </Link>
+            <Button
+              fullWidth
+              variant='contained'
+              color='secondary'
+              size='medium'
+              sx={{ mt: 3, mb: 2, borderRadius: '30px', width: 200 }}
+              onClick={() => postLogin()}
+            >
+              Login
+            </Button>
+            <Grid container sx={{ textAlign: 'center' }}>
+              <Grid item>
+                <Link href='' variant='body2'>
+                  {'Forgot Password?'}
+                </Link>
+              </Grid>
             </Grid>
-          </Grid>
+            <Button
+              fullWidth
+              variant='contained'
+              color='secondary'
+              size='medium'
+              sx={{ mt: 3, mb: 2, borderRadius: '30px', width: 200 }}
+              onClick={() => navigate('/signup')}
+            >
+              Create Account
+            </Button>
+          </Stack>
         </Box>
       </Box>
     </Container>
