@@ -52,9 +52,8 @@ export default function CollapsibleTable() {
       })
       .then(data => {
         // console.log(data);
-        setPositions(data)
-        setPostAlert(false)
-        ;
+        setPositions(data);
+        setPostAlert(false);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -204,12 +203,12 @@ export default function CollapsibleTable() {
       }}
     >
       {postAlert === false ? null : (
-          <Stack sx={{ width: '100%' }}>
-            <Alert severity='success' spacing={2} mb={2}>
-              Airman has been successfully assigned to the post position.
-            </Alert>
-          </Stack>
-        )}
+        <Stack sx={{ width: '100%' }}>
+          <Alert severity='success' spacing={2} mb={2}>
+            Airman has been successfully assigned to the post position.
+          </Alert>
+        </Stack>
+      )}
       <Typography variant='h1' component='h2'>
         {schedDate.toDateString()}
       </Typography>
@@ -303,7 +302,7 @@ export default function CollapsibleTable() {
                       }
                     : { borderRadius: 0 }
                 }
-                onClick={e => {
+                onClick={() => {
                   setSchedDate(date);
                   setShift('Days');
                   fetchSchedule();
@@ -323,7 +322,7 @@ export default function CollapsibleTable() {
                       }
                     : { borderRadius: 0 }
                 }
-                onClick={e => {
+                onClick={() => {
                   setSchedDate(date);
                   setShift('Mids');
                   fetchSchedule();
@@ -345,10 +344,16 @@ export default function CollapsibleTable() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell sx={{fontWeight: "bold"}}>Post</TableCell>
-              <TableCell align='right' sx={{fontWeight: "bold"}}>Manning Requirements</TableCell>
-              <TableCell align='right' sx={{fontWeight: "bold"}}>Weapon Requirements</TableCell>
-              <TableCell align='right' sx={{fontWeight: "bold"}}>Certification Required</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Post</TableCell>
+              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                Manning Requirements
+              </TableCell>
+              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                Weapon Requirements
+              </TableCell>
+              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                Certification Required
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -366,7 +371,7 @@ const Row = props => {
   const { row } = props;
   const [open, setOpen] = useState(false);
 
-  const splitArr = row.weapons.split(" ");
+  const splitArr = row.weapons.split(' ');
 
   return (
     <React.Fragment>
@@ -429,22 +434,23 @@ const Row = props => {
         <TableCell align='right'>{row.man_req}</TableCell>
         {/* <TableCell align='right'>{row.weapons.toUpperCase()}</TableCell> */}
         <TableCell align='right'>
-          {splitArr.map(wep => (
-            <span>
+          {splitArr.map((wep, index) => (
+            <span key={index}>
               <Chip
-              icon={<SecurityIcon />}
-              label={wep.toUpperCase()}
-              color='secondary'
-              />&nbsp;
+                icon={<SecurityIcon />}
+                label={wep.toUpperCase()}
+                color='secondary'
+              />
+              &nbsp;
             </span>
-         ))}
+          ))}
         </TableCell>
         {/* <TableCell align='right'>{row.cert[0].cert}</TableCell> */}
         <TableCell align='right'>
           <Chip
-          icon={<WorkspacePremiumIcon />}
-          label={row.cert[0].cert}
-          color='success'
+            icon={<WorkspacePremiumIcon />}
+            label={row.cert[0].cert}
+            color='success'
           />
         </TableCell>
       </TableRow>
@@ -460,8 +466,8 @@ const Row = props => {
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{fontWeight: "bold"}}>Posted</TableCell>
-                    <TableCell sx={{fontWeight: "bold"}}>Members</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Posted</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Members</TableCell>
                     <TableCell align='right'> </TableCell>
                     <TableCell align='right'> </TableCell>
                   </TableRow>

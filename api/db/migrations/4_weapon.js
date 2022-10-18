@@ -3,9 +3,11 @@
  * @returns { Promise<void> }
  */
 exports.up = function (knex) {
-  return knex.schema.createTable('certification', table => {
+  return knex.schema.createTable('weapon', table => {
     table.increments('id');
-    table.string('cert', 250);
+    table.string('weapon', 250);
+    table.string('type', 250);
+    table.string('ammo', 250);
   });
 };
 
@@ -14,5 +16,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTableIfExists('certification');
+  return knex.schema.dropTableIfExists('weapon');
 };

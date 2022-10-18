@@ -197,7 +197,7 @@ const EditMemberModal = props => {
   const [userType, setUserType] = useState(memberObject.admin);
   const [rank, setRank] = useState(memberObject.rank);
   const [cert, setCert] = useState(memberObject.cert_id);
-  const [weapon, setWeapon] = useState('');
+
   const [weaponArr, setWeaponArr] = useState(memberObject.weapons);
   const [status, setStatus] = useState(memberObject.weapon_arming);
   const [notes, setNotes] = useState(memberObject.notes);
@@ -215,6 +215,7 @@ const EditMemberModal = props => {
       cert_id: cert,
       weapon_arming: status,
       notes: notes,
+      weaponIdArray: weaponIdArray,
     };
     console.log('updated user, ', updatedUser);
 
@@ -239,7 +240,7 @@ const EditMemberModal = props => {
 
   const handleChange = event => {
     const {
-      target: { value, checked },
+      target: { checked },
     } = event;
     console.log(event);
     console.log(
@@ -250,13 +251,13 @@ const EditMemberModal = props => {
     let wepId = parseInt(event.target.parentNode.parentNode.id);
     if (checked && !weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
-      setWeapon(curr => [
+      setWeaponArr(curr => [
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else if(!checked) {
+    } else if (!checked) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
-      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+      setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId));
     }
   };
 

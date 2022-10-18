@@ -244,7 +244,7 @@ const BasicCard = () => {
           alignItems='center'
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            //justifyContent: 'center',
             justifyContent: 'space-between',
           }}
         >

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { MemberContext } from './MemberContext';
+import React, { useState } from 'react';
+//import { MemberContext } from './MemberContext';
 import {
   Box,
   Typography,
@@ -14,7 +14,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 export const Filter = () => {
-  const { usersArray } = useContext(MemberContext);
+  //const { usersArray } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -36,13 +36,13 @@ export const Filter = () => {
     borderRadius: 4,
   };
 
-  const entry = usersArray.filter(member => member.cert_id === 1);
-  const patrol = usersArray.filter(member => member.cert_id === 2);
-  const desk = usersArray.filter(member => member.cert_id === 3);
-  const sergeant = usersArray.filter(member => member.cert_id === 4);
+  // const entry = usersArray.filter(member => member.cert_id === 1);
+  // const patrol = usersArray.filter(member => member.cert_id === 2);
+  // const desk = usersArray.filter(member => member.cert_id === 3);
+  // const sergeant = usersArray.filter(member => member.cert_id === 4);
 
-  const arm = usersArray.filter(member => member.weapon_arming === true);
-  const noarm = usersArray.filter(member => member.weapon_arming === false);
+  // const arm = usersArray.filter(member => member.weapon_arming === true);
+  // const noarm = usersArray.filter(member => member.weapon_arming === false);
 
   //console.log(noarm)
 

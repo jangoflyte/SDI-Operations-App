@@ -25,7 +25,7 @@ export const Settings = () => {
   const [postArray, setPostArray] = useState([]);
   const [postsPage, setPostsPage] = useState(true);
   const [sgt, setSgt] = useState([]);
-  const [day, setDay] = useState("Day");
+  const [day, setDay] = useState('Day');
   const [flag, setFlag] = useState(false);
 
   useEffect(() => {
@@ -51,11 +51,11 @@ export const Settings = () => {
       .catch(err => console.log(err));
   }, [triggerFetch]);
 
-  const dayArr = ["Day", "Night"]
-  const handleClick = (day) => {
-    setFlag(!flag)
-    setDay(dayArr[day])
-  }
+  const dayArr = ['Day', 'Night'];
+  const handleClick = day => {
+    setFlag(!flag);
+    setDay(dayArr[day]);
+  };
 
   if (postArray.length === 0) {
     return (
@@ -82,7 +82,9 @@ export const Settings = () => {
         >
           Settings
         </Typography>
-        <Box sx={{width: 500, display: "flex", justifyContent: "space-between"}}>
+        <Box
+          sx={{ width: 500, display: 'flex', justifyContent: 'space-between' }}
+        >
           {postsPage === true ? (
             <>
               <Typography
@@ -135,29 +137,41 @@ export const Settings = () => {
             </>
           )}
         </Box>
-              
-       
 
         {postsPage === true ? (
           <>
-            <Stack direction="row" mt={3} sx={{width: 300, display: "flex", justifyContent: "space-between"}}>
-              <Button 
+            <Stack
+              direction='row'
+              mt={3}
+              sx={{
+                width: 300,
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Button
                 //color='secondary'
-                color={flag ?  'primary' : 'secondary'}
+                color={flag ? 'primary' : 'secondary'}
                 variant='contained'
                 sx={{ borderRadius: '30px' }}
                 onClick={() => handleClick(0)}
-                >Day Posts</Button>
-              <Button 
+              >
+                Day Posts
+              </Button>
+              <Button
                 //color='secondary'
                 color={flag ? 'secondary' : 'primary'}
                 variant='contained'
                 sx={{ borderRadius: '30px' }}
                 onClick={() => handleClick(1)}
-                >Night Posts</Button>
+              >
+                Night Posts
+              </Button>
             </Stack>
             <Box sx={{ my: 4 }}>
-              <Typography variant='h5'>{postArray.length} {day} Posts</Typography>
+              <Typography variant='h5'>
+                {postArray.length} {day} Posts
+              </Typography>
             </Box>
 
             {postArray.map((post, index) => {
@@ -369,7 +383,6 @@ const Edit = props => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
               justifyContent: 'space-between',
             }}
           >
@@ -404,7 +417,6 @@ const Edit = props => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
               justifyContent: 'space-between',
             }}
           >

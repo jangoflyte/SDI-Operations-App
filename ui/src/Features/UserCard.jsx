@@ -223,9 +223,8 @@ const UserCard = () => {
                         />
                       ) : (
                         member.weapons.map((weapon, index) => (
-                          <span>
+                          <span key={index}>
                             <Chip
-                              key={index}
                               icon={<SecurityIcon />}
                               label={weapon.weapon.toUpperCase()}
                               color='secondary'
@@ -248,7 +247,7 @@ const UserCard = () => {
           alignItems='center'
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            //justifyContent: 'center',
             justifyContent: 'space-between',
           }}
         >

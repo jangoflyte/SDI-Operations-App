@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Home from './Components/Home.js';
 import { MemberDetails } from './Components/MembersDetail.js';
 import { Settings } from './Components/Settings.js';
@@ -8,8 +8,9 @@ import PersistentDrawerLeft from './Components/Navbar.jsx';
 import { DataSources } from './Components/DataSources.js';
 import IndividualMember from './Components/InvidualMember.js';
 import SignIn from './Components/SignIn.jsx';
-// import SignUp from './Components/SignUp';
+import SignUp from './Components/SignUp';
 // import Home from './Components/Home';
+import { useCookies } from 'react-cookie';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -22,6 +23,14 @@ const App = () => {
   const [allWeapons, setAllWeapons] = useState([]);
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
+  const [cookies, setCookie, removeCookie] = useCookies(['auth']);
+  const [userAccount, setUserAccount] = useState(null);
+
+  useMemo(() => {
+    if (cookies.user) {
+      setUserAccount(cookies.user);
+    }
+  }, [cookies]);
 
   useEffect(() => {
     fetch(`${API}/users`, {
@@ -56,8 +65,13 @@ const App = () => {
     allWeapons,
     toggler,
     setToggler,
-    postAlert, 
-    setPostAlert
+    postAlert,
+    setPostAlert,
+    cookies,
+    setCookie,
+    removeCookie,
+    userAccount,
+    setUserAccount,
   };
 
   return (
@@ -67,7 +81,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/signin' element={<SignIn />} />
-          {/* <Route path='/signup' element={<SignUp />} /> */}
+          <Route path='/signup' element={<SignUp />} />
           <Route path='/data' element={<DataSources />} />
           <Route path='/sfmembers' element={<MemberDetails />} />
           <Route path='/sfmembers/:memberId' element={<IndividualMember />} />

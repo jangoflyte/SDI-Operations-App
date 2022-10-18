@@ -1,3 +1,4 @@
+import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { MemberContext } from '../App';
+import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 
@@ -67,8 +68,8 @@ export default function SignIn() {
       })
       .then(data => {
         console.log('data', data);
-        cookies.set('user_id', `${data.id}`);
-        cookies.set('user', `${data.username}`);
+        // cookies.set('user_id', `${data.id}`);
+        // cookies.set('user', `${data.username}`);
       })
       .catch(error => {
         console.log(error);
@@ -92,7 +93,7 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5' align='center'>
-            Welcome to our inventory tracker, please sign in!
+            Welcome to our Human People tracker, please sign in!
           </Typography>
           <Box
             component='form'

@@ -1,18 +1,9 @@
-import React, { useContext, useState } from 'react';
-import { MemberContext } from '../Components/MemberContext';
-import { Button, Modal, Box, Paper, Typography } from '@mui/material/';
+import React, { useState } from 'react';
+import { Button, Modal, Box, Typography } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
-import ReplaceMemberModal from './ReplaceMember';
 
 const EditSchedule = props => {
-  const {
-    role,
-    post,
-
-    delSchedule,
-    currentDate,
-    userRow,
-  } = props;
+  const { role, post, delSchedule, currentDate, userRow } = props;
   // const { API, data } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);

@@ -28,7 +28,7 @@ const PostMemberModal = props => {
   } = props;
   const { API, data, setPostAlert } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  //const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = useState({});
   const [page, setPage] = useState(0);
@@ -244,8 +244,8 @@ const PostMemberModal = props => {
                         sx={{ textAlign: 'center', minWidth: '30%' }}
                       >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
                         <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
-                          {user.weapons.map(wep => (
-                            <span>
+                          {user.weapons.map((wep, index) => (
+                            <span key={index}>
                               <Chip
                                 icon={<SecurityIcon />}
                                 label={wep.weapon.toUpperCase()}

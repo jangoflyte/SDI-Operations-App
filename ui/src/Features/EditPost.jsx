@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import '../styles/MembersDetail.css';
-
 import {
   Box,
   Button,
@@ -96,7 +95,7 @@ export const EditPost = props => {
 
   const handleChange = event => {
     const {
-      target: { value, checked },
+      target: { checked },
     } = event;
     console.log(event);
     console.log(
@@ -163,7 +162,6 @@ export const EditPost = props => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
               justifyContent: 'space-between',
             }}
           >
@@ -192,7 +190,7 @@ export const EditPost = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'center',
+              //justifyContent: 'center',
               justifyContent: 'space-between',
             }}
           >

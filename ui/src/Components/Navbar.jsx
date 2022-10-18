@@ -212,7 +212,7 @@ export default function PersistentDrawerLeft() {
               <ListItemIcon>
                 <SettingsIcon sx={{ color: 'white' }} />
               </ListItemIcon>
-              <ListItemText primary='Settings' sx={{ color: 'white' }} />
+              <ListItemText primary='Post Settings' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
           {/* {['Dash Board', 'Flight Status', 'Flight Calender', 'Master Schedule', 'Map of Post','Edit Help', 'Edit FAQ'].map((text, index) => (

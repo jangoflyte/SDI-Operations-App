@@ -224,9 +224,8 @@ const AdminCard = () => {
                         />
                       ) : (
                         member.weapons.map((weapon, index) => (
-                          <span>
+                          <span key={index}>
                             <Chip
-                              key={index}
                               icon={<SecurityIcon />}
                               label={weapon.weapon.toUpperCase()}
                               color='secondary'
@@ -249,7 +248,7 @@ const AdminCard = () => {
           alignItems='center'
           sx={{
             display: 'flex',
-            justifyContent: 'center',
+            //justifyContent: 'center',
             justifyContent: 'space-between',
           }}
         >

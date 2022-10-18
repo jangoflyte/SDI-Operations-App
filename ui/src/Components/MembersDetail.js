@@ -52,7 +52,11 @@ export const MemberDetails = () => {
     setToggle(false);
   }, []);
 
-  const viewArray = [<BasicCard />, <AdminCard />, <UserCard />];
+  const viewArray = [
+    <BasicCard key={1} />,
+    <AdminCard key={2} />,
+    <UserCard key={3} />,
+  ];
 
   // useEffect(()=> {
   //   console.log("users array: ", usersArray)
@@ -196,7 +200,8 @@ const MenuProps = {
 };
 
 const AddMemberModal = () => {
-  const { API, setTriggerFetch, setToggle, allWeapons } = useContext(MemberContext);
+  const { API, setTriggerFetch, setToggle, allWeapons } =
+    useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -246,7 +251,7 @@ const AddMemberModal = () => {
 
   const handleChange = event => {
     const {
-      target: { value, checked },
+      target: { checked },
     } = event;
     console.log(event);
     console.log(
@@ -261,7 +266,7 @@ const AddMemberModal = () => {
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else if(!checked) {
+    } else if (!checked) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
@@ -442,7 +447,7 @@ const AddMemberModal = () => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weapon.map(weap => weap.weapon)}
-                defaultValue={"None Selected"}
+                defaultValue={'None Selected'}
                 // value={weaponArr}
                 // onChange={handleChange}
                 // onClick={handleChange}

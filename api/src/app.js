@@ -41,9 +41,6 @@ app.use(express.json());
 
 // auth check middleware /////////////////////////////////////
 const authenticateToken = (req, res, next) => {
-  // const authHeader = req.headers['authorization'];
-  // const token = authHeader && authHeader.split(' ')[1];
-  // dont know auth headers yet so using cookie instead
   // console.log(req.cookies);
   const token = req.cookies.auth;
   // console.log(token);
@@ -58,12 +55,12 @@ const authenticateToken = (req, res, next) => {
 
 app.post('/login', async (req, res) => {
   // authenticate user
-  const user = await userCheck(req.body.user_name);
+  const user = await userCheck(req.body.email);
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     // console.log(user);
     if (await bcrypt.compare(req.body.password, user.password)) {
-      const userToken = { user_name: user.user_name };
+      const userToken = { email: user.email };
       const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET);
       res
         .status(200)
