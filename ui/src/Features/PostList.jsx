@@ -189,10 +189,16 @@ export default function CollapsibleTable() {
   useMemo(() => {
     let dateRange2 = [];
     for (let i = 0; i < 7; i++) {
-      let workingDate = startDate;
+      let workingDate = startDate.toISOString().split('T')[0];
+      workingDate = workingDate.split('-');
       console.log('working date, i:', workingDate, i);
-      workingDate = new Date(workingDate.setDate(workingDate.getDate() + i));
-      dateRange2.push(workingDate);
+      let newDate = new Date(
+        `${workingDate[0]}-${workingDate[1]}-${
+          parseInt(workingDate[2]) + i
+        }T00:00:00`
+      );
+      console.log('created date', newDate.toISOString());
+      dateRange2.push(newDate);
     }
     setDateRange(dateRange2);
   }, [startDate]);
@@ -261,7 +267,7 @@ export default function CollapsibleTable() {
       <Box>
         <TextField
           id='date'
-          label='Birthday'
+          label='Start Date'
           type='date'
           defaultValue={startDate.toISOString().split('T')[0]}
           sx={{ width: 220 }}
@@ -270,8 +276,9 @@ export default function CollapsibleTable() {
           }}
           onChange={e => {
             let dateArr = e.target.value.split('-');
-            console.log(e.target.value);
-            setStartDate(new Date(dateArr[0], dateArr[1], dateArr[2]));
+            console.log('settign start date: ', dateArr);
+            // setStartDate(new Date(dateArr[0], dateArr[1] + 1, dateArr[2]));
+            setStartDate(new Date(`${e.target.value}T00:00:00`));
           }}
         />
       </Box>
