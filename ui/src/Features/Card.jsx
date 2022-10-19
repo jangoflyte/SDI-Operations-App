@@ -18,8 +18,14 @@ import SecurityIcon from '@mui/icons-material/Security';
 
 const BasicCard = props => {
   const { pageTrigger } = props;
-  const { setMember, API, usersArray, setTriggerFetch, triggerFetch } =
-    useContext(MemberContext);
+  const {
+    setMember,
+    API,
+    usersArray,
+    setTriggerFetch,
+    triggerFetch,
+    userAccount,
+  } = useContext(MemberContext);
   const navigate = useNavigate();
   const [idArray, setIdArray] = useState([]);
   const [page, setPage] = useState(0);
@@ -116,21 +122,24 @@ const BasicCard = props => {
           pt={2}
           sx={{ display: 'flex' }}
         >
-          <Box ml={10} sx={{ width: '15%' }}>
+          <Box
+            ml={10}
+            justifyContent='left'
+            alignItems='center'
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: 600,
+            }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
-          </Box>
-          <Box sx={{ width: '20%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
-          </Box>
-          <Box sx={{ width: '25%' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
           </Box>
-          <Box sx={{ width: '20%' }}>
+          <Box sx={{ width: 500, display: 'flex', justifyContent: 'flex-end' }}>
             <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
           </Box>
-          <Box
-            sx={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}
-          >
+          <Box sx={{ width: 500, display: 'flex', justifyContent: 'flex-end' }}>
             <Typography sx={{ fontWeight: 'bold' }}>
               Weapon Qualification
             </Typography>
@@ -154,9 +163,8 @@ const BasicCard = props => {
               >
                 <Box
                   justifyContent='left'
-                  width='5%'
                   alignItems='center'
-                  sx={{ display: 'flex' }}
+                  sx={{ display: 'flex', width: 100 }}
                 >
                   <Checkbox
                     label='Name'
@@ -167,9 +175,12 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='left'
-                  width='35%'
                   alignItems='center'
-                  sx={{ display: 'flex', justifyContent: 'space-between' }}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: 600,
+                  }}
                 >
                   <Typography>
                     {member.rank ? member.rank.toUpperCase() : `No rank`}
@@ -193,8 +204,7 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='right'
-                  width='30%'
-                  sx={{ display: 'flex' }}
+                  sx={{ display: 'flex', width: 500 }}
                 >
                   <Typography component='span' sx={{ textAlign: 'center' }}>
                     {member.certs.length === 0 ? (
@@ -215,8 +225,7 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='right'
-                  width='30%'
-                  sx={{ display: 'flex' }}
+                  sx={{ display: 'flex', width: 500 }}
                 >
                   <Typography component='span' sx={{ textAlign: 'center' }}>
                     {member.weapons.length === 0 ? (
@@ -237,7 +246,6 @@ const BasicCard = props => {
                         />
                       ))
                     )}
-                    {/* <Chip icon={<SecurityIcon />} label={member.weapons.map(weapon => (weapon.weapon))} color="secondary"/> */}
                   </Typography>
                 </Box>
               </Stack>
@@ -255,23 +263,27 @@ const BasicCard = props => {
           }}
         >
           <Box>
-            <Button
-              color='secondary'
-              variant='contained'
-              size='medium'
-              sx={{ borderRadius: '30px' }}
-              onClick={() => {
-                // const confirmation = window.confirm(
-                //   'Are you sure you want to delete users? It will permanently delete their account'
-                // );
-                const confirmation = true;
-                if (confirmation) {
-                  handleDeleteUser(idArray);
-                }
-              }}
-            >
-              Delete User
-            </Button>
+            {userAccount !== null && userAccount.admin ? (
+              <Button
+                color='secondary'
+                variant='contained'
+                size='medium'
+                sx={{ borderRadius: '30px' }}
+                onClick={() => {
+                  // const confirmation = window.confirm(
+                  //   'Are you sure you want to delete users? It will permanently delete their account'
+                  // );
+                  const confirmation = true;
+                  if (confirmation) {
+                    handleDeleteUser(idArray);
+                  }
+                }}
+              >
+                Delete User
+              </Button>
+            ) : (
+              <>take a hike</>
+            )}
           </Box>
 
           <Box>

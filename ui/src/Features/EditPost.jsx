@@ -23,7 +23,6 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
-import { AlertPost } from './AlertPost';
 
 const style = {
   position: 'absolute',
@@ -73,6 +72,7 @@ export const EditPost = props => {
 
   const handleItemClose = () => {
     setOpenItem(false);
+    handleClose();
   };
 
   // const [checkedArray, setCheckedArray] = useState(
@@ -329,13 +329,21 @@ export const EditPost = props => {
               <DialogContent>
                 <DialogContentText id='alert-dialog-description'>
                   Once the Post is Deleted, it cannot be recovered. Are you sure
-                  you want to delete this post?
+                  you want to delete this Post?
                 </DialogContentText>
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleItemClose}>Cancel</Button>
-                <Button onClick={handleItemClose} autoFocus>
-                  Confirm
+                <Button
+                  sx={{
+                    borderRadius: '30px',
+                    color: 'red',
+                    mr: 2,
+                  }}
+                  onClick={() => handleDelete(post.id)}
+                  autoFocus
+                >
+                  Delete
                 </Button>
               </DialogActions>
             </Dialog>

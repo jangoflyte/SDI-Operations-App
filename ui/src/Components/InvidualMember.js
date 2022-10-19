@@ -16,6 +16,11 @@ import {
   Stack,
   FormControl,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
@@ -199,7 +204,7 @@ const EditMemberModal = props => {
   memberObject = memberObject.memberObject;
   console.log('member object, ', memberObject);
 
-  const { API, member, setTriggerFetch, allWeapons, allFlights } =
+  const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -214,6 +219,17 @@ const EditMemberModal = props => {
   const [flight, setFlight] = useState(memberObject.flight);
   const [email, setEmail] = useState(memberObject.email);
   const [notes, setNotes] = useState(memberObject.notes);
+  const [openItem, setOpenItem] = React.useState(false);
+
+  const handleItemClickOpen = () => {
+    setOpenItem(true);
+  };
+
+  const handleItemClose = () => {
+    setOpenItem(false);
+    handleClose();
+  };
+
   const [weaponIdArray, setWeaponIdArray] = useState(
     memberObject.weapons.map(wep => wep.id)
   );
@@ -314,14 +330,54 @@ const EditMemberModal = props => {
       >
         Edit Profile
       </Button>
+
       <Button
+        variant='contained'
+        sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
+        onClick={handleItemClickOpen}
+      >
+        Delete
+      </Button>
+
+      <Dialog
+        open={openItem}
+        onClose={handleItemClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>
+          {'Are You Sure You Want to Delete?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Once the User is Deleted, it cannot be recovered. Are you sure you
+            want to delete this User?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleItemClose}>Cancel</Button>
+          <Button
+            sx={{
+              borderRadius: '30px',
+              color: 'red',
+              mr: 2,
+            }}
+            onClick={() => handleDeleteUser()}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* <Button
         onClick={handleDeleteUser}
         variant='contained'
         color='warning'
         sx={{ borderRadius: '30px' }}
       >
         Delete User
-      </Button>
+      </Button> */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -401,6 +457,7 @@ const EditMemberModal = props => {
                 value={userType}
                 label='User Type'
                 onChange={e => setUserType(e.target.value)}
+                disabled={!(userAccount !== null && userAccount.admin)}
               >
                 <MenuItem value={true}>Admin</MenuItem>
                 <MenuItem value={false}>User</MenuItem>
@@ -469,7 +526,6 @@ const EditMemberModal = props => {
                 label='Certifications'
                 onChange={e => setCert(e.target.value)}
               >
-                <MenuItem value={null}></MenuItem>
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>

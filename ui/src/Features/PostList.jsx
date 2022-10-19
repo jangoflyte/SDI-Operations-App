@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 // import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Button, Divider, Chip, Alert, Stack } from '@mui/material/';
+import { Button, Divider, Chip, Alert, Stack, TextField } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -27,7 +27,8 @@ export default function CollapsibleTable() {
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
   const [schedDate, setSchedDate] = useState(new Date());
-
+  const [startDate, setStartDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState([]);
   // let currentDate = new Date().toISOString().split('T')[0];
 
   let dateEnd = new Date();
@@ -62,7 +63,7 @@ export default function CollapsibleTable() {
   };
 
   const fetchSchedule = () => {
-    console.log('fetching schedule', schedDate);
+    console.log('fetching schedule, schedDate:', schedDate);
     let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
@@ -185,12 +186,16 @@ export default function CollapsibleTable() {
     return row;
   }, [positions, schedule, schedDate, shift]);
 
-  let dateRange = [];
-  for (let i = 0; i < 7; i++) {
-    let workingDate = new Date();
-    workingDate = new Date(workingDate.setDate(workingDate.getDate() + i));
-    dateRange.push(workingDate);
-  }
+  useMemo(() => {
+    let dateRange2 = [];
+    for (let i = 0; i < 7; i++) {
+      let workingDate = startDate;
+      console.log('working date, i:', workingDate, i);
+      workingDate = new Date(workingDate.setDate(workingDate.getDate() + i));
+      dateRange2.push(workingDate);
+    }
+    setDateRange(dateRange2);
+  }, [startDate]);
 
   return (
     <Box
@@ -253,6 +258,23 @@ export default function CollapsibleTable() {
           </Typography>
         </Box>
       )}
+      <Box>
+        <TextField
+          id='date'
+          label='Birthday'
+          type='date'
+          defaultValue={startDate.toISOString().split('T')[0]}
+          sx={{ width: 220 }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          onChange={e => {
+            let dateArr = e.target.value.split('-');
+            console.log(e.target.value);
+            setStartDate(new Date(dateArr[0], dateArr[1], dateArr[2]));
+          }}
+        />
+      </Box>
       <Box
         sx={{
           display: 'flex',

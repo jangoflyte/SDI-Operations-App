@@ -131,7 +131,7 @@ export const MemberDetails = () => {
             {userAccount !== null && userAccount.admin ? (
               <AddMemberModal />
             ) : (
-              <>Pay for Flight chief premium to add users</>
+              <></>
             )}
           </Box>
         </Stack>

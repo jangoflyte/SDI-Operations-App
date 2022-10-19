@@ -57,7 +57,7 @@ export const DataSources = () => {
       <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            Update Members Certifications, or Arming Status.
+            Update Member(s) Certifications or Arming Status.
           </Typography>
           <p>
             Upload your .csv file including airman name and corresponding
@@ -226,8 +226,8 @@ const Upload = props => {
             <p>
               To add a data source, download&nbsp;
               <a
-                href='/assets/Template.xlsx'
-                download='Template.xlsx'
+                href='/assets/Template.csv'
+                download='Template.csv'
                 style={{ textDecoration: 'none' }}
               >
                 this template

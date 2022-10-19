@@ -130,7 +130,13 @@ export default function PersistentDrawerLeft() {
             </Box>
           )}
 
-          <Grid xs display='flex' justifyContent='flex-end' alignItems='center'>
+          <Grid
+            xs
+            display='flex'
+            justifyContent='flex-end'
+            alignItems='center'
+            mr={2}
+          >
             {userAccount === null ? (
               <Typography variant='h5' component='h6'>
                 <Button
@@ -167,6 +173,7 @@ export default function PersistentDrawerLeft() {
                 <Button
                   variant='text'
                   color='secondary'
+                  sx={{ ml: 2 }}
                   onClick={() => {
                     removeCookie('user');
                     removeCookie('auth');

@@ -57,6 +57,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
+// app.use(express.bodyParser({ limit: '50mb' }));
 
 // auth check middleware /////////////////////////////////////
 const authenticateToken = (req, res, next) => {

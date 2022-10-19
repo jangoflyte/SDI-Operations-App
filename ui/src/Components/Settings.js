@@ -44,7 +44,7 @@ export const Settings = () => {
 
   useEffect(() => {
     //placeholder for desk sergeant
-    fetch(`${API}/users/9`, {
+    fetch(`${API}/users/1`, {
       method: 'GET',
     })
       .then(res => res.json())
@@ -218,7 +218,7 @@ export const Settings = () => {
                     variant='h5'
                     ml={10}
                     pb={4}
-                    sx={{ fontWeight: 'bold', width: '5%' }}
+                    sx={{ fontWeight: 'bold', width: 100 }}
                   >
                     Role
                   </Typography>
@@ -226,15 +226,15 @@ export const Settings = () => {
                     variant='h5'
                     ml={20}
                     pb={4}
-                    sx={{ fontWeight: 'bold', width: '10%' }}
+                    sx={{ fontWeight: 'bold', width: 100 }}
                   >
                     Name
                   </Typography>
                   <Typography
                     variant='h5'
-                    ml={22}
+                    ml={20}
                     pb={4}
-                    sx={{ fontWeight: 'bold', width: '20%' }}
+                    sx={{ fontWeight: 'bold', width: 100 }}
                   >
                     Email
                   </Typography>
@@ -253,23 +253,23 @@ export const Settings = () => {
                         variant='h6'
                         ml={10}
                         pb={4}
-                        sx={{ width: '5%' }}
+                        sx={{ width: 100 }}
                       >
                         {user.certs.map(cert => `${cert.cert}`)}
                       </Typography>
                       <Typography
                         variant='h6'
-                        ml={21}
+                        ml={20}
                         pb={4}
-                        sx={{ width: '20%' }}
+                        sx={{ width: 100 }}
                       >
                         {user.first_name} {user.last_name}
                       </Typography>
                       <Typography
                         variant='h6'
-                        ml={15}
+                        ml={20}
                         pb={4}
-                        sx={{ width: '20%' }}
+                        sx={{ width: 100 }}
                       >
                         {user.email}
                       </Typography>
