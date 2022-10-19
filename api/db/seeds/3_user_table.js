@@ -16,7 +16,9 @@ exports.seed = async function (knex) {
             cert_id: 4,
             weapon_arming: true,
             admin: true,
-            email: 'john@spaceforce.mil',
+            email: 'admin',
+            password:
+              '$2b$10$az7u9mz6Z0YQPxXYsT2PpOd.aC1m3V1Ibt/OFZNcHmbv9.snFQyVO',
           },
           {
             first_name: 'Jane',

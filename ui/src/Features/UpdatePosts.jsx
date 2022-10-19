@@ -20,15 +20,6 @@ import ListItemText from '@mui/material/ListItemText';
 
 export const UpdatePosts = () => {
   return (
-    <>
-      <Button
-        color={'secondary'}
-        variant='outlined'
-        sx={{ borderRadius: '50px', width: 250, mt: 4 }}
-        onClick={''}
-      >
-        Add Post
-      </Button>
-    </>
+
   );
 };

@@ -19,6 +19,7 @@ import PostMemberModal from './AddMember';
 import EditSchedule from './EditSchedule';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function CollapsibleTable() {
   const { API, postAlert, setPostAlert } = useContext(MemberContext);
@@ -449,7 +450,7 @@ const Row = props => {
         <TableCell align='right'>
           <Chip
             icon={<WorkspacePremiumIcon />}
-            label={row.cert[0].cert}
+            label={row.cert.length > 0 ? row.cert[0].cert : null}
             color='success'
           />
         </TableCell>

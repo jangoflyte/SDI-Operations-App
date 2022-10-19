@@ -27,6 +27,9 @@ const {
   patchPosition,
   userCheck,
   allFlights,
+  postPosition,
+  deletePosition,
+  updateMultipleUsers,
 } = require('./controller.js');
 
 const whitelist = [
@@ -72,7 +75,7 @@ const authenticateToken = (req, res, next) => {
 app.post('/login', async (req, res) => {
   // authenticate user
   const user = await userCheck(req.body.email);
-  console.log('usercheck', user);
+  console.log('usercheck: ', user, `\nemail: `, req.body.email);
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     // console.log(user);
@@ -127,7 +130,7 @@ app.post('/register', async (req, res) => {
     };
     // push user to db
 
-    postUsers(user)
+    postUsers([user])
       .then(results => {
         console.log('creating token');
         const userToken = { email: user.email };
@@ -241,9 +244,23 @@ app.patch('/position/:id', (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
+app.post('/position', (req, res) => {
+  console.log('posting position');
+  postPosition(req)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.delete('/position/:id', (req, res) => {
+  console.log('deleting position');
+  deletePosition(req.params.id)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
 app.post('/postusers', (req, res) => {
   console.log('posting users');
-  postUsers(req)
+  postUsers(req.body)
     .then(() => res.send({ message: 'We have posted a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
@@ -257,6 +274,14 @@ app.post('/postweaponuser', (req, res) => {
 app.patch('/updateuser/:id', (req, res) => {
   updateUser(req)
     .then(() => res.send({ message: 'We have updated a user.' }))
+    .catch(err => res.status(500).send(console.log(err)));
+});
+
+app.patch('/updateusers', (req, res) => {
+  updateMultipleUsers(req.body)
+    .then(data =>
+      res.send({ message: 'We have updated a users.', users: data })
+    )
     .catch(err => res.status(500).send(console.log(err)));
 });
 

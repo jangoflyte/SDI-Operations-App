@@ -10,6 +10,7 @@ import {
   Button,
   Modal,
   Alert,
+  Input,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Papa from 'papaparse';
@@ -44,34 +45,31 @@ export const DataSources = () => {
       <Card sx={{ boxShadow: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            Arming Status
+            Add Member(s)
           </Typography>
-          <p>
-            Upload your .csv file indicating your recent Do Not Arm airmen
-            status.
-          </p>
+          <p>Upload your .csv file to update member list</p>
         </CardContent>
         <CardActions>
-          <Upload />
+          <Upload uploadType={'POST'} />
         </CardActions>
       </Card>
 
       <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            Certifications
+            Update Members Certifications, or Arming Status.
           </Typography>
           <p>
             Upload your .csv file including airman name and corresponding
-            certifications.
+            certifications/qualifications/arming status.
           </p>
         </CardContent>
-        <CardActions>
-          <Upload />
+        <CardActions id='updateMember'>
+          <Upload uploadType={'PATCH'} />
         </CardActions>
       </Card>
 
-      <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
+      {/* <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
         <CardContent>
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Weapon Qualifications
@@ -84,12 +82,13 @@ export const DataSources = () => {
         <CardActions>
           <Upload />
         </CardActions>
-      </Card>
+      </Card> */}
     </Box>
   );
 };
 
-const Upload = () => {
+const Upload = props => {
+  const { uploadType } = props;
   const { setToggler, API } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -128,35 +127,58 @@ const Upload = () => {
   };
 
   const changeHandler = event => {
+    setFlag(!flag);
     setSelectedFile(event.target.files[0]);
-    setIsFilePicked(true);
-    console.log('This is our selected file', selectedFile);
-  };
-  const handleSubmission = () => {
-    Papa.parse(selectedFile, {
+
+    // setSelectedFile(event.target.files[0]);
+    Papa.parse(event.target.files[0], {
       header: true,
       complete: function (results) {
         setParsed(results.data);
-        console.log(JSON.stringify(parsed));
-        // console.log('This is our parsed file', parsed);
-        // console.log('json stringify stuff', JSON.stringify(parsed));
+        JSON.stringify(parsed);
+        setIsFilePicked(true);
       },
     });
+    console.log('This is our selected file', parsed);
+  };
 
-    fetch(`${API}/postusers`, {
-      method: 'POST',
-      body: JSON.stringify(parsed),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(result => {
-        console.log('Success:', result);
+  const handleSubmission = () => {
+    setToggler(true);
+    handleClose();
+    if (parsed.length === 0) return;
+    console.log('This is our parsed file before fetch', parsed);
+
+    if (uploadType === 'POST') {
+      fetch(`${API}/postusers`, {
+        method: 'POST',
+        body: JSON.stringify(parsed),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+        .then(response => response.json())
+        .then(result => {
+          console.log('Success:', result);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    } else {
+      fetch(`${API}/updateusers`, {
+        method: 'PATCH',
+        body: JSON.stringify(parsed),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => response.json())
+        .then(result => {
+          console.log('Success:', result);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
   };
 
   return (
@@ -226,19 +248,22 @@ const Upload = () => {
                 borderRadius: '15px',
               }}
             >
-              <p style={{ textAlign: 'center' }}>
-                Drag file here or click to upload.
-              </p>
-              {/* <Button
+              <p style={{ textAlign: 'center' }}>Click to upload.</p>
+              <Button
                 variant='text'
+                component='label'
                 color='secondary'
-                onClick={() => handleClick()}
+                sx={{ fontWeight: 'bold' }}
               >
-                UPLOAD{' '}
-                
-              </Button> */}
-              <input type='file' id='input' onChange={changeHandler} />
-              <Button onClick={handleSubmission}>Submit</Button>
+                <input
+                  style={{ display: 'none' }}
+                  type='file'
+                  id='input'
+                  onChange={changeHandler}
+                />
+                Upload
+              </Button>
+              {/* <Input type='file' id='input' onChange={changeHandler}></Input> */}
             </Stack>
           ) : (
             <Stack
@@ -251,13 +276,14 @@ const Upload = () => {
                 borderRadius: '15px',
               }}
             >
-              <p style={{ textAlign: 'center' }}>File name</p>
+              <p style={{ textAlign: 'center' }}>{selectedFile.name}</p>
               <Button
                 variant='text'
                 color='primary'
+                sx={{ fontWeight: 'bold' }}
                 onClick={() => handleClick()}
               >
-                REMOVE
+                Remove
               </Button>
             </Stack>
           )}
@@ -277,7 +303,7 @@ const Upload = () => {
                 variant='contained'
                 color={flag ? 'secondary' : 'primary'}
                 sx={{ borderRadius: '30px' }}
-                onClick={() => handleClickAdd()}
+                onClick={handleSubmission}
               >
                 ADD DATA
               </Button>

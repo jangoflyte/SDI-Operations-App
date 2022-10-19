@@ -22,16 +22,19 @@ import { useParams } from 'react-router';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import { useNavigate } from 'react-router-dom';
 
 const IndividualMember = () => {
-  const { member, API, setMember, triggerFetch } = useContext(MemberContext);
+  const { member, API, setMember, triggerFetch, userAccount } =
+    useContext(MemberContext);
+
   const { memberId } = useParams();
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
       .then(res => res.json())
       .then(data => setMember(data[0]));
-  }, [triggerFetch]);
+  }, [triggerFetch, memberId]);
 
   if (member === undefined || member.length === 0) {
     return (
@@ -83,7 +86,15 @@ const IndividualMember = () => {
             <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
               User Profile
             </Typography>
-            <EditMemberModal memberObject={member} />
+            {userAccount !== null ? (
+              userAccount.admin || userAccount.id === parseInt(memberId) ? (
+                <EditMemberModal memberObject={member} />
+              ) : (
+                <>touch grass</>
+              )
+            ) : (
+              <>go read a book</>
+            )}
           </Stack>
 
           <Grid container justifyContent='space-around' sx={{ mt: 5 }}>
@@ -206,6 +217,7 @@ const EditMemberModal = props => {
   const [weaponIdArray, setWeaponIdArray] = useState(
     memberObject.weapons.map(wep => wep.id)
   );
+  const navigate = useNavigate();
 
   console.log(memberObject);
 
@@ -213,6 +225,8 @@ const EditMemberModal = props => {
   const handleEdit = () => {
     const updatedUser = {
       first_name: firstName,
+      //for data to persist you could do first_name: firstname || member.first_name
+      //if no input, then it should just "replace" the value with the old one. rinse and repeat
       last_name: lastName,
       admin: userType,
       rank: rank,
@@ -240,6 +254,27 @@ const EditMemberModal = props => {
       .catch(err => {
         console.log('Error: ', err);
       });
+  };
+
+  const handleDeleteUser = () => {
+    //const deleteUser = window.confirm('Are you sure you want to delete user?');
+    const deleteUser = true;
+    if (deleteUser === true) {
+      fetch(`${API}/deleteuser/${member.id}`, {
+        method: 'DELETE',
+      })
+        .then(res => res.json())
+        .then(() => {
+          setTriggerFetch(curr => !curr);
+          //navigate("/sfmembers")
+          // handleClose()
+        })
+        .then(navigate('/sfmembers'))
+        //.then(window.location.reload(false))
+        .catch(err => {
+          console.log('Error: ', err);
+        });
+    }
   };
 
   const handleChange = event => {
@@ -278,6 +313,14 @@ const EditMemberModal = props => {
         sx={{ borderRadius: '30px' }}
       >
         Edit Profile
+      </Button>
+      <Button
+        onClick={handleDeleteUser}
+        variant='contained'
+        color='warning'
+        sx={{ borderRadius: '30px' }}
+      >
+        Delete User
       </Button>
       <Modal
         open={open}
@@ -382,8 +425,8 @@ const EditMemberModal = props => {
                 <MenuItem value={'e7'}>MSgt</MenuItem>
                 <MenuItem value={'e8'}>SMSgt</MenuItem>
                 <MenuItem value={'e9'}>CMSgt</MenuItem>
-                <MenuItem value={'o1'}>1LT</MenuItem>
-                <MenuItem value={'o2'}>2LT</MenuItem>
+                <MenuItem value={'o1'}>2LT</MenuItem>
+                <MenuItem value={'o2'}>1LT</MenuItem>
                 <MenuItem value={'o3'}>Capt</MenuItem>
                 <MenuItem value={'o4'}>Major</MenuItem>
                 <MenuItem value={'o5'}>Lt. Col</MenuItem>

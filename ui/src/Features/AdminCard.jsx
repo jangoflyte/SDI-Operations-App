@@ -16,7 +16,8 @@ import { Filter } from '../Components/Filter.js';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 
-const AdminCard = () => {
+const AdminCard = props => {
+  const { pageTrigger } = props;
   const { setMember, API, usersArray, setTriggerFetch, triggerFetch } =
     useContext(MemberContext);
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ const AdminCard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // useEffect(() => {
-  //   setPage(0);
-  // }, []);
+  useEffect(() => {
+    setPage(0);
+  }, [pageTrigger]);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -37,20 +38,18 @@ const AdminCard = () => {
     setPage(0);
   };
 
-  useEffect(() => {
-    fetch(`${API}/users`, {
-      method: 'GET',
-    })
-      .then(res => res.json())
-      .then(setPage(0))
-      .catch(err => console.log(err));
-  }, [API, triggerFetch, idArray]);
-  //console.log("allusers", user)
-
   const navigateToMember = member => {
     console.log('current member', member);
     setMember(member);
     navigate(`/sfmembers/${member.id}`);
+  };
+  const handleCheck = props => {
+    const { event, member } = props;
+    if (event.target.checked) {
+      setIdArray(curr => [...curr, member.id]);
+    } else {
+      setIdArray(idArray.filter(id => id !== member.id));
+    }
   };
 
   const handleDeleteUser = inputArray => {
@@ -65,7 +64,7 @@ const AdminCard = () => {
           // handleClose()
         })
         .then(navigate('/sfmembers'))
-        .then(window.location.reload(false))
+        //.then(window.location.reload(false))
         .catch(err => {
           console.log('Error: ', err);
         });
@@ -158,9 +157,8 @@ const AdminCard = () => {
                   >
                     <Checkbox
                       label='Name'
-                      onChange={() => {
-                        setIdArray(curr => [...curr, member.id]);
-                      }}
+                      checked={idArray.includes(member.id)}
+                      onChange={e => handleCheck({ event: e, member: member })}
                     />
                   </Box>
 

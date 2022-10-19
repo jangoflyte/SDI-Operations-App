@@ -16,7 +16,8 @@ import { Filter } from '../Components/Filter.js';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 
-const BasicCard = () => {
+const BasicCard = props => {
+  const { pageTrigger } = props;
   const { setMember, API, usersArray, setTriggerFetch, triggerFetch } =
     useContext(MemberContext);
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ const BasicCard = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  // useEffect(() => {
-  //   setPage(0);
-  // }, []);
+  useEffect(() => {
+    setPage(0);
+  }, [pageTrigger]);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -37,14 +38,18 @@ const BasicCard = () => {
     setPage(0);
   };
 
+  const handleCheck = props => {
+    const { event, member } = props;
+    if (event.target.checked) {
+      setIdArray(curr => [...curr, member.id]);
+    } else {
+      setIdArray(idArray.filter(id => id !== member.id));
+    }
+  };
+
   useEffect(() => {
-    fetch(`${API}/users`, {
-      method: 'GET',
-    })
-      .then(res => res.json())
-      .then(setPage(0))
-      .catch(err => console.log(err));
-  }, [API, triggerFetch, idArray]);
+    setPage(0);
+  }, []);
   //console.log("allusers", user)
 
   const navigateToMember = member => {
@@ -65,7 +70,7 @@ const BasicCard = () => {
           // handleClose()
         })
         .then(navigate('/sfmembers'))
-        .then(window.location.reload(false))
+        //.then(window.location.reload(false))
         .catch(err => {
           console.log('Error: ', err);
         });
@@ -155,9 +160,8 @@ const BasicCard = () => {
                 >
                   <Checkbox
                     label='Name'
-                    onChange={() => {
-                      setIdArray(curr => [...curr, member.id]);
-                    }}
+                    checked={idArray.includes(member.id)}
+                    onChange={e => handleCheck({ event: e, member: member })}
                   />
                 </Box>
 
@@ -167,7 +171,9 @@ const BasicCard = () => {
                   alignItems='center'
                   sx={{ display: 'flex', justifyContent: 'space-between' }}
                 >
-                  <Typography>{member.rank.toUpperCase()}</Typography>
+                  <Typography>
+                    {member.rank ? member.rank.toUpperCase() : `No rank`}
+                  </Typography>
                   <Typography
                     onClick={() => navigateToMember(member)}
                     sx={{
@@ -254,7 +260,15 @@ const BasicCard = () => {
               variant='contained'
               size='medium'
               sx={{ borderRadius: '30px' }}
-              onClick={() => handleDeleteUser(idArray)}
+              onClick={() => {
+                // const confirmation = window.confirm(
+                //   'Are you sure you want to delete users? It will permanently delete their account'
+                // );
+                const confirmation = true;
+                if (confirmation) {
+                  handleDeleteUser(idArray);
+                }
+              }}
             >
               Delete User
             </Button>

@@ -1,13 +1,7 @@
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,
-,,PANAMA 12 SCHEDULE,,,,,,,,,,,,
-,,MONDAY,,TUESDAY,,WEDNESDAY,,THURSDAY,,FRIDAY,,SATURDAY,,SUNDAY
-,,12-Sep,,13-Sep,,14-Sep,,15-Sep,,16-Sep,,17-Sep,,18-Sep
-,,0600 - 1800 - ALPHA,,0600 - 1800  - ALPHA,,0600 - 1800 - BRAVO,,0600 - 1800 - BRAVO,,0600 - 1800.  - ALPHA,,0600 - 1800  - ALPHA,,0600 - 1800  - ALPHA
-,,1800 -0600 - CHARLIE,,1800 -0600 - CHARLIE,,1800 -0600 - DELTA,,1800 -0600 - DELTA,,1800 -0600 - CHARLIE,,1800 -0600 - CHARLIE,,1800 -0600 - CHARLIE
-,,19-Sep,,20-Sep,,21-Sep,,22-Sep,,23-Sep,,24-Sep,,25-Sep
-,,0600 - 1800 - BRAVO,,0600 - 1800 - BRAVO,,0600 - 1800 - ALPHA,,0600 - 1800 - ALPHA,,0600 - 1800 - BRAVO,,0600 - 1800 - BRAVO,,0600 - 1800 - BRAVO
-,,1800 -0600 - DELTA,,1800 -0600 - DELTA,,1800 -0600 - CHARLIE,,1800 -0600 - CHARLIE,,1800 -0600 - DELTA,,1800 -0600 - DELTA,,1800 -0600 - DELTA
+first_name,last_name,rank,flight,cert_id,weapon_arming,admin,notes,email,password
+Amity,Foley,e3,alpha-1,1 = ecc,TRUE/FALSE,TRUE/FALSE,any notes that need added,dolor.dolor.tempus@google.com,In
+,,,alpha-2,2 = patrol,,,,,
+,,,bravo-1,3 = BDOC,,,,,
+,,,bravo-2,4 = Flight Sergeant,,,,,
+,,,charlie-1,,,,,,
+,,,charlie-2,,,,,,

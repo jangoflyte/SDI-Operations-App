@@ -11,19 +11,13 @@ import {
   MenuItem,
   Stack,
   FormControl,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+// import SearchIcon from '@mui/icons-material/Search';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
-import { AlertPost } from './AlertPost';
 
 const style = {
   position: 'absolute',
@@ -49,35 +43,17 @@ const MenuProps = {
   },
 };
 
-export const EditPost = props => {
-  const { post } = props;
-
+export const AddPost = () => {
   const { API, setTriggerFetch, setToggle, allWeapons } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [postName, setPostName] = useState(post.name);
-  const [weapon, setWeapon] = useState(post.weapon_req);
-  const [weaponIdArray, setWeaponIdArray] = useState(
-    post.weapon_req.map(wep => wep.id)
-  );
-  const [manReq, setManReq] = useState(post.man_req);
-  const [cert, setCert] = useState(post.cert_id);
-
-  const [openItem, setOpenItem] = React.useState(false);
-
-  const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
-
-  const handleItemClose = () => {
-    setOpenItem(false);
-  };
-
-  // const [checkedArray, setCheckedArray] = useState(
-  //   makeCheckedArray(allWeapons)
-  // );
+  const [postName, setPostName] = useState(null);
+  const [weapon, setWeapon] = useState([]);
+  const [weaponIdArray, setWeaponIdArray] = useState([]);
+  const [manReq, setManReq] = useState(null);
+  const [cert, setCert] = useState(null);
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
@@ -87,11 +63,10 @@ export const EditPost = props => {
       cert_id: cert,
       weapon_req: weaponIdArray,
     };
-
     console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
-    fetch(`${API}/position/${post.id}`, {
-      method: 'PATCH',
+    fetch(`${API}/position/`, {
+      method: 'POST',
       body: JSON.stringify(newPost),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -100,18 +75,6 @@ export const EditPost = props => {
       // .then(window.location.reload(false))
       .then(res => res.json())
       // .then(window.location.reload(false))
-      .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggle(true);
-        handleClose();
-      })
-      .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
-
-  const handleDelete = positionId => {
-    fetch(`${API}/position/${positionId}`, { method: 'DELETE' })
       .then(() => {
         setTriggerFetch(curr => !curr);
         setToggle(true);
@@ -152,13 +115,14 @@ export const EditPost = props => {
 
   return (
     <>
-      <BorderColorIcon
+      <Button
         onClick={handleOpen}
-        fontSize='large'
-        color='secondary'
-        cursor='pointer'
-        sx={{ mr: 5 }}
-      />
+        color={'secondary'}
+        variant='contained'
+        sx={{ borderRadius: '50px', width: 150 }}
+      >
+        Add Post
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -183,7 +147,7 @@ export const EditPost = props => {
             variant='h4'
             sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
-            Edit Post
+            Add Post
           </Typography>
 
           <Stack
@@ -311,59 +275,12 @@ export const EditPost = props => {
             }}
           >
             <Button
-              variant='contained'
-              sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
-              onClick={handleItemClickOpen}
-            >
-              Delete
-            </Button>
-            <Dialog
-              open={openItem}
-              onClose={handleItemClose}
-              aria-labelledby='alert-dialog-title'
-              aria-describedby='alert-dialog-description'
-            >
-              <DialogTitle id='alert-dialog-title'>
-                {'Are You Sure You Want to Delete?'}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id='alert-dialog-description'>
-                  Once the Post is Deleted, it cannot be recovered. Are you sure
-                  you want to delete this post?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleItemClose}>Cancel</Button>
-                <Button onClick={handleItemClose} autoFocus>
-                  Confirm
-                </Button>
-              </DialogActions>
-            </Dialog>
-            {/* <Button
-              onClick={() => {
-                <AlertPost />;
-                // const confirmation = window.confirm(
-                //   'Are you sure you want to delete post? It will delete post for every user.'
-                // );
-                // if (confirmation) {
-                //   handleDelete(post.id);
-                // } else {
-                //   handleClose();
-                // }
-              }}
-              variant='contained'
-              sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
-            >
-              Delete Post
-            </Button> */}
-
-            <Button
               onClick={() => handleAdd()}
               color='secondary'
               variant='contained'
               sx={{ borderRadius: '30px' }}
             >
-              Save Changes
+              Add
             </Button>
           </Stack>
         </Box>

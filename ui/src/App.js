@@ -61,9 +61,9 @@ const App = () => {
       .catch(err => console.log(err));
   }, [API]);
 
-  // useEffect(() => {
-  //   console.log(userAccount);
-  // }, [userAccount]);
+  useEffect(() => {
+    console.log('user account ', userAccount);
+  }, [userAccount]);
 
   const obj = {
     data,

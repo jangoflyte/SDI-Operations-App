@@ -26,11 +26,19 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
 export const MemberDetails = () => {
-  const { API, setUsersArray, usersArray, triggerFetch, toggle, setToggle } =
-    useContext(MemberContext);
+  const {
+    API,
+    setUsersArray,
+    usersArray,
+    triggerFetch,
+    toggle,
+    setToggle,
+    userAccount,
+  } = useContext(MemberContext);
   const [searchText, setSearchText] = useState('');
   const [changeView, setChangeView] = useState(0);
   const [flag, setFlag] = useState(false);
+  const [pageTrigger, setPageTrigger] = useState(true);
 
   useEffect(() => {
     fetch(`${API}/usersearch/${searchText}`, {
@@ -53,9 +61,9 @@ export const MemberDetails = () => {
   }, []);
 
   const viewArray = [
-    <BasicCard key={1} />,
-    <AdminCard key={2} />,
-    <UserCard key={3} />,
+    <BasicCard key={1} pageTrigger={pageTrigger} />,
+    <AdminCard key={2} pageTrigger={pageTrigger} />,
+    <UserCard key={3} pageTrigger={pageTrigger} />,
   ];
 
   const buttonSX = {
@@ -114,12 +122,17 @@ export const MemberDetails = () => {
                 }}
                 onChange={e => {
                   setSearchText(e.target.value);
+                  setPageTrigger(!pageTrigger);
                 }}
               />
             </FormControl>
           </Box>
           <Box justifyContent='right' sx={{ display: 'flex', mx: '80px' }}>
-            <AddMemberModal />
+            {userAccount !== null && userAccount.admin ? (
+              <AddMemberModal />
+            ) : (
+              <>Pay for Flight chief premium to add users</>
+            )}
           </Box>
         </Stack>
 
@@ -193,14 +206,14 @@ const AddMemberModal = () => {
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState(null);
   const [rank, setRank] = useState('');
-  const [cert, setCert] = useState('');
+  const [cert, setCert] = useState(null);
   const [weapon, setWeapon] = useState([]);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(null);
   const [flight, setFlight] = useState([]);
-  const [status, setStatus] = useState('');
-  const [notes, setNotes] = useState('');
+  const [status, setStatus] = useState(null);
+  const [notes, setNotes] = useState(null);
   const [weaponIdArray, setWeaponIdArray] = useState([]);
 
   //need to modify this so old data is persisted
@@ -220,7 +233,7 @@ const AddMemberModal = () => {
 
     fetch(`${API}/postusers/`, {
       method: 'POST',
-      body: JSON.stringify(newUser),
+      body: JSON.stringify([newUser]),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
@@ -402,7 +415,6 @@ const AddMemberModal = () => {
             pt={2}
             sx={{
               display: 'flex',
-
               justifyContent: 'space-between',
             }}
           >
@@ -434,9 +446,6 @@ const AddMemberModal = () => {
                 multiple
                 value={weapon.map(weap => weap.weapon)}
                 defaultValue={'None Selected'}
-                // value={weaponArr}
-                // onChange={handleChange}
-                // onClick={handleChange}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -447,17 +456,7 @@ const AddMemberModal = () => {
                     key={index}
                     value={weaponObject.id}
                   >
-                    <Checkbox
-                      onChange={handleChange}
-                      // defaultChecked={weapon.some(
-                      //   wep => wep.id === weaponObject.id
-                      // )}
-                      // checked={weapon.some(
-                      //   wep => wep.weapon_id === weaponObject.id
-                      // )}
-
-                      // make seperate component
-                    />
+                    <Checkbox onChange={handleChange} />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>
                 ))}
@@ -500,7 +499,6 @@ const AddMemberModal = () => {
                     value={flightObject.flight}
                   >
                     {flightObject.flight}
-                    {/* <ListItemText primary={flightObject.flight} /> */}
                   </MenuItem>
                 ))}
               </Select>

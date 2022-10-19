@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { PostCard } from './PostCard';
-import { UpdatePosts } from '../Features/UpdatePosts';
+import { AddPost } from '../Features/AddPost';
 
 export const Settings = () => {
   const { API, triggerFetch } = useContext(MemberContext);
@@ -166,13 +166,20 @@ export const Settings = () => {
               </Button>
             </Stack>
 
-            <UpdatePosts />
-
-            <Box sx={{ my: 4 }}>
-              <Typography variant='h5'>
+            <Stack
+              direction='row'
+              sx={{
+                my: 4,
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: 800,
+              }}
+            >
+              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
                 {postArray.length} {day} Posts
               </Typography>
-            </Box>
+              <AddPost />
+            </Stack>
 
             {postArray.map((post, index) => {
               return <PostCard post={post} key={index} />;

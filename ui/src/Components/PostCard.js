@@ -6,7 +6,6 @@ import { Box, Typography, Stack, Chip, Button } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
-import { EditRole } from '../Features/EditRole';
 
 export const PostCard = props => {
   const { setPostsPage } = useContext(MemberContext);
@@ -85,62 +84,62 @@ export const PostCard = props => {
           </Typography>
         </Box>
       </Stack>
-      {roleArray(post).map((role, index) => (
-        <Stack
-          key={index}
-          component='span'
-          direction='row'
-          alignItems='center'
-          pt={2}
-          sx={{ display: 'flex' }}
-        >
-          <Box width='33%'>
-            <Typography>{role.name}</Typography>
-          </Box>
-          <Box width='33%'>
-            <Typography component='span' sx={{ fontWeight: 'bold' }}>
-              {post.cert_req.length === 0 ? (
-                <Chip
-                  icon={<WorkspacePremiumIcon />}
-                  label='No Certs'
-                  color='success'
-                />
-              ) : (
-                <Chip
-                  icon={<WorkspacePremiumIcon />}
-                  label={post.cert_req.map(cert => cert.cert)}
-                  color='success'
-                />
-              )}
-            </Typography>
-          </Box>
-          <Box width='33%'>
-            <Typography component='span' sx={{ fontWeight: 'bold' }}>
-              {post.weapon_req.length === 0 ? (
-                <Chip
-                  color='secondary'
-                  icon={<SecurityIcon />}
-                  label='No Weapons'
-                />
-              ) : (
-                post.weapon_req.map((weapon, index) => (
+      {roleArray(post).map((role, index) => {
+        if (index > 6) return null;
+        if (index > 5) return `...Aditional Posts hidden...`;
+        return (
+          <Stack
+            key={index}
+            component='span'
+            direction='row'
+            alignItems='center'
+            pt={2}
+            sx={{ display: 'flex' }}
+          >
+            <Box width='33%'>
+              <Typography>{role.name}</Typography>
+            </Box>
+            <Box width='33%'>
+              <Typography component='span' sx={{ fontWeight: 'bold' }}>
+                {post.cert_req.length === 0 ? (
                   <Chip
-                    key={index}
-                    icon={<SecurityIcon />}
-                    label={weapon.weapon.toUpperCase()}
-                    color='secondary'
-                    sx={{ m: 1 / 4 }}
+                    icon={<WorkspacePremiumIcon />}
+                    label='No Certs'
+                    color='success'
                   />
-                ))
-              )}
-            </Typography>
-          </Box>
-        </Stack>
-      ))}
-
-      <Stack>
-        <EditRole/>
-      </Stack>
+                ) : (
+                  <Chip
+                    icon={<WorkspacePremiumIcon />}
+                    label={post.cert_req.map(cert => cert.cert)}
+                    color='success'
+                  />
+                )}
+              </Typography>
+            </Box>
+            <Box width='33%'>
+              <Typography component='span' sx={{ fontWeight: 'bold' }}>
+                {post.weapon_req.length === 0 ? (
+                  <Chip
+                    color='secondary'
+                    icon={<SecurityIcon />}
+                    label='No Weapons'
+                  />
+                ) : (
+                  post.weapon_req.map((weapon, index) => (
+                    <Chip
+                      key={index}
+                      icon={<SecurityIcon />}
+                      label={weapon.weapon.toUpperCase()}
+                      color='secondary'
+                      sx={{ m: 1 / 4 }}
+                    />
+                  ))
+                )}
+              </Typography>
+            </Box>
+          </Stack>
+        );
+      })}
     </Box>
   );
 };

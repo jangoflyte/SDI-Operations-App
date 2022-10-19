@@ -9,9 +9,7 @@ import {
   Typography,
   Container,
   MenuItem,
-  // Select,
-  // InputLabel,
-  // FormControl,
+  Stack,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
@@ -96,11 +94,7 @@ export default function SignUp() {
           alignItems: 'center',
         }}
       >
-        <Avatar
-          // alt='galvanize'
-          // src='...public/images/galvanize.jpeg'
-          sx={{ m: 1, bgcolor: 'secondary.main' }}
-        />
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} />
         <Typography component='h1' variant='h5'>
           Sign up
         </Typography>
@@ -145,6 +139,7 @@ export default function SignUp() {
                 label='eMail'
                 name='email'
                 autoComplete='email'
+                autoFocus
                 onChange={e => {
                   setUserInfo(prev => {
                     return { ...prev, email: e.target.value };
@@ -160,7 +155,6 @@ export default function SignUp() {
                 fullWidth
                 id='firstname'
                 label='First Name'
-                autoFocus
                 onChange={e => {
                   setUserInfo(prev => {
                     return { ...prev, first_name: e.target.value };
@@ -236,15 +230,25 @@ export default function SignUp() {
               />
             </Grid>
           </Grid>
-          <Button
-            type='submit'
-            fullWidth
-            variant='contained'
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => postUser()}
+          <Stack
+            ml={13}
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              textAlign: 'center',
+            }}
           >
-            Sign Up
-          </Button>
+            <Button
+              type='submit'
+              fullWidth
+              variant='contained'
+              color='secondary'
+              sx={{ mt: 3, mb: 2, borderRadius: '30px', width: 200 }}
+              onClick={() => postUser()}
+            >
+              Sign Up
+            </Button>
+          </Stack>
           <Grid container justifyContent='flex-end'>
             <Grid item>
               <Link href='/login' variant='body2'>

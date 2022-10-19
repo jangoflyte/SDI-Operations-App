@@ -16,7 +16,7 @@ const userCheck = async email => {
   if (results[0] === undefined) {
     return null;
   } else {
-    console.log('user found');
+    console.log('user found', results);
     return results[0];
   }
 };
@@ -71,7 +71,20 @@ const postCert = async posts => {
 
 // user /////////////////////////////////////////////////////////////
 const getAllUsers = async () => {
-  let users = await knex('user_table').select('*').orderBy('last_name', 'asc');
+  let users = await knex('user_table')
+    .select(
+      'id',
+      'first_name',
+      'last_name',
+      'rank',
+      'flight',
+      'cert_id',
+      'weapon_arming',
+      'admin',
+      'notes',
+      'email'
+    )
+    .orderBy('last_name', 'asc');
   let wepUsers = await addWeapon(users);
   let certUsers = await addCerts(wepUsers);
   return certUsers;
@@ -119,31 +132,27 @@ const postWeaponUser = async (userId, wepArray) => {
   }
 };
 
-const postUsers = async req => {
-  let newUser;
-  if (req.body.first_name) {
-    newUser = {
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      admin: req.body.admin,
-      rank: req.body.rank,
-      cert_id: req.body.cert_id,
-      email: req.body.email,
-      weapon_arming: req.body.weapon_arming,
-      notes: req.body.notes,
-    };
-  } else {
-    newUser = req;
+const postUsers = async users => {
+  for (let user of users) {
+    if (user.weaponIdArray) {
+      const newUser = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        admin: user.admin,
+        rank: user.rank,
+        cert_id: user.cert_id,
+        email: user.email,
+        weapon_arming: user.weapon_arming,
+        notes: user.notes,
+      };
+      let result = await knex('user_table').insert(newUser, ['*']);
+      await postWeaponUser(result[0].id, user.weaponIdArray);
+      return result;
+    } else {
+      let result = await knex('user_table').insert(users, ['*']);
+      return result;
+    }
   }
-
-  let result = await knex('user_table').insert(newUser, ['*']);
-  console.log('This is result, newusers: ', result, newUser);
-  console.log('result: ', result);
-  if (req.body && req.body.weaponIdArray) {
-    await postWeaponUser(result[0].id, req.body.weaponIdArray);
-    console.log('This is result: ', result);
-  }
-  return result;
 };
 
 const updateUser = async req => {
@@ -157,12 +166,32 @@ const updateUser = async req => {
     email: req.body.email,
     weapon_arming: req.body.weapon_arming,
     notes: req.body.notes,
+    flight: req.body.flight,
   };
   console.log('new user ', newUser);
   await deleteWeaponUser(req.params.id);
   await postWeaponUser(req.params.id, req.body.weaponIdArray);
   // knex.raw('TRUNCATE users_table CASCADE');
   return await knex('user_table').where({ id: req.params.id }).update(newUser);
+};
+
+const updateMultipleUsers = async users => {
+  let results = [];
+  for (let user of users) {
+    for (let key in user) {
+      if (user[key] === '') delete user[key];
+    }
+    if (Object.keys(user).length === 0) {
+      return;
+    }
+    console.log('user', user);
+    let output = await knex('user_table')
+      .where('email', user.email)
+      .update(user, ['*']);
+    results.push(output[0]);
+  }
+  console.log('update multiple users: ', results);
+  return results;
 };
 
 // schedules //////////////////////////////////////////////
@@ -262,6 +291,28 @@ const patchPosition = async req => {
   return result;
 };
 
+const postPosition = async req => {
+  console.log('this is req.body for post position: ', req.body);
+  let postObject = {
+    name: req.body.name,
+    man_req: req.body.man_req,
+    cert_id: req.body.cert_id,
+  };
+  let result = await knex('position').insert(postObject, ['*']);
+  console.log('result ', result);
+  await postWeaponPosition(result[0].id, req.body.weapon_req);
+  return result;
+};
+
+const deletePosition = async positionId => {
+  console.log('delete position ran');
+  await deleteWeaponPosition(positionId);
+  let result = await knex('position').where({ id: positionId }).delete();
+  console.log('delete position result ', result);
+
+  return result;
+};
+
 const updateWeaponUser = req => {
   knex.raw('TRUNCATE weapon_user CASCADE');
   return knex('weapon_user').where({ id: req.params.id }).update(req.body);
@@ -294,4 +345,7 @@ module.exports = {
   patchPosition,
   userCheck,
   allFlights,
+  postPosition,
+  deletePosition,
+  updateMultipleUsers,
 };

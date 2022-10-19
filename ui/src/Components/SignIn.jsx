@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-//import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-//import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -84,17 +83,8 @@ export default function SignIn() {
         {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
           <LockOutlinedIcon />
         </Avatar> */}
-        <Box>
-          <img
-            src={logo}
-            alt='logo'
-            style={{
-              width: '100%',
-              backgroundColor: '#212121',
-              height: '100%',
-              borderRadius: '20px',
-            }}
-          />
+        <Box sx={{ backgroundColor: '#212121', borderRadius: '20px', pl: 1.5 }}>
+          <img src={logo} alt='logo' />
         </Box>
         {/* <Typography component='h1' variant='h5' align='center'>
           Welcome to 45SFS Scheduling App.
@@ -156,11 +146,11 @@ export default function SignIn() {
           />
 
           <Stack
-            ml={13}
+            ml={12}
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              textAlign: 'center',
+              flexDirection: 'column',
             }}
           >
             <Button
@@ -168,24 +158,47 @@ export default function SignIn() {
               variant='contained'
               color='secondary'
               size='medium'
-              sx={{ mt: 3, mb: 2, borderRadius: '30px', width: 200 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                borderRadius: '30px',
+                width: 200,
+              }}
               onClick={() => postLogin()}
             >
               Login
             </Button>
-            <Grid container sx={{ textAlign: 'center' }}>
+
+            <Grid
+              ml={5}
+              container
+              sx={{
+                textAlign: 'center',
+              }}
+            >
               <Grid item>
                 <Link href='' variant='body2'>
                   {'Forgot Password?'}
                 </Link>
               </Grid>
             </Grid>
+            <Stack ml={10} mt={3}>
+              <Avatar sx={{ bgcolor: '#212121' }}>OR</Avatar>
+            </Stack>
+
             <Button
               fullWidth
               variant='contained'
               color='secondary'
               size='medium'
-              sx={{ mt: 3, mb: 2, borderRadius: '30px', width: 200 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                borderRadius: '30px',
+                width: 200,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
               onClick={() => navigate('/signup')}
             >
               Create Account
