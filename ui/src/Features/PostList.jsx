@@ -192,6 +192,8 @@ export default function CollapsibleTable() {
       let workingDate = startDate.toISOString().split('T')[0];
       workingDate = workingDate.split('-');
       console.log('working date, i:', workingDate, i);
+
+      // need to add check for not adding dates past end of month //////////////////////////////////
       let newDate = new Date(
         `${workingDate[0]}-${workingDate[1]}-${
           parseInt(workingDate[2]) + i
@@ -279,6 +281,7 @@ export default function CollapsibleTable() {
             console.log('settign start date: ', dateArr);
             // setStartDate(new Date(dateArr[0], dateArr[1] + 1, dateArr[2]));
             setStartDate(new Date(`${e.target.value}T00:00:00`));
+            setSchedDate(new Date(`${e.target.value}T00:00:00`));
           }}
         />
       </Box>
