@@ -22,12 +22,14 @@ import {
   DialogContentText,
   DialogTitle,
   Tooltip,
+  IconButton,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from 'react-router-dom';
 import { UserPost } from './UserPost';
 
@@ -69,160 +71,181 @@ const IndividualMember = () => {
         }}
       >
         <Box>
-          <Stack direction='row' spacing={2}>
-            <a href='/sfmembers' style={{ textDecoration: 'none' }}>
-              People&nbsp;
-            </a>
-            {'>'} {member.first_name} {member.last_name}
+          <Box>
+            <Stack direction='row' spacing={2}>
+              <a href='/sfmembers' style={{ textDecoration: 'none' }}>
+                People&nbsp;
+              </a>
+              {'>'} {member.first_name} {member.last_name}
+            </Stack>
+          </Box>
+          <Stack direction='row' alignItems='center' spacing={2} mt={6}>
+            <Avatar />
+            <h1>
+              {member.first_name} {member.last_name}
+            </h1>
           </Stack>
         </Box>
-        <Stack direction='row' alignItems='center' spacing={2} mt={6}>
-          <Avatar />
-          <h1>
-            {member.first_name} {member.last_name}
-          </h1>
-        </Stack>
-
         <Box
           sx={{
-            m: 5,
-            height: 550,
-            width: 500,
-            boxShadow: 3,
-            borderRadius: 3,
-            p: 5,
-            backgroundColor: 'white',
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'top',
+            justifyContent: 'center',
+            gap: 3,
+            mt: 5,
           }}
         >
-          <Stack
-            direction='row'
-            spacing={2}
-            sx={{ display: 'flex', justifyContent: 'space-between' }}
-          >
-            <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-              User Profile
-            </Typography>
-            {userAccount !== null ? (
-              userAccount.admin || userAccount.id === parseInt(memberId) ? (
-                <EditMemberModal memberObject={member} />
-              ) : null
-            ) : null}
-          </Stack>
-
-          <Grid container sx={{ mt: 5 }}>
-            <Box
-              display='flex'
-              flexDirection='column'
-              container
-              sx={{ width: '70%' }}
-            >
-              <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
-              <Typography sx={{ mb: 5 }}>
-                {member.first_name} {member.last_name}
-              </Typography>
-              <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
-              <Typography sx={{ mb: 5 }}>
-                {member.rank.toUpperCase()}
-              </Typography>
-              <Typography sx={{ fontWeight: 'bold' }}>
-                Weapons Qualifications:
-              </Typography>
-              {member.weapons.length === 0 ? (
-                <Typography sx={{ mb: 5 }}>No weapons</Typography>
-              ) : member.weapons.length > 3 ? (
-                <>
-                  <Typography sx={{ mb: 5 }}>
-                    {member.weapons.length}
-                  </Typography>
-                  {/* <WeaponQuals /> */}
-                </>
-              ) : (
-                <Typography sx={{ mb: 5 }}>
-                  {member.weapons
-                    .map(item => item.weapon.toUpperCase())
-                    .join(', ')}
-                </Typography>
-              )}
-              <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
-              {console.log(member.email.length)}
-              {member.email.length > 30 ? (
-                <Tooltip title={member.email}>
-                  <Typography sx={{ mb: 5 }}>
-                    {member.email.substring(0, 30)}...
-                  </Typography>
-                </Tooltip>
-              ) : (
-                <Typography sx={{ mb: 5 }}>{member.email}</Typography>
-              )}
-            </Box>
-
-            <Box display='flex' flexDirection='column' sx={{ width: '30%' }}>
-              <Typography sx={{ fontWeight: 'bold' }}>User Type:</Typography>
-              <Typography sx={{ mb: 5 }}>
-                {member.admin === true ? 'Admin' : 'User'}
-              </Typography>
-
-              <Typography sx={{ fontWeight: 'bold' }}>
-                Certifications:
-              </Typography>
-              {member.certs.length === 0 ? (
-                <Typography sx={{ mb: 5 }}>No certs</Typography>
-              ) : (
-                <Typography sx={{ mb: 5 }}>
-                  {member.certs.map(item => item.cert)}
-                </Typography>
-              )}
-
-              <Typography component='span' sx={{ fontWeight: 'bold' }}>
-                Arm Status:
-              </Typography>
-              {member.weapon_arming === true ? (
-                <Chip label='Arm' color='success' />
-              ) : (
-                <Chip label='Do Not Arm' color='error' />
-              )}
-
-              <Typography mt={4} sx={{ fontWeight: 'bold' }}>
-                Flight:
-              </Typography>
-              <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
-            </Box>
-          </Grid>
-          <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
           <Box
-            // display='flex'
-            // flexDirection='column'
-            component='div'
-            sx={{ overflow: 'auto', maxHeight: 100, mt: 2 }}
+            sx={{
+              height: 600,
+              width: 500,
+              boxShadow: 3,
+              borderRadius: 3,
+              p: 5,
+              backgroundColor: 'white',
+            }}
           >
-            {member.notes === null ? (
-              <Typography sx={{ mb: 5 }}>N/A</Typography>
+            <Stack
+              direction='row'
+              spacing={2}
+              sx={{ display: 'flex', justifyContent: 'space-between' }}
+            >
+              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+                Profile Information
+              </Typography>
+              {userAccount !== null ? (
+                userAccount.admin || userAccount.id === parseInt(memberId) ? (
+                  <EditMemberModal memberObject={member} />
+                ) : null
+              ) : null}
+            </Stack>
+
+            <Grid container sx={{ mt: 5 }}>
+              <Box
+                display='flex'
+                flexDirection='column'
+                container
+                sx={{ width: '70%' }}
+              >
+                <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
+                <Typography sx={{ mb: 5 }}>
+                  {member.first_name} {member.last_name}
+                </Typography>
+                <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
+                <Typography sx={{ mb: 5 }}>
+                  {member.rank.toUpperCase()}
+                </Typography>
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  Weapons Qualifications:
+                </Typography>
+                {member.weapons.length === 0 ? (
+                  <Typography sx={{ mb: 5 }}>No weapons</Typography>
+                ) : member.weapons.length > 3 ? (
+                  <Stack direction='row'>
+                    <Typography sx={{ mb: 5 }}>
+                      {member.weapons.length}
+                    </Typography>
+                    <WeaponQuals weapon={member.weapons} />
+                  </Stack>
+                ) : (
+                  <Typography sx={{ mb: 5 }}>
+                    {member.weapons
+                      .map(item => item.weapon.toUpperCase())
+                      .join(', ')}
+                  </Typography>
+                )}
+                <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
+                {console.log(member.email.length)}
+                {member.email.length > 30 ? (
+                  <Tooltip title={member.email}>
+                    <Typography sx={{ mb: 5 }}>
+                      {member.email.substring(0, 30)}...
+                    </Typography>
+                  </Tooltip>
+                ) : (
+                  <Typography sx={{ mb: 5 }}>{member.email}</Typography>
+                )}
+              </Box>
+
+              <Box display='flex' flexDirection='column' sx={{ width: '30%' }}>
+                <Typography sx={{ fontWeight: 'bold' }}>User Type:</Typography>
+                <Typography sx={{ mb: 5 }}>
+                  {member.admin === true ? 'Admin' : 'User'}
+                </Typography>
+
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  Certifications:
+                </Typography>
+                {member.certs.length === 0 ? (
+                  <Typography sx={{ mb: 5 }}>No certs</Typography>
+                ) : (
+                  <Typography sx={{ mb: 5 }}>
+                    {member.certs.map(item => item.cert)}
+                  </Typography>
+                )}
+
+                <Typography component='span' sx={{ fontWeight: 'bold' }}>
+                  Arm Status:
+                </Typography>
+                {member.weapon_arming === true ? (
+                  <Chip label='Arm' color='success' />
+                ) : (
+                  <Chip label='Do Not Arm' color='error' />
+                )}
+
+                <Typography mt={4} sx={{ fontWeight: 'bold' }}>
+                  Flight:
+                </Typography>
+                <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
+              </Box>
+            </Grid>
+            <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
+            <Box
+              // display='flex'
+              // flexDirection='column'
+              component='div'
+              sx={{
+                overflow: 'auto',
+                maxHeight: 100,
+                mt: 2,
+                bgcolor: '#edeef0',
+                borderRadius: 2,
+                p: 1,
+              }}
+            >
+              {member.notes === null ? (
+                <Typography sx={{ mb: 5 }}>N/A</Typography>
+              ) : (
+                <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
+              )}
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              mx: 5,
+              width: 500,
+              boxShadow: 3,
+              borderRadius: 3,
+              p: 5,
+              backgroundColor: 'white',
+            }}
+          >
+            <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 2 }}>
+              {member.first_name + `'s`} Schedule
+            </Typography>
+            {scheduleArray !== null && scheduleArray.length > 0 ? (
+              scheduleArray.map((schedule, index) => {
+                // console.log('INDEX ', index);
+                return (
+                  <UserPost schedule={schedule} key={index} index={index} />
+                );
+              })
             ) : (
-              <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
+              <>Not Assigned to Any Posts</>
             )}
           </Box>
-        </Box>
-        <Box
-          sx={{
-            mx: 5,
-            width: 500,
-            boxShadow: 3,
-            borderRadius: 3,
-            p: 5,
-            backgroundColor: 'white',
-          }}
-        >
-          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            {member.first_name + `'s`} Schedule
-          </Typography>
-          {scheduleArray !== null && scheduleArray.length > 0 ? (
-            scheduleArray.map((schedule, index) => {
-              // console.log('INDEX ', index);
-              return <UserPost schedule={schedule} key={index} index={index} />;
-            })
-          ) : (
-            <>Not Assigned to Any Posts</>
-          )}
         </Box>
       </Box>
     );
@@ -709,32 +732,50 @@ const EditMemberModal = props => {
   );
 };
 
-// function WeaponQuals() {
-//   const [open, setOpen] = React.useState(false);
+function WeaponQuals(props) {
+  const { weapon } = props;
+  const [open, setOpen] = React.useState(false);
 
-//   const handleClickOpen = () => {
-//     setOpen(true);
-//   };
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-//   return (<Dialog
-//   open={handleClickOpen}
-//   onClose={handleClose}}
-//   aria-labelledby='alert-dialog-title'
-//   aria-describedby='alert-dialog-description'
-// >
-//   <DialogTitle id='alert-dialog-title'>
-//     {'Are You Sure You Want to Delete?'}
-//   </DialogTitle>
-//   <DialogContent>
-//     <DialogContentText id='alert-dialog-description'>
-//       Once the User is Deleted, it cannot be recovered. Are you sure you want to
-//       delete this User?
-//     </DialogContentText>
-//   </DialogContent>
-// </Dialog>
-// )}
+  return (
+    <>
+      <IconButton
+        variant='outlined'
+        onClick={handleClickOpen}
+        size='small'
+        sx={{ ml: 2, width: 33, height: 33 }}
+      >
+        <AddCircleOutlineIcon />
+      </IconButton>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='customized-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
+          {'List of Weapon Qualifications:'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='customized-dialog-description'>
+            <ul>
+              {weapon.map((wep, index) => (
+                <li key={index}>
+                  {wep.weapon.toUpperCase()} - {wep.type}
+                </li>
+              ))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
 export default IndividualMember;

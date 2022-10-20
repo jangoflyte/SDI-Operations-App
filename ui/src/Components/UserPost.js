@@ -14,17 +14,20 @@ export const UserPost = props => {
 
   return (
     <Box
-      backgroundColor={checkEven ? '#D3D3D3' : '#FFFFFF'}
+      backgroundColor={checkEven ? '#edeef0' : '#FFFFFF'}
       sx={{
         display: 'flex',
         direction: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
         p: 1,
       }}
     >
-      <Box>{schedule.position_info[0].name}</Box>
-      <Box>{schedule.role}</Box>
-      <Box>{schedule.date}</Box>
+      <Box sx={{ width: '20%' }}>{schedule.position_info[0].name}</Box>
+      <Box sx={{ width: '20%' }}>{schedule.role}</Box>
+      <Box sx={{ width: '30%' }}>{new Date(schedule.date).toDateString()}</Box>
+      <Box sx={{ width: '20%' }}>{schedule.time}</Box>
     </Box>
   );
 
