@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Tooltip,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
@@ -129,11 +130,12 @@ const IndividualMember = () => {
               {member.weapons.length === 0 ? (
                 <Typography sx={{ mb: 5 }}>No weapons</Typography>
               ) : member.weapons.length > 3 ? (
-                <Typography sx={{ mb: 5 }}>
-                  {member.weapons
-                    .map(item => item.weapon.toUpperCase())
-                    .join(', ')}
-                </Typography>
+                <>
+                  <Typography sx={{ mb: 5 }}>
+                    {member.weapons.length}
+                  </Typography>
+                  {/* <WeaponQuals /> */}
+                </>
               ) : (
                 <Typography sx={{ mb: 5 }}>
                   {member.weapons
@@ -142,7 +144,16 @@ const IndividualMember = () => {
                 </Typography>
               )}
               <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
-              <Typography sx={{ mb: 5 }}>{member.email}</Typography>{' '}
+              {console.log(member.email.length)}
+              {member.email.length > 30 ? (
+                <Tooltip title={member.email}>
+                  <Typography sx={{ mb: 5 }}>
+                    {member.email.substring(0, 30)}...
+                  </Typography>
+                </Tooltip>
+              ) : (
+                <Typography sx={{ mb: 5 }}>{member.email}</Typography>
+              )}
             </Box>
 
             <Box display='flex' flexDirection='column' sx={{ width: '30%' }}>
@@ -177,12 +188,13 @@ const IndividualMember = () => {
               <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
             </Box>
           </Grid>
+          <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
           <Box
-            display='flex'
-            flexDirection='column'
-            sx={{ heigth: '10%', overflow: 'scroll' }}
+            // display='flex'
+            // flexDirection='column'
+            component='div'
+            sx={{ overflow: 'auto', maxHeight: 100, mt: 2 }}
           >
-            <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
             {member.notes === null ? (
               <Typography sx={{ mb: 5 }}>N/A</Typography>
             ) : (
@@ -204,11 +216,12 @@ const IndividualMember = () => {
             {member.first_name + `'s`} Schedule
           </Typography>
           {scheduleArray !== null && scheduleArray.length > 0 ? (
-            scheduleArray.map((schedule, index) => (
-              <UserPost schedule={schedule} key={index} />
-            ))
+            scheduleArray.map((schedule, index) => {
+              // console.log('INDEX ', index);
+              return <UserPost schedule={schedule} key={index} index={index} />;
+            })
           ) : (
-            <>no array</>
+            <>Not Assigned to Any Posts</>
           )}
         </Box>
       </Box>
@@ -695,5 +708,33 @@ const EditMemberModal = props => {
     </>
   );
 };
+
+// function WeaponQuals() {
+//   const [open, setOpen] = React.useState(false);
+
+//   const handleClickOpen = () => {
+//     setOpen(true);
+//   };
+//   const handleClose = () => {
+//     setOpen(false);
+//   };
+
+//   return (<Dialog
+//   open={handleClickOpen}
+//   onClose={handleClose}}
+//   aria-labelledby='alert-dialog-title'
+//   aria-describedby='alert-dialog-description'
+// >
+//   <DialogTitle id='alert-dialog-title'>
+//     {'Are You Sure You Want to Delete?'}
+//   </DialogTitle>
+//   <DialogContent>
+//     <DialogContentText id='alert-dialog-description'>
+//       Once the User is Deleted, it cannot be recovered. Are you sure you want to
+//       delete this User?
+//     </DialogContentText>
+//   </DialogContent>
+// </Dialog>
+// )}
 
 export default IndividualMember;
