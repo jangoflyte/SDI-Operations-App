@@ -42,6 +42,7 @@ services:
     #     source: ./api/src
     #     target: /app/src
     command: npm run start
+    restart: on-failure
     healthcheck:
       test: curl --fail http://localhost:8080 || exit 1
       interval: 5s
@@ -59,6 +60,7 @@ services:
     #   - type: bind
     #     source: ./ui/src
     #     target: /app/src
+    restart: on-failure
     healthcheck:
       test: curl --fail http://localhost:3000 || exit 1
       interval: 5s
