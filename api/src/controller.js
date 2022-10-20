@@ -210,6 +210,15 @@ const schedAddUsers = async schedules => {
   }
   return newSchedules;
 };
+// const schedAddPositions = async schedules => {
+//   let newSchedules = schedules;
+//   for (let schedule of newSchedules) {
+//     // call user by id and add to sched
+//     let positionInfo = await knex('position')
+//     schedule.position_info = positionInfo;
+//   }
+//   return newSchedules;
+// };
 
 const getScheduleByDate = async props => {
   // console.log('before knex date', props)

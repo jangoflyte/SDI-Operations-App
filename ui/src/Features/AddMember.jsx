@@ -287,9 +287,7 @@ const PostMemberModal = props => {
                         {/* <Box
                         sx={{ textAlign: 'center', minWidth: '30%' }}
                       >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
-                        <Box
-                          sx={{ textAlign: 'right', minWidth: '40%', mt: 5 }}
-                        >
+                        <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
                           {user.weapons.map((wep, index) => (
                             <span key={index}>
                               <Chip
