@@ -282,7 +282,7 @@ const BasicCard = props => {
                 Delete User
               </Button>
             ) : (
-              <>take a hike</>
+              <></>
             )}
           </Box>
 

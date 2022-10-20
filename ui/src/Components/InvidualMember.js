@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../Components/MemberContext';
-import '../styles/Card.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../Components/MemberContext'
+import '../styles/Card.css'
 import {
   Box,
   Grid,
@@ -20,33 +20,34 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { useParams } from 'react-router';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import { useNavigate } from 'react-router-dom';
+  DialogTitle
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { useParams } from 'react-router'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import ListItemText from '@mui/material/ListItemText'
+import Checkbox from '@mui/material/Checkbox'
+import { useNavigate } from 'react-router-dom'
 
 const IndividualMember = () => {
-  const { member, API, setMember, triggerFetch, userAccount } =
-    useContext(MemberContext);
+  const { member, API, setMember, triggerFetch, userAccount } = useContext(
+    MemberContext
+  )
 
-  const { memberId } = useParams();
+  const { memberId } = useParams()
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
       .then(res => res.json())
-      .then(data => setMember(data[0]));
-  }, [triggerFetch, memberId]);
+      .then(data => setMember(data[0]))
+  }, [triggerFetch, memberId])
 
   if (member === undefined || member.length === 0) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
       </Box>
-    );
+    )
   } else {
     return (
       <Box
@@ -54,7 +55,7 @@ const IndividualMember = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <Box>
@@ -80,7 +81,7 @@ const IndividualMember = () => {
             boxShadow: 3,
             borderRadius: 3,
             p: 5,
-            backgroundColor: 'white',
+            backgroundColor: 'white'
           }}
         >
           <Stack
@@ -95,10 +96,10 @@ const IndividualMember = () => {
               userAccount.admin || userAccount.id === parseInt(memberId) ? (
                 <EditMemberModal memberObject={member} />
               ) : (
-                <>touch grass</>
+                <></>
               )
             ) : (
-              <>go read a book</>
+              <></>
             )}
           </Stack>
 
@@ -170,9 +171,9 @@ const IndividualMember = () => {
           </Box>
         </Box>
       </Box>
-    );
+    )
   }
-};
+}
 
 const style = {
   position: 'absolute',
@@ -185,57 +186,63 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
-};
+  borderRadius: 4
+}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+      width: 250
+    }
+  }
+}
 
 const EditMemberModal = props => {
-  let memberObject = props;
-  memberObject = memberObject.memberObject;
-  console.log('member object, ', memberObject);
+  let memberObject = props
+  memberObject = memberObject.memberObject
+  console.log('member object, ', memberObject)
 
-  const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
-    useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [firstName, setFirstName] = useState(memberObject.first_name);
-  const [lastName, setLastName] = useState(memberObject.last_name);
-  const [userType, setUserType] = useState(memberObject.admin);
-  const [rank, setRank] = useState(memberObject.rank);
-  const [cert, setCert] = useState(memberObject.cert_id);
-  const [weaponArr, setWeaponArr] = useState(memberObject.weapons);
-  const [status, setStatus] = useState(memberObject.weapon_arming);
-  const [flight, setFlight] = useState(memberObject.flight);
-  const [email, setEmail] = useState(memberObject.email);
-  const [notes, setNotes] = useState(memberObject.notes);
-  const [openItem, setOpenItem] = React.useState(false);
+  const {
+    API,
+    member,
+    setTriggerFetch,
+    allWeapons,
+    allFlights,
+    userAccount
+  } = useContext(MemberContext)
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+  const [firstName, setFirstName] = useState(memberObject.first_name)
+  const [lastName, setLastName] = useState(memberObject.last_name)
+  const [userType, setUserType] = useState(memberObject.admin)
+  const [rank, setRank] = useState(memberObject.rank)
+  const [cert, setCert] = useState(memberObject.cert_id)
+  const [weaponArr, setWeaponArr] = useState(memberObject.weapons)
+  const [status, setStatus] = useState(memberObject.weapon_arming)
+  const [flight, setFlight] = useState(memberObject.flight)
+  const [email, setEmail] = useState(memberObject.email)
+  const [notes, setNotes] = useState(memberObject.notes)
+  const [openItem, setOpenItem] = React.useState(false)
 
   const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
+    setOpenItem(true)
+  }
 
   const handleItemClose = () => {
-    setOpenItem(false);
-    handleClose();
-  };
+    setOpenItem(false)
+    handleClose()
+  }
 
   const [weaponIdArray, setWeaponIdArray] = useState(
     memberObject.weapons.map(wep => wep.id)
-  );
-  const navigate = useNavigate();
+  )
+  const navigate = useNavigate()
 
-  console.log(memberObject);
+  console.log(memberObject)
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
@@ -251,74 +258,74 @@ const EditMemberModal = props => {
       flight: flight,
       email: email,
       notes: notes,
-      weaponIdArray: weaponIdArray,
-    };
-    console.log('updated user, ', updatedUser);
+      weaponIdArray: weaponIdArray
+    }
+    console.log('updated user, ', updatedUser)
 
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
       body: JSON.stringify(updatedUser),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       .then(res => res.json())
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        handleClose();
+        setTriggerFetch(curr => !curr)
+        handleClose()
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   const handleDeleteUser = () => {
     //const deleteUser = window.confirm('Are you sure you want to delete user?');
-    const deleteUser = true;
+    const deleteUser = true
     if (deleteUser === true) {
       fetch(`${API}/deleteuser/${member.id}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       })
         .then(res => res.json())
         .then(() => {
-          setTriggerFetch(curr => !curr);
+          setTriggerFetch(curr => !curr)
           //navigate("/sfmembers")
           // handleClose()
         })
         .then(navigate('/sfmembers'))
         //.then(window.location.reload(false))
         .catch(err => {
-          console.log('Error: ', err);
-        });
+          console.log('Error: ', err)
+        })
     }
-  };
+  }
 
   const handleChange = event => {
     const {
-      target: { checked },
-    } = event;
-    console.log(event);
+      target: { checked }
+    } = event
+    console.log(event)
     console.log(
       'value: checked ',
       event.target.parentNode.parentNode.id,
       checked
-    );
-    let wepId = parseInt(event.target.parentNode.parentNode.id);
+    )
+    let wepId = parseInt(event.target.parentNode.parentNode.id)
     if (checked && !weaponIdArray.includes(wepId)) {
-      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeaponIdArray(curr => [...curr, wepId])
       setWeaponArr(curr => [
         ...curr,
-        allWeapons.filter(weapon => weapon.id === wepId)[0],
-      ]);
+        allWeapons.filter(weapon => weapon.id === wepId)[0]
+      ])
     } else if (!checked) {
-      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
-      setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId));
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId))
+      setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId))
     }
-  };
+  }
 
   useEffect(() => {
-    console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
-  }, [weaponIdArray, allFlights]);
+    console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights)
+  }, [weaponIdArray, allFlights])
 
   return (
     <>
@@ -360,7 +367,7 @@ const EditMemberModal = props => {
             sx={{
               borderRadius: '30px',
               color: 'red',
-              mr: 2,
+              mr: 2
             }}
             onClick={() => handleDeleteUser()}
             autoFocus
@@ -410,7 +417,7 @@ const EditMemberModal = props => {
             sx={{
               display: 'flex',
 
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -419,7 +426,7 @@ const EditMemberModal = props => {
                 label='First Name'
                 value={firstName}
                 inputProps={{
-                  defaultValue: `${memberObject.first_name}`,
+                  defaultValue: `${memberObject.first_name}`
                 }}
                 variant='outlined'
                 onChange={e => setFirstName(e.target.value)}
@@ -431,7 +438,7 @@ const EditMemberModal = props => {
                 label='Last Name'
                 value={lastName}
                 inputProps={{
-                  defaultValue: `${memberObject.last_name}`,
+                  defaultValue: `${memberObject.last_name}`
                 }}
                 variant='outlined'
                 onChange={e => setLastName(e.target.value)}
@@ -445,7 +452,7 @@ const EditMemberModal = props => {
             sx={{
               display: 'flex',
 
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -511,7 +518,7 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -568,7 +575,7 @@ const EditMemberModal = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -577,7 +584,7 @@ const EditMemberModal = props => {
                 label='Email'
                 value={email}
                 inputProps={{
-                  defaultValue: `${memberObject.email}`,
+                  defaultValue: `${memberObject.email}`
                 }}
                 variant='outlined'
                 onChange={e => setEmail(e.target.value)}
@@ -624,7 +631,7 @@ const EditMemberModal = props => {
               value={notes === null ? 'N/A' : notes}
               sx={{ mb: 2 }}
               inputProps={{
-                defaultValue: `${memberObject.notes}`,
+                defaultValue: `${memberObject.notes}`
               }}
               onChange={e => setNotes(e.target.value)}
             />
@@ -636,7 +643,7 @@ const EditMemberModal = props => {
             sx={{
               borderRadius: '30px',
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'right'
             }}
           >
             <Button
@@ -651,7 +658,7 @@ const EditMemberModal = props => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default IndividualMember;
+export default IndividualMember
