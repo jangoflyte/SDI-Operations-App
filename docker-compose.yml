@@ -19,7 +19,7 @@ services:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
     # volumes:
     #   - pgdatasource:/var/lib/postgresql/data
 
@@ -42,6 +42,12 @@ services:
     #     source: ./api/src
     #     target: /app/src
     command: npm run start
+    healthcheck:
+      test: curl --fail http://localhost:8080 || exit 1
+      interval: 5s
+      timeout: 5s
+      start_period: 120s
+      retries: 10
 
   capstone-ui:
     build: ui/
@@ -53,3 +59,9 @@ services:
     #   - type: bind
     #     source: ./ui/src
     #     target: /app/src
+    healthcheck:
+      test: curl --fail http://localhost:3001 || exit 1
+      interval: 5s
+      timeout: 5s
+      start_period: 120s
+      retries: 10
