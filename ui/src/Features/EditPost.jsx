@@ -286,7 +286,7 @@ export const EditPost = props => {
                     <Checkbox
                       onChange={handleChange}
                       defaultChecked={weapon.some(
-                        wep => wep.weapon_id === weaponObject.id
+                        wep => wep.id === weaponObject.id
                       )}
                       // checked={weapon.some(
                       //   wep => wep.weapon_id === weaponObject.id

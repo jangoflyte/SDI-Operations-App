@@ -189,17 +189,10 @@ export default function CollapsibleTable() {
   useMemo(() => {
     let dateRange2 = [];
     for (let i = 0; i < 7; i++) {
-      let workingDate = startDate.toISOString().split('T')[0];
-      workingDate = workingDate.split('-');
-      console.log('working date, i:', workingDate, i);
-
-      // need to add check for not adding dates past end of month //////////////////////////////////
-      let newDate = new Date(
-        `${workingDate[0]}-${workingDate[1]}-${
-          parseInt(workingDate[2]) + i
-        }T00:00:00`
-      );
-      console.log('created date', newDate.toISOString());
+      let workingDate = new Date(startDate);
+      //console.log('working date, i:', workingDate, i);
+      let newDate = new Date(workingDate.setDate(workingDate.getDate() + i));
+      //console.log('created date', newDate.toISOString());
       dateRange2.push(newDate);
     }
     setDateRange(dateRange2);
@@ -213,7 +206,7 @@ export default function CollapsibleTable() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 3,
+        gap: 2,
       }}
     >
       {postAlert === false ? null : (
@@ -223,50 +216,19 @@ export default function CollapsibleTable() {
           </Alert>
         </Stack>
       )}
-      <Typography variant='h1' component='h2'>
+      <Typography variant='h1' component='span'>
         {schedDate.toDateString()}
       </Typography>
-      {shift === 'Days' && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant='h5'>{`Panama 12's `}</Typography>
-          <Typography
-            variant='h5'
-            ml={2}
-            sx={{ color: '#29b6f6', fontWeight: 'bold' }}
-          >
-            {shift}
-          </Typography>
-        </Box>
-      )}
-      {shift === 'Mids' && (
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant='h5'>{`Panama 12's `}</Typography>
-          <Typography
-            variant='h5'
-            ml={2}
-            sx={{ color: '#ffa726', fontWeight: 'bold' }}
-          >
-            {shift}
-          </Typography>
-        </Box>
-      )}
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
         <TextField
           id='date'
           label='Start Date'
@@ -277,13 +239,52 @@ export default function CollapsibleTable() {
             shrink: true,
           }}
           onChange={e => {
+            console.log('target value: ', e.target.value);
             let dateArr = e.target.value.split('-');
             console.log('settign start date: ', dateArr);
-            // setStartDate(new Date(dateArr[0], dateArr[1] + 1, dateArr[2]));
-            setStartDate(new Date(`${e.target.value}T00:00:00`));
-            setSchedDate(new Date(`${e.target.value}T00:00:00`));
+            if (e.target.value === '') {
+              setStartDate(new Date());
+              e.target.value = new Date().toISOString().split('T')[0];
+              setSchedDate(new Date(`${e.target.value}T00:00:00`));
+            } else {
+              setStartDate(new Date(`${e.target.value}T00:00:00`));
+              setSchedDate(new Date(`${e.target.value}T00:00:00`));
+            }
           }}
         />
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          {shift === 'Days' && (
+            <>
+              <Typography variant='h5'>{`Panama 12's `}</Typography>
+              <Typography
+                variant='h5'
+                ml={2}
+                sx={{ color: '#29b6f6', fontWeight: 'bold' }}
+              >
+                {shift}
+              </Typography>
+            </>
+          )}
+          {shift === 'Mids' && (
+            <>
+              <Typography variant='h5'>{`Panama 12's `}</Typography>
+              <Typography
+                variant='h5'
+                ml={2}
+                sx={{ color: '#ffa726', fontWeight: 'bold' }}
+              >
+                {shift}
+              </Typography>
+            </>
+          )}
+        </Box>
       </Box>
       <Box
         sx={{
@@ -403,7 +404,6 @@ export default function CollapsibleTable() {
 const Row = props => {
   const { row } = props;
   const [open, setOpen] = useState(false);
-
   const splitArr = row.weapons.split(' ');
 
   return (
@@ -426,7 +426,7 @@ const Row = props => {
               flexWrap: 'wrap',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-between',
             }}
           >
             {row.name}
@@ -437,8 +437,7 @@ const Row = props => {
                   alignItems: 'center',
                   backgroundColor: '#f44336',
                   borderRadius: 20,
-                  ml: 3,
-                  px: 1,
+                  px: 0.5,
                 }}
               >
                 <svg

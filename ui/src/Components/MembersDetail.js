@@ -385,8 +385,8 @@ const AddMemberModal = () => {
                 <MenuItem value={'e7'}>MSgt</MenuItem>
                 <MenuItem value={'e8'}>SMSgt</MenuItem>
                 <MenuItem value={'e9'}>CMSgt</MenuItem>
-                <MenuItem value={'o1'}>1LT</MenuItem>
-                <MenuItem value={'o2'}>2LT</MenuItem>
+                <MenuItem value={'o1'}>2LT</MenuItem>
+                <MenuItem value={'o2'}>1LT</MenuItem>
                 <MenuItem value={'o3'}>Capt</MenuItem>
                 <MenuItem value={'o4'}>Major</MenuItem>
                 <MenuItem value={'o5'}>Lt. Col</MenuItem>
@@ -456,7 +456,12 @@ const AddMemberModal = () => {
                     key={index}
                     value={weaponObject.id}
                   >
-                    <Checkbox onChange={handleChange} />
+                    <Checkbox
+                      onChange={handleChange}
+                      defaultChecked={weapon.some(
+                        wep => wep.id === weaponObject.id
+                      )}
+                    />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>
                 ))}

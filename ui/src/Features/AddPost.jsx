@@ -199,7 +199,6 @@ export const AddPost = () => {
                 label='Certifications'
                 onChange={e => setCert(e.target.value)}
               >
-                <MenuItem value={null}></MenuItem>
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>
@@ -250,7 +249,7 @@ export const AddPost = () => {
                     <Checkbox
                       onChange={handleChange}
                       defaultChecked={weapon.some(
-                        wep => wep.weapon_id === weaponObject.id
+                        wep => wep.id === weaponObject.id
                       )}
                       // checked={weapon.some(
                       //   wep => wep.weapon_id === weaponObject.id

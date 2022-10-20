@@ -18,14 +18,8 @@ import SecurityIcon from '@mui/icons-material/Security';
 
 const BasicCard = props => {
   const { pageTrigger } = props;
-  const {
-    setMember,
-    API,
-    usersArray,
-    setTriggerFetch,
-    triggerFetch,
-    userAccount,
-  } = useContext(MemberContext);
+  const { setMember, API, usersArray, setTriggerFetch, userAccount } =
+    useContext(MemberContext);
   const navigate = useNavigate();
   const [idArray, setIdArray] = useState([]);
   const [page, setPage] = useState(0);
@@ -56,7 +50,6 @@ const BasicCard = props => {
   useEffect(() => {
     setPage(0);
   }, []);
-  //console.log("allusers", user)
 
   const navigateToMember = member => {
     console.log('current member', member);
@@ -72,18 +65,14 @@ const BasicCard = props => {
         .then(res => res.json())
         .then(() => {
           setTriggerFetch(curr => !curr);
-          //navigate("/sfmembers")
-          // handleClose()
         })
         .then(navigate('/sfmembers'))
-        //.then(window.location.reload(false))
+
         .catch(err => {
           console.log('Error: ', err);
         });
     }
   };
-
-  // useEffect(()=>{console.log(idArray)},[idArray])
 
   return (
     <Box
@@ -123,23 +112,32 @@ const BasicCard = props => {
           sx={{ display: 'flex' }}
         >
           <Box
-            ml={10}
-            justifyContent='left'
+            sx={{ width: '5%', display: 'flex', justifyContent: 'flex-start' }}
+          >
+            {/* leave empty */}
+            <div></div>
+          </Box>
+          <Box
+            justifyContent='center'
             alignItems='center'
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              width: 600,
+              width: '35%',
             }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
             <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
             <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
           </Box>
-          <Box sx={{ width: 500, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box
+            sx={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
           </Box>
-          <Box sx={{ width: 500, display: 'flex', justifyContent: 'flex-end' }}>
+          <Box
+            sx={{ width: '40%', display: 'flex', justifyContent: 'flex-end' }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>
               Weapon Qualification
             </Typography>
@@ -162,9 +160,13 @@ const BasicCard = props => {
                 }}
               >
                 <Box
-                  justifyContent='left'
+                  justifyContent='center'
                   alignItems='center'
-                  sx={{ display: 'flex', width: 100 }}
+                  sx={{
+                    display: 'flex',
+                    width: '5%',
+                    justifyContent: 'flex-start',
+                  }}
                 >
                   <Checkbox
                     label='Name'
@@ -179,7 +181,7 @@ const BasicCard = props => {
                   sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    width: 600,
+                    width: '35%',
                   }}
                 >
                   <Typography>
@@ -204,49 +206,45 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='right'
-                  sx={{ display: 'flex', width: 500 }}
+                  sx={{ display: 'flex', width: '20%' }}
                 >
-                  <Typography component='span' sx={{ textAlign: 'center' }}>
-                    {member.certs.length === 0 ? (
-                      <Chip
-                        icon={<WorkspacePremiumIcon />}
-                        label='No Certs'
-                        color='success'
-                      />
-                    ) : (
-                      <Chip
-                        icon={<WorkspacePremiumIcon />}
-                        label={member.certs.map(cert => cert.cert)}
-                        color='success'
-                      />
-                    )}
-                  </Typography>
+                  {member.certs.length === 0 ? (
+                    <Chip
+                      icon={<WorkspacePremiumIcon />}
+                      label='No Certs'
+                      color='primary'
+                    />
+                  ) : (
+                    <Chip
+                      icon={<WorkspacePremiumIcon />}
+                      label={member.certs.map(cert => cert.cert)}
+                      color='success'
+                    />
+                  )}
                 </Box>
 
                 <Box
                   justifyContent='right'
-                  sx={{ display: 'flex', width: 500 }}
+                  sx={{ display: 'flex', width: '40%' }}
                 >
-                  <Typography component='span' sx={{ textAlign: 'center' }}>
-                    {member.weapons.length === 0 ? (
+                  {member.weapons.length === 0 ? (
+                    <Chip
+                      key={index}
+                      color='primary'
+                      icon={<SecurityIcon />}
+                      label='No Weapons'
+                    />
+                  ) : (
+                    member.weapons.map((weapon, index) => (
                       <Chip
                         key={index}
-                        color='secondary'
                         icon={<SecurityIcon />}
-                        label='No Weapons'
+                        label={weapon.weapon.toUpperCase()}
+                        color='secondary'
+                        sx={{ m: 1 / 4 }}
                       />
-                    ) : (
-                      member.weapons.map((weapon, index) => (
-                        <Chip
-                          key={index}
-                          icon={<SecurityIcon />}
-                          label={weapon.weapon.toUpperCase()}
-                          color='secondary'
-                          sx={{ m: 1 / 4 }}
-                        />
-                      ))
-                    )}
-                  </Typography>
+                    ))
+                  )}
                 </Box>
               </Stack>
             ))}
@@ -258,7 +256,6 @@ const BasicCard = props => {
           alignItems='center'
           sx={{
             display: 'flex',
-            //justifyContent: 'center',
             justifyContent: 'space-between',
           }}
         >
@@ -281,9 +278,7 @@ const BasicCard = props => {
               >
                 Delete User
               </Button>
-            ) : (
-              <>take a hike</>
-            )}
+            ) : null}
           </Box>
 
           <Box>
@@ -296,7 +291,6 @@ const BasicCard = props => {
           </Box>
 
           <Box>
-            {/* <Checkbox></Checkbox> */}
             <TablePagination
               rowsPerPageOptions={[5, 10]}
               component='div'

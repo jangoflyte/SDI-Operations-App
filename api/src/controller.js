@@ -307,6 +307,7 @@ const postPosition = async req => {
 const deletePosition = async positionId => {
   console.log('delete position ran');
   await deleteWeaponPosition(positionId);
+  await deletePostScheduleByPosition(positionId);
   let result = await knex('position').where({ id: positionId }).delete();
   console.log('delete position result ', result);
 
@@ -324,6 +325,10 @@ const deleteWeaponUserByUser = async userId => {
 
 const deletePostSchedule = async userId => {
   return knex('post_schedule').where({ user_id: userId }).delete();
+};
+
+const deletePostScheduleByPosition = async positionId => {
+  return knex('post_schedule').where({ position_id: positionId }).delete();
 };
 
 module.exports = {

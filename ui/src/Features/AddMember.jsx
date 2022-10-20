@@ -10,6 +10,10 @@ import {
   TablePagination,
   Pagination,
   Stack,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
@@ -26,13 +30,15 @@ const PostMemberModal = props => {
     currentDate,
     shift,
   } = props;
-  const { API, data, setPostAlert } = useContext(MemberContext);
+  const { API, data, setPostAlert, userAccount, allFlights } =
+    useContext(MemberContext);
   const [open, setOpen] = useState(false);
   //const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = useState({});
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [flight, setFlight] = useState('alpha-1');
 
   //  console.log(cert_req)
   let weaponsReq = weapon_req.split(' ');
@@ -49,7 +55,11 @@ const PostMemberModal = props => {
     });
     let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
     // console.log('results', certResults)
-    if (wepResults.includes(true) && certResults.includes(true)) {
+    if (
+      wepResults.includes(true) &&
+      certResults.includes(true) &&
+      user.flight === flight
+    ) {
       return true;
     } else {
       return false;
@@ -66,19 +76,6 @@ const PostMemberModal = props => {
   };
 
   // console.log('flight filter', filterFlight, weapon_req)
-
-  const style = {
-    position: 'absolute',
-    top: '0',
-    right: '0',
-    width: '60vw',
-    height: 'auto',
-    minHeight: '100%',
-    bgcolor: 'background.paper',
-    border: '2px solid #000000',
-    boxShadow: 24,
-    p: 4,
-  };
 
   const patchSchedule = patchInfo => {
     console.log('patching schedule');
@@ -113,34 +110,50 @@ const PostMemberModal = props => {
   // time // schedule filtered
   // role // role prop
 
+  const style = {
+    position: 'absolute',
+    top: '0',
+    right: '0',
+    width: '60vw',
+    height: 'auto',
+    minHeight: '100%',
+    bgcolor: 'background.paper',
+    border: '2px solid #000000',
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <>
-      <Button
-        onClick={() => {
-          // console.log(role)
-          // console.log(post)
-          setOpen(true);
-        }}
-        variant='outlined'
-        color='error'
-        size='small'
-        sx={{ mr: 10, px: 0, minWidth: 22 }}
-      >
-        <svg
-          xmlns='http://www.w3.org/2000/svg'
-          fill='none'
-          viewBox='0 0 24 24'
-          strokeWidth={1.5}
-          stroke='currentColor'
-          style={{ width: 20 }}
+      {userAccount !== null && userAccount.admin ? (
+        <Button
+          onClick={() => {
+            // console.log(role)
+            // console.log(post)
+            setOpen(true);
+          }}
+          variant='outlined'
+          color='error'
+          size='small'
+          sx={{ mr: 10, px: 0, minWidth: 22 }}
         >
-          <path
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            d='M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10'
-          />
-        </svg>
-      </Button>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            fill='none'
+            viewBox='0 0 24 24'
+            strokeWidth={1.5}
+            stroke='currentColor'
+            style={{ width: 20 }}
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              d='M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10'
+            />
+          </svg>
+        </Button>
+      ) : null}
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -152,6 +165,7 @@ const PostMemberModal = props => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
+
           <Typography sx={{ textAlign: 'center', fontSize: '2.2rem' }}>
             Select Qualifying Airman
           </Typography>
@@ -175,7 +189,37 @@ const PostMemberModal = props => {
               Panama 12
             </Box>
           </Box>
-
+          <Box
+            sx={{
+              mt: 3,
+              ml: 5,
+              display: 'flex',
+              justifyContent: 'beginning',
+              alignItems: 'center',
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>Flight</InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={flight}
+                label='Flight'
+                onChange={e => setFlight(e.target.value)}
+              >
+                {allFlights.map((flightObject, index) => (
+                  <MenuItem
+                    id={flightObject.id}
+                    key={index}
+                    value={flightObject.flight}
+                  >
+                    {flightObject.flight}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
           <Stack
             sx={{
               display: 'flex',
@@ -183,7 +227,7 @@ const PostMemberModal = props => {
               justifyContent: 'space-between',
               flexDirection: 'column',
               gap: 1,
-              mt: 10,
+              mt: 3,
               px: 5,
             }}
           >
@@ -243,7 +287,9 @@ const PostMemberModal = props => {
                         {/* <Box
                         sx={{ textAlign: 'center', minWidth: '30%' }}
                       >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
-                        <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
+                        <Box
+                          sx={{ textAlign: 'right', minWidth: '40%', mt: 5 }}
+                        >
                           {user.weapons.map((wep, index) => (
                             <span key={index}>
                               <Chip

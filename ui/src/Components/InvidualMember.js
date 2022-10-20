@@ -94,12 +94,8 @@ const IndividualMember = () => {
             {userAccount !== null ? (
               userAccount.admin || userAccount.id === parseInt(memberId) ? (
                 <EditMemberModal memberObject={member} />
-              ) : (
-                <>touch grass</>
-              )
-            ) : (
-              <>go read a book</>
-            )}
+              ) : null
+            ) : null}
           </Stack>
 
           <Grid container justifyContent='space-around' sx={{ mt: 5 }}>
@@ -151,7 +147,7 @@ const IndividualMember = () => {
               {member.weapon_arming === true ? (
                 <Chip label='Arm' color='success' />
               ) : (
-                <Chip label='Do Not Arm' color='secondary' />
+                <Chip label='Do Not Arm' color='error' />
               )}
 
               <Typography mt={4} sx={{ fontWeight: 'bold' }}>
@@ -282,11 +278,8 @@ const EditMemberModal = props => {
         .then(res => res.json())
         .then(() => {
           setTriggerFetch(curr => !curr);
-          //navigate("/sfmembers")
-          // handleClose()
         })
         .then(navigate('/sfmembers'))
-        //.then(window.location.reload(false))
         .catch(err => {
           console.log('Error: ', err);
         });
@@ -370,14 +363,6 @@ const EditMemberModal = props => {
         </DialogActions>
       </Dialog>
 
-      {/* <Button
-        onClick={handleDeleteUser}
-        variant='contained'
-        color='warning'
-        sx={{ borderRadius: '30px' }}
-      >
-        Delete User
-      </Button> */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -601,7 +586,6 @@ const EditMemberModal = props => {
                     value={flightObject.flight}
                   >
                     {flightObject.flight}
-                    {/* <ListItemText primary={flightObject.flight} /> */}
                   </MenuItem>
                 ))}
               </Select>

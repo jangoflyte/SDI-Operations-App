@@ -39,7 +39,12 @@ export const DataSources = () => {
           </Alert>
         </Stack>
       )}
-      <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
+      <Typography
+        variant='h3'
+        ml={10}
+        pb={4}
+        sx={{ fontWeight: 'bold', width: 500 }}
+      >
         Data Sources
       </Typography>
       <Card sx={{ boxShadow: 5, borderRadius: 3, width: 1000, p: 3 }}>

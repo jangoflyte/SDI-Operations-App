@@ -109,7 +109,6 @@ export default function PersistentDrawerLeft() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      {/* <CssBaseline /> */}
       <AppBar position='fixed' open={open} onClose={handleDrawerClose}>
         <Toolbar>
           <IconButton
@@ -178,6 +177,7 @@ export default function PersistentDrawerLeft() {
                     removeCookie('user');
                     removeCookie('auth');
                     setUserAccount(null);
+                    navigate('/login');
                   }}
                 >
                   Logout
@@ -222,8 +222,9 @@ export default function PersistentDrawerLeft() {
         <Typography
           sx={{ display: 'flex', justifyContent: 'center', color: 'white' }}
         >
-          {/* {userAccount.admin === true ? 'Admin View' : 'User View'} */}
-          Admin View
+          {userAccount !== null && userAccount.admin
+            ? 'Admin View'
+            : 'User View'}
         </Typography>
         <Divider light />
 
@@ -238,15 +239,6 @@ export default function PersistentDrawerLeft() {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigate('/data')}>
-              <ListItemIcon>
-                <SignalWifiStatusbar4BarIcon sx={{ color: 'white' }} />
-              </ListItemIcon>
-              <ListItemText primary='Data Sources' sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem disablePadding>
             <ListItemButton onClick={() => handleNavigate('/sfmembers')}>
               <ListItemIcon>
                 <GroupsIcon sx={{ color: 'white' }} />
@@ -256,7 +248,22 @@ export default function PersistentDrawerLeft() {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigate('/settings')}>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/data')}
+            >
+              <ListItemIcon>
+                <SignalWifiStatusbar4BarIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Data Sources' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/settings')}
+            >
               <ListItemIcon>
                 <SettingsIcon sx={{ color: 'white' }} />
               </ListItemIcon>
