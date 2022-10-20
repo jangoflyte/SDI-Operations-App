@@ -542,7 +542,7 @@ const AddMemberModal = () => {
               variant='contained'
               sx={{ borderRadius: '30px' }}
             >
-              Save Profile
+              Add User
             </Button>
           </Stack>
         </Box>

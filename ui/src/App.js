@@ -61,9 +61,9 @@ const App = () => {
       .catch(err => console.log(err));
   }, [API]);
 
-  useEffect(() => {
-    console.log('user account ', userAccount);
-  }, [userAccount]);
+  // useEffect(() => {
+  //   console.log('user account ', userAccount);
+  // }, [userAccount]);
 
   const obj = {
     data,
@@ -94,15 +94,27 @@ const App = () => {
     <MemberContext.Provider value={obj}>
       <Router>
         <PersistentDrawerLeft />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/login' element={<SignIn />} />
-          <Route path='/signup' element={<SignUp />} />
-          <Route path='/data' element={<DataSources />} />
-          <Route path='/sfmembers' element={<MemberDetails />} />
-          <Route path='/sfmembers/:memberId' element={<IndividualMember />} />
-          <Route path='/settings' element={<Settings />} />
-        </Routes>
+        {userAccount !== null ? (
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/login' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/data' element={<DataSources />} />
+            <Route path='/sfmembers' element={<MemberDetails />} />
+            <Route path='/sfmembers/:memberId' element={<IndividualMember />} />
+            <Route path='/settings' element={<Settings />} />
+          </Routes>
+        ) : (
+          <Routes>
+            <Route path='/' element={<SignIn />} />
+            <Route path='/login' element={<SignIn />} />
+            <Route path='/signup' element={<SignUp />} />
+            <Route path='/data' element={<SignIn />} />
+            <Route path='/sfmembers' element={<SignIn />} />
+            <Route path='/sfmembers/:memberId' element={<SignIn />} />
+            <Route path='/settings' element={<SignIn />} />
+          </Routes>
+        )}
       </Router>
     </MemberContext.Provider>
   );

@@ -435,9 +435,11 @@ const Row = props => {
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  backgroundColor: '#f44336',
+                  backgroundColor: '#BD5334;',
                   borderRadius: 20,
                   px: 0.5,
+                  py: 0.5,
+                  color: 'white',
                 }}
               >
                 <svg
@@ -447,7 +449,7 @@ const Row = props => {
                   strokeWidth={1.5}
                   stroke='currentColor'
                   className='w-6 h-6'
-                  style={{ width: 30 }}
+                  style={{ width: 25 }}
                 >
                   <path
                     strokeLinecap='round'
@@ -466,16 +468,29 @@ const Row = props => {
         <TableCell align='right'>{row.man_req}</TableCell>
         {/* <TableCell align='right'>{row.weapons.toUpperCase()}</TableCell> */}
         <TableCell align='right'>
-          {splitArr.map((wep, index) => (
-            <span key={index}>
+          {splitArr.length > 3 ? (
+            <span>
               <Chip
                 icon={<SecurityIcon />}
-                label={wep.toUpperCase()}
+                label={`${splitArr.length} Weapons...`}
                 color='secondary'
               />
               &nbsp;
             </span>
-          ))}
+          ) : (
+            <>
+              {splitArr.map((wep, index) => (
+                <span key={index}>
+                  <Chip
+                    icon={<SecurityIcon />}
+                    label={wep.toUpperCase()}
+                    color='secondary'
+                  />
+                  &nbsp;
+                </span>
+              ))}
+            </>
+          )}
         </TableCell>
         {/* <TableCell align='right'>{row.cert[0].cert}</TableCell> */}
         <TableCell align='right'>

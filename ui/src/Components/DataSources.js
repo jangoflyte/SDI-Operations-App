@@ -10,7 +10,6 @@ import {
   Button,
   Modal,
   Alert,
-  Input,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Papa from 'papaparse';
@@ -257,8 +256,7 @@ const Upload = props => {
               <Button
                 variant='text'
                 component='label'
-                color='secondary'
-                sx={{ fontWeight: 'bold' }}
+                sx={{ fontWeight: 'bold', color: 'blue' }}
               >
                 <input
                   style={{ display: 'none' }}
@@ -268,7 +266,6 @@ const Upload = props => {
                 />
                 Upload
               </Button>
-              {/* <Input type='file' id='input' onChange={changeHandler}></Input> */}
             </Stack>
           ) : (
             <Stack
@@ -284,8 +281,7 @@ const Upload = props => {
               <p style={{ textAlign: 'center' }}>{selectedFile.name}</p>
               <Button
                 variant='text'
-                color='primary'
-                sx={{ fontWeight: 'bold' }}
+                sx={{ fontWeight: 'bold', color: 'red' }}
                 onClick={() => handleClick()}
               >
                 Remove

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import '../styles/MembersDetail.css';
 import {
@@ -65,6 +65,13 @@ export const EditPost = props => {
   const [cert, setCert] = useState(post.cert_id);
 
   const [openItem, setOpenItem] = React.useState(false);
+
+  useEffect(() => {
+    setPostName(post.name);
+    setWeapon(post.weapon_req);
+    setCert(post.cert_id);
+    setWeaponIdArray(post.weapon_req.map(wep => wep.id));
+  }, [props]);
 
   const handleItemClickOpen = () => {
     setOpenItem(true);
@@ -315,7 +322,7 @@ export const EditPost = props => {
               sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
               onClick={handleItemClickOpen}
             >
-              Delete
+              Delete Post
             </Button>
             <Dialog
               open={openItem}
@@ -343,7 +350,7 @@ export const EditPost = props => {
                   onClick={() => handleDelete(post.id)}
                   autoFocus
                 >
-                  Delete
+                  Delete Post
                 </Button>
               </DialogActions>
             </Dialog>

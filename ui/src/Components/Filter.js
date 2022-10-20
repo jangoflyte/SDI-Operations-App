@@ -66,7 +66,7 @@ export const Filter = () => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
-          <Typography>Filters</Typography>
+          <Typography sx={{ fontWeight: 'bold' }}>Filters</Typography>
           <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
             <FormLabel component='legend'>By Certification</FormLabel>
             <FormGroup>

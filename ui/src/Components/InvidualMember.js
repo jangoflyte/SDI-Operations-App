@@ -28,17 +28,27 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { useNavigate } from 'react-router-dom';
+import { UserPost } from './UserPost';
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
     useContext(MemberContext);
-
   const { memberId } = useParams();
+  const [scheduleArray, setScheduleArray] = useState(null);
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
       .then(res => res.json())
       .then(data => setMember(data[0]));
+  }, [triggerFetch, memberId]);
+
+  useEffect(() => {
+    fetch(`${API}/schedule/${memberId}`)
+      .then(res => res.json())
+      .then(data => {
+        // console.log('schedule data', data);
+        setScheduleArray(data);
+      });
   }, [triggerFetch, memberId]);
 
   if (member === undefined || member.length === 0) {
@@ -74,8 +84,8 @@ const IndividualMember = () => {
 
         <Box
           sx={{
-            m: 10,
-            height: 500,
+            m: 5,
+            height: 550,
             width: 500,
             boxShadow: 3,
             borderRadius: 3,
@@ -98,8 +108,13 @@ const IndividualMember = () => {
             ) : null}
           </Stack>
 
-          <Grid container justifyContent='space-around' sx={{ mt: 5 }}>
-            <Box display='flex' flexDirection='column'>
+          <Grid container sx={{ mt: 5 }}>
+            <Box
+              display='flex'
+              flexDirection='column'
+              container
+              sx={{ width: '70%' }}
+            >
               <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
               <Typography sx={{ mb: 5 }}>
                 {member.first_name} {member.last_name}
@@ -113,6 +128,12 @@ const IndividualMember = () => {
               </Typography>
               {member.weapons.length === 0 ? (
                 <Typography sx={{ mb: 5 }}>No weapons</Typography>
+              ) : member.weapons.length > 3 ? (
+                <Typography sx={{ mb: 5 }}>
+                  {member.weapons
+                    .map(item => item.weapon.toUpperCase())
+                    .join(', ')}
+                </Typography>
               ) : (
                 <Typography sx={{ mb: 5 }}>
                   {member.weapons
@@ -124,7 +145,7 @@ const IndividualMember = () => {
               <Typography sx={{ mb: 5 }}>{member.email}</Typography>{' '}
             </Box>
 
-            <Box display='flex' flexDirection='column'>
+            <Box display='flex' flexDirection='column' sx={{ width: '30%' }}>
               <Typography sx={{ fontWeight: 'bold' }}>User Type:</Typography>
               <Typography sx={{ mb: 5 }}>
                 {member.admin === true ? 'Admin' : 'User'}
@@ -156,7 +177,11 @@ const IndividualMember = () => {
               <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
             </Box>
           </Grid>
-          <Box display='flex' marginLeft={6} flexDirection='column'>
+          <Box
+            display='flex'
+            flexDirection='column'
+            sx={{ heigth: '10%', overflow: 'scroll' }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
             {member.notes === null ? (
               <Typography sx={{ mb: 5 }}>N/A</Typography>
@@ -164,6 +189,27 @@ const IndividualMember = () => {
               <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
             )}
           </Box>
+        </Box>
+        <Box
+          sx={{
+            mx: 5,
+            width: 500,
+            boxShadow: 3,
+            borderRadius: 3,
+            p: 5,
+            backgroundColor: 'white',
+          }}
+        >
+          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+            {member.first_name + `'s`} Schedule
+          </Typography>
+          {scheduleArray !== null && scheduleArray.length > 0 ? (
+            scheduleArray.map((schedule, index) => (
+              <UserPost schedule={schedule} key={index} />
+            ))
+          ) : (
+            <>no array</>
+          )}
         </Box>
       </Box>
     );
@@ -195,10 +241,12 @@ const MenuProps = {
   },
 };
 
+/////////////////////////////////////////// EDIT MEMBER MODAL ///////////////////////////////////////////
+
 const EditMemberModal = props => {
   let memberObject = props;
   memberObject = memberObject.memberObject;
-  console.log('member object, ', memberObject);
+  // console.log('member object, ', memberObject);
 
   const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
     useContext(MemberContext);
@@ -217,6 +265,19 @@ const EditMemberModal = props => {
   const [notes, setNotes] = useState(memberObject.notes);
   const [openItem, setOpenItem] = React.useState(false);
 
+  useEffect(() => {
+    setFirstName(memberObject.first_name);
+    setLastName(memberObject.last_name);
+    setUserType(memberObject.admin);
+    setRank(memberObject.rank);
+    setCert(memberObject.cert_id);
+    setWeaponArr(memberObject.weapons);
+    setStatus(memberObject.weapon_arming);
+    setFlight(memberObject.flight);
+    setEmail(memberObject.email);
+    setNotes(memberObject.notes);
+  }, [props]);
+
   const handleItemClickOpen = () => {
     setOpenItem(true);
   };
@@ -230,8 +291,6 @@ const EditMemberModal = props => {
     memberObject.weapons.map(wep => wep.id)
   );
   const navigate = useNavigate();
-
-  console.log(memberObject);
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
@@ -323,45 +382,6 @@ const EditMemberModal = props => {
       >
         Edit Profile
       </Button>
-
-      <Button
-        variant='contained'
-        sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
-        onClick={handleItemClickOpen}
-      >
-        Delete
-      </Button>
-
-      <Dialog
-        open={openItem}
-        onClose={handleItemClose}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='alert-dialog-title'>
-          {'Are You Sure You Want to Delete?'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Once the User is Deleted, it cannot be recovered. Are you sure you
-            want to delete this User?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleItemClose}>Cancel</Button>
-          <Button
-            sx={{
-              borderRadius: '30px',
-              color: 'red',
-              mr: 2,
-            }}
-            onClick={() => handleDeleteUser()}
-            autoFocus
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       <Modal
         open={open}
@@ -623,6 +643,44 @@ const EditMemberModal = props => {
               justifyContent: 'right',
             }}
           >
+            <Button
+              variant='contained'
+              sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
+              onClick={handleItemClickOpen}
+            >
+              Delete User
+            </Button>
+
+            <Dialog
+              open={openItem}
+              onClose={handleItemClose}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>
+                {'Are You Sure You Want to Delete?'}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  Once the User is Deleted, it cannot be recovered. Are you sure
+                  you want to delete this User?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleItemClose}>Cancel</Button>
+                <Button
+                  sx={{
+                    borderRadius: '30px',
+                    color: 'red',
+                    mr: 2,
+                  }}
+                  onClick={() => handleDeleteUser()}
+                  autoFocus
+                >
+                  Delete User
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Button
               onClick={() => handleEdit()}
               color='secondary'

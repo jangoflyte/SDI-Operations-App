@@ -78,6 +78,10 @@ export const AddPost = () => {
       .then(() => {
         setTriggerFetch(curr => !curr);
         setToggle(true);
+        setPostName(null);
+        setManReq(null);
+        setCert(null);
+        setWeapon([]);
         handleClose();
       })
       .catch(err => {
@@ -279,7 +283,7 @@ export const AddPost = () => {
               variant='contained'
               sx={{ borderRadius: '30px' }}
             >
-              Add
+              Add Post
             </Button>
           </Stack>
         </Box>

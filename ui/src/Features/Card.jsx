@@ -111,32 +111,47 @@ const BasicCard = props => {
           pt={2}
           sx={{ display: 'flex' }}
         >
-          <Box
-            sx={{ width: '5%', display: 'flex', justifyContent: 'flex-start' }}
-          >
+          <Box sx={{ display: 'flex', justifyContent: 'center', width: '5%' }}>
             {/* leave empty */}
             <div></div>
           </Box>
           <Box
-            justifyContent='center'
             alignItems='center'
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
-              width: '35%',
+              justifyContent: 'center',
+              width: '22%',
             }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
+          </Box>
+          <Box
+            alignItems='center'
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%',
+            }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
+          </Box>
+          <Box
+            alignItems='center'
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%',
+            }}
+          >
             <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
           </Box>
           <Box
-            sx={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}
+            sx={{ width: '22%', display: 'flex', justifyContent: 'flex-end' }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
           </Box>
           <Box
-            sx={{ width: '40%', display: 'flex', justifyContent: 'flex-end' }}
+            sx={{ width: '22%', display: 'flex', justifyContent: 'flex-end' }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>
               Weapon Qualification
@@ -157,15 +172,15 @@ const BasicCard = props => {
                 sx={{
                   borderRadius: 3,
                   display: 'flex',
+                  justifyContent: 'space-between',
                 }}
               >
                 <Box
-                  justifyContent='center'
                   alignItems='center'
                   sx={{
                     display: 'flex',
                     width: '5%',
-                    justifyContent: 'flex-start',
+                    justifyContent: 'center',
                   }}
                 >
                   <Checkbox
@@ -176,17 +191,25 @@ const BasicCard = props => {
                 </Box>
 
                 <Box
-                  justifyContent='left'
                   alignItems='center'
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '35%',
+                    justifyContent: 'center',
+                    width: '22%',
                   }}
                 >
                   <Typography>
                     {member.rank ? member.rank.toUpperCase() : `No rank`}
                   </Typography>
+                </Box>
+                <Box
+                  alignItems='center'
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '22%',
+                  }}
+                >
                   <Typography
                     onClick={() => navigateToMember(member)}
                     sx={{
@@ -197,6 +220,15 @@ const BasicCard = props => {
                   >
                     {member.last_name}, {member.first_name}
                   </Typography>
+                </Box>
+                <Box
+                  alignItems='center'
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '22%',
+                  }}
+                >
                   {member.admin === true ? (
                     <Typography>Admin</Typography>
                   ) : (
@@ -206,7 +238,10 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='right'
-                  sx={{ display: 'flex', width: '20%' }}
+                  sx={{
+                    display: 'flex',
+                    width: '22%',
+                  }}
                 >
                   {member.certs.length === 0 ? (
                     <Chip
@@ -225,7 +260,10 @@ const BasicCard = props => {
 
                 <Box
                   justifyContent='right'
-                  sx={{ display: 'flex', width: '40%' }}
+                  sx={{
+                    display: 'flex',
+                    width: '22%',
+                  }}
                 >
                   {member.weapons.length === 0 ? (
                     <Chip
@@ -233,6 +271,14 @@ const BasicCard = props => {
                       color='primary'
                       icon={<SecurityIcon />}
                       label='No Weapons'
+                    />
+                  ) : member.weapons.length > 2 ? (
+                    <Chip
+                      key={index}
+                      icon={<SecurityIcon />}
+                      label={member.weapons.length + ' Weapons...'}
+                      color='secondary'
+                      sx={{ m: 1 / 4 }}
                     />
                   ) : (
                     member.weapons.map((weapon, index) => (

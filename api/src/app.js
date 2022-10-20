@@ -30,6 +30,7 @@ const {
   postPosition,
   deletePosition,
   updateMultipleUsers,
+  getScheduleById,
 } = require('./controller.js');
 
 const whitelist = [
@@ -163,6 +164,12 @@ app.get('/', (request, response) => {
 
 app.get('/schedule', (request, response) => {
   getAllSchedule()
+    .then(data => response.status(200).send(data))
+    .catch(err => response.status(500).send(err));
+});
+
+app.get('/schedule/:userId', (request, response) => {
+  getScheduleById(request.params.userId)
     .then(data => response.status(200).send(data))
     .catch(err => response.status(500).send(err));
 });

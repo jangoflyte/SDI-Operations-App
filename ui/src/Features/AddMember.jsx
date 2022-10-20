@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import {
   Button,
@@ -14,6 +14,7 @@ import {
   FormControl,
   InputLabel,
   Select,
+  LinearProgress,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
@@ -39,37 +40,46 @@ const PostMemberModal = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [flight, setFlight] = useState('alpha-1');
+  const [timeCheck, setTimeCheck] = useState(true);
+  const [filterFlight, setFilterFlight] = useState([]);
+  const [trigerFilter, setTrigerFilter] = useState(true);
 
+  useMemo(() => {
+    setTimeout(() => {
+      setTimeCheck(!timeCheck);
+    }, 1300);
+  }, [filterFlight]);
   //  console.log(cert_req)
   let weaponsReq = weapon_req.split(' ');
 
-  const filterFlight = data.filter(user => {
-    let wepResults = weaponsReq.map(wep => {
-      let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
-      // console.log('inside filter', tests, user)
-      if (tests.includes(true)) {
+  useMemo(() => {
+    let results = data.filter(user => {
+      let wepResults = weaponsReq.map(wep => {
+        let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
+        // console.log('inside filter', tests, user)
+        if (tests.includes(true)) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
+      // console.log('results', certResults)
+      if (
+        wepResults.includes(true) &&
+        certResults.includes(true) &&
+        user.flight === flight
+      ) {
         return true;
       } else {
         return false;
       }
     });
-    let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
-    // console.log('results', certResults)
-    if (
-      wepResults.includes(true) &&
-      certResults.includes(true) &&
-      user.flight === flight
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  });
+    setFilterFlight(results);
+  }, [trigerFilter]);
 
   const onDataPageChange = (event, page) => setPage(page - 1);
-
   const handleChangePage = (event, newPage) => setPage(newPage);
-
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -206,7 +216,11 @@ const PostMemberModal = props => {
                 id='demo-simple-select'
                 value={flight}
                 label='Flight'
-                onChange={e => setFlight(e.target.value)}
+                onChange={e => {
+                  setTimeCheck(!timeCheck);
+                  setFlight(e.target.value);
+                  setTrigerFilter(!trigerFilter);
+                }}
               >
                 {allFlights.map((flightObject, index) => (
                   <MenuItem
@@ -231,78 +245,93 @@ const PostMemberModal = props => {
               px: 5,
             }}
           >
-            {filterFlight.length > 0
-              ? filterFlight
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((user, index) => (
-                    <Button
-                      key={index}
-                      sx={
-                        selected !== user.id
-                          ? { borderRadius: 2.5, p: 0 }
-                          : {
-                              borderRadius: 2.5,
-                              p: 0,
-                              border: '2px solid blue',
-                            }
-                      }
-                      onClick={() => setSelected(user.id)}
-                    >
-                      <Paper
-                        sx={[
-                          {
-                            display: 'flex',
-                            alignItems: 'center',
-                            // justifyContent: 'space-around',
-                            flexDirection: 'row',
-                            p: 2,
-                            width: '100%',
+            {filterFlight.length > 0 ? (
+              filterFlight
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((user, index) => (
+                  <Button
+                    key={index}
+                    sx={
+                      selected !== user.id
+                        ? { borderRadius: 2.5, p: 0 }
+                        : {
                             borderRadius: 2.5,
-                            backgroundColor: 'none',
+                            p: 0,
+                            border: '2px solid blue',
+                          }
+                    }
+                    onClick={() => setSelected(user.id)}
+                  >
+                    <Paper
+                      sx={[
+                        {
+                          display: 'flex',
+                          alignItems: 'center',
+                          // justifyContent: 'space-around',
+                          flexDirection: 'row',
+                          p: 2,
+                          width: '100%',
+                          borderRadius: 2.5,
+                          backgroundColor: 'none',
+                        },
+                        {
+                          '&:hover': {
+                            backgroundColor: '#DCDCDC',
                           },
-                          {
-                            '&:hover': {
-                              backgroundColor: '#DCDCDC',
-                            },
-                          },
-                        ]}
-                      >
-                        <Box
-                          sx={{ textAlign: 'left', minWidth: '30%' }}
-                        >{`${user.first_name} ${user.last_name}`}</Box>
+                        },
+                      ]}
+                    >
+                      <Box
+                        sx={{ textAlign: 'left', minWidth: '30%' }}
+                      >{`${user.first_name} ${user.last_name}`}</Box>
 
-                        {/* <Box
+                      {/* <Box
                         sx={{ textAlign: 'left', minWidth: '30%' }}
                       >{`${user.certs[0].cert}`}</Box> */}
-                        <Box sx={{ textAlign: 'center', minWidth: '30%' }}>
-                          {
-                            <Chip
-                              icon={<WorkspacePremiumIcon />}
-                              label={user.certs[0].cert}
-                              color='success'
-                            />
-                          }
-                        </Box>
+                      <Box sx={{ textAlign: 'center', minWidth: '30%' }}>
+                        {
+                          <Chip
+                            icon={<WorkspacePremiumIcon />}
+                            label={user.certs[0].cert}
+                            color='success'
+                          />
+                        }
+                      </Box>
 
-                        {/* <Box
+                      {/* <Box
                         sx={{ textAlign: 'center', minWidth: '30%' }}
                       >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
-                        <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
-                          {user.weapons.map((wep, index) => (
-                            <span key={index}>
-                              <Chip
-                                icon={<SecurityIcon />}
-                                label={wep.weapon.toUpperCase()}
-                                color='secondary'
-                              />
-                              &nbsp;
-                            </span>
-                          ))}
-                        </Box>
-                      </Paper>
-                    </Button>
-                  ))
-              : `Loading`}
+                      <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
+                        {user.weapons.map((wep, index) => (
+                          <span key={index}>
+                            <Chip
+                              icon={<SecurityIcon />}
+                              label={wep.weapon.toUpperCase()}
+                              color='secondary'
+                            />
+                            &nbsp;
+                          </span>
+                        ))}
+                      </Box>
+                    </Paper>
+                  </Button>
+                ))
+            ) : (
+              <Box sx={{ width: '100%' }}>
+                {timeCheck ? (
+                  <LinearProgress />
+                ) : (
+                  <Typography
+                    variant='h5'
+                    component='span'
+                    color='error'
+                    sx={{ fontWeight: 'bold' }}
+                  >
+                    No Personnel Meet Requirements.
+                  </Typography>
+                )}
+              </Box>
+            )}
           </Stack>
 
           <Stack

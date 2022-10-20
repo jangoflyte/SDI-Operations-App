@@ -198,7 +198,17 @@ const updateMultipleUsers = async users => {
 const getAllSchedule = async () => {
   let schedules = await knex('post_schedule').select('*');
   let schedUsers = await schedAddUsers(schedules);
-  return schedUsers;
+  let schedPositions = await schedAddPositions(schedUsers);
+  return schedPositions;
+};
+
+const getScheduleById = async userId => {
+  let schedules = await knex('post_schedule')
+    .where({ user_id: userId })
+    .select('*');
+  let schedUsers = await schedAddUsers(schedules);
+  let schedPositions = await schedAddPositions(schedUsers);
+  return schedPositions;
 };
 
 const schedAddUsers = async schedules => {
@@ -210,15 +220,17 @@ const schedAddUsers = async schedules => {
   }
   return newSchedules;
 };
-// const schedAddPositions = async schedules => {
-//   let newSchedules = schedules;
-//   for (let schedule of newSchedules) {
-//     // call user by id and add to sched
-//     let positionInfo = await knex('position')
-//     schedule.position_info = positionInfo;
-//   }
-//   return newSchedules;
-// };
+const schedAddPositions = async schedules => {
+  let newSchedules = schedules;
+  for (let schedule of newSchedules) {
+    // call user by id and add to sched
+    let positionInfo = await knex('position').where({
+      id: schedule.position_id,
+    });
+    schedule.position_info = positionInfo;
+  }
+  return newSchedules;
+};
 
 const getScheduleByDate = async props => {
   // console.log('before knex date', props)
@@ -249,7 +261,7 @@ const deleteUser = async id => {
 
 // position /////////////////////////////////////////////////////////////
 const getAllposition = async () => {
-  let positions = await knex('position').select('*').orderBy('id', 'asc');
+  let positions = await knex('position').select('*').orderBy('name', 'asc');
   let positionsWeapon = await postWeapon(positions);
   let positionsCerts = await postCert(positionsWeapon);
   return positionsCerts;
@@ -362,4 +374,5 @@ module.exports = {
   postPosition,
   deletePosition,
   updateMultipleUsers,
+  getScheduleById,
 };
