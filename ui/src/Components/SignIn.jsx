@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import LinearProgress from '@mui/material/LinearProgress'
 import Avatar from '@mui/material/Avatar';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
@@ -14,13 +15,26 @@ import { useContext } from 'react';
 import logo from '../logo.svg';
 
 export default function SignIn() {
-  const { API, setCookie, setUserAccount } = useContext(MemberContext);
+  const { API, setCookie, setUserAccount, data } = useContext(MemberContext);
   const [loginCredentials, setLoginCredentials] = useState({
     email: '',
     password: '',
   });
   const [failedLogin, setFailedLogin] = useState(false);
+  const [apiRes, setApiRes] = useState({ok:false})
   let navigate = useNavigate();
+
+  useEffect(()=>{
+
+    fetch(`${API}`)
+    .then(data => setApiRes(data))
+    // .catch(err => setApiRes(err));
+  },[API])
+
+  useEffect(()=>{
+
+console.log("api res ", apiRes.ok)
+  },[apiRes])
 
   const postLogin = () => {
     console.log('fetching login', loginCredentials);
@@ -89,6 +103,9 @@ export default function SignIn() {
         {/* <Typography component='h1' variant='h5' align='center'>
           Welcome to 45SFS Scheduling App.
         </Typography> */}
+
+
+
         {failedLogin && (
           <>
             <Typography
@@ -203,7 +220,16 @@ export default function SignIn() {
             >
               Create Account
             </Button>
+
+
+
           </Stack>
+          {!apiRes.ok ? (
+                <Box sx={{ m:2, width: '100%'}}>
+                  <>Connecting to API</>
+                <LinearProgress />
+              </Box>
+        ):(<></>)}
         </Box>
       </Box>
     </Container>
