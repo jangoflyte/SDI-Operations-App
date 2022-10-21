@@ -80,7 +80,11 @@ const IndividualMember = () => {
             </Stack>
           </Box>
           <Stack direction='row' alignItems='center' spacing={2} mt={6}>
-            <Avatar />
+            {/* <Avatar>
+              {member.first_name.charAt(0).toUpperCase()}
+              {member.last_name.charAt(0).toUpperCase()}
+            </Avatar> */}
+            <EditAvatar avatar={member} />
             <h1>
               {member.first_name} {member.last_name}
             </h1>
@@ -123,12 +127,7 @@ const IndividualMember = () => {
             </Stack>
 
             <Grid container sx={{ mt: 5 }}>
-              <Box
-                display='flex'
-                flexDirection='column'
-                container
-                sx={{ width: '70%' }}
-              >
+              <Box display='flex' flexDirection='column' sx={{ width: '70%' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
                 <Typography sx={{ mb: 5 }}>
                   {member.first_name} {member.last_name}
@@ -157,8 +156,8 @@ const IndividualMember = () => {
                   </Typography>
                 )}
                 <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
-                {console.log(member.email.length)}
-                {member.email.length > 30 ? (
+
+                {member.email && member.email.length > 30 ? (
                   <Tooltip title={member.email}>
                     <Typography sx={{ mb: 5 }}>
                       {member.email.substring(0, 30)}...
@@ -198,7 +197,9 @@ const IndividualMember = () => {
                 <Typography mt={4} sx={{ fontWeight: 'bold' }}>
                   Flight:
                 </Typography>
-                <Typography sx={{ mb: 5 }}>{member.flight}</Typography>
+                <Typography sx={{ mb: 5 }}>
+                  {member.flight && member.flight.toUpperCase()}
+                </Typography>
               </Box>
             </Grid>
             <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
@@ -233,8 +234,42 @@ const IndividualMember = () => {
             }}
           >
             <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 2 }}>
-              {member.first_name + `'s`} Schedule
+              {member.first_name + `'s`} Upcoming Schedule
             </Typography>
+
+            <Stack
+              direction='row'
+              sx={{
+                display: 'flex',
+                direction: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+                p: 1,
+              }}
+            >
+              <Box sx={{ width: '20%' }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                  Post
+                </Typography>
+              </Box>
+              <Box sx={{ width: '20%' }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                  Position
+                </Typography>
+              </Box>
+              <Box sx={{ width: '30%' }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                  Date
+                </Typography>
+              </Box>
+              <Box sx={{ width: '20%' }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                  Time
+                </Typography>
+              </Box>
+            </Stack>
+
             {scheduleArray !== null && scheduleArray.length > 0 ? (
               scheduleArray.map((schedule, index) => {
                 // console.log('INDEX ', index);
@@ -772,6 +807,54 @@ function WeaponQuals(props) {
               ))}
             </ul>
           </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+function EditAvatar(props) {
+  const { avatar } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Avatar
+        onClick={handleClickOpen}
+        sx={{ cursor: 'pointer' }}
+        src=''
+        alt='avatar'
+      >
+        {avatar.first_name.charAt(0).toUpperCase()}
+        {avatar.last_name.charAt(0).toUpperCase()}
+      </Avatar>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='customized-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
+          {'Edit Avatar'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='customized-dialog-description'>
+            <Avatar src='' alt='avatar'>
+              {avatar.first_name.charAt(0).toUpperCase()}
+              {avatar.last_name.charAt(0).toUpperCase()}
+            </Avatar>
+          </DialogContentText>
+          <DialogActions>
+            <Button>Change Avatar</Button>
+            <Button>Change Background Color</Button>
+          </DialogActions>
         </DialogContent>
       </Dialog>
     </>

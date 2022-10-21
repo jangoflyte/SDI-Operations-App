@@ -139,7 +139,7 @@ export const Settings = () => {
 
         {postsPage === true ? (
           <>
-            <Stack
+            {/* <Stack
               direction='row'
               mt={3}
               sx={{
@@ -164,7 +164,7 @@ export const Settings = () => {
               >
                 Night Posts
               </Button>
-            </Stack>
+            </Stack> */}
 
             <Stack
               direction='row'

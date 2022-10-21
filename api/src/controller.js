@@ -16,7 +16,7 @@ const userCheck = async email => {
   if (results[0] === undefined) {
     return null;
   } else {
-    console.log('user found', results);
+    console.log('user found', results[0]);
     return results[0];
   }
 };
@@ -144,7 +144,13 @@ const postUsers = async users => {
         email: user.email,
         weapon_arming: user.weapon_arming,
         notes: user.notes,
+        flight: user.flight,
       };
+      if (newUser.flight === '') {
+        delete newUser.flight;
+      }
+
+      console.log('newUser information: ', newUser);
       let result = await knex('user_table').insert(newUser, ['*']);
       await postWeaponUser(result[0].id, user.weaponIdArray);
       return result;
@@ -216,6 +222,7 @@ const schedAddUsers = async schedules => {
   for (let schedule of newSchedules) {
     // call user by id and add to sched
     let userInfo = await individualUser(schedule.user_id);
+    delete userInfo[0].password;
     schedule.user_info = userInfo;
   }
   return newSchedules;
@@ -352,6 +359,13 @@ const deletePostScheduleByPosition = async positionId => {
   return knex('post_schedule').where({ position_id: positionId }).delete();
 };
 
+const addPassword = async props => {
+  let { user, id } = props;
+  const result = await knex('user_table').where('id', id).update(user, ['*']);
+  console.log('add password ', result);
+  return result;
+};
+
 module.exports = {
   getAllUsers,
   postUsers,
@@ -375,4 +389,5 @@ module.exports = {
   deletePosition,
   updateMultipleUsers,
   getScheduleById,
+  addPassword,
 };

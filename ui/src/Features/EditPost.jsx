@@ -51,7 +51,7 @@ const MenuProps = {
 export const EditPost = props => {
   const { post } = props;
 
-  const { API, setTriggerFetch, setToggle, allWeapons } =
+  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allWeapons } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -109,7 +109,7 @@ export const EditPost = props => {
       // .then(window.location.reload(false))
       .then(() => {
         setTriggerFetch(curr => !curr);
-        setToggle(true);
+        setToggleAlert(!toggleAlert);
         handleClose();
       })
       .catch(err => {
@@ -121,7 +121,7 @@ export const EditPost = props => {
     fetch(`${API}/position/${positionId}`, { method: 'DELETE' })
       .then(() => {
         setTriggerFetch(curr => !curr);
-        setToggle(true);
+        setToggleAlert(!toggleAlert);
         handleClose();
       })
       .catch(err => {
@@ -354,24 +354,6 @@ export const EditPost = props => {
                 </Button>
               </DialogActions>
             </Dialog>
-            {/* <Button
-              onClick={() => {
-                <AlertPost />;
-                // const confirmation = window.confirm(
-                //   'Are you sure you want to delete post? It will delete post for every user.'
-                // );
-                // if (confirmation) {
-                //   handleDelete(post.id);
-                // } else {
-                //   handleClose();
-                // }
-              }}
-              variant='contained'
-              sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
-            >
-              Delete Post
-            </Button> */}
-
             <Button
               onClick={() => handleAdd()}
               color='secondary'

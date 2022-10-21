@@ -17,6 +17,7 @@ exports.up = function (knex) {
     table.string('notes', 1024);
     table.string('email');
     table.string('password');
+    table.string('avatar');
   });
 };
 

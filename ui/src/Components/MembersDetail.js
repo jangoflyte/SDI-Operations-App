@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import BasicCard from '../Features/Card';
@@ -18,6 +18,7 @@ import {
   Stack,
   Alert,
   FormControl,
+  Fade,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
@@ -31,9 +32,9 @@ export const MemberDetails = () => {
     setUsersArray,
     usersArray,
     triggerFetch,
-    toggle,
-    setToggle,
     userAccount,
+    toggleAlert,
+    setToggleAlert,
   } = useContext(MemberContext);
   const [searchText, setSearchText] = useState('');
   const [changeView, setChangeView] = useState(0);
@@ -49,16 +50,18 @@ export const MemberDetails = () => {
         setUsersArray(data);
       })
       .catch(err => console.log(err));
-  }, [searchText, triggerFetch, toggle]);
+  }, [searchText, triggerFetch, toggleAlert]);
 
   const handleView = view => {
     setChangeView(view);
     setFlag(!flag);
   };
 
-  useEffect(() => {
-    setToggle(false);
-  }, []);
+  useMemo(() => {
+    setTimeout(() => {
+      setToggleAlert(false);
+    }, 3000);
+  }, [toggleAlert]);
 
   const viewArray = [
     <BasicCard key={1} pageTrigger={pageTrigger} />,
@@ -83,13 +86,20 @@ export const MemberDetails = () => {
   } else {
     return (
       <Box>
-        {toggle === false ? null : (
-          <Stack sx={{ width: '100%' }}>
+        <Stack
+          sx={{
+            width: '100vw',
+            position: 'absolute',
+            left: 0,
+            top: '10vh',
+          }}
+        >
+          <Fade in={toggleAlert} timeout={1000}>
             <Alert severity='success' spacing={2} mb={2}>
               Your new user, has successfully been added.
             </Alert>
-          </Stack>
-        )}
+          </Fade>
+        </Stack>
 
         <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
           People
@@ -153,7 +163,7 @@ export const MemberDetails = () => {
             sx={buttonSX}
             onClick={() => handleView(2)}
           >
-            User
+            Users
           </Button>
           <Button
             color={changeView === 1 ? 'secondary' : 'primary'}
@@ -198,39 +208,62 @@ const MenuProps = {
 };
 
 const AddMemberModal = () => {
-  const { API, setTriggerFetch, setToggle, allWeapons, allFlights } =
+  const { API, setTriggerFetch, setToggleAlert, allWeapons, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [userType, setUserType] = useState(null);
-  const [rank, setRank] = useState('');
-  const [cert, setCert] = useState(null);
   const [weapon, setWeapon] = useState([]);
-  const [email, setEmail] = useState(null);
-  const [flight, setFlight] = useState([]);
-  const [status, setStatus] = useState(null);
-  const [notes, setNotes] = useState(null);
   const [weaponIdArray, setWeaponIdArray] = useState([]);
+  const [failedAdd, setFailedAdd] = useState(false);
+  const [addUser, setAddUser] = useState({
+    first_name: '',
+    last_name: '',
+    admin: false,
+    rank: '',
+    cert_id: 1,
+    weapon_arming: false,
+    email: '',
+    flight: '',
+    notes: '',
+  });
+
+  useMemo(() => {
+    setWeaponIdArray([]);
+    setWeapon([]);
+    setAddUser({
+      first_name: '',
+      last_name: '',
+      admin: false,
+      rank: '',
+      cert_id: 1,
+      weapon_arming: false,
+      email: '',
+      flight: '',
+      notes: '',
+    });
+  }, [open]);
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
-    const newUser = {
-      first_name: firstName,
-      last_name: lastName,
-      admin: userType,
-      rank: rank,
-      cert_id: cert,
-      weapon_arming: status,
-      email: email,
-      flight: flight,
-      notes: notes,
+    let newUser = {
+      ...addUser,
       weaponIdArray: weaponIdArray,
     };
 
+    if (
+      newUser.first_Name === '' ||
+      newUser.last_Name === '' ||
+      newUser.email === '' ||
+      newUser.rank === ''
+    ) {
+      setFailedAdd(true);
+      return;
+    }
+    console.log('weapon: ', weapon);
+    console.log('weaponIDArray: ', weaponIdArray);
+    console.log('flight: ', newUser.flight);
+    console.log(newUser);
     fetch(`${API}/postusers/`, {
       method: 'POST',
       body: JSON.stringify([newUser]),
@@ -241,8 +274,10 @@ const AddMemberModal = () => {
       .then(res => res.json())
       .then(() => {
         setTriggerFetch(curr => !curr);
-        setToggle(true);
+        setToggleAlert(true);
+        setFailedAdd(false);
         handleClose();
+        window.scrollTo(0, 0);
       })
       .catch(err => {
         console.log('Error: ', err);
@@ -272,10 +307,6 @@ const AddMemberModal = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('weapon id Array ', weaponIdArray);
-  }, [weaponIdArray]);
-
   return (
     <>
       <Button
@@ -299,21 +330,21 @@ const AddMemberModal = () => {
           </Box>
 
           <Typography
-            id='modal-modal-title'
-            variant='h6'
-            component='h2'
-            sx={{ textAlign: 'center' }}
-          >
-            PEOPLE
-          </Typography>
-          <Typography
             id='modal-modal-description'
             variant='h4'
             sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
             Add User
           </Typography>
-
+          {failedAdd && (
+            <Typography
+              variant='h4'
+              color='error'
+              sx={{ textAlign: 'center', fontWeight: 'bold' }}
+            >
+              Missing Required Information
+            </Typography>
+          )}
           <Stack
             direction='row'
             mt={3}
@@ -324,20 +355,28 @@ const AddMemberModal = () => {
           >
             <FormControl sx={{ width: '40ch' }}>
               <TextField
+                required={true}
+                error={failedAdd}
                 id='outlined-basic'
                 label='First Name'
-                value={firstName}
+                value={addUser.first_name}
                 variant='outlined'
-                onChange={e => setFirstName(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, first_name: e.target.value })
+                }
               />
             </FormControl>
             <FormControl sx={{ width: '40ch' }}>
               <TextField
+                required={true}
+                error={failedAdd}
                 id='outlined-basic'
                 label='Last Name'
-                value={lastName}
+                value={addUser.last_name}
                 variant='outlined'
-                onChange={e => setLastName(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, last_name: e.target.value })
+                }
               />
             </FormControl>
           </Stack>
@@ -356,9 +395,11 @@ const AddMemberModal = () => {
                 htmlFor='weapon_arming'
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={userType}
+                value={addUser.admin}
                 label='User Type'
-                onChange={e => setUserType(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, admin: e.target.value })
+                }
               >
                 <MenuItem value={true}>Admin</MenuItem>
                 <MenuItem value={false}>User</MenuItem>
@@ -368,12 +409,14 @@ const AddMemberModal = () => {
             <FormControl sx={{ width: '25ch' }}>
               <InputLabel id='demo-simple-select-label'>Rank</InputLabel>
               <Select
+                required={true}
+                error={failedAdd}
                 htmlFor='rank'
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={rank}
+                value={addUser.rank}
                 label='Rank'
-                onChange={e => setRank(e.target.value)}
+                onChange={e => setAddUser({ ...addUser, rank: e.target.value })}
               >
                 <MenuItem value={null}></MenuItem>
                 <MenuItem value={'e1'}>AB</MenuItem>
@@ -399,10 +442,11 @@ const AddMemberModal = () => {
               <Select
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                marginBottom='5'
-                value={status}
+                value={addUser.weapon_arming}
                 label='Arm'
-                onChange={e => setStatus(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, weapon_arming: e.target.value })
+                }
               >
                 <MenuItem value={true}>Arm 🟢</MenuItem>
                 <MenuItem value={false}>Do Not Arm🔴</MenuItem>
@@ -426,9 +470,11 @@ const AddMemberModal = () => {
                 htmlFor='cert_id'
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={cert}
+                value={addUser.cert_id}
                 label='Certifications'
-                onChange={e => setCert(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, cert_id: e.target.value })
+                }
               >
                 <MenuItem value={null}></MenuItem>
                 <MenuItem value={1}>Entry Controller</MenuItem>
@@ -479,11 +525,15 @@ const AddMemberModal = () => {
           >
             <FormControl sx={{ width: '40ch' }}>
               <TextField
+                required={true}
+                error={failedAdd}
                 id='outlined-basic'
                 label='Email'
-                value={email}
+                value={addUser.email}
                 variant='outlined'
-                onChange={e => setEmail(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, email: e.target.value })
+                }
               />
             </FormControl>
 
@@ -493,9 +543,11 @@ const AddMemberModal = () => {
                 htmlFor='cert_id'
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={flight}
+                value={addUser.flight}
                 label='Flight'
-                onChange={e => setFlight(e.target.value)}
+                onChange={e =>
+                  setAddUser({ ...addUser, flight: e.target.value })
+                }
               >
                 {allFlights.map((flightObject, index) => (
                   <MenuItem
@@ -522,8 +574,8 @@ const AddMemberModal = () => {
               fullWidth
               multiline
               rows={4}
-              value={notes}
-              onChange={e => setNotes(e.target.value)}
+              value={addUser.notes}
+              onChange={e => setAddUser({ ...addUser, notes: e.target.value })}
             />
           </Stack>
 

@@ -1,7 +1,18 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
 // import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
-import { Button, Divider, Chip, Alert, Stack, TextField } from '@mui/material/';
+import {
+  Button,
+  Divider,
+  Chip,
+  Alert,
+  Fade,
+  TextField,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
@@ -22,7 +33,7 @@ import SecurityIcon from '@mui/icons-material/Security';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function CollapsibleTable() {
-  const { API, postAlert, setPostAlert } = useContext(MemberContext);
+  const { API, toggleAlert, setToggleAlert } = useContext(MemberContext);
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
@@ -39,7 +50,7 @@ export default function CollapsibleTable() {
   // console.log('todays date, date end', currentDate, dateEnd);
 
   const fetchPosts = () => {
-    console.log('fetching positions');
+    // console.log('fetching positions');
     fetch(`${API}/position`, {
       method: 'GET',
       // credentials: 'include',
@@ -55,7 +66,6 @@ export default function CollapsibleTable() {
       .then(data => {
         // console.log(data);
         setPositions(data);
-        setPostAlert(false);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -102,7 +112,7 @@ export default function CollapsibleTable() {
         return res.json();
       })
       .then(data => {
-        console.log(data);
+        // console.log(data);
         fetchSchedule();
       })
       .catch(err => {
@@ -198,6 +208,12 @@ export default function CollapsibleTable() {
     setDateRange(dateRange2);
   }, [startDate]);
 
+  useMemo(() => {
+    setTimeout(() => {
+      setToggleAlert(false);
+    }, 3000);
+  }, [toggleAlert]);
+
   return (
     <Box
       sx={{
@@ -209,14 +225,36 @@ export default function CollapsibleTable() {
         gap: 2,
       }}
     >
-      {postAlert === false ? null : (
-        <Stack sx={{ width: '100%' }}>
+      <Fade in={toggleAlert} timeout={1000}>
+        <Box
+          sx={{
+            width: '100vw',
+            position: 'absolute',
+            left: 0,
+            top: '10vh',
+          }}
+        >
           <Alert severity='success' spacing={2} mb={2}>
             Airman has been successfully assigned to the post position.
           </Alert>
-        </Stack>
-      )}
-      <Typography variant='h1' component='span'>
+        </Box>
+      </Fade>
+      <Typography
+        variant='h1'
+        component='span'
+        sx={
+          // fontFamily":"Roboto",
+          shift === 'Days'
+            ? {
+                color: '#29b6f6',
+                textShadow: '1px 1px 2px #454545',
+              }
+            : {
+                color: '#ffa726',
+                textShadow: '1px 1px 2px #454545',
+              }
+        }
+      >
         {schedDate.toDateString()}
       </Typography>
       <Box
@@ -234,14 +272,14 @@ export default function CollapsibleTable() {
           label='Start Date'
           type='date'
           defaultValue={startDate.toISOString().split('T')[0]}
-          sx={{ width: 220 }}
+          sx={{ width: 220, backgroundColor: 'white' }}
           InputLabelProps={{
             shrink: true,
           }}
           onChange={e => {
-            console.log('target value: ', e.target.value);
-            let dateArr = e.target.value.split('-');
-            console.log('settign start date: ', dateArr);
+            // console.log('target value: ', e.target.value);
+            // let dateArr = e.target.value.split('-');
+            // console.log('settign start date: ', dateArr);
             if (e.target.value === '') {
               setStartDate(new Date());
               e.target.value = new Date().toISOString().split('T')[0];
@@ -260,7 +298,8 @@ export default function CollapsibleTable() {
             alignItems: 'center',
           }}
         >
-          {shift === 'Days' && (
+          <Typography variant='h5'>{`Panama 12's `}</Typography>
+          {/* {shift === 'Days' && (
             <>
               <Typography variant='h5'>{`Panama 12's `}</Typography>
               <Typography
@@ -283,7 +322,7 @@ export default function CollapsibleTable() {
                 {shift}
               </Typography>
             </>
-          )}
+          )} */}
         </Box>
       </Box>
       <Box
@@ -308,7 +347,7 @@ export default function CollapsibleTable() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 2,
-                      borderColor: '#4fc3f7',
+                      borderColor: shift === 'Days' ? '#4fc3f7' : '#ffa726',
                       borderRadius: 1,
                     }
                   : {
@@ -470,11 +509,13 @@ const Row = props => {
         <TableCell align='right'>
           {splitArr.length > 3 ? (
             <span>
-              <Chip
+              {/* {console.log(row)} */}
+              {/* <Chip
                 icon={<SecurityIcon />}
                 label={`${splitArr.length} Weapons...`}
                 color='secondary'
-              />
+              /> */}
+              <WeaponQuals weapon={splitArr} />
               &nbsp;
             </span>
           ) : (
@@ -579,3 +620,46 @@ const Row = props => {
     </React.Fragment>
   );
 };
+
+function WeaponQuals(props) {
+  const { weapon } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Chip
+        onClick={handleClickOpen}
+        icon={<SecurityIcon />}
+        label={weapon.length + ' Weapons...'}
+        color='secondary'
+        sx={{ m: 1 / 4 }}
+      />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='customized-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
+          {'List of Weapon Qualifications:'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='customized-dialog-description'>
+            <ul>
+              {weapon.map((wep, index) => (
+                <li key={index}>{wep.toUpperCase()}</li>
+              ))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}

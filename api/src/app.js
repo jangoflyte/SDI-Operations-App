@@ -31,6 +31,7 @@ const {
   deletePosition,
   updateMultipleUsers,
   getScheduleById,
+  addPassword,
 } = require('./controller.js');
 
 const whitelist = [
@@ -112,12 +113,6 @@ app.post('/register', async (req, res) => {
     if (!(email && password && first_name && last_name && rank)) {
       res.status(400).send('All input is required');
     }
-    // check if user exists already
-    const userExist = await userCheck(email);
-    // console.log('user exists', userExist);
-    if (userExist !== null) {
-      return res.status(409).send('User Already Exist. Please Login');
-    }
     // create user
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -129,29 +124,60 @@ app.post('/register', async (req, res) => {
       email: email,
       password: hashedPassword,
       rank: rank,
+      admin: false,
     };
-    // push user to db
 
-    postUsers([user])
-      .then(results => {
-        console.log('creating token');
-        const userToken = { email: user.email };
+    // check if user exists already
+    const userExist = await userCheck(email);
+    console.log('user exists', userExist);
+    if (userExist !== null && userExist.password !== null) {
+      return res.status(409).send('User Already Exist. Please Login');
+    } else if (userExist !== null && userExist.password === null) {
+      delete user.admin;
+      addPassword({ user: user, id: userExist.id })
+        .then(results => {
+          console.log('creatifng token');
+          const userToken = { email: user.email };
+          const accessToken = jwt.sign(
+            userToken,
+            process.env.ACCESS_TOKEN_SECRET
+          );
+          delete results[0].password;
+          return (
+            res
+              .status(201)
+              // .cookie('auth', accessToken, { maxAge: 900000 })
+              .send({
+                status: 'success',
+                user: results[0],
+                cookie: ['auth', accessToken, { maxAge: 900000 }],
+              })
+          );
+        })
+        .catch(err => res.status(500).send(err));
+    } else {
+      // push user to db
+      postUsers([user])
+        .then(results => {
+          console.log('creating token');
+          const userToken = { email: user.email };
 
-        const accessToken = jwt.sign(
-          userToken,
-          process.env.ACCESS_TOKEN_SECRET
-        );
-        delete results[0].password;
-        res
-          .status(201)
-          // .cookie('auth', accessToken, { maxAge: 900000 })
-          .send({
-            status: 'success',
-            user: results[0],
-            cookie: ['auth', accessToken, { maxAge: 900000 }],
-          });
-      })
-      .catch(err => res.status(500).send(err));
+          const accessToken = jwt.sign(
+            userToken,
+            process.env.ACCESS_TOKEN_SECRET
+          );
+          delete results[0].password;
+          res
+            .status(201)
+            // .cookie('auth', accessToken, { maxAge: 900000 })
+            .send({
+              status: 'success',
+              user: results[0],
+              cookie: ['auth', accessToken, { maxAge: 900000 }],
+            });
+        })
+        .catch(err => res.status(500).send(err));
+    }
   } catch {
     res.status(500).send();
   }

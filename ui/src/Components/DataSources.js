@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useMemo } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import {
   Stack,
@@ -10,16 +10,19 @@ import {
   Button,
   Modal,
   Alert,
+  Fade,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Papa from 'papaparse';
 
 export const DataSources = () => {
-  const { toggler, setToggler } = useContext(MemberContext);
+  const { toggleAlert, setToggleAlert } = useContext(MemberContext);
 
-  useEffect(() => {
-    setToggler(false);
-  }, []);
+  useMemo(() => {
+    setTimeout(() => {
+      setToggleAlert(false);
+    }, 3000);
+  }, [toggleAlert]);
 
   return (
     <Box
@@ -31,13 +34,21 @@ export const DataSources = () => {
         justifyContent: 'center',
       }}
     >
-      {toggler === false ? null : (
-        <Stack sx={{ width: '100%' }}>
+      <Stack
+        sx={{
+          width: '100vw',
+          position: 'absolute',
+          left: 0,
+          top: '10vh',
+        }}
+      >
+        <Fade in={toggleAlert}>
           <Alert severity='success' spacing={2} mb={2}>
             Your data source, has successfully been added.
           </Alert>
-        </Stack>
-      )}
+        </Fade>
+      </Stack>
+
       <Typography
         variant='h3'
         ml={10}
@@ -93,7 +104,7 @@ export const DataSources = () => {
 
 const Upload = props => {
   const { uploadType } = props;
-  const { setToggler, API } = useContext(MemberContext);
+  const { setToggleAlert, API } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -125,10 +136,10 @@ const Upload = props => {
     setFlag(!flag);
   };
 
-  const handleClickAdd = () => {
-    setToggler(true);
-    handleClose();
-  };
+  // const handleClickAdd = () => {
+  //   setToggleAlert(true);
+  //   handleClose();
+  // };
 
   const changeHandler = event => {
     setFlag(!flag);
@@ -147,7 +158,7 @@ const Upload = props => {
   };
 
   const handleSubmission = () => {
-    setToggler(true);
+    setToggleAlert(true);
     handleClose();
     if (parsed.length === 0) return;
     console.log('This is our parsed file before fetch', parsed);

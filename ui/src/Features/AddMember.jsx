@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import {
   Button,
@@ -15,6 +15,10 @@ import {
   InputLabel,
   Select,
   LinearProgress,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
@@ -31,7 +35,7 @@ const PostMemberModal = props => {
     currentDate,
     shift,
   } = props;
-  const { API, data, setPostAlert, userAccount, allFlights } =
+  const { API, data, setToggleAlert, userAccount, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = useState(false);
   //const handleOpen = () => setOpen(true);
@@ -106,7 +110,8 @@ const PostMemberModal = props => {
         console.log(data);
         // call update for users
         fetchSchedule();
-        setPostAlert(true);
+        setToggleAlert(true);
+        window.scrollTo(0, 0);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -285,9 +290,6 @@ const PostMemberModal = props => {
                         sx={{ textAlign: 'left', minWidth: '30%' }}
                       >{`${user.first_name} ${user.last_name}`}</Box>
 
-                      {/* <Box
-                        sx={{ textAlign: 'left', minWidth: '30%' }}
-                      >{`${user.certs[0].cert}`}</Box> */}
                       <Box sx={{ textAlign: 'center', minWidth: '30%' }}>
                         {
                           <Chip
@@ -298,20 +300,28 @@ const PostMemberModal = props => {
                         }
                       </Box>
 
-                      {/* <Box
-                        sx={{ textAlign: 'center', minWidth: '30%' }}
-                      >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
                       <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
-                        {user.weapons.map((wep, index) => (
-                          <span key={index}>
-                            <Chip
-                              icon={<SecurityIcon />}
-                              label={wep.weapon.toUpperCase()}
-                              color='secondary'
-                            />
-                            &nbsp;
-                          </span>
-                        ))}
+                        {user.weapons.length > 3 ? (
+                          <>
+                            {/* <Chip
+                            icon={<SecurityIcon />}
+                            label={`${user.weapons.length} Weapons...`}
+                            color='secondary'
+                          /> */}
+                            <WeaponQuals weapon={user.weapons} />
+                          </>
+                        ) : (
+                          user.weapons.map((wep, index) => (
+                            <span key={index}>
+                              <Chip
+                                icon={<SecurityIcon />}
+                                label={wep.weapon.toUpperCase()}
+                                color='secondary'
+                              />
+                              &nbsp;
+                            </span>
+                          ))
+                        )}
                       </Box>
                     </Paper>
                   </Button>
@@ -371,7 +381,7 @@ const PostMemberModal = props => {
                   {
                     role === 3 && (postUser.role = 'Charlie');
                   }
-                  console.log('user info to post', postUser);
+                  // console.log('user info to post', postUser);
                   patchSchedule(postUser);
                 }}
                 color='secondary'
@@ -417,5 +427,50 @@ const PostMemberModal = props => {
     </>
   );
 };
+
+function WeaponQuals(props) {
+  const { weapon } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Chip
+        onClick={handleClickOpen}
+        icon={<SecurityIcon />}
+        label={weapon.length + ' Weapons...'}
+        color='secondary'
+        sx={{ m: 1 / 4 }}
+      />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='customized-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
+          {'List of Weapon Qualifications:'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='customized-dialog-description'>
+            <ul>
+              {weapon.map((wep, index) => (
+                <li key={index}>
+                  {wep.weapon.toUpperCase()} - {wep.type}
+                </li>
+              ))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
 export default PostMemberModal;

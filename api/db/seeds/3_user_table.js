@@ -10,7 +10,7 @@ exports.seed = async function (knex) {
         return knex('user_table').insert([
           {
             first_name: 'John',
-            last_name: 'Doe',
+            last_name: 'zDoe',
             rank: 'e5',
             flight: 'alpha-1',
             cert_id: 4,
@@ -19,6 +19,9 @@ exports.seed = async function (knex) {
             email: 'admin',
             password:
               '$2b$10$az7u9mz6Z0YQPxXYsT2PpOd.aC1m3V1Ibt/OFZNcHmbv9.snFQyVO',
+            avatar:
+              'https://i.pinimg.com/originals/ac/97/a4/ac97a40174f0864df0234746dd3a1f5f.jpg',
+            notes: 'DO NOT DELETE',
           },
           {
             first_name: 'Jane',
@@ -94,7 +97,7 @@ exports.seed = async function (knex) {
             first_name: 'Ronald',
             last_name: 'McDonald',
             rank: 'e6',
-            flight: 'bravo-2',
+            flight: 'charlie-1',
             cert_id: 3,
             weapon_arming: true,
             admin: true,

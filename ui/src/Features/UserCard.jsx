@@ -9,6 +9,11 @@ import {
   Button,
   Chip,
   TablePagination,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
@@ -24,10 +29,19 @@ const UserCard = props => {
   const [idArray, setIdArray] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openItem, setOpenItem] = React.useState(false);
 
   useEffect(() => {
     setPage(0);
   }, [pageTrigger]);
+
+  const handleItemClickOpen = () => {
+    setOpenItem(true);
+  };
+
+  const handleItemClose = () => {
+    setOpenItem(false);
+  };
 
   const onDataPageChange = (event, page) => setPage(page - 1);
 
@@ -61,8 +75,8 @@ const UserCard = props => {
         .then(res => res.json())
         .then(() => {
           setTriggerFetch(curr => !curr);
-          //navigate("/sfmembers")
-          // handleClose()
+          handleItemClose();
+          setPage(0);
         })
         .then(navigate('/sfmembers'))
         //.then(window.location.reload(false))
@@ -275,13 +289,15 @@ const UserCard = props => {
                         label='No Weapons'
                       />
                     ) : member.weapons.length > 2 ? (
-                      <Chip
-                        key={index}
+                      <>
+                        {/* <Chip
                         icon={<SecurityIcon />}
                         label={member.weapons.length + ' Weapons...'}
                         color='secondary'
                         sx={{ m: 1 / 4 }}
-                      />
+                      /> */}
+                        <WeaponQuals weapon={member.weapons} />
+                      </>
                     ) : (
                       member.weapons.map((weapon, index) => (
                         <Chip
@@ -311,23 +327,52 @@ const UserCard = props => {
           <Box>
             {userAccount !== null && userAccount.admin ? (
               <Button
-                color='secondary'
                 variant='contained'
                 size='medium'
-                sx={{ borderRadius: '30px' }}
-                onClick={() => {
-                  // const confirmation = window.confirm(
-                  //   'Are you sure you want to delete users? It will permanently delete their account'
-                  // );
-                  const confirmation = true;
-                  if (confirmation) {
-                    handleDeleteUser(idArray);
-                  }
-                }}
+                sx={{ borderRadius: '30px', bgcolor: '#8B0000' }}
+                onClick={handleItemClickOpen}
               >
-                Delete User
+                Delete Users
               </Button>
             ) : null}
+            <Dialog
+              open={openItem}
+              onClose={handleItemClose}
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
+            >
+              <DialogTitle id='alert-dialog-title'>
+                {'Are You Sure You Want to Delete?'}
+              </DialogTitle>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  Once the Users are Deleted, they cannot be recovered. Are you
+                  sure you want to delete these Users from the Database?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleItemClose}>Cancel</Button>
+                <Button
+                  sx={{
+                    borderRadius: '30px',
+                    color: 'red',
+                    mr: 2,
+                  }}
+                  onClick={() => {
+                    // const confirmation = window.confirm(
+                    //   'Are you sure you want to delete users? It will permanently delete their account'
+                    // );
+                    const confirmation = true;
+                    if (confirmation) {
+                      handleDeleteUser(idArray);
+                    }
+                  }}
+                  autoFocus
+                >
+                  Delete Post
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Box>
 
           <Box>
@@ -355,5 +400,50 @@ const UserCard = props => {
     </Box>
   );
 };
+
+function WeaponQuals(props) {
+  const { weapon } = props;
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Chip
+        onClick={handleClickOpen}
+        icon={<SecurityIcon />}
+        label={weapon.length + ' Weapons...'}
+        color='secondary'
+        sx={{ m: 1 / 4 }}
+      />
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='customized-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
+          {'List of Weapon Qualifications:'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='customized-dialog-description'>
+            <ul>
+              {weapon.map((wep, index) => (
+                <li key={index}>
+                  {wep.weapon.toUpperCase()} - {wep.type}
+                </li>
+              ))}
+            </ul>
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
 
 export default UserCard;

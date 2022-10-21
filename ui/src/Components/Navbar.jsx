@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
@@ -157,17 +157,9 @@ export default function PersistentDrawerLeft() {
                   badgeContent={0}
                   showZero
                 >
-                  {/* <NotificationsIcon /> */}
                   <NotificationModal />
                 </Badge>
-                {/* <Avatar
-                  onClick={() => navigate(`/sfmembers/${userAccount.id}`)}
-                  alt='Security Forces Member'
-                  src=''
-                  sx={{
-                    cursor: 'pointer',
-                  }}
-                /> */}
+
                 <EditAccount />
                 <Button
                   variant='text'
@@ -286,8 +278,8 @@ const EditAccount = () => {
   const handleClose = () => setOpen(false);
   const { userAccount } = useContext(MemberContext);
   const navigate = useNavigate();
-  // console.log(userAccount);
 
+  console.log(userAccount);
   const style = {
     position: 'absolute',
     top: '20%',
@@ -312,11 +304,14 @@ const EditAccount = () => {
       <Avatar
         onClick={handleOpen}
         alt='Security Forces Member'
-        src=''
         sx={{
           cursor: 'pointer',
         }}
-      />
+      >
+        {userAccount.first_name.charAt(0).toUpperCase()}
+        {userAccount.last_name.charAt(0).toUpperCase()}
+      </Avatar>
+
       <Modal
         open={open}
         onClose={handleClose}
