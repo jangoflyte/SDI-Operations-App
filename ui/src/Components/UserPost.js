@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 export const UserPost = props => {
   const { schedule, index } = props;
   const checkEven = index % 2 === 0;
+  const scheduleDay = new Date(schedule.date).toDateString();
 
   console.log('schedule in user post ', schedule, checkEven);
 
@@ -21,7 +22,7 @@ export const UserPost = props => {
     >
       <Box sx={{ width: '20%' }}>{schedule.position_info[0].name}</Box>
       <Box sx={{ width: '20%' }}>{schedule.role}</Box>
-      <Box sx={{ width: '30%' }}>{new Date(schedule.date).toDateString()}</Box>
+      <Box sx={{ width: '30%' }}>{scheduleDay}</Box>
       <Box sx={{ width: '20%' }}>{schedule.time}</Box>
     </Box>
   );

@@ -10,6 +10,7 @@ import IndividualMember from './Components/InvidualMember.js';
 import SignIn from './Components/SignIn.jsx';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
+import { Footer } from './Components/Footer.jsx';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -99,6 +100,7 @@ const App = () => {
               <Route path='/settings' element={<Settings />} />
               <Route path='*' element={<Home />} />
             </Routes>
+            <Footer />
           </>
         ) : (
           <Routes>

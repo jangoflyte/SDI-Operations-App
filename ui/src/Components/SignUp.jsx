@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
 import { useState, useContext } from 'react';
-import logo from '../logo.svg';
+import logo from '../passlogo.png';
 
 export default function SignUp() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);

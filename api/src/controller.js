@@ -82,7 +82,8 @@ const getAllUsers = async () => {
       'weapon_arming',
       'admin',
       'notes',
-      'email'
+      'email',
+      'avatar'
     )
     .orderBy('last_name', 'asc');
   let wepUsers = await addWeapon(users);
@@ -308,6 +309,7 @@ const patchPosition = async req => {
     name: req.body.name,
     man_req: req.body.man_req,
     cert_id: req.body.cert_id,
+    shift: req.body.shift,
   };
   await deleteWeaponPosition(req.params.id);
   console.log('between delete and post');

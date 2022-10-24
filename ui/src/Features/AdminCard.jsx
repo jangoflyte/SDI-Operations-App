@@ -231,7 +231,11 @@ const AdminCard = props => {
                         color: 'blue',
                       }}
                     >
-                      {member.last_name}, {member.first_name}
+                      {member.last_name.charAt(0).toUpperCase() +
+                        member.last_name.slice(1)}{' '}
+                      ,{' '}
+                      {member.first_name.charAt(0).toUpperCase() +
+                        member.first_name.slice(1)}
                     </Typography>
                   </Box>
                   <Box

@@ -8,7 +8,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import logo from '../logo.svg';
+import logo from '../passlogoSpecial.png';
 
 export default function SignIn() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);

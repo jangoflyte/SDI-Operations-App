@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
@@ -18,9 +18,6 @@ import {
   Avatar,
   Badge,
   Modal,
-  Card,
-  CardContent,
-  Stack,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -31,11 +28,10 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import '../styles/MembersDetail.css';
-import logo from '../logo.svg';
+import logo from '../passlogoSpecial.png';
 import Grid from '@mui/material/Unstable_Grid2';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import CloseIcon from '@mui/icons-material/Close';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { NotificationModal } from '../Features/Notification.jsx';
 
 const drawerWidth = 240;
 
@@ -120,15 +116,22 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-
-          {flag === true ? null : (
-            <Box ml={4}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'end',
+              justifyContent: 'beginning',
+            }}
+          >
+            {flag === true ? null : (
               <Button onClick={() => navigate('/')}>
-                <img src={logo} alt='logo' />
+                <img src={logo} alt='logo' style={{ width: 140 }} />
               </Button>
-            </Box>
-          )}
-
+            )}
+            <Typography fontSize={16} component='span'>
+              Post.Assignment.Scheduling.System
+            </Typography>
+          </Box>
           <Grid
             xs
             display='flex'
@@ -279,7 +282,7 @@ const EditAccount = () => {
   const { userAccount } = useContext(MemberContext);
   const navigate = useNavigate();
 
-  console.log(userAccount);
+  //console.log(userAccount);
   const style = {
     position: 'absolute',
     top: '20%',
@@ -304,6 +307,7 @@ const EditAccount = () => {
       <Avatar
         onClick={handleOpen}
         alt='Security Forces Member'
+        src={userAccount.avatar}
         sx={{
           cursor: 'pointer',
         }}
@@ -340,89 +344,6 @@ const EditAccount = () => {
           >
             My Profile
           </Button>
-        </Box>
-      </Modal>
-    </>
-  );
-};
-
-const NotificationModal = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const style = {
-    position: 'absolute',
-    top: '35%',
-    right: '1%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    height: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 4,
-    overflowY: 'scroll',
-    maxHeight: '90%',
-  };
-
-  return (
-    <>
-      <NotificationsIcon
-        onClick={handleOpen}
-        alt='notification'
-        src=''
-        sx={{
-          cursor: 'pointer',
-        }}
-      />
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
-        <Box sx={style}>
-          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
-          </Box>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'left' }}
-          >
-            Notifications
-          </Typography>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'center' }}
-          >
-            Today
-          </Typography>
-          <Stack direction='row'>
-            <Card sx={{ width: '100%' }}>
-              <CalendarTodayIcon />
-              <CardContent>Schedule to be posted</CardContent>
-            </Card>
-          </Stack>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'center' }}
-          >
-            Yesterday
-          </Typography>
-          <Stack direction='row'>
-            <Card sx={{ width: '100%' }}>
-              <CalendarTodayIcon />
-              <CardContent>Schedule to be posted</CardContent>
-            </Card>
-          </Stack>
         </Box>
       </Modal>
     </>

@@ -38,6 +38,7 @@ const IndividualMember = () => {
     useContext(MemberContext);
   const { memberId } = useParams();
   const [scheduleArray, setScheduleArray] = useState(null);
+  const [upcoming, setUpcoming] = useState(true);
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
@@ -76,7 +77,11 @@ const IndividualMember = () => {
               <a href='/sfmembers' style={{ textDecoration: 'none' }}>
                 People&nbsp;
               </a>
-              {'>'} {member.first_name} {member.last_name}
+              {'>'}{' '}
+              {member.first_name.charAt(0).toUpperCase() +
+                member.first_name.slice(1)}{' '}
+              {member.last_name.charAt(0).toUpperCase() +
+                member.last_name.slice(1)}
             </Stack>
           </Box>
           <Stack direction='row' alignItems='center' spacing={2} mt={6}>
@@ -86,7 +91,10 @@ const IndividualMember = () => {
             </Avatar> */}
             <EditAvatar avatar={member} />
             <h1>
-              {member.first_name} {member.last_name}
+              {member.first_name.charAt(0).toUpperCase() +
+                member.first_name.slice(1)}{' '}
+              {member.last_name.charAt(0).toUpperCase() +
+                member.last_name.slice(1)}
             </h1>
           </Stack>
         </Box>
@@ -130,11 +138,14 @@ const IndividualMember = () => {
               <Box display='flex' flexDirection='column' sx={{ width: '70%' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.first_name} {member.last_name}
+                  {member.first_name.charAt(0).toUpperCase() +
+                    member.first_name.slice(1)}{' '}
+                  {member.last_name.charAt(0).toUpperCase() +
+                    member.last_name.slice(1)}
                 </Typography>
                 <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.rank.toUpperCase()}
+                  {member.rank && member.rank.toUpperCase()}
                 </Typography>
                 <Typography sx={{ fontWeight: 'bold' }}>
                   Weapons Qualifications:
@@ -198,7 +209,8 @@ const IndividualMember = () => {
                   Flight:
                 </Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.flight && member.flight.toUpperCase()}
+                  {member.flight === null ? 'N/A' : member.flight.toUpperCase()}
+                  {/* {member.flight && member.flight.toUpperCase()} */}
                 </Typography>
               </Box>
             </Grid>
@@ -233,9 +245,38 @@ const IndividualMember = () => {
               backgroundColor: 'white',
             }}
           >
-            <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 2 }}>
-              {member.first_name + `'s`} Upcoming Schedule
-            </Typography>
+            <Stack
+              direction='row'
+              sx={{
+                display: 'flex',
+                // justifyContent: 'space-between',
+              }}
+            >
+              <Typography
+                variant='h5'
+                sx={{ fontWeight: 'bold', mb: 2, width: '75%' }}
+              >
+                {member.first_name + `'s`} {upcoming ? 'Upcoming ' : 'Past '}
+                Schedule
+              </Typography>
+
+              <Button
+                color={upcoming ? 'secondary' : 'primary'}
+                variant='contained'
+                sx={{ borderRadius: '30px', width: '12%' }}
+                onClick={() => setUpcoming(true)}
+              >
+                Upcoming
+              </Button>
+              <Button
+                color={upcoming ? 'primary' : 'secondary'}
+                variant='contained'
+                sx={{ borderRadius: '30px', width: '12%' }}
+                onClick={() => setUpcoming(false)}
+              >
+                Past
+              </Button>
+            </Stack>
 
             <Stack
               direction='row'
@@ -273,6 +314,7 @@ const IndividualMember = () => {
             {scheduleArray !== null && scheduleArray.length > 0 ? (
               scheduleArray.map((schedule, index) => {
                 // console.log('INDEX ', index);
+                schedule.upcoming = upcoming;
                 return (
                   <UserPost schedule={schedule} key={index} index={index} />
                 );
@@ -816,6 +858,7 @@ function WeaponQuals(props) {
 function EditAvatar(props) {
   const { avatar } = props;
   const [open, setOpen] = React.useState(false);
+  const [pic, setPic] = useState(avatar.avatar);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -824,13 +867,18 @@ function EditAvatar(props) {
     setOpen(false);
   };
 
+  const handlePic = () => {
+    setPic(null);
+  };
+
   return (
     <>
       <Avatar
         onClick={handleClickOpen}
-        sx={{ cursor: 'pointer' }}
-        src=''
+        sx={{ cursor: 'pointer', width: 56, height: 56 }}
+        src={pic}
         alt='avatar'
+        size='large'
       >
         {avatar.first_name.charAt(0).toUpperCase()}
         {avatar.last_name.charAt(0).toUpperCase()}
@@ -846,13 +894,17 @@ function EditAvatar(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='customized-dialog-description'>
-            <Avatar src='' alt='avatar'>
-              {avatar.first_name.charAt(0).toUpperCase()}
-              {avatar.last_name.charAt(0).toUpperCase()}
-            </Avatar>
+            {pic === null ? (
+              <Avatar src='' alt='avatar' sx={{ width: 100, height: 100 }}>
+                {avatar.first_name.charAt(0).toUpperCase()}
+                {avatar.last_name.charAt(0).toUpperCase()}
+              </Avatar>
+            ) : (
+              <Avatar src={pic} alt='avatar' sx={{ width: 100, height: 100 }} />
+            )}
           </DialogContentText>
           <DialogActions>
-            <Button>Change Avatar</Button>
+            <Button onClick={() => handlePic()}>Change Avatar</Button>
             <Button>Change Background Color</Button>
           </DialogActions>
         </DialogContent>

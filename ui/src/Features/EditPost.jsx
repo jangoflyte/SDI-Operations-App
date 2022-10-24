@@ -63,13 +63,14 @@ export const EditPost = props => {
   );
   const [manReq, setManReq] = useState(post.man_req);
   const [cert, setCert] = useState(post.cert_id);
-
+  const [shift, setShift] = useState(post.shift);
   const [openItem, setOpenItem] = React.useState(false);
 
   useEffect(() => {
     setPostName(post.name);
     setWeapon(post.weapon_req);
     setCert(post.cert_id);
+    setShift(post.shift);
     setWeaponIdArray(post.weapon_req.map(wep => wep.id));
   }, [props]);
 
@@ -93,6 +94,7 @@ export const EditPost = props => {
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
+      shift: shift,
     };
 
     console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
@@ -304,6 +306,31 @@ export const EditPost = props => {
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>
                 ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack
+            direction='row'
+            pt={2}
+            sx={{
+              display: 'flex',
+              //justifyContent: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>Shift</InputLabel>
+              <Select
+                htmlFor='shift'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={shift}
+                label='Shift'
+                onChange={e => setShift(e.target.value)}
+              >
+                <MenuItem value='day'>Day</MenuItem>
+                <MenuItem value='night'>Night</MenuItem>
               </Select>
             </FormControl>
           </Stack>

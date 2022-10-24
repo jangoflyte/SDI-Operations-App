@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, Typography, Stack, Chip, Button } from '@mui/material';
+import { Box, Typography, Stack, Chip } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
@@ -10,6 +10,8 @@ import { EditPost } from '../Features/EditPost';
 export const PostCard = props => {
   const { setPostsPage } = useContext(MemberContext);
   const post = props.post;
+
+  //console.log('post', post);
 
   const roleArray = postInput => {
     let manReq = parseInt(postInput.man_req);
