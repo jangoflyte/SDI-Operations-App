@@ -254,7 +254,7 @@ const IndividualMember = () => {
             >
               <Typography
                 variant='h5'
-                sx={{ fontWeight: 'bold', mb: 2, width: '75%' }}
+                sx={{ fontWeight: 'bold', mb: 2, width: '60%' }}
               >
                 {member.first_name + `'s`} {upcoming ? 'Upcoming ' : 'Past '}
                 Schedule
@@ -262,16 +262,17 @@ const IndividualMember = () => {
 
               <Button
                 color={upcoming ? 'secondary' : 'primary'}
-                variant='contained'
-                sx={{ borderRadius: '30px', width: '12%' }}
+                // variant='outlined'
+                variant={upcoming ? 'contained' : 'outlined'}
+                sx={{ borderRadius: '30px', width: '15%', mx: 1, fontSize: 11 }}
                 onClick={() => setUpcoming(true)}
               >
                 Upcoming
               </Button>
               <Button
                 color={upcoming ? 'primary' : 'secondary'}
-                variant='contained'
-                sx={{ borderRadius: '30px', width: '12%' }}
+                variant='outlined'
+                sx={{ borderRadius: '30px', width: '15%' }}
                 onClick={() => setUpcoming(false)}
               >
                 Past
@@ -421,7 +422,7 @@ const EditMemberModal = props => {
       notes: notes,
       weaponIdArray: weaponIdArray,
     };
-    console.log('updated user, ', updatedUser);
+    //console.log('updated user, ', updatedUser);
 
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
@@ -482,7 +483,7 @@ const EditMemberModal = props => {
   };
 
   useEffect(() => {
-    console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
+    //console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
   }, [weaponIdArray, allFlights]);
 
   return (
@@ -857,6 +858,7 @@ function WeaponQuals(props) {
 
 function EditAvatar(props) {
   const { avatar } = props;
+  const { API, member, setTriggerFetch } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const [pic, setPic] = useState(avatar.avatar);
 
@@ -866,9 +868,47 @@ function EditAvatar(props) {
   const handleClose = () => {
     setOpen(false);
   };
+  console.log(pic);
+
+  const defaultPic = () => {
+    fetch(`${API}/updateuser/${member.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        avatar: null,
+      }),
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    })
+      .then(res => res.json())
+      .then(() => {
+        setTriggerFetch(curr => !curr);
+        setPic(null);
+        handleClose();
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+      });
+  };
 
   const handlePic = () => {
-    setPic(null);
+    fetch(`${API}/updateuser/${member.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        avatar: pic,
+      }),
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    })
+      .then(res => res.json())
+      .then(() => {
+        setTriggerFetch(curr => !curr);
+        handleClose();
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+      });
   };
 
   return (
@@ -894,17 +934,33 @@ function EditAvatar(props) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='customized-dialog-description'>
-            {pic === null ? (
-              <Avatar src='' alt='avatar' sx={{ width: 100, height: 100 }}>
-                {avatar.first_name.charAt(0).toUpperCase()}
-                {avatar.last_name.charAt(0).toUpperCase()}
-              </Avatar>
-            ) : (
-              <Avatar src={pic} alt='avatar' sx={{ width: 100, height: 100 }} />
-            )}
+            <Stack direction='row'>
+              {pic === null ? (
+                <Avatar src='' alt='avatar' sx={{ width: 100, height: 100 }}>
+                  {avatar.first_name.charAt(0).toUpperCase()}
+                  {avatar.last_name.charAt(0).toUpperCase()}
+                </Avatar>
+              ) : (
+                <Avatar
+                  src={pic}
+                  alt='avatar'
+                  sx={{ width: 100, height: 100 }}
+                />
+              )}
+              <FormControl sx={{ width: '40ch' }} ml={2}>
+                <TextField
+                  id='outlined-basic'
+                  label='Source'
+                  value={pic}
+                  variant='outlined'
+                  onChange={e => setPic(e.target.value)}
+                ></TextField>
+              </FormControl>
+            </Stack>
           </DialogContentText>
           <DialogActions>
             <Button onClick={() => handlePic()}>Change Avatar</Button>
+            <Button onClick={() => defaultPic()}>Default</Button>
             <Button>Change Background Color</Button>
           </DialogActions>
         </DialogContent>

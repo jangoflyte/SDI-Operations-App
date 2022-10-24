@@ -11,5 +11,10 @@ exports.seed = async function (knex) {
       user_id: 1,
       read: false,
     },
+    {
+      notification_id: 2,
+      user_id: 2,
+      read: false,
+    },
   ]);
 };

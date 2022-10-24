@@ -6,7 +6,7 @@ export const UserPost = props => {
   const checkEven = index % 2 === 0;
   const scheduleDay = new Date(schedule.date).toDateString();
 
-  console.log('schedule in user post ', schedule, checkEven);
+  //console.log('schedule in user post ', schedule, checkEven);
 
   return (
     <Box

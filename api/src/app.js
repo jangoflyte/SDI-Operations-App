@@ -32,6 +32,7 @@ const {
   updateMultipleUsers,
   getScheduleById,
   addPassword,
+  getAllNotifications,
 } = require('./controller.js');
 
 const whitelist = [
@@ -181,6 +182,12 @@ app.post('/register', async (req, res) => {
   } catch {
     res.status(500).send();
   }
+});
+
+app.get('/notifications', (req, res) => {
+  getAllNotifications()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
 app.get('/', (request, response) => {
