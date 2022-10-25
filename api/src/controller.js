@@ -387,6 +387,22 @@ const getNotificationById = async id => {
   return result[0];
 };
 
+const getAllNotificationsById = async id => {
+  console.log('get all notifications userID', id);
+  let joinTable = await knex('notification_user')
+    .select('*')
+    .where({ user_id: id });
+  for (let join of joinTable) {
+    let userObj = await individualUser(join.user_id);
+    delete userObj[0].password;
+    join.user = userObj[0];
+
+    let notifObj = await getNotificationById(join.notification_id);
+    join.notification = notifObj;
+  }
+  return joinTable;
+};
+
 const getAllNotifications = async () => {
   let joinTable = await knex('notification_user').select('*');
 
@@ -426,4 +442,5 @@ module.exports = {
   getScheduleById,
   addPassword,
   getAllNotifications,
+  getAllNotificationsById,
 };

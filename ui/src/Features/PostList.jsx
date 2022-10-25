@@ -596,7 +596,17 @@ const Row = props => {
                       </TableCell>
                       <TableCell>
                         {!userRow.noUser
-                          ? `${userRow.user_info[0].first_name} ${userRow.user_info[0].last_name}`
+                          ? `${
+                              userRow.user_info[0].first_name
+                                .charAt(0)
+                                .toUpperCase() +
+                              userRow.user_info[0].first_name.slice(1)
+                            } ${
+                              userRow.user_info[0].last_name
+                                .charAt(0)
+                                .toUpperCase() +
+                              userRow.user_info[0].last_name.slice(1)
+                            }`
                           : `No One Posted`}
                       </TableCell>
                       <TableCell align='right'>

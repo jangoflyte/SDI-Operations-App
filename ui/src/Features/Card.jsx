@@ -14,6 +14,7 @@ import {
   DialogContentText,
   DialogTitle,
   DialogActions,
+  Avatar,
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
@@ -221,25 +222,45 @@ const BasicCard = props => {
                 <Box
                   alignItems='center'
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
                     width: '22%',
                   }}
                 >
-                  <Typography
-                    onClick={() => navigateToMember(member)}
-                    sx={{
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                      color: 'blue',
-                    }}
-                  >
-                    {member.last_name.charAt(0).toUpperCase() +
-                      member.last_name.slice(1)}{' '}
-                    ,{' '}
-                    {member.first_name.charAt(0).toUpperCase() +
-                      member.first_name.slice(1)}
-                  </Typography>
+                  <Button fullWidth sx={{ borderRadius: 10 }}>
+                    <Box
+                      alignItems='center'
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'start',
+                        width: '100%',
+                        gap: 1,
+                      }}
+                    >
+                      <Avatar
+                        sx={{ cursor: 'pointer', mr: 1 }}
+                        src={member.avatar}
+                        alt='avatar'
+                        size='small'
+                        onClick={() => navigateToMember(member)}
+                      >
+                        {member.first_name.charAt(0).toUpperCase()}
+                        {member.last_name.charAt(0).toUpperCase()}
+                      </Avatar>
+                      <Typography
+                        onClick={() => navigateToMember(member)}
+                        sx={{
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          color: 'blue',
+                        }}
+                      >
+                        {member.last_name.charAt(0).toUpperCase() +
+                          member.last_name.slice(1)}{' '}
+                        ,{' '}
+                        {member.first_name.charAt(0).toUpperCase() +
+                          member.first_name.slice(1)}
+                      </Typography>
+                    </Box>
+                  </Button>
                 </Box>
                 <Box
                   alignItems='center'

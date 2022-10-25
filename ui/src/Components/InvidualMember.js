@@ -23,6 +23,7 @@ import {
   DialogTitle,
   Tooltip,
   IconButton,
+  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
@@ -133,7 +134,7 @@ const IndividualMember = () => {
                 ) : null
               ) : null}
             </Stack>
-
+            <Divider sx={{ mt: 1.5 }}></Divider>
             <Grid container sx={{ mt: 5 }}>
               <Box display='flex' flexDirection='column' sx={{ width: '70%' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
@@ -249,36 +250,45 @@ const IndividualMember = () => {
               direction='row'
               sx={{
                 display: 'flex',
-                // justifyContent: 'space-between',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              <Typography
-                variant='h5'
-                sx={{ fontWeight: 'bold', mb: 2, width: '60%' }}
-              >
+              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
                 {member.first_name + `'s`} {upcoming ? 'Upcoming ' : 'Past '}
                 Schedule
               </Typography>
-
-              <Button
-                color={upcoming ? 'secondary' : 'primary'}
-                // variant='outlined'
-                variant={upcoming ? 'contained' : 'outlined'}
-                sx={{ borderRadius: '30px', width: '15%', mx: 1, fontSize: 11 }}
-                onClick={() => setUpcoming(true)}
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 1.2,
+                }}
               >
-                Upcoming
-              </Button>
-              <Button
-                color={upcoming ? 'primary' : 'secondary'}
-                variant='outlined'
-                sx={{ borderRadius: '30px', width: '15%' }}
-                onClick={() => setUpcoming(false)}
-              >
-                Past
-              </Button>
+                <Button
+                  color={upcoming ? 'secondary' : 'primary'}
+                  // variant='outlined'
+                  variant={upcoming ? 'contained' : 'outlined'}
+                  sx={{
+                    borderRadius: '30px',
+                  }}
+                  onClick={() => setUpcoming(true)}
+                >
+                  Upcoming
+                </Button>
+                <Button
+                  color={upcoming ? 'primary' : 'secondary'}
+                  // variant='outlined'
+                  variant={!upcoming ? 'contained' : 'outlined'}
+                  sx={{ borderRadius: '30px' }}
+                  onClick={() => setUpcoming(false)}
+                >
+                  Past
+                </Button>
+              </Box>
             </Stack>
-
+            <Divider sx={{ mt: 1.5 }}></Divider>
             <Stack
               direction='row'
               sx={{
@@ -727,7 +737,6 @@ const EditMemberModal = props => {
           </Stack>
 
           <Stack
-            Stack
             direction='row'
             pt={2}
             sx={{ display: 'flex', justifyContent: 'center' }}
@@ -841,7 +850,10 @@ function WeaponQuals(props) {
           {'List of Weapon Qualifications:'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
+          <DialogContentText
+            component='span'
+            id='customized-dialog-description'
+          >
             <ul>
               {weapon.map((wep, index) => (
                 <li key={index}>
@@ -858,9 +870,19 @@ function WeaponQuals(props) {
 
 function EditAvatar(props) {
   const { avatar } = props;
-  const { API, member, setTriggerFetch } = useContext(MemberContext);
+  const {
+    API,
+    member,
+    setTriggerFetch,
+    cookies,
+    setCookie,
+    removeCookie,
+    userAccount,
+    setUserAccount,
+  } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const [pic, setPic] = useState(avatar.avatar);
+  const [color, setColor] = useState('red');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -871,6 +893,7 @@ function EditAvatar(props) {
   console.log(pic);
 
   const defaultPic = () => {
+    if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -883,6 +906,17 @@ function EditAvatar(props) {
       .then(res => res.json())
       .then(() => {
         setTriggerFetch(curr => !curr);
+        if (avatar.id === cookies.user.id) {
+          let userInfo = cookies.user;
+          userInfo.avatar = null;
+          setCookie('user', userInfo, {
+            path: '/',
+            maxAge: 90000,
+            sameSite: 'None',
+            secure: 'true',
+          });
+          setUserAccount({ ...userAccount, avatar: null });
+        }
         setPic(null);
         handleClose();
       })
@@ -892,6 +926,7 @@ function EditAvatar(props) {
   };
 
   const handlePic = () => {
+    if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
@@ -903,6 +938,17 @@ function EditAvatar(props) {
     })
       .then(res => res.json())
       .then(() => {
+        if (avatar.id === cookies.user.id) {
+          let userInfo = cookies.user;
+          userInfo.avatar = pic;
+          setCookie('user', userInfo, {
+            path: '/',
+            maxAge: 90000,
+            sameSite: 'None',
+            secure: 'true',
+          });
+          setUserAccount({ ...userAccount, avatar: pic });
+        }
         setTriggerFetch(curr => !curr);
         handleClose();
       })
@@ -936,7 +982,11 @@ function EditAvatar(props) {
           <DialogContentText id='customized-dialog-description'>
             <Stack direction='row'>
               {pic === null ? (
-                <Avatar src='' alt='avatar' sx={{ width: 100, height: 100 }}>
+                <Avatar
+                  src=''
+                  alt='avatar'
+                  sx={{ width: 100, height: 100, bgcolor: color }}
+                >
                   {avatar.first_name.charAt(0).toUpperCase()}
                   {avatar.last_name.charAt(0).toUpperCase()}
                 </Avatar>
@@ -947,7 +997,7 @@ function EditAvatar(props) {
                   sx={{ width: 100, height: 100 }}
                 />
               )}
-              <FormControl sx={{ width: '40ch' }} ml={2}>
+              <FormControl sx={{ width: '40ch', ml: 3 }}>
                 <TextField
                   id='outlined-basic'
                   label='Source'
@@ -959,9 +1009,20 @@ function EditAvatar(props) {
             </Stack>
           </DialogContentText>
           <DialogActions>
-            <Button onClick={() => handlePic()}>Change Avatar</Button>
-            <Button onClick={() => defaultPic()}>Default</Button>
-            <Button>Change Background Color</Button>
+            <Stack
+              direction='row'
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '100%',
+              }}
+            >
+              <Button onClick={() => handlePic()}>Change Avatar</Button>
+              <Button onClick={() => defaultPic()}>Default</Button>
+              <Button onClick={() => setColor()}>
+                Change Background Color
+              </Button>
+            </Stack>
           </DialogActions>
         </DialogContent>
       </Dialog>

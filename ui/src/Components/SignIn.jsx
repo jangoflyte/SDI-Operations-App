@@ -8,7 +8,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import logo from '../passlogoSpecial.png';
+import logo from '../passlogo.png';
 
 export default function SignIn() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);
@@ -61,6 +61,7 @@ export default function SignIn() {
             secure: 'true',
           });
           setCookie(cookieInfo[0], cookieInfo[1], {
+            path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',

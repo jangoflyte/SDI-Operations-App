@@ -67,6 +67,7 @@ export default function SignUp() {
           let user_id = data.user;
           console.log(user_id);
           setCookie('user', JSON.stringify(data.user), {
+            path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',

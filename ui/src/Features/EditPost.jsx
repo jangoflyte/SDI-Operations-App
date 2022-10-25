@@ -319,7 +319,7 @@ export const EditPost = props => {
               justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            {/* <FormControl sx={{ width: '40ch' }}>
               <InputLabel id='demo-simple-select-label'>Shift</InputLabel>
               <Select
                 htmlFor='shift'
@@ -332,7 +332,7 @@ export const EditPost = props => {
                 <MenuItem value='day'>Day</MenuItem>
                 <MenuItem value='night'>Night</MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </Stack>
 
           <Stack

@@ -19,6 +19,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Avatar,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
@@ -233,7 +234,7 @@ const PostMemberModal = props => {
                     key={index}
                     value={flightObject.flight}
                   >
-                    {flightObject.flight}
+                    {flightObject.flight.toUpperCase()}
                   </MenuItem>
                 ))}
               </Select>
@@ -287,8 +288,32 @@ const PostMemberModal = props => {
                       ]}
                     >
                       <Box
-                        sx={{ textAlign: 'left', minWidth: '30%' }}
-                      >{`${user.first_name} ${user.last_name}`}</Box>
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'beginning',
+                          gap: 1,
+                          minWidth: '30%',
+                        }}
+                      >
+                        <Avatar
+                          sx={{ cursor: 'pointer' }}
+                          src={user.avatar}
+                          alt='avatar'
+                          size='small'
+                        >
+                          {user.first_name.charAt(0).toUpperCase()}
+                          {user.last_name.charAt(0).toUpperCase()}
+                        </Avatar>
+                        {console.log(user)}
+                        {`${
+                          user.first_name.charAt(0).toUpperCase() +
+                          user.first_name.slice(1)
+                        } ${
+                          user.last_name.charAt(0) +
+                          user.last_name.slice(1).toUpperCase()
+                        }`}
+                      </Box>
 
                       <Box sx={{ textAlign: 'center', minWidth: '30%' }}>
                         {

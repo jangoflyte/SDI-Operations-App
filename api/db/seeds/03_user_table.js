@@ -32,6 +32,8 @@ exports.seed = async function (knex) {
             weapon_arming: false,
             admin: false,
             email: 'jane@spaceforce.mil',
+            avatar:
+              'https://media4.giphy.com/media/1rSQ3HLhM8G6NPzLqG/giphy.gif',
           },
           {
             first_name: 'Greg',
@@ -42,6 +44,8 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'greg@spaceforce.mil',
+            avatar:
+              'https://i.pinimg.com/originals/f7/fb/5a/f7fb5ae85a12eb38c56d5f8c9e23b544.gif',
           },
           {
             first_name: 'Macy',
@@ -52,6 +56,8 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'macy@spaceforce.mil',
+            avatar:
+              'https://media1.giphy.com/media/3ornjPteRwwUdSWifC/giphy.gif',
           },
           {
             first_name: 'George',
@@ -62,6 +68,8 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'george@spaceforce.mil',
+            avatar:
+              'https://media.tenor.com/8JC0Q8897jwAAAAM/facepalm-picard.gif',
           },
           {
             first_name: 'Nick',

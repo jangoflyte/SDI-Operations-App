@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
@@ -15,9 +15,7 @@ import {
   ListItemText,
   Typography,
   Button,
-  Avatar,
   Badge,
-  Modal,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -28,10 +26,10 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import '../styles/MembersDetail.css';
-import logo from '../passlogoSpecial.png';
+import logo from '../passlogo.png';
 import Grid from '@mui/material/Unstable_Grid2';
-import CloseIcon from '@mui/icons-material/Close';
 import { NotificationModal } from '../Features/Notification.jsx';
+import { AvatarMenu } from '../Features/AvatarMenu';
 
 const drawerWidth = 240;
 
@@ -84,8 +82,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
-  const { userAccount, removeCookie, setUserAccount } =
-    useContext(MemberContext);
+  const { userAccount } = useContext(MemberContext);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -120,7 +117,9 @@ export default function PersistentDrawerLeft() {
             sx={{
               display: 'flex',
               alignItems: 'end',
+              //flex-end?
               justifyContent: 'beginning',
+              //flex-start?
             }}
           >
             {flag === true ? null : (
@@ -154,7 +153,7 @@ export default function PersistentDrawerLeft() {
             ) : (
               <>
                 <Badge
-                  sx={{ m: 2, marginRight: 3 }}
+                  sx={{ m: 2, marginRight: 1 }}
                   color='secondary'
                   //increment this with number of notifications
                   badgeContent={0}
@@ -163,20 +162,7 @@ export default function PersistentDrawerLeft() {
                   <NotificationModal />
                 </Badge>
 
-                <EditAccount />
-                <Button
-                  variant='text'
-                  color='secondary'
-                  sx={{ ml: 2 }}
-                  onClick={() => {
-                    removeCookie('user');
-                    removeCookie('auth');
-                    setUserAccount(null);
-                    navigate('/login');
-                  }}
-                >
-                  Logout
-                </Button>
+                <AvatarMenu />
               </>
             )}
           </Grid>
@@ -274,78 +260,3 @@ export default function PersistentDrawerLeft() {
     </Box>
   );
 }
-
-const EditAccount = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { userAccount } = useContext(MemberContext);
-  const navigate = useNavigate();
-
-  //console.log(userAccount);
-  const style = {
-    position: 'absolute',
-    top: '20%',
-    right: '1%',
-    transform: 'translate(-50%, -50%)',
-    width: 200,
-    height: 100,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 4,
-  };
-
-  const handleCloseModal = path => {
-    navigate(path);
-    handleClose();
-  };
-
-  return (
-    <>
-      <Avatar
-        onClick={handleOpen}
-        alt='Security Forces Member'
-        src={userAccount.avatar}
-        sx={{
-          cursor: 'pointer',
-        }}
-      >
-        {userAccount.first_name.charAt(0).toUpperCase()}
-        {userAccount.last_name.charAt(0).toUpperCase()}
-      </Avatar>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
-        <Box sx={style}>
-          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
-          </Box>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'left' }}
-          >
-            {`${userAccount.rank.toUpperCase()} ${userAccount.first_name} ${
-              userAccount.last_name
-            }`}
-          </Typography>
-
-          <Button
-            onClick={() => handleCloseModal(`/sfmembers/${userAccount.id}`)}
-            color='secondary'
-            variant='text'
-          >
-            My Profile
-          </Button>
-        </Box>
-      </Modal>
-    </>
-  );
-};
