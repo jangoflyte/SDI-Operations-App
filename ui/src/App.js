@@ -10,6 +10,7 @@ import IndividualMember from './Components/InvidualMember.js';
 import SignIn from './Components/SignIn.jsx';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
+import { Footer } from './Components/Footer.jsx';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -21,6 +22,7 @@ const App = () => {
   const [allFlights, setAllFlights] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
   const [userAccount, setUserAccount] = useState(null);
+  const [color, setColor] = useState('gray');
 
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
@@ -78,6 +80,8 @@ const App = () => {
     userAccount,
     setUserAccount,
     allFlights,
+    color,
+    setColor,
   };
 
   return (
@@ -88,8 +92,6 @@ const App = () => {
             <PersistentDrawerLeft />
             <Routes>
               <Route path='/' element={<Home />} />
-              <Route path='/login' element={<SignIn />} />
-              <Route path='/signup' element={<SignUp />} />
               <Route path='/data' element={<DataSources />} />
               <Route path='/sfmembers' element={<MemberDetails />} />
               <Route
@@ -99,6 +101,7 @@ const App = () => {
               <Route path='/settings' element={<Settings />} />
               <Route path='*' element={<Home />} />
             </Routes>
+            <Footer />
           </>
         ) : (
           <Routes>

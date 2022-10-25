@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
@@ -15,12 +15,6 @@ import {
   ListItemText,
   Typography,
   Button,
-  Avatar,
-  Badge,
-  Modal,
-  Card,
-  CardContent,
-  Stack,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -31,11 +25,10 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import '../styles/MembersDetail.css';
-import logo from '../logo.svg';
+import logo from '../passlogo.png';
 import Grid from '@mui/material/Unstable_Grid2';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import CloseIcon from '@mui/icons-material/Close';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { NotificationModal } from '../Features/Notification.jsx';
+import { AvatarMenu } from '../Features/AvatarMenu';
 
 const drawerWidth = 240;
 
@@ -88,8 +81,8 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
-  const { userAccount, removeCookie, setUserAccount } =
-    useContext(MemberContext);
+  const [toggle, setToggle] = React.useState(false);
+  const { userAccount } = useContext(MemberContext);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -107,6 +100,10 @@ export default function PersistentDrawerLeft() {
     handleDrawerClose();
   };
 
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position='fixed' open={open} onClose={handleDrawerClose}>
@@ -120,15 +117,38 @@ export default function PersistentDrawerLeft() {
           >
             <MenuIcon />
           </IconButton>
-
-          {flag === true ? null : (
-            <Box ml={4}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'end',
+              justifyContent: 'beginning',
+            }}
+          >
+            {flag === true ? null : (
               <Button onClick={() => navigate('/')}>
-                <img src={logo} alt='logo' />
+                <img src={logo} alt='logo' style={{ width: 140 }} />
               </Button>
-            </Box>
-          )}
-
+            )}
+            {toggle === false ? (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer' }}
+              >
+                <u>PASS</u>
+              </Typography>
+            ) : (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer' }}
+              >
+                <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
+              </Typography>
+            )}
+          </Box>
           <Grid
             xs
             display='flex'
@@ -150,30 +170,9 @@ export default function PersistentDrawerLeft() {
               </Typography>
             ) : (
               <>
-                <Badge
-                  sx={{ m: 2, marginRight: 3 }}
-                  color='secondary'
-                  //increment this with number of notifications
-                  badgeContent={0}
-                  showZero
-                >
-                  <NotificationModal />
-                </Badge>
+                <NotificationModal />
 
-                <EditAccount />
-                <Button
-                  variant='text'
-                  color='secondary'
-                  sx={{ ml: 2 }}
-                  onClick={() => {
-                    removeCookie('user');
-                    removeCookie('auth');
-                    setUserAccount(null);
-                    navigate('/login');
-                  }}
-                >
-                  Logout
-                </Button>
+                <AvatarMenu />
               </>
             )}
           </Grid>
@@ -271,160 +270,3 @@ export default function PersistentDrawerLeft() {
     </Box>
   );
 }
-
-const EditAccount = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { userAccount } = useContext(MemberContext);
-  const navigate = useNavigate();
-
-  console.log(userAccount);
-  const style = {
-    position: 'absolute',
-    top: '20%',
-    right: '1%',
-    transform: 'translate(-50%, -50%)',
-    width: 200,
-    height: 100,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 4,
-  };
-
-  const handleCloseModal = path => {
-    navigate(path);
-    handleClose();
-  };
-
-  return (
-    <>
-      <Avatar
-        onClick={handleOpen}
-        alt='Security Forces Member'
-        sx={{
-          cursor: 'pointer',
-        }}
-      >
-        {userAccount.first_name.charAt(0).toUpperCase()}
-        {userAccount.last_name.charAt(0).toUpperCase()}
-      </Avatar>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
-        <Box sx={style}>
-          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
-          </Box>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'left' }}
-          >
-            {`${userAccount.rank.toUpperCase()} ${userAccount.first_name} ${
-              userAccount.last_name
-            }`}
-          </Typography>
-
-          <Button
-            onClick={() => handleCloseModal(`/sfmembers/${userAccount.id}`)}
-            color='secondary'
-            variant='text'
-          >
-            My Profile
-          </Button>
-        </Box>
-      </Modal>
-    </>
-  );
-};
-
-const NotificationModal = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  const style = {
-    position: 'absolute',
-    top: '35%',
-    right: '1%',
-    transform: 'translate(-50%, -50%)',
-    width: 600,
-    height: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 4,
-    overflowY: 'scroll',
-    maxHeight: '90%',
-  };
-
-  return (
-    <>
-      <NotificationsIcon
-        onClick={handleOpen}
-        alt='notification'
-        src=''
-        sx={{
-          cursor: 'pointer',
-        }}
-      />
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='modal-modal-title'
-        aria-describedby='modal-modal-description'
-      >
-        <Box sx={style}>
-          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
-          </Box>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'left' }}
-          >
-            Notifications
-          </Typography>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'center' }}
-          >
-            Today
-          </Typography>
-          <Stack direction='row'>
-            <Card sx={{ width: '100%' }}>
-              <CalendarTodayIcon />
-              <CardContent>Schedule to be posted</CardContent>
-            </Card>
-          </Stack>
-
-          <Typography
-            id='modal-modal-description'
-            variant='h6'
-            sx={{ mt: 1, textAlign: 'center' }}
-          >
-            Yesterday
-          </Typography>
-          <Stack direction='row'>
-            <Card sx={{ width: '100%' }}>
-              <CalendarTodayIcon />
-              <CardContent>Schedule to be posted</CardContent>
-            </Card>
-          </Stack>
-        </Box>
-      </Modal>
-    </>
-  );
-};

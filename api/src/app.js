@@ -32,6 +32,9 @@ const {
   updateMultipleUsers,
   getScheduleById,
   addPassword,
+  getAllNotifications,
+  getAllNotificationsById,
+  patchNotifications,
 } = require('./controller.js');
 
 const whitelist = [
@@ -182,6 +185,32 @@ app.post('/register', async (req, res) => {
     res.status(500).send();
   }
 });
+
+// notifications ///////////////////////////////////////////////////
+app.get('/notifications', (req, res) => {
+  getAllNotifications()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.get('/notifications/:id', (req, res) => {
+  getAllNotificationsById(req.params.id)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.post('/notifications/:userId', (req, res) => {
+  //post notification with userid?
+});
+
+app.patch('/notifications/:id', (req, res) => {
+  patchNotifications({ id: req.params.id, notification: req.body })
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+  //update notification read status
+});
+
+///////////////////////////////////////////// notifications ///////////
 
 app.get('/', (request, response) => {
   response.set('Access-Control-Allow-Origin', '*');

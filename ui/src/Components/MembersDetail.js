@@ -418,7 +418,6 @@ const AddMemberModal = () => {
                 label='Rank'
                 onChange={e => setAddUser({ ...addUser, rank: e.target.value })}
               >
-                <MenuItem value={null}></MenuItem>
                 <MenuItem value={'e1'}>AB</MenuItem>
                 <MenuItem value={'e2'}>AMN</MenuItem>
                 <MenuItem value={'e3'}>A1C</MenuItem>
@@ -476,7 +475,6 @@ const AddMemberModal = () => {
                   setAddUser({ ...addUser, cert_id: e.target.value })
                 }
               >
-                <MenuItem value={null}></MenuItem>
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>

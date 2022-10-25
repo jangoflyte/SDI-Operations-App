@@ -99,7 +99,10 @@ const EditSchedule = props => {
             >
               {currentDate.toDateString()}
               <br />
-              {userRow.user_info[0].first_name} {userRow.user_info[0].last_name}
+              {userRow.user_info[0].first_name.charAt(0).toUpperCase() +
+                userRow.user_info[0].first_name.slice(1)}{' '}
+              {userRow.user_info[0].last_name.charAt(0).toUpperCase() +
+                userRow.user_info[0].last_name.slice(1)}
               <br />
               Post: {post}&nbsp;&nbsp;&nbsp;
               {role === 0 && `Shift: Lead`}

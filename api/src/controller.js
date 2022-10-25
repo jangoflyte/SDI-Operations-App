@@ -82,7 +82,8 @@ const getAllUsers = async () => {
       'weapon_arming',
       'admin',
       'notes',
-      'email'
+      'email',
+      'avatar'
     )
     .orderBy('last_name', 'asc');
   let wepUsers = await addWeapon(users);
@@ -118,6 +119,7 @@ const deleteWeaponUser = async userId => {
 
 const postWeaponUser = async (userId, wepArray) => {
   console.log('userId: ', userId, 'wep array, ', wepArray);
+
   if (wepArray.length > 0) {
     let insertInfo = wepArray.map(wep => {
       let postObject = {
@@ -163,6 +165,7 @@ const postUsers = async users => {
 
 const updateUser = async req => {
   console.log('This is req.body for update user: ', req.body);
+
   const newUser = {
     first_name: req.body.first_name,
     last_name: req.body.last_name,
@@ -173,12 +176,22 @@ const updateUser = async req => {
     weapon_arming: req.body.weapon_arming,
     notes: req.body.notes,
     flight: req.body.flight,
+    avatar: req.body.avatar,
   };
   console.log('new user ', newUser);
-  await deleteWeaponUser(req.params.id);
-  await postWeaponUser(req.params.id, req.body.weaponIdArray);
-  // knex.raw('TRUNCATE users_table CASCADE');
-  return await knex('user_table').where({ id: req.params.id }).update(newUser);
+
+  if (req.body.weaponIdArray !== undefined) {
+    await deleteWeaponUser(req.params.id);
+    await postWeaponUser(req.params.id, req.body.weaponIdArray);
+    return await knex('user_table')
+      .where({ id: req.params.id })
+      .update(newUser);
+  } else {
+    // knex.raw('TRUNCATE users_table CASCADE');
+    return await knex('user_table')
+      .where({ id: req.params.id })
+      .update(req.body);
+  }
 };
 
 const updateMultipleUsers = async users => {
@@ -308,6 +321,7 @@ const patchPosition = async req => {
     name: req.body.name,
     man_req: req.body.man_req,
     cert_id: req.body.cert_id,
+    shift: req.body.shift,
   };
   await deleteWeaponPosition(req.params.id);
   console.log('between delete and post');
@@ -366,6 +380,52 @@ const addPassword = async props => {
   return result;
 };
 
+// notifications //////////////////////////////////////////////////
+const getNotificationById = async id => {
+  console.log('get notification id ', id);
+  const result = await knex('notification').where({ id: id });
+  return result[0];
+};
+
+const getAllNotificationsById = async id => {
+  console.log('get all notifications userID', id);
+  let joinTable = await knex('notification_user')
+    .select('*')
+    .where({ user_id: id });
+  for (let join of joinTable) {
+    let userObj = await individualUser(join.user_id);
+    delete userObj[0].password;
+    join.user = userObj[0];
+
+    let notifObj = await getNotificationById(join.notification_id);
+    join.notification = notifObj;
+  }
+  return joinTable;
+};
+
+const getAllNotifications = async () => {
+  let joinTable = await knex('notification_user').select('*');
+
+  for (let join of joinTable) {
+    let userObj = await individualUser(join.user_id);
+    delete userObj[0].password;
+    join.user = userObj[0];
+
+    let notifObj = await getNotificationById(join.notification_id);
+    join.notification = notifObj;
+  }
+  return joinTable;
+};
+
+const patchNotifications = async ({ id, notification }) => {
+  console.log('patch notifications ran');
+
+  let result = await knex('notification_user')
+    .where({ id: notification.id })
+    .update({ read: true }, ['*']);
+  return result;
+};
+
 module.exports = {
   getAllUsers,
   postUsers,
@@ -390,4 +450,7 @@ module.exports = {
   updateMultipleUsers,
   getScheduleById,
   addPassword,
+  getAllNotifications,
+  getAllNotificationsById,
+  patchNotifications,
 };

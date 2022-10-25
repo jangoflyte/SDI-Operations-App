@@ -5,7 +5,6 @@ import {
   Box,
   Grid,
   LinearProgress,
-  Avatar,
   Button,
   Typography,
   Modal,
@@ -22,22 +21,24 @@ import {
   DialogContentText,
   DialogTitle,
   Tooltip,
-  IconButton,
+  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from 'react-router-dom';
 import { UserPost } from './UserPost';
+import { WeaponQuals } from '../Features/WeaponQuals';
+import { EditAvatar } from './EditAvatar';
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
     useContext(MemberContext);
   const { memberId } = useParams();
   const [scheduleArray, setScheduleArray] = useState(null);
+  const [upcoming, setUpcoming] = useState(true);
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
@@ -71,24 +72,49 @@ const IndividualMember = () => {
         }}
       >
         <Box>
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'start',
+            }}
+          >
             <Stack direction='row' spacing={2}>
               <a href='/sfmembers' style={{ textDecoration: 'none' }}>
                 People&nbsp;
               </a>
-              {'>'} {member.first_name} {member.last_name}
+              {`> `}
+              {member.first_name
+                ? `${member.first_name
+                    .charAt(0)
+                    .toUpperCase()}${member.first_name.slice(
+                    1
+                  )} ${member.last_name
+                    .charAt(0)
+                    .toUpperCase()}${member.last_name.slice(1)}`
+                : `N/A`}
             </Stack>
           </Box>
-          <Stack direction='row' alignItems='center' spacing={2} mt={6}>
-            {/* <Avatar>
-              {member.first_name.charAt(0).toUpperCase()}
-              {member.last_name.charAt(0).toUpperCase()}
-            </Avatar> */}
-            <EditAvatar avatar={member} />
-            <h1>
-              {member.first_name} {member.last_name}
-            </h1>
-          </Stack>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <EditAvatar avatar={member} memberId={memberId} />
+            <Typography variant='h1'>
+              {member.first_name
+                ? `${member.first_name
+                    .charAt(0)
+                    .toUpperCase()}${member.first_name.slice(
+                    1
+                  )} ${member.last_name
+                    .charAt(0)
+                    .toUpperCase()}${member.last_name.slice(1)}`
+                : `N/A`}
+            </Typography>
+          </Box>
         </Box>
         <Box
           sx={{
@@ -125,27 +151,38 @@ const IndividualMember = () => {
                 ) : null
               ) : null}
             </Stack>
-
+            <Divider sx={{ mt: 1.5 }}></Divider>
             <Grid container sx={{ mt: 5 }}>
               <Box display='flex' flexDirection='column' sx={{ width: '70%' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.first_name} {member.last_name}
+                  {member.first_name
+                    ? `${member.first_name
+                        .charAt(0)
+                        .toUpperCase()}${member.first_name.slice(
+                        1
+                      )} ${member.last_name
+                        .charAt(0)
+                        .toUpperCase()}${member.last_name.slice(1)}`
+                    : `N/A`}
                 </Typography>
+
                 <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
-                <Typography sx={{ mb: 5 }}>
-                  {member.rank.toUpperCase()}
-                </Typography>
+                {member.rank === null ? (
+                  <Typography sx={{ mb: 5 }}>N/A</Typography>
+                ) : (
+                  <Typography sx={{ mb: 5 }}>
+                    {member.rank && member.rank.toUpperCase()}
+                  </Typography>
+                )}
+
                 <Typography sx={{ fontWeight: 'bold' }}>
                   Weapons Qualifications:
                 </Typography>
                 {member.weapons.length === 0 ? (
                   <Typography sx={{ mb: 5 }}>No weapons</Typography>
                 ) : member.weapons.length > 3 ? (
-                  <Stack direction='row'>
-                    <Typography sx={{ mb: 5 }}>
-                      {member.weapons.length}
-                    </Typography>
+                  <Stack direction='row' mb={4}>
                     <WeaponQuals weapon={member.weapons} />
                   </Stack>
                 ) : (
@@ -155,9 +192,11 @@ const IndividualMember = () => {
                       .join(', ')}
                   </Typography>
                 )}
-                <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
 
-                {member.email && member.email.length > 30 ? (
+                <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
+                {member.email === null ? (
+                  <Typography sx={{ mb: 5 }}>No email</Typography>
+                ) : member.email && member.email.length > 30 ? (
                   <Tooltip title={member.email}>
                     <Typography sx={{ mb: 5 }}>
                       {member.email.substring(0, 30)}...
@@ -198,14 +237,12 @@ const IndividualMember = () => {
                   Flight:
                 </Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.flight && member.flight.toUpperCase()}
+                  {member.flight === null ? 'N/A' : member.flight.toUpperCase()}
                 </Typography>
               </Box>
             </Grid>
             <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
             <Box
-              // display='flex'
-              // flexDirection='column'
               component='div'
               sx={{
                 overflow: 'auto',
@@ -216,7 +253,7 @@ const IndividualMember = () => {
                 p: 1,
               }}
             >
-              {member.notes === null ? (
+              {member.notes === null || undefined ? (
                 <Typography sx={{ mb: 5 }}>N/A</Typography>
               ) : (
                 <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
@@ -233,10 +270,49 @@ const IndividualMember = () => {
               backgroundColor: 'white',
             }}
           >
-            <Typography variant='h5' sx={{ fontWeight: 'bold', mb: 2 }}>
-              {member.first_name + `'s`} Upcoming Schedule
-            </Typography>
-
+            <Stack
+              direction='row'
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
+                {member.first_name + `'s`} {upcoming ? 'Upcoming ' : 'Past '}
+                Schedule
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 1.2,
+                }}
+              >
+                <Button
+                  color={upcoming ? 'secondary' : 'primary'}
+                  // variant='outlined'
+                  variant={upcoming ? 'contained' : 'outlined'}
+                  sx={{
+                    borderRadius: '30px',
+                  }}
+                  onClick={() => setUpcoming(true)}
+                >
+                  Upcoming
+                </Button>
+                <Button
+                  color={upcoming ? 'primary' : 'secondary'}
+                  // variant='outlined'
+                  variant={!upcoming ? 'contained' : 'outlined'}
+                  sx={{ borderRadius: '30px' }}
+                  onClick={() => setUpcoming(false)}
+                >
+                  Past
+                </Button>
+              </Box>
+            </Stack>
+            <Divider sx={{ mt: 1.5 }}></Divider>
             <Stack
               direction='row'
               sx={{
@@ -273,6 +349,7 @@ const IndividualMember = () => {
             {scheduleArray !== null && scheduleArray.length > 0 ? (
               scheduleArray.map((schedule, index) => {
                 // console.log('INDEX ', index);
+                schedule.upcoming = upcoming;
                 return (
                   <UserPost schedule={schedule} key={index} index={index} />
                 );
@@ -379,7 +456,7 @@ const EditMemberModal = props => {
       notes: notes,
       weaponIdArray: weaponIdArray,
     };
-    console.log('updated user, ', updatedUser);
+    //console.log('updated user, ', updatedUser);
 
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
@@ -440,7 +517,7 @@ const EditMemberModal = props => {
   };
 
   useEffect(() => {
-    console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
+    //console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
   }, [weaponIdArray, allFlights]);
 
   return (
@@ -494,9 +571,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='First Name'
                 value={firstName}
-                inputProps={{
-                  defaultValue: `${memberObject.first_name}`,
-                }}
                 variant='outlined'
                 onChange={e => setFirstName(e.target.value)}
               />
@@ -506,9 +580,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='Last Name'
                 value={lastName}
-                inputProps={{
-                  defaultValue: `${memberObject.last_name}`,
-                }}
                 variant='outlined'
                 onChange={e => setLastName(e.target.value)}
               />
@@ -652,9 +723,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='Email'
                 value={email}
-                inputProps={{
-                  defaultValue: `${memberObject.email}`,
-                }}
                 variant='outlined'
                 onChange={e => setEmail(e.target.value)}
               />
@@ -684,7 +752,6 @@ const EditMemberModal = props => {
           </Stack>
 
           <Stack
-            Stack
             direction='row'
             pt={2}
             sx={{ display: 'flex', justifyContent: 'center' }}
@@ -698,9 +765,6 @@ const EditMemberModal = props => {
               rows={4}
               value={notes === null ? 'N/A' : notes}
               sx={{ mb: 2 }}
-              inputProps={{
-                defaultValue: `${memberObject.notes}`,
-              }}
               onChange={e => setNotes(e.target.value)}
             />
           </Stack>
@@ -766,99 +830,5 @@ const EditMemberModal = props => {
     </>
   );
 };
-
-function WeaponQuals(props) {
-  const { weapon } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <IconButton
-        variant='outlined'
-        onClick={handleClickOpen}
-        size='small'
-        sx={{ ml: 2, width: 33, height: 33 }}
-      >
-        <AddCircleOutlineIcon />
-      </IconButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'List of Weapon Qualifications:'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <ul>
-              {weapon.map((wep, index) => (
-                <li key={index}>
-                  {wep.weapon.toUpperCase()} - {wep.type}
-                </li>
-              ))}
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
-
-function EditAvatar(props) {
-  const { avatar } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <Avatar
-        onClick={handleClickOpen}
-        sx={{ cursor: 'pointer' }}
-        src=''
-        alt='avatar'
-      >
-        {avatar.first_name.charAt(0).toUpperCase()}
-        {avatar.last_name.charAt(0).toUpperCase()}
-      </Avatar>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'Edit Avatar'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <Avatar src='' alt='avatar'>
-              {avatar.first_name.charAt(0).toUpperCase()}
-              {avatar.last_name.charAt(0).toUpperCase()}
-            </Avatar>
-          </DialogContentText>
-          <DialogActions>
-            <Button>Change Avatar</Button>
-            <Button>Change Background Color</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
 export default IndividualMember;

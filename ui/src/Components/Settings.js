@@ -52,7 +52,7 @@ export const Settings = () => {
       .catch(err => console.log(err));
   }, [triggerFetch]);
 
-  const dayArr = ['Day', 'Night'];
+  const dayArr = ['day', 'night'];
   const handleClick = day => {
     setFlag(!flag);
     setDay(dayArr[day]);
@@ -181,7 +181,13 @@ export const Settings = () => {
               <AddPost />
             </Stack>
 
+            {/* change day/nights here */}
             {postArray.map((post, index) => {
+              // console.log('shift', post.shift.includes(day));
+              //console.log(post.shift);
+              // post.shift.includes(day) ? (
+              //   <PostCard post={post} key={index} />
+              // ) : null;
               return <PostCard post={post} key={index} />;
             })}
           </>

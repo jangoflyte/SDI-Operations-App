@@ -2,14 +2,17 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, Typography, Stack, Chip, Button } from '@mui/material';
+import { Box, Typography, Stack, Chip } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
+import { WeaponQuals } from '../Features/WeaponQuals';
 
 export const PostCard = props => {
   const { setPostsPage } = useContext(MemberContext);
   const post = props.post;
+
+  //console.log('post', post);
 
   const roleArray = postInput => {
     let manReq = parseInt(postInput.man_req);
@@ -124,6 +127,8 @@ export const PostCard = props => {
                     icon={<SecurityIcon />}
                     label='No Weapons'
                   />
+                ) : post.weapon_req.length > 3 ? (
+                  <WeaponQuals weapon={post.weapon_req} />
                 ) : (
                   post.weapon_req.map((weapon, index) => (
                     <Chip

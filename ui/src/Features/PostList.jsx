@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-// import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import {
   Button,
@@ -8,10 +7,7 @@ import {
   Alert,
   Fade,
   TextField,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
+  Stack,
 } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -30,7 +26,7 @@ import PostMemberModal from './AddMember';
 import EditSchedule from './EditSchedule';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { WeaponQuals } from './WeaponQuals';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert } = useContext(MemberContext);
@@ -50,7 +46,7 @@ export default function CollapsibleTable() {
   // console.log('todays date, date end', currentDate, dateEnd);
 
   const fetchPosts = () => {
-    // console.log('fetching positions');
+    console.log('fetching positions');
     fetch(`${API}/position`, {
       method: 'GET',
       // credentials: 'include',
@@ -112,7 +108,7 @@ export default function CollapsibleTable() {
         return res.json();
       })
       .then(data => {
-        // console.log(data);
+        console.log(data);
         fetchSchedule();
       })
       .catch(err => {
@@ -299,30 +295,6 @@ export default function CollapsibleTable() {
           }}
         >
           <Typography variant='h5'>{`Panama 12's `}</Typography>
-          {/* {shift === 'Days' && (
-            <>
-              <Typography variant='h5'>{`Panama 12's `}</Typography>
-              <Typography
-                variant='h5'
-                ml={2}
-                sx={{ color: '#29b6f6', fontWeight: 'bold' }}
-              >
-                {shift}
-              </Typography>
-            </>
-          )}
-          {shift === 'Mids' && (
-            <>
-              <Typography variant='h5'>{`Panama 12's `}</Typography>
-              <Typography
-                variant='h5'
-                ml={2}
-                sx={{ color: '#ffa726', fontWeight: 'bold' }}
-              >
-                {shift}
-              </Typography>
-            </>
-          )} */}
         </Box>
       </Box>
       <Box
@@ -421,7 +393,7 @@ export default function CollapsibleTable() {
               <TableCell align='right' sx={{ fontWeight: 'bold' }}>
                 Manning Requirements
               </TableCell>
-              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
                 Weapon Requirements
               </TableCell>
               <TableCell align='right' sx={{ fontWeight: 'bold' }}>
@@ -457,7 +429,7 @@ const Row = props => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        {/* change color to needs edited icon */}
+
         <TableCell component='th' scope='row'>
           <Box
             sx={{
@@ -505,35 +477,38 @@ const Row = props => {
           </Box>
         </TableCell>
         <TableCell align='right'>{row.man_req}</TableCell>
-        {/* <TableCell align='right'>{row.weapons.toUpperCase()}</TableCell> */}
+
         <TableCell align='right'>
           {splitArr.length > 3 ? (
-            <span>
-              {/* {console.log(row)} */}
-              {/* <Chip
-                icon={<SecurityIcon />}
-                label={`${splitArr.length} Weapons...`}
-                color='secondary'
-              /> */}
+            <Box
+              sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}
+            >
               <WeaponQuals weapon={splitArr} />
-              &nbsp;
-            </span>
+            </Box>
           ) : (
-            <>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                width: '100%',
+                gap: 1,
+              }}
+            >
               {splitArr.map((wep, index) => (
-                <span key={index}>
+                <Box key={index}>
                   <Chip
                     icon={<SecurityIcon />}
                     label={wep.toUpperCase()}
                     color='secondary'
                   />
-                  &nbsp;
-                </span>
+                </Box>
               ))}
-            </>
+            </Box>
           )}
         </TableCell>
-        {/* <TableCell align='right'>{row.cert[0].cert}</TableCell> */}
+
         <TableCell align='right'>
           <Chip
             icon={<WorkspacePremiumIcon />}
@@ -564,7 +539,6 @@ const Row = props => {
                   {row.users.map((userRow, index) => (
                     <TableRow key={index}>
                       <TableCell component='th' scope='row'>
-                        {/* {!userRow.noUser ? `${userRow.role}` : <Button onClick={() => PostMemberModal()} sx={{ backgroundColor: 'orange' }}>Add User</Button>} */}
                         {!userRow.noUser ? (
                           <span>
                             <EditSchedule
@@ -596,13 +570,24 @@ const Row = props => {
                       </TableCell>
                       <TableCell>
                         {!userRow.noUser
-                          ? `${userRow.user_info[0].first_name} ${userRow.user_info[0].last_name}`
+                          ? `${
+                              userRow.user_info[0].first_name
+                                .charAt(0)
+                                .toUpperCase() +
+                              userRow.user_info[0].first_name.slice(1)
+                            } ${
+                              userRow.user_info[0].last_name
+                                .charAt(0)
+                                .toUpperCase() +
+                              userRow.user_info[0].last_name.slice(1)
+                            }`
                           : `No One Posted`}
                       </TableCell>
                       <TableCell align='right'>
                         {!userRow.noUser &&
                           `${userRow.user_info[0].weapons.map(
                             wep => `${wep.weapon.toUpperCase()} `
+                            //wep => wep.join(', ')
                           )}`}
                       </TableCell>
                       <TableCell align='right'>
@@ -620,46 +605,3 @@ const Row = props => {
     </React.Fragment>
   );
 };
-
-function WeaponQuals(props) {
-  const { weapon } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <Chip
-        onClick={handleClickOpen}
-        icon={<SecurityIcon />}
-        label={weapon.length + ' Weapons...'}
-        color='secondary'
-        sx={{ m: 1 / 4 }}
-      />
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'List of Weapon Qualifications:'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <ul>
-              {weapon.map((wep, index) => (
-                <li key={index}>{wep.toUpperCase()}</li>
-              ))}
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}

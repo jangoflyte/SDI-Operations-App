@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
 import { useState, useContext } from 'react';
-import logo from '../logo.svg';
+import logo from '../passlogo.png';
 
 export default function SignUp() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);
@@ -67,6 +67,7 @@ export default function SignUp() {
           let user_id = data.user;
           console.log(user_id);
           setCookie('user', JSON.stringify(data.user), {
+            path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',

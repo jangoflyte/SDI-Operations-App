@@ -9,6 +9,7 @@ exports.up = function (knex) {
     table.string('man_req', 250);
     table.integer('cert_id');
     table.foreign('cert_id').references('id').inTable('certification');
+    table.string('shift');
   });
 };
 
