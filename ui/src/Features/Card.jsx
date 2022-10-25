@@ -243,8 +243,12 @@ const BasicCard = props => {
                         size='small'
                         onClick={() => navigateToMember(member)}
                       >
-                        {member.first_name.charAt(0).toUpperCase()}
-                        {member.last_name.charAt(0).toUpperCase()}
+                        {member.first_name
+                          ? member.first_name.charAt(0).toUpperCase()
+                          : null}
+                        {member.last_name
+                          ? member.last_name.charAt(0).toUpperCase()
+                          : null}
                       </Avatar>
                       <Typography
                         onClick={() => navigateToMember(member)}
@@ -254,11 +258,16 @@ const BasicCard = props => {
                           color: 'blue',
                         }}
                       >
-                        {member.last_name.charAt(0).toUpperCase() +
-                          member.last_name.slice(1)}{' '}
-                        ,{' '}
-                        {member.first_name.charAt(0).toUpperCase() +
-                          member.first_name.slice(1)}
+                        {' '}
+                        {member.last_name
+                          ? `${member.last_name
+                              .charAt(0)
+                              .toUpperCase()}${member.last_name.slice(
+                              1
+                            )}, ${member.first_name
+                              .charAt(0)
+                              .toUpperCase()}${member.first_name.slice(1)}`
+                          : `N/A`}
                       </Typography>
                     </Box>
                   </Button>

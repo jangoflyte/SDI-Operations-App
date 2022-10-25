@@ -81,6 +81,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
+  const [toggle, setToggle] = React.useState(false);
   const { userAccount } = useContext(MemberContext);
   const navigate = useNavigate();
 
@@ -97,6 +98,10 @@ export default function PersistentDrawerLeft() {
   const handleNavigate = path => {
     navigate(path);
     handleDrawerClose();
+  };
+
+  const handleToggle = () => {
+    setToggle(!toggle);
   };
 
   return (
@@ -124,9 +129,25 @@ export default function PersistentDrawerLeft() {
                 <img src={logo} alt='logo' style={{ width: 140 }} />
               </Button>
             )}
-            <Typography variant='subtitle2' component='span'>
-              <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
-            </Typography>
+            {toggle === false ? (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer' }}
+              >
+                <u>PASS</u>
+              </Typography>
+            ) : (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer' }}
+              >
+                <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
+              </Typography>
+            )}
           </Box>
           <Grid
             xs

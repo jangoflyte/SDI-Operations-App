@@ -83,11 +83,16 @@ const IndividualMember = () => {
               <a href='/sfmembers' style={{ textDecoration: 'none' }}>
                 People&nbsp;
               </a>
-              {'>'}{' '}
-              {member.first_name.charAt(0).toUpperCase() +
-                member.first_name.slice(1)}{' '}
-              {member.last_name.charAt(0).toUpperCase() +
-                member.last_name.slice(1)}
+              {`> `}
+              {member.first_name
+                ? `${member.first_name
+                    .charAt(0)
+                    .toUpperCase()}${member.first_name.slice(
+                    1
+                  )} ${member.last_name
+                    .charAt(0)
+                    .toUpperCase()}${member.last_name.slice(1)}`
+                : `N/A`}
             </Stack>
           </Box>
           <Box
@@ -99,10 +104,15 @@ const IndividualMember = () => {
           >
             <EditAvatar avatar={member} memberId={memberId} />
             <Typography variant='h1'>
-              {member.first_name.charAt(0).toUpperCase() +
-                member.first_name.slice(1)}{' '}
-              {member.last_name.charAt(0).toUpperCase() +
-                member.last_name.slice(1)}
+              {member.first_name
+                ? `${member.first_name
+                    .charAt(0)
+                    .toUpperCase()}${member.first_name.slice(
+                    1
+                  )} ${member.last_name
+                    .charAt(0)
+                    .toUpperCase()}${member.last_name.slice(1)}`
+                : `N/A`}
             </Typography>
           </Box>
         </Box>
@@ -146,22 +156,33 @@ const IndividualMember = () => {
               <Box display='flex' flexDirection='column' sx={{ width: '70%' }}>
                 <Typography sx={{ fontWeight: 'bold' }}>Name:</Typography>
                 <Typography sx={{ mb: 5 }}>
-                  {member.first_name.charAt(0).toUpperCase() +
-                    member.first_name.slice(1)}{' '}
-                  {member.last_name.charAt(0).toUpperCase() +
-                    member.last_name.slice(1)}
+                  {member.first_name
+                    ? `${member.first_name
+                        .charAt(0)
+                        .toUpperCase()}${member.first_name.slice(
+                        1
+                      )} ${member.last_name
+                        .charAt(0)
+                        .toUpperCase()}${member.last_name.slice(1)}`
+                    : `N/A`}
                 </Typography>
+
                 <Typography sx={{ fontWeight: 'bold' }}>Rank:</Typography>
-                <Typography sx={{ mb: 5 }}>
-                  {member.rank && member.rank.toUpperCase()}
-                </Typography>
+                {member.rank === null ? (
+                  <Typography sx={{ mb: 5 }}>N/A</Typography>
+                ) : (
+                  <Typography sx={{ mb: 5 }}>
+                    {member.rank && member.rank.toUpperCase()}
+                  </Typography>
+                )}
+
                 <Typography sx={{ fontWeight: 'bold' }}>
                   Weapons Qualifications:
                 </Typography>
                 {member.weapons.length === 0 ? (
                   <Typography sx={{ mb: 5 }}>No weapons</Typography>
                 ) : member.weapons.length > 3 ? (
-                  <Stack direction='row'>
+                  <Stack direction='row' mb={4}>
                     <WeaponQuals weapon={member.weapons} />
                   </Stack>
                 ) : (
@@ -171,11 +192,11 @@ const IndividualMember = () => {
                       .join(', ')}
                   </Typography>
                 )}
-                <Typography mt={4} sx={{ fontWeight: 'bold' }}>
-                  Email:
-                </Typography>
 
-                {member.email && member.email.length > 30 ? (
+                <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
+                {member.email === null ? (
+                  <Typography sx={{ mb: 5 }}>No email</Typography>
+                ) : member.email && member.email.length > 30 ? (
                   <Tooltip title={member.email}>
                     <Typography sx={{ mb: 5 }}>
                       {member.email.substring(0, 30)}...
@@ -217,14 +238,11 @@ const IndividualMember = () => {
                 </Typography>
                 <Typography sx={{ mb: 5 }}>
                   {member.flight === null ? 'N/A' : member.flight.toUpperCase()}
-                  {/* {member.flight && member.flight.toUpperCase()} */}
                 </Typography>
               </Box>
             </Grid>
             <Typography sx={{ fontWeight: 'bold' }}>Notes:</Typography>
             <Box
-              // display='flex'
-              // flexDirection='column'
               component='div'
               sx={{
                 overflow: 'auto',
@@ -235,7 +253,7 @@ const IndividualMember = () => {
                 p: 1,
               }}
             >
-              {member.notes === null ? (
+              {member.notes === null || undefined ? (
                 <Typography sx={{ mb: 5 }}>N/A</Typography>
               ) : (
                 <Typography sx={{ mb: 5 }}>{member.notes}</Typography>

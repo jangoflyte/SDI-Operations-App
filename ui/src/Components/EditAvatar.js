@@ -118,8 +118,10 @@ export const EditAvatar = props => {
         alt='avatar'
         size='large'
       >
-        {avatar.first_name.charAt(0).toUpperCase()}
-        {avatar.last_name.charAt(0).toUpperCase()}
+        {avatar.first_name
+          ? `${avatar.first_name.charAt(0).toUpperCase()}`
+          : `F`}
+        {avatar.last_name ? `${avatar.last_name.charAt(0).toUpperCase()}` : `L`}
       </Avatar>
       <Dialog
         open={open}
@@ -139,8 +141,12 @@ export const EditAvatar = props => {
                   alt='avatar'
                   sx={{ width: 100, height: 100, bgcolor: color }}
                 >
-                  {avatar.first_name.charAt(0).toUpperCase()}
-                  {avatar.last_name.charAt(0).toUpperCase()}
+                  {avatar.first_name
+                    ? `${avatar.first_name.charAt(0).toUpperCase()}`
+                    : `First`}
+                  {avatar.last_name
+                    ? `${avatar.last_name.charAt(0).toUpperCase()}`
+                    : `Last`}
                 </Avatar>
               ) : (
                 <Avatar
