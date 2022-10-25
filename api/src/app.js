@@ -34,6 +34,7 @@ const {
   addPassword,
   getAllNotifications,
   getAllNotificationsById,
+  patchNotifications,
 } = require('./controller.js');
 
 const whitelist = [
@@ -200,6 +201,13 @@ app.get('/notifications/:id', (req, res) => {
 
 app.post('/notifications/:userId', (req, res) => {
   //post notification with userid?
+});
+
+app.patch('/notifications/:id', (req, res) => {
+  patchNotifications({ id: req.params.id, notification: req.body })
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+  //update notification read status
 });
 
 ///////////////////////////////////////////// notifications ///////////

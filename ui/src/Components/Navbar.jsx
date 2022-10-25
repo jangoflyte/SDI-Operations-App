@@ -15,7 +15,6 @@ import {
   ListItemText,
   Typography,
   Button,
-  Badge,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -117,9 +116,7 @@ export default function PersistentDrawerLeft() {
             sx={{
               display: 'flex',
               alignItems: 'end',
-              //flex-end?
               justifyContent: 'beginning',
-              //flex-start?
             }}
           >
             {flag === true ? null : (
@@ -127,8 +124,8 @@ export default function PersistentDrawerLeft() {
                 <img src={logo} alt='logo' style={{ width: 140 }} />
               </Button>
             )}
-            <Typography fontSize={16} component='span'>
-              Post.Assignment.Scheduling.System
+            <Typography variant='subtitle2' component='span'>
+              <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
             </Typography>
           </Box>
           <Grid
@@ -152,15 +149,7 @@ export default function PersistentDrawerLeft() {
               </Typography>
             ) : (
               <>
-                <Badge
-                  sx={{ m: 2, marginRight: 1 }}
-                  color='secondary'
-                  //increment this with number of notifications
-                  badgeContent={0}
-                  showZero
-                >
-                  <NotificationModal />
-                </Badge>
+                <NotificationModal />
 
                 <AvatarMenu />
               </>

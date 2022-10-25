@@ -66,9 +66,13 @@ export const Filter = () => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
-          <Typography sx={{ fontWeight: 'bold' }}>Filters</Typography>
+          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
+            Filters
+          </Typography>
           <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
-            <FormLabel component='legend'>By Certification</FormLabel>
+            <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
+              By Certification
+            </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox name='ecp' />}
@@ -88,7 +92,9 @@ export const Filter = () => {
               />
             </FormGroup>
 
-            <FormLabel component='legend'>By Weapon Qualification</FormLabel>
+            <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
+              By Weapon Qualification
+            </FormLabel>
             <FormGroup>
               <FormControlLabel control={<Checkbox name='m4' />} label='M-4' />
               <FormControlLabel
@@ -97,7 +103,9 @@ export const Filter = () => {
               />
             </FormGroup>
 
-            <FormLabel component='legend'>Arming Status</FormLabel>
+            <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
+              Arming Status
+            </FormLabel>
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox name='arm' />}

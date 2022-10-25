@@ -6,6 +6,7 @@ import { Box, Typography, Stack, Chip } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
+import { WeaponQuals } from '../Features/WeaponQuals';
 
 export const PostCard = props => {
   const { setPostsPage } = useContext(MemberContext);
@@ -126,6 +127,8 @@ export const PostCard = props => {
                     icon={<SecurityIcon />}
                     label='No Weapons'
                   />
+                ) : post.weapon_req.length > 3 ? (
+                  <WeaponQuals weapon={post.weapon_req} />
                 ) : (
                   post.weapon_req.map((weapon, index) => (
                     <Chip

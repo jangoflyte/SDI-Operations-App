@@ -22,6 +22,7 @@ const App = () => {
   const [allFlights, setAllFlights] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
   const [userAccount, setUserAccount] = useState(null);
+  const [color, setColor] = useState('gray');
 
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
@@ -79,6 +80,8 @@ const App = () => {
     userAccount,
     setUserAccount,
     allFlights,
+    color,
+    setColor,
   };
 
   return (

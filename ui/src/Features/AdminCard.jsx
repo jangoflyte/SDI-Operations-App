@@ -21,10 +21,11 @@ import { useNavigate } from 'react-router-dom';
 import { Filter } from '../Components/Filter.js';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
+import { WeaponQuals } from './WeaponQuals';
 
 const AdminCard = props => {
   const { pageTrigger } = props;
-  const { setMember, API, usersArray, setTriggerFetch, userAccount } =
+  const { setMember, API, usersArray, setTriggerFetch, userAccount, color } =
     useContext(MemberContext);
   const navigate = useNavigate();
   const [idArray, setIdArray] = useState([]);
@@ -233,7 +234,7 @@ const AdminCard = props => {
                         }}
                       >
                         <Avatar
-                          sx={{ cursor: 'pointer', mr: 1 }}
+                          sx={{ cursor: 'pointer', mr: 1, bgcolor: color }}
                           src={member.avatar}
                           alt='avatar'
                           size='small'
@@ -408,7 +409,7 @@ const AdminCard = props => {
 
           <Box>
             <TablePagination
-              rowsPerPageOptions={[5, 10]}
+              rowsPerPageOptions={[5, 10, 20, 30, 50]}
               component='div'
               count={admins.length}
               rowsPerPage={rowsPerPage}
@@ -422,50 +423,5 @@ const AdminCard = props => {
     </Box>
   );
 };
-
-function WeaponQuals(props) {
-  const { weapon } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <Chip
-        onClick={handleClickOpen}
-        icon={<SecurityIcon />}
-        label={weapon.length + ' Weapons...'}
-        color='secondary'
-        sx={{ m: 1 / 4 }}
-      />
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'List of Weapon Qualifications:'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <ul>
-              {weapon.map((wep, index) => (
-                <li key={index}>
-                  {wep.weapon.toUpperCase()} - {wep.type}
-                </li>
-              ))}
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
 export default AdminCard;

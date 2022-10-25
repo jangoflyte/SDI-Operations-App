@@ -15,15 +15,12 @@ import {
   InputLabel,
   Select,
   LinearProgress,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Avatar,
 } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
+import { WeaponQuals } from './WeaponQuals';
 
 const PostMemberModal = props => {
   const {
@@ -243,7 +240,7 @@ const PostMemberModal = props => {
           <Stack
             sx={{
               display: 'flex',
-              //justifyContent: 'center',
+
               justifyContent: 'space-between',
               flexDirection: 'column',
               gap: 1,
@@ -273,7 +270,7 @@ const PostMemberModal = props => {
                         {
                           display: 'flex',
                           alignItems: 'center',
-                          // justifyContent: 'space-around',
+
                           flexDirection: 'row',
                           p: 2,
                           width: '100%',
@@ -328,11 +325,6 @@ const PostMemberModal = props => {
                       <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
                         {user.weapons.length > 3 ? (
                           <>
-                            {/* <Chip
-                            icon={<SecurityIcon />}
-                            label={`${user.weapons.length} Weapons...`}
-                            color='secondary'
-                          /> */}
                             <WeaponQuals weapon={user.weapons} />
                           </>
                         ) : (
@@ -376,7 +368,6 @@ const PostMemberModal = props => {
           >
             <Box
               justifyContent='left'
-              // width='10%'
               alignItems='center'
               sx={{ borderRadius: '30px', display: 'flex' }}
             >
@@ -419,7 +410,6 @@ const PostMemberModal = props => {
 
             <Box
               justifyContent='left'
-              // width='35%'
               alignItems='center'
               sx={{ display: 'flex', justifyContent: 'space-between' }}
             >
@@ -431,11 +421,7 @@ const PostMemberModal = props => {
               />
             </Box>
 
-            <Box
-              justifyContent='right'
-              // width='30%'
-              sx={{ display: 'flex' }}
-            >
+            <Box justifyContent='right' sx={{ display: 'flex' }}>
               <TablePagination
                 rowsPerPageOptions={[5, 10]}
                 component='div'
@@ -452,50 +438,5 @@ const PostMemberModal = props => {
     </>
   );
 };
-
-function WeaponQuals(props) {
-  const { weapon } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <Chip
-        onClick={handleClickOpen}
-        icon={<SecurityIcon />}
-        label={weapon.length + ' Weapons...'}
-        color='secondary'
-        sx={{ m: 1 / 4 }}
-      />
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'List of Weapon Qualifications:'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <ul>
-              {weapon.map((wep, index) => (
-                <li key={index}>
-                  {wep.weapon.toUpperCase()} - {wep.type}
-                </li>
-              ))}
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
 export default PostMemberModal;

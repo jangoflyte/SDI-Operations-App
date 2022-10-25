@@ -20,7 +20,7 @@ exports.seed = async function (knex) {
             password:
               '$2b$10$az7u9mz6Z0YQPxXYsT2PpOd.aC1m3V1Ibt/OFZNcHmbv9.snFQyVO',
             avatar:
-              'https://i.pinimg.com/originals/ac/97/a4/ac97a40174f0864df0234746dd3a1f5f.jpg',
+              'https://media0.giphy.com/media/KRH2MDRBywNwHe91h9/giphy.gif',
             notes: 'DO NOT DELETE',
           },
           {
@@ -44,8 +44,7 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'greg@spaceforce.mil',
-            avatar:
-              'https://i.pinimg.com/originals/f7/fb/5a/f7fb5ae85a12eb38c56d5f8c9e23b544.gif',
+            avatar: 'https://media.giphy.com/media/D7z8JfNANqahW/giphy.gif',
           },
           {
             first_name: 'Macy',
@@ -80,16 +79,19 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'nick@spaceforce.mil',
+            avatar: 'https://media.giphy.com/media/q7kofYLObTVUk/giphy.gif',
           },
           {
-            first_name: 'Jermiah',
-            last_name: 'Lastname',
+            first_name: 'Giga',
+            last_name: 'Chad',
             rank: 'e5',
             flight: 'bravo-2',
             cert_id: 4,
             weapon_arming: true,
             admin: false,
             email: 'jermiah@@spaceforce.mil',
+            avatar:
+              'https://media.tenor.com/epNMHGvRyHcAAAAC/gigachad-chad.gif',
           },
           {
             first_name: 'Logan',
@@ -100,6 +102,8 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'l.paul@spaceforce.mil',
+            avatar:
+              'https://media.giphy.com/media/XepyCu939TXLtpJ2gl/giphy.gif',
           },
           {
             first_name: 'Ronald',
@@ -110,6 +114,7 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: true,
             email: 'r.mcdonald@spaceforce.mil',
+            avatar: 'https://media3.giphy.com/media/gVXENYotXZvi0/200.gif',
           },
         ]);
       }

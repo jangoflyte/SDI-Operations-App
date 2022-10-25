@@ -5,7 +5,6 @@ import {
   Box,
   Grid,
   LinearProgress,
-  Avatar,
   Button,
   Typography,
   Modal,
@@ -22,7 +21,6 @@ import {
   DialogContentText,
   DialogTitle,
   Tooltip,
-  IconButton,
   Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,9 +28,10 @@ import { useParams } from 'react-router';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from 'react-router-dom';
 import { UserPost } from './UserPost';
+import { WeaponQuals } from '../Features/WeaponQuals';
+import { EditAvatar } from './EditAvatar';
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
@@ -73,7 +72,13 @@ const IndividualMember = () => {
         }}
       >
         <Box>
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'start',
+            }}
+          >
             <Stack direction='row' spacing={2}>
               <a href='/sfmembers' style={{ textDecoration: 'none' }}>
                 People&nbsp;
@@ -85,19 +90,21 @@ const IndividualMember = () => {
                 member.last_name.slice(1)}
             </Stack>
           </Box>
-          <Stack direction='row' alignItems='center' spacing={2} mt={6}>
-            {/* <Avatar>
-              {member.first_name.charAt(0).toUpperCase()}
-              {member.last_name.charAt(0).toUpperCase()}
-            </Avatar> */}
-            <EditAvatar avatar={member} />
-            <h1>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <EditAvatar avatar={member} memberId={memberId} />
+            <Typography variant='h1'>
               {member.first_name.charAt(0).toUpperCase() +
                 member.first_name.slice(1)}{' '}
               {member.last_name.charAt(0).toUpperCase() +
                 member.last_name.slice(1)}
-            </h1>
-          </Stack>
+            </Typography>
+          </Box>
         </Box>
         <Box
           sx={{
@@ -155,9 +162,6 @@ const IndividualMember = () => {
                   <Typography sx={{ mb: 5 }}>No weapons</Typography>
                 ) : member.weapons.length > 3 ? (
                   <Stack direction='row'>
-                    <Typography sx={{ mb: 5 }}>
-                      {member.weapons.length}
-                    </Typography>
                     <WeaponQuals weapon={member.weapons} />
                   </Stack>
                 ) : (
@@ -167,7 +171,9 @@ const IndividualMember = () => {
                       .join(', ')}
                   </Typography>
                 )}
-                <Typography sx={{ fontWeight: 'bold' }}>Email:</Typography>
+                <Typography mt={4} sx={{ fontWeight: 'bold' }}>
+                  Email:
+                </Typography>
 
                 {member.email && member.email.length > 30 ? (
                   <Tooltip title={member.email}>
@@ -547,9 +553,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='First Name'
                 value={firstName}
-                inputProps={{
-                  defaultValue: `${memberObject.first_name}`,
-                }}
                 variant='outlined'
                 onChange={e => setFirstName(e.target.value)}
               />
@@ -559,9 +562,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='Last Name'
                 value={lastName}
-                inputProps={{
-                  defaultValue: `${memberObject.last_name}`,
-                }}
                 variant='outlined'
                 onChange={e => setLastName(e.target.value)}
               />
@@ -705,9 +705,6 @@ const EditMemberModal = props => {
                 id='outlined-basic'
                 label='Email'
                 value={email}
-                inputProps={{
-                  defaultValue: `${memberObject.email}`,
-                }}
                 variant='outlined'
                 onChange={e => setEmail(e.target.value)}
               />
@@ -750,9 +747,6 @@ const EditMemberModal = props => {
               rows={4}
               value={notes === null ? 'N/A' : notes}
               sx={{ mb: 2 }}
-              inputProps={{
-                defaultValue: `${memberObject.notes}`,
-              }}
               onChange={e => setNotes(e.target.value)}
             />
           </Stack>
@@ -818,216 +812,5 @@ const EditMemberModal = props => {
     </>
   );
 };
-
-function WeaponQuals(props) {
-  const { weapon } = props;
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <IconButton
-        variant='outlined'
-        onClick={handleClickOpen}
-        size='small'
-        sx={{ ml: 2, width: 33, height: 33 }}
-      >
-        <AddCircleOutlineIcon />
-      </IconButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'List of Weapon Qualifications:'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            component='span'
-            id='customized-dialog-description'
-          >
-            <ul>
-              {weapon.map((wep, index) => (
-                <li key={index}>
-                  {wep.weapon.toUpperCase()} - {wep.type}
-                </li>
-              ))}
-            </ul>
-          </DialogContentText>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
-
-function EditAvatar(props) {
-  const { avatar } = props;
-  const {
-    API,
-    member,
-    setTriggerFetch,
-    cookies,
-    setCookie,
-    removeCookie,
-    userAccount,
-    setUserAccount,
-  } = useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const [pic, setPic] = useState(avatar.avatar);
-  const [color, setColor] = useState('red');
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-  console.log(pic);
-
-  const defaultPic = () => {
-    if (avatar.id === cookies.user.id) removeCookie('user');
-    fetch(`${API}/updateuser/${member.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        avatar: null,
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    })
-      .then(res => res.json())
-      .then(() => {
-        setTriggerFetch(curr => !curr);
-        if (avatar.id === cookies.user.id) {
-          let userInfo = cookies.user;
-          userInfo.avatar = null;
-          setCookie('user', userInfo, {
-            path: '/',
-            maxAge: 90000,
-            sameSite: 'None',
-            secure: 'true',
-          });
-          setUserAccount({ ...userAccount, avatar: null });
-        }
-        setPic(null);
-        handleClose();
-      })
-      .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
-
-  const handlePic = () => {
-    if (avatar.id === cookies.user.id) removeCookie('user');
-    fetch(`${API}/updateuser/${member.id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({
-        avatar: pic,
-      }),
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    })
-      .then(res => res.json())
-      .then(() => {
-        if (avatar.id === cookies.user.id) {
-          let userInfo = cookies.user;
-          userInfo.avatar = pic;
-          setCookie('user', userInfo, {
-            path: '/',
-            maxAge: 90000,
-            sameSite: 'None',
-            secure: 'true',
-          });
-          setUserAccount({ ...userAccount, avatar: pic });
-        }
-        setTriggerFetch(curr => !curr);
-        handleClose();
-      })
-      .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
-
-  return (
-    <>
-      <Avatar
-        onClick={handleClickOpen}
-        sx={{ cursor: 'pointer', width: 56, height: 56 }}
-        src={pic}
-        alt='avatar'
-        size='large'
-      >
-        {avatar.first_name.charAt(0).toUpperCase()}
-        {avatar.last_name.charAt(0).toUpperCase()}
-      </Avatar>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby='customized-dialog-title'
-        aria-describedby='alert-dialog-description'
-      >
-        <DialogTitle id='customized-dialog-title' sx={{ fontWeight: 'bold' }}>
-          {'Edit Avatar'}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='customized-dialog-description'>
-            <Stack direction='row'>
-              {pic === null ? (
-                <Avatar
-                  src=''
-                  alt='avatar'
-                  sx={{ width: 100, height: 100, bgcolor: color }}
-                >
-                  {avatar.first_name.charAt(0).toUpperCase()}
-                  {avatar.last_name.charAt(0).toUpperCase()}
-                </Avatar>
-              ) : (
-                <Avatar
-                  src={pic}
-                  alt='avatar'
-                  sx={{ width: 100, height: 100 }}
-                />
-              )}
-              <FormControl sx={{ width: '40ch', ml: 3 }}>
-                <TextField
-                  id='outlined-basic'
-                  label='Source'
-                  value={pic}
-                  variant='outlined'
-                  onChange={e => setPic(e.target.value)}
-                ></TextField>
-              </FormControl>
-            </Stack>
-          </DialogContentText>
-          <DialogActions>
-            <Stack
-              direction='row'
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}
-            >
-              <Button onClick={() => handlePic()}>Change Avatar</Button>
-              <Button onClick={() => defaultPic()}>Default</Button>
-              <Button onClick={() => setColor()}>
-                Change Background Color
-              </Button>
-            </Stack>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
-}
 
 export default IndividualMember;

@@ -188,7 +188,7 @@ export default function SignIn() {
           {!apiRes.ok ? (
             <Box sx={{ m: 2, width: '100%' }}>
               <Typography variant='h5' component='h5' sx={{ color: 'white' }}>
-                Connecting to API
+                Connecting to Database
               </Typography>
               <LinearProgress />
             </Box>

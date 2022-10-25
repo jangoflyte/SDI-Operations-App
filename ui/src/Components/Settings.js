@@ -183,7 +183,7 @@ export const Settings = () => {
 
             {/* change day/nights here */}
             {postArray.map((post, index) => {
-              console.log('shift', post.shift.includes(day));
+              // console.log('shift', post.shift.includes(day));
               //console.log(post.shift);
               // post.shift.includes(day) ? (
               //   <PostCard post={post} key={index} />

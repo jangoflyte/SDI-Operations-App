@@ -417,6 +417,15 @@ const getAllNotifications = async () => {
   return joinTable;
 };
 
+const patchNotifications = async ({ id, notification }) => {
+  console.log('patch notifications ran');
+
+  let result = await knex('notification_user')
+    .where({ id: notification.id })
+    .update({ read: true }, ['*']);
+  return result;
+};
+
 module.exports = {
   getAllUsers,
   postUsers,
@@ -443,4 +452,5 @@ module.exports = {
   addPassword,
   getAllNotifications,
   getAllNotificationsById,
+  patchNotifications,
 };
