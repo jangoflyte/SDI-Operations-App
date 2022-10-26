@@ -35,6 +35,8 @@ const {
   getAllNotifications,
   getAllNotificationsById,
   patchNotifications,
+  deleteNotificationsById,
+  postNotification,
 } = require('./controller.js');
 
 const whitelist = [
@@ -193,14 +195,23 @@ app.get('/notifications', (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
-app.get('/notifications/:id', (req, res) => {
-  getAllNotificationsById(req.params.id)
+app.get('/notifications/:userId', (req, res) => {
+  getAllNotificationsById(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
 app.post('/notifications/:userId', (req, res) => {
   //post notification with userid?
+  postNotification({ userId: req.params.userId, notification: req.body })
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.delete('/notifications/:joinId', (req, res) => {
+  deleteNotificationsById(req.params.joinId)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
 app.patch('/notifications/:id', (req, res) => {

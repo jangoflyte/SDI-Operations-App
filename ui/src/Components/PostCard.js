@@ -63,7 +63,7 @@ export const PostCard = props => {
             fontWeight: 'bold',
           }}
         >
-          {post.name}
+          {post.name.charAt(0).toUpperCase() + post.name.slice(1)}
         </Typography>
         <EditPost post={post} />
       </Stack>

@@ -137,43 +137,48 @@ export const MemberDetails = () => {
               />
             </FormControl>
           </Box>
-          <Box justifyContent='right' sx={{ display: 'flex', mx: '80px' }}>
+        </Stack>
+
+        <Box sx={{ display: 'flex', mx: '80px' }} pt={3}>
+          <Box justifyContent='left' sx={{ display: 'flex' }}>
+            <Button
+              color={changeView === 0 ? 'secondary' : 'primary'}
+              variant='contained'
+              size='large'
+              sx={buttonSX}
+              onClick={() => handleView(0)}
+            >
+              All
+            </Button>
+            <Button
+              color={changeView === 2 ? 'secondary' : 'primary'}
+              variant='contained'
+              size='large'
+              sx={buttonSX}
+              onClick={() => handleView(2)}
+            >
+              Users
+            </Button>
+            <Button
+              color={changeView === 1 ? 'secondary' : 'primary'}
+              variant='contained'
+              size='large'
+              sx={buttonSX}
+              onClick={() => handleView(1)}
+            >
+              Admins
+            </Button>
+          </Box>
+          <Box
+            justifyContent='right'
+            sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}
+          >
             {userAccount !== null && userAccount.admin ? (
               <AddMemberModal />
             ) : (
               <></>
             )}
           </Box>
-        </Stack>
-
-        <Box justifyContent='left' sx={{ display: 'flex', mx: '80px' }} pt={3}>
-          <Button
-            color={changeView === 0 ? 'secondary' : 'primary'}
-            variant='contained'
-            size='large'
-            sx={buttonSX}
-            onClick={() => handleView(0)}
-          >
-            All
-          </Button>
-          <Button
-            color={changeView === 2 ? 'secondary' : 'primary'}
-            variant='contained'
-            size='large'
-            sx={buttonSX}
-            onClick={() => handleView(2)}
-          >
-            Users
-          </Button>
-          <Button
-            color={changeView === 1 ? 'secondary' : 'primary'}
-            variant='contained'
-            size='large'
-            sx={buttonSX}
-            onClick={() => handleView(1)}
-          >
-            Admins
-          </Button>
         </Box>
 
         <Stack>{viewArray[changeView]}</Stack>
@@ -313,7 +318,7 @@ const AddMemberModal = () => {
         onClick={handleOpen}
         variant='contained'
         color='secondary'
-        size='medium'
+        size='large'
         sx={{ borderRadius: '30px' }}
       >
         Add User

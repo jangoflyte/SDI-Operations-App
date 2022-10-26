@@ -25,7 +25,7 @@ import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
 import '../styles/MembersDetail.css';
-import logo from '../passlogo.png';
+import logo from '../passlogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
 import { NotificationModal } from '../Features/Notification.jsx';
 import { AvatarMenu } from '../Features/AvatarMenu';
@@ -129,25 +129,6 @@ export default function PersistentDrawerLeft() {
                 <img src={logo} alt='logo' style={{ width: 140 }} />
               </Button>
             )}
-            {toggle === false ? (
-              <Typography
-                variant='subtitle2'
-                component='span'
-                onClick={() => handleToggle()}
-                sx={{ cursor: 'pointer' }}
-              >
-                <u>PASS</u>
-              </Typography>
-            ) : (
-              <Typography
-                variant='subtitle2'
-                component='span'
-                onClick={() => handleToggle()}
-                sx={{ cursor: 'pointer' }}
-              >
-                <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
-              </Typography>
-            )}
           </Box>
           <Grid
             xs
@@ -156,6 +137,27 @@ export default function PersistentDrawerLeft() {
             alignItems='center'
             mr={2}
           >
+            {toggle === false ? (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer' }}
+              >
+                {/* <b>PASS</b> */}
+                <b>PASS</b>
+              </Typography>
+            ) : (
+              <Typography
+                variant='subtitle2'
+                component='span'
+                onClick={() => handleToggle()}
+                sx={{ cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
+                {/* // link to nowhere interupting the flow */}
+              </Typography>
+            )}
             {userAccount === null ? (
               <Typography variant='h5' component='h6'>
                 <Button
@@ -186,6 +188,7 @@ export default function PersistentDrawerLeft() {
             width: drawerWidth,
             boxSizing: 'border-box',
             backgroundColor: '#212121',
+            hover: '#8B8989	',
             color: 'white',
           },
         }}

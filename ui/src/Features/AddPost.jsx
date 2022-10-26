@@ -44,16 +44,15 @@ const MenuProps = {
 };
 
 export const AddPost = () => {
-  const { API, setTriggerFetch, setToggle, allWeapons } =
-    useContext(MemberContext);
+  const { API, setTriggerFetch, allWeapons } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [postName, setPostName] = useState(null);
+  const [postName, setPostName] = useState('');
   const [weapon, setWeapon] = useState([]);
   const [weaponIdArray, setWeaponIdArray] = useState([]);
-  const [manReq, setManReq] = useState(null);
-  const [cert, setCert] = useState(null);
+  const [manReq, setManReq] = useState('');
+  const [cert, setCert] = useState('');
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
@@ -76,13 +75,19 @@ export const AddPost = () => {
       .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggle(true);
-        setPostName(null);
-        setManReq(null);
-        setCert(null);
-        setWeapon([]);
         handleClose();
+
+        setTriggerFetch(curr => !curr);
+
+        setPostName(null);
+
+        setManReq(null);
+
+        setCert(null);
+
+        setWeapon([]);
+
+        // setToggleAlert(true);
       })
       .catch(err => {
         console.log('Error: ', err);

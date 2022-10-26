@@ -8,7 +8,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import logo from '../passlogo.png';
+import logo from '../passlogo.svg';
 
 export default function SignIn() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);
@@ -26,7 +26,7 @@ export default function SignIn() {
   }, [API]);
 
   useEffect(() => {
-    console.log('api res ', apiRes.ok);
+    // console.log('api res ', apiRes.ok);
   }, [apiRes]);
 
   const postLogin = () => {
@@ -53,7 +53,7 @@ export default function SignIn() {
         // console.log(data);
         if (data === undefined) return;
         if (data.cookie !== undefined) {
-          console.log('return data', data);
+          // console.log('return data', data);
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
             maxAge: cookieInfo[2].maxAge,
