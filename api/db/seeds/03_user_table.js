@@ -98,7 +98,7 @@ exports.seed = async function (knex) {
             last_name: 'Paul',
             rank: 'e6',
             flight: 'bravo-2',
-            cert_id: 1,Giga
+            cert_id: 1,
             email: 'l.paul@spaceforce.mil',
             avatar:
               'https://media.giphy.com/media/XepyCu939TXLtpJ2gl/giphy.gif',
