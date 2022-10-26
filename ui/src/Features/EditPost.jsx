@@ -97,7 +97,7 @@ export const EditPost = props => {
       shift: shift,
     };
 
-    console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
+    // console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
     fetch(`${API}/position/${post.id}`, {
       method: 'PATCH',

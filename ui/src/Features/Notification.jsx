@@ -1,10 +1,24 @@
 import React, { useState, useContext } from 'react';
-import { Modal, Card, Box, Typography, Chip, Badge } from '@mui/material';
+import {
+  Modal,
+  Card,
+  Box,
+  Typography,
+  Chip,
+  Badge,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Avatar,
+} from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import CloseIcon from '@mui/icons-material/Close';
 import { MemberContext } from '../Components/MemberContext';
 import { useEffect } from 'react';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 export const NotificationModal = () => {
   const [open, setOpen] = useState(false);
@@ -12,6 +26,8 @@ export const NotificationModal = () => {
   const handleClose = () => setOpen(false);
   const { userAccount, API } = useContext(MemberContext);
   const [notifications, setNotifications] = useState([]);
+  const [unreadArray, setUnreadArray] = useState([]);
+  const [triggerNotification, setTriggerNotification] = useState(false);
 
   const style = {
     position: 'absolute',
@@ -31,7 +47,11 @@ export const NotificationModal = () => {
 
   useEffect(() => {
     getNotification();
-  }, []);
+  }, [triggerNotification]);
+
+  // useEffect(() => {
+  //   console.log('unread array, ', unreadArray);
+  // }, [unreadArray]);
 
   const getNotification = () => {
     fetch(`${API}/notifications/${userAccount.id}`, {
@@ -46,7 +66,9 @@ export const NotificationModal = () => {
         // const notif = data.filter(
         //   notification => notification.user_id === userAccount.id
         // );
+        data.sort(({ id: a }, { id: b }) => a - b);
         setNotifications(data);
+        setUnreadArray(data.filter(notification => !notification.read));
         console.log(`notifications after set`, notifications);
       })
       .catch(err => {
@@ -56,9 +78,10 @@ export const NotificationModal = () => {
     console.log(`notification`);
   };
 
-  const onClick = () => {
+  const handleClick = () => {
     getNotification();
     handleOpen();
+    setTriggerNotification(!triggerNotification);
   };
 
   const NotificationRead = notifId => {
@@ -75,6 +98,27 @@ export const NotificationModal = () => {
       .then(res => res.json())
       .then(data => {
         console.log(`data after patch`, data);
+        setTriggerNotification(!triggerNotification);
+      })
+      .catch(err => {
+        console.log('Error: ', err);
+      });
+  };
+
+  // /notifications/:joinId
+
+  const NotificationDelete = joinId => {
+    fetch(`${API}/notifications/${joinId}`, {
+      method: 'DELETE',
+      body: JSON.stringify({}),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(`data after delete`, data);
+        setTriggerNotification(!triggerNotification);
       })
       .catch(err => {
         console.log('Error: ', err);
@@ -93,11 +137,11 @@ export const NotificationModal = () => {
         color='secondary'
         overlap='circular'
         //increment this with number of notifications
-        badgeContent={notifications.length}
+        badgeContent={unreadArray.length > 0 ? unreadArray.length : null}
         showZero
       >
         <NotificationsIcon
-          onClick={onClick}
+          onClick={handleClick}
           alt='notification'
           src=''
           sx={{
@@ -140,7 +184,7 @@ export const NotificationModal = () => {
               </Typography>
             )}
             {notifications.map((notif, index) => (
-              <span key={index}>
+              <Accordion key={index}>
                 <Card
                   sx={
                     notif.read
@@ -159,7 +203,9 @@ export const NotificationModal = () => {
                         }
                   }
                 >
-                  <CalendarTodayIcon />
+                  <Avatar sx={{ bgcolor: '#6D7AE5' }}>
+                    <CalendarTodayIcon />
+                  </Avatar>
 
                   <Box
                     sx={{
@@ -170,23 +216,78 @@ export const NotificationModal = () => {
                       width: '100%',
                     }}
                   >
-                    <Typography>{notif.notification.name}</Typography>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls='panel1a-content'
+                      id='panel1a-header'
+                      onClick={() => {
+                        if (notif.read) return;
+                        NotificationRead(notif.id);
+                      }}
+                    >
+                      <Typography>{notif.notification.name}</Typography>
+                    </AccordionSummary>
+                  </Box>
+                </Card>
+                <AccordionDetails>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                      padding: 1,
+                      width: '100%',
+                    }}
+                  >
                     <Typography>
+                      Date Received:{' '}
                       {new Date(notif.notification.date_time).toDateString()}
                     </Typography>
+                    <Typography>
+                      Time Received:{' '}
+                      {
+                        new Date(notif.notification.date_time)
+                          .toTimeString()
+                          .split(' ')[0]
+                      }
+                    </Typography>
                   </Box>
-                  <Chip
+                  <Box
                     sx={{
-                      borderRadius: 10,
-                      color: 'red',
-                      mr: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-around',
+                      padding: 1,
+                      width: '100%',
                     }}
-                    onClick={() => NotificationRead(notif.id)}
-                    size='small'
-                    label='X'
-                  />
-                </Card>
-              </span>
+                  >
+                    <Chip
+                      sx={{
+                        borderRadius: 10,
+                        color: 'green',
+                        mr: 1,
+                      }}
+                      onClick={() => NotificationRead(notif.id)}
+                      size='small'
+                      icon={<CheckIcon />}
+                      label='Notification Unread'
+                      clickable
+                    />
+                    <Chip
+                      sx={{
+                        borderRadius: 10,
+                        color: 'red',
+                        mr: 1,
+                      }}
+                      onClick={() => NotificationDelete(notif.id)}
+                      size='small'
+                      label='Delete Notification'
+                      icon={<ClearIcon />}
+                      clickable
+                    />
+                  </Box>
+                </AccordionDetails>
+              </Accordion>
             ))}
           </Box>
         </Box>

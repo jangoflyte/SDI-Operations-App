@@ -11,6 +11,10 @@ const theme = createTheme({
     secondary: {
       main: '#BD5334',
     },
+    info: {
+      main: '#6D7AE5',
+      light: '#8f95c3',
+    },
   },
 });
 const root = ReactDOM.createRoot(document.getElementById('root'));

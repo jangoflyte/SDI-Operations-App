@@ -105,7 +105,7 @@ const PostMemberModal = props => {
         return res.json();
       })
       .then(data => {
-        console.log(data);
+        // console.log(data);
         // call update for users
         fetchSchedule();
         setToggleAlert(true);
@@ -302,7 +302,7 @@ const PostMemberModal = props => {
                           {user.first_name.charAt(0).toUpperCase()}
                           {user.last_name.charAt(0).toUpperCase()}
                         </Avatar>
-                        {console.log(user)}
+
                         {`${
                           user.first_name.charAt(0).toUpperCase() +
                           user.first_name.slice(1)

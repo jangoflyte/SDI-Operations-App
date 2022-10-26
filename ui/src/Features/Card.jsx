@@ -68,7 +68,7 @@ const BasicCard = props => {
   }, []);
 
   const navigateToMember = member => {
-    console.log('current member', member);
+    // console.log('current member', member);
     setMember(member);
     navigate(`/sfmembers/${member.id}`);
   };
@@ -255,7 +255,7 @@ const BasicCard = props => {
                         sx={{
                           cursor: 'pointer',
                           fontWeight: 'bold',
-                          color: 'blue',
+                          color: '#6D7AE5',
                         }}
                       >
                         {' '}

@@ -11,7 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
 import { useState, useContext } from 'react';
-import logo from '../passlogo.png';
+import logo from '../passlogo.svg';
 
 export default function SignUp() {
   const { API, setCookie, setUserAccount } = useContext(MemberContext);
@@ -51,7 +51,7 @@ export default function SignUp() {
       body: JSON.stringify(userInfo),
     })
       .then(res => {
-        console.log(res.status);
+        // console.log(res.status);
         if (res.status === 409) {
           setUserExists(true);
         } else if (res.status === 201) {
@@ -61,11 +61,11 @@ export default function SignUp() {
         }
       })
       .then(data => {
-        console.log('fetch data', data);
+        // console.log('fetch data', data);
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
           let user_id = data.user;
-          console.log(user_id);
+          // console.log(user_id);
           setCookie('user', JSON.stringify(data.user), {
             path: '/',
             maxAge: cookieInfo[2].maxAge,

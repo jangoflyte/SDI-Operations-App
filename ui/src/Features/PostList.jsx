@@ -7,7 +7,7 @@ import {
   Alert,
   Fade,
   TextField,
-  Stack,
+  Avatar,
 } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -27,6 +27,7 @@ import EditSchedule from './EditSchedule';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { WeaponQuals } from './WeaponQuals';
+import { useNavigate } from 'react-router-dom';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert } = useContext(MemberContext);
@@ -69,7 +70,7 @@ export default function CollapsibleTable() {
   };
 
   const fetchSchedule = () => {
-    console.log('fetching schedule, schedDate:', schedDate);
+    console.log('fetching schedule');
     let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
@@ -108,7 +109,7 @@ export default function CollapsibleTable() {
         return res.json();
       })
       .then(data => {
-        console.log(data);
+        // console.log(data);
         fetchSchedule();
       })
       .catch(err => {
@@ -242,7 +243,7 @@ export default function CollapsibleTable() {
           // fontFamily":"Roboto",
           shift === 'Days'
             ? {
-                color: '#29b6f6',
+                color: '#6D7AE5',
                 textShadow: '1px 1px 2px #454545',
               }
             : {
@@ -319,7 +320,7 @@ export default function CollapsibleTable() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 2,
-                      borderColor: shift === 'Days' ? '#4fc3f7' : '#ffa726',
+                      borderColor: shift === 'Days' ? '#6D7AE5' : '#ffa726',
                       borderRadius: 1,
                     }
                   : {
@@ -383,6 +384,7 @@ export default function CollapsibleTable() {
         component={Paper}
         sx={{
           boxShadow: 5,
+          borderColor: shift === 'Days' ? '#6D7AE5' : '#ffa726',
         }}
       >
         <Table aria-label='collapsible table'>
@@ -416,6 +418,8 @@ const Row = props => {
   const { row } = props;
   const [open, setOpen] = useState(false);
   const splitArr = row.weapons.split(' ');
+  const { color } = useContext(MemberContext);
+  const navigate = useNavigate();
 
   return (
     <React.Fragment>
@@ -440,7 +444,7 @@ const Row = props => {
               justifyContent: 'space-between',
             }}
           >
-            {row.name}
+            {row.name.charAt(0).toUpperCase() + row.name.slice(1)}
             {row.users.filter(user => user.noUser === true).length > 0 && (
               <Box
                 sx={{
@@ -529,8 +533,12 @@ const Row = props => {
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Posted</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Members</TableCell>
+                    <TableCell align='left' sx={{ fontWeight: 'bold' }}>
+                      Posted
+                    </TableCell>
+                    <TableCell align='left' sx={{ fontWeight: 'bold' }}>
+                      Members
+                    </TableCell>
                     <TableCell align='right'> </TableCell>
                     <TableCell align='right'> </TableCell>
                   </TableRow>
@@ -569,8 +577,38 @@ const Row = props => {
                         )}
                       </TableCell>
                       <TableCell>
-                        {!userRow.noUser
-                          ? `${
+                        {!userRow.noUser ? (
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'start',
+                              gap: 1,
+                            }}
+                          >
+                            <Avatar
+                              sx={{ cursor: 'pointer', bgcolor: color }}
+                              src={userRow.user_info[0].avatar}
+                              alt='avatar'
+                              size='small'
+                              onClick={() =>
+                                navigate(
+                                  `/sfmembers/${userRow.user_info[0].id}`
+                                )
+                              }
+                            >
+                              {userRow.user_info[0].first_name
+                                ? userRow.user_info[0].first_name
+                                    .charAt(0)
+                                    .toUpperCase()
+                                : null}
+                              {userRow.user_info[0].last_name
+                                ? userRow.user_info[0].last_name
+                                    .charAt(0)
+                                    .toUpperCase()
+                                : null}
+                            </Avatar>
+                            {`${
                               userRow.user_info[0].first_name
                                 .charAt(0)
                                 .toUpperCase() +
@@ -580,15 +618,18 @@ const Row = props => {
                                 .charAt(0)
                                 .toUpperCase() +
                               userRow.user_info[0].last_name.slice(1)
-                            }`
-                          : `No One Posted`}
+                            }
+                            `}
+                          </Box>
+                        ) : (
+                          `No One Posted`
+                        )}
                       </TableCell>
                       <TableCell align='right'>
                         {!userRow.noUser &&
-                          `${userRow.user_info[0].weapons.map(
-                            wep => `${wep.weapon.toUpperCase()} `
-                            //wep => wep.join(', ')
-                          )}`}
+                          `${userRow.user_info[0].weapons
+                            .map(wep => `${wep.weapon.toUpperCase()}`)
+                            .join(', ')}`}
                       </TableCell>
                       <TableCell align='right'>
                         {!userRow.noUser &&

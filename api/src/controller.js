@@ -382,8 +382,8 @@ const addPassword = async props => {
 
 // notifications //////////////////////////////////////////////////
 const getNotificationById = async id => {
-  console.log('get notification id ', id);
-  const result = await knex('notification').where({ id: id });
+  //console.log('get notification id ', id);
+  const result = await knex('notification').select('*').where({ id: id });
   return result[0];
 };
 
@@ -393,26 +393,32 @@ const getAllNotificationsById = async id => {
     .select('*')
     .where({ user_id: id });
   for (let join of joinTable) {
-    let userObj = await individualUser(join.user_id);
-    delete userObj[0].password;
-    join.user = userObj[0];
+    if (join.user_id !== null || join.notification_id !== null) {
+      let userObj = await individualUser(join.user_id);
+      delete userObj[0].password;
+      join.user = userObj[0];
 
-    let notifObj = await getNotificationById(join.notification_id);
-    join.notification = notifObj;
+      let notifObj = await getNotificationById(join.notification_id);
+      join.notification = notifObj;
+    }
   }
   return joinTable;
 };
 
 const getAllNotifications = async () => {
-  let joinTable = await knex('notification_user').select('*');
+  let joinTable = await knex('notification_user')
+    .select('*')
+    .orderBy('id', 'asc');
 
   for (let join of joinTable) {
-    let userObj = await individualUser(join.user_id);
-    delete userObj[0].password;
-    join.user = userObj[0];
+    if (join.user_id !== null || join.notification_id !== null) {
+      let userObj = await individualUser(join.user_id);
+      delete userObj[0].password;
+      join.user = userObj[0];
 
-    let notifObj = await getNotificationById(join.notification_id);
-    join.notification = notifObj;
+      let notifObj = await getNotificationById(join.notification_id);
+      join.notification = notifObj;
+    }
   }
   return joinTable;
 };
@@ -423,6 +429,31 @@ const patchNotifications = async ({ id, notification }) => {
   let result = await knex('notification_user')
     .where({ id: notification.id })
     .update({ read: true }, ['*']);
+  return result;
+};
+
+const deleteNotificationsById = async joinId => {
+  console.log('delete notifications', joinId);
+  let result = await knex('notification_user')
+    .where({ id: joinId })
+    .delete(['*']);
+  console.log('delete notification results', result);
+  return result;
+};
+
+const postNotification = async ({ userId, notification }) => {
+  console.log('post notification ran', userId, notification);
+  let joinResult = await knex('notification').insert(notification, ['*']);
+
+  let result = await knex('notification_user').insert(
+    {
+      user_id: userId,
+      notification_id: joinResult[0].id,
+    },
+    ['*']
+  );
+  // .where({ user_id: userId });
+  console.log('post notification join results', joinResult, 'result ', result);
   return result;
 };
 
@@ -453,4 +484,6 @@ module.exports = {
   getAllNotifications,
   getAllNotificationsById,
   patchNotifications,
+  deleteNotificationsById,
+  postNotification,
 };

@@ -248,7 +248,7 @@ const AdminCard = props => {
                           sx={{
                             cursor: 'pointer',
                             fontWeight: 'bold',
-                            color: 'blue',
+                            color: '#6D7AE5',
                           }}
                         >
                           {member.last_name.charAt(0).toUpperCase() +

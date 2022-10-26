@@ -22,6 +22,7 @@ import {
   DialogTitle,
   Tooltip,
   Divider,
+  Avatar,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
@@ -34,7 +35,7 @@ import { WeaponQuals } from '../Features/WeaponQuals';
 import { EditAvatar } from './EditAvatar';
 
 const IndividualMember = () => {
-  const { member, API, setMember, triggerFetch, userAccount } =
+  const { member, API, setMember, triggerFetch, userAccount, color } =
     useContext(MemberContext);
   const { memberId } = useParams();
   const [scheduleArray, setScheduleArray] = useState(null);
@@ -80,7 +81,10 @@ const IndividualMember = () => {
             }}
           >
             <Stack direction='row' spacing={2}>
-              <a href='/sfmembers' style={{ textDecoration: 'none' }}>
+              <a
+                href='/sfmembers'
+                style={{ textDecoration: 'none', color: '#6D7AE5' }}
+              >
                 People&nbsp;
               </a>
               {`> `}
@@ -102,7 +106,30 @@ const IndividualMember = () => {
               justifyContent: 'center',
             }}
           >
-            <EditAvatar avatar={member} memberId={memberId} />
+            {userAccount !== null ? (
+              userAccount.id === parseInt(memberId) ? (
+                <EditAvatar avatar={member} memberId={memberId} />
+              ) : (
+                <Avatar
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    bgcolor: color,
+                  }}
+                  src={member.avatar}
+                  alt='avatar'
+                  size='large'
+                >
+                  {member.first_name
+                    ? `${member.first_name.charAt(0).toUpperCase()}`
+                    : `F`}
+                  {member.last_name
+                    ? `${member.last_name.charAt(0).toUpperCase()}`
+                    : `L`}
+                </Avatar>
+              )
+            ) : null}
+            {/* <EditAvatar avatar={member} memberId={memberId} /> */}
             <Typography variant='h1'>
               {member.first_name
                 ? `${member.first_name
@@ -646,6 +673,7 @@ const EditMemberModal = props => {
                 label='Arm'
                 sx={{ mb: 2 }}
                 onChange={e => setStatus(e.target.value)}
+                disabled={!(userAccount !== null && userAccount.admin)}
               >
                 <MenuItem value={true}>Arm 🟢</MenuItem>
                 <MenuItem value={false}>Do Not Arm🔴</MenuItem>

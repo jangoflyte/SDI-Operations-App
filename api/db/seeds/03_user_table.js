@@ -82,7 +82,7 @@ exports.seed = async function (knex) {
             avatar: 'https://media.giphy.com/media/q7kofYLObTVUk/giphy.gif',
           },
           {
-            first_name: 'Giga',
+            first_name: 'Swanson',
             last_name: 'Chad',
             rank: 'e5',
             flight: 'bravo-2',
@@ -98,9 +98,7 @@ exports.seed = async function (knex) {
             last_name: 'Paul',
             rank: 'e6',
             flight: 'bravo-2',
-            cert_id: 1,
-            weapon_arming: true,
-            admin: false,
+            cert_id: 1,Giga
             email: 'l.paul@spaceforce.mil',
             avatar:
               'https://media.giphy.com/media/XepyCu939TXLtpJ2gl/giphy.gif',
