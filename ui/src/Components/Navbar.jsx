@@ -24,6 +24,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
+import SchoolIcon from '@mui/icons-material/School';
 import '../styles/MembersDetail.css';
 import logo from '../passlogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -238,6 +239,18 @@ export default function PersistentDrawerLeft() {
                 <GroupsIcon sx={{ color: 'white' }} />
               </ListItemIcon>
               <ListItemText primary='People' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/training')}
+            >
+              <ListItemIcon>
+                <SchoolIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Training' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
 

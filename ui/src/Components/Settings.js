@@ -82,7 +82,11 @@ export const Settings = () => {
           Settings
         </Typography>
         <Box
-          sx={{ width: 500, display: 'flex', justifyContent: 'space-between' }}
+          sx={{
+            width: '60vw',
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
         >
           {postsPage === true ? (
             <>

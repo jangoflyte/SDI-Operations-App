@@ -19,7 +19,5 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 
 export const UpdatePosts = () => {
-  return (
-
-  );
+  return <></>;
 };

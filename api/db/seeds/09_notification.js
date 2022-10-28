@@ -6,7 +6,9 @@ exports.seed = async function (knex) {
   // Deletes ALL existing entries
   await knex('notification').del();
   await knex('notification').insert([
-    { name: 'test-notification' },
+    {
+      name: 'Welcome to PASS! Your destination for post assignment and scheduling needs',
+    },
     { name: 'test-notification 2' },
     { name: 'test-notification 3' },
     { name: 'test-notification 4' },

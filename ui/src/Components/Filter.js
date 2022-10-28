@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-//import { MemberContext } from './MemberContext';
+import React, { useState, useContext } from 'react';
+import { MemberContext } from './MemberContext';
 import {
   Box,
   Typography,
@@ -13,14 +13,11 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-export const Filter = () => {
-  //const { usersArray } = useContext(MemberContext);
+export const Filter = ({ setFilter, filter }) => {
+  const { allWeapons } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  //   const [cert, setCert] = useState(0);
-  //   const [weapon, setWeapon] = useState(0);
-  //   const [status, setStatus] = useState(false);
 
   const style = {
     position: 'absolute',
@@ -36,25 +33,81 @@ export const Filter = () => {
     borderRadius: 4,
   };
 
-  // const entry = usersArray.filter(member => member.cert_id === 1);
-  // const patrol = usersArray.filter(member => member.cert_id === 2);
-  // const desk = usersArray.filter(member => member.cert_id === 3);
-  // const sergeant = usersArray.filter(member => member.cert_id === 4);
+  const handleCheckCert = box => {
+    const id = Number(box.parentNode.parentNode.id);
+    console.log(box.checked, id);
+    if (box.checked) {
+      setFilter(prev => {
+        let newArr = prev.certification;
+        newArr.push(id);
+        return { ...prev, certification: newArr };
+      });
+    } else {
+      setFilter(prev => {
+        let newArr = prev.certification.filter(cert => cert !== id);
+        return { ...prev, certification: newArr };
+      });
+    }
+  };
 
-  // const arm = usersArray.filter(member => member.weapon_arming === true);
-  // const noarm = usersArray.filter(member => member.weapon_arming === false);
+  const handleCheckQual = box => {
+    const id = box.parentNode.parentNode.id;
+    console.log(box.checked, id);
+    if (box.checked) {
+      setFilter(prev => {
+        let newArr = prev.weapon;
+        newArr.push(id);
+        return { ...prev, weapon: newArr };
+      });
+    } else {
+      setFilter(prev => {
+        let newArr = prev.weapon.filter(cert => cert !== id);
+        return { ...prev, weapon: newArr };
+      });
+    }
+  };
 
-  //console.log(noarm)
+  const handleCheckArming = box => {
+    const id = box.parentNode.parentNode.id;
+    console.log(box.checked, id);
+    if (box.checked) {
+      setFilter(prev => {
+        let newArr = prev.arming_status;
+        newArr.push(id);
+        return { ...prev, arming_status: newArr };
+      });
+    } else {
+      setFilter(prev => {
+        let newArr = prev.arming_status.filter(cert => cert !== id);
+        return { ...prev, arming_status: newArr };
+      });
+    }
+  };
 
   return (
-    <>
+    <Box sx={{ display: 'flex', gap: 1 }}>
       <Button
         onClick={handleOpen}
-        variant='outlined'
+        variant='contained'
         color='secondary'
         sx={{ borderRadius: '30px' }}
       >
         Filter
+      </Button>
+      <Button
+        onClick={() =>
+          setFilter({
+            ...filter,
+            certification: [],
+            weapon: [],
+            arming_status: [],
+          })
+        }
+        variant='outlined'
+        color='secondary'
+        sx={{ borderRadius: '30px' }}
+      >
+        Clear Filter
       </Button>
       <Modal
         open={open}
@@ -66,41 +119,112 @@ export const Filter = () => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
+
           <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
             Filters
           </Typography>
+
           <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
               By Certification
             </FormLabel>
             <FormGroup>
-              <FormControlLabel
-                control={<Checkbox name='ecp' />}
-                label='Entry Controller'
-              />
-              <FormControlLabel
-                control={<Checkbox name='patrol' />}
-                label='Patrol'
-              />
-              <FormControlLabel
-                control={<Checkbox name='desk' />}
-                label='Desk Sergeant'
-              />
-              <FormControlLabel
-                control={<Checkbox name='flight chief' />}
-                label='Flight Chief'
-              />
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='ecp'
+                        checked={filter.certification.includes(1)}
+                      />
+                    }
+                    label='Entry Controller'
+                    id='1'
+                    onClick={e => {
+                      handleCheckCert(e.target);
+                    }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='patrol'
+                        checked={filter.certification.includes(2)}
+                      />
+                    }
+                    label='Patrol'
+                    id='2'
+                    onClick={e => {
+                      handleCheckCert(e.target);
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='desk'
+                        checked={filter.certification.includes(3)}
+                      />
+                    }
+                    label='Desk Sergeant'
+                    id='3'
+                    onClick={e => {
+                      handleCheckCert(e.target);
+                    }}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='flight chief'
+                        checked={filter.certification.includes(4)}
+                      />
+                    }
+                    label='Flight Chief'
+                    id='4'
+                    onClick={e => {
+                      handleCheckCert(e.target);
+                    }}
+                  />
+                </Box>
+              </Box>
             </FormGroup>
 
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
               By Weapon Qualification
             </FormLabel>
             <FormGroup>
-              <FormControlLabel control={<Checkbox name='m4' />} label='M-4' />
-              <FormControlLabel
-                control={<Checkbox name='m18' />}
-                label='M-18'
-              />
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {allWeapons.map((wep, index) => (
+                  <Box key={index} sx={{ width: '50%' }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name={wep.weapon}
+                          checked={filter.weapon.includes(wep.weapon)}
+                        />
+                      }
+                      label={wep.weapon}
+                      id={wep.weapon}
+                      onClick={e => {
+                        handleCheckQual(e.target);
+                      }}
+                    />
+                  </Box>
+                ))}
+              </Box>
             </FormGroup>
 
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
@@ -108,17 +232,56 @@ export const Filter = () => {
             </FormLabel>
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox name='arm' />}
+                control={
+                  <Checkbox
+                    name='arm'
+                    checked={filter.arming_status.includes('true')}
+                  />
+                }
                 label='Can Arm'
+                id='true'
+                onClick={e => {
+                  handleCheckArming(e.target);
+                }}
               />
               <FormControlLabel
-                control={<Checkbox name='no arm' />}
+                control={
+                  <Checkbox
+                    name='no arm'
+                    checked={filter.arming_status.includes('false')}
+                  />
+                }
                 label='Cannot Arm'
+                id='false'
+                onClick={e => {
+                  handleCheckArming(e.target);
+                }}
               />
             </FormGroup>
           </FormControl>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Button
+              onClick={() =>
+                setFilter({
+                  ...filter,
+                  certification: [],
+                  weapon: [],
+                  arming_status: [],
+                })
+              }
+              sx={{ cursor: 'pointer' }}
+            >
+              Clear Filter
+            </Button>
+          </Box>
         </Box>
       </Modal>
-    </>
+    </Box>
   );
 };

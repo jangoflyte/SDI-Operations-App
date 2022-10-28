@@ -2,8 +2,7 @@ import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import BasicCard from '../Features/Card';
-import AdminCard from '../Features/AdminCard';
-import UserCard from '../Features/UserCard';
+
 import {
   Box,
   LinearProgress,
@@ -40,6 +39,12 @@ export const MemberDetails = () => {
   const [changeView, setChangeView] = useState(0);
   const [flag, setFlag] = useState(false);
   const [pageTrigger, setPageTrigger] = useState(true);
+  const [filter, setFilter] = useState({
+    certification: [],
+    weapon: [],
+    arming_status: [],
+    admin: null,
+  });
 
   useEffect(() => {
     fetch(`${API}/usersearch/${searchText}`, {
@@ -63,12 +68,6 @@ export const MemberDetails = () => {
     }, 3000);
   }, [toggleAlert]);
 
-  const viewArray = [
-    <BasicCard key={1} pageTrigger={pageTrigger} />,
-    <AdminCard key={2} pageTrigger={pageTrigger} />,
-    <UserCard key={3} pageTrigger={pageTrigger} />,
-  ];
-
   const buttonSX = {
     borderRadius: '30px',
     marginRight: '10px',
@@ -85,7 +84,14 @@ export const MemberDetails = () => {
     );
   } else {
     return (
-      <Box>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+        }}
+      >
         <Stack
           sx={{
             width: '100vw',
@@ -100,88 +106,108 @@ export const MemberDetails = () => {
             </Alert>
           </Fade>
         </Stack>
-
-        <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
-          People
-        </Typography>
-        <Stack
-          component='span'
-          direction='row'
-          alignItems='center'
-          justifyContent='space-between'
-          sx={{ display: 'flex' }}
-        >
-          <Box
-            justifyContent='left'
-            sx={{
-              maxWidth: '100%',
-              mx: '80px',
-              display: 'flex',
-            }}
+        <Box sx={{ width: '90%' }}>
+          <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
+            People
+          </Typography>
+          <Stack
+            component='span'
+            direction='row'
+            alignItems='center'
+            justifyContent='space-between'
+            sx={{ display: 'flex' }}
           >
-            <FormControl sx={{ width: '40ch', backgroundColor: 'white' }}>
-              <TextField
-                label='Search People'
-                id='fullWidth'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <SearchIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                onChange={e => {
-                  setSearchText(e.target.value);
-                  setPageTrigger(!pageTrigger);
-                }}
-              />
-            </FormControl>
-          </Box>
-        </Stack>
+            <Box
+              justifyContent='left'
+              sx={{
+                width: '100%',
+                ml: 10,
+                display: 'flex',
+              }}
+            >
+              <FormControl sx={{ width: '40ch', backgroundColor: 'white' }}>
+                <TextField
+                  label='Search People'
+                  id='fullWidth'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  onChange={e => {
+                    setSearchText(e.target.value);
+                    setPageTrigger(!pageTrigger);
+                  }}
+                />
+              </FormControl>
+            </Box>
+          </Stack>
 
-        <Box sx={{ display: 'flex', mx: '80px' }} pt={3}>
-          <Box justifyContent='left' sx={{ display: 'flex' }}>
-            <Button
-              color={changeView === 0 ? 'secondary' : 'primary'}
-              variant='contained'
-              size='large'
-              sx={buttonSX}
-              onClick={() => handleView(0)}
+          <Box sx={{ display: 'flex', mx: '80px' }} pt={3}>
+            <Box justifyContent='left' sx={{ display: 'flex' }}>
+              <Button
+                color={changeView === 0 ? 'secondary' : 'primary'}
+                variant='contained'
+                size='large'
+                sx={buttonSX}
+                onClick={() => {
+                  handleView(0);
+                  setFilter({ ...filter, admin: null });
+                }}
+              >
+                All
+              </Button>
+              <Button
+                color={changeView === 2 ? 'secondary' : 'primary'}
+                variant='contained'
+                size='large'
+                sx={buttonSX}
+                onClick={() => {
+                  handleView(2);
+                  setFilter({ ...filter, admin: false });
+                }}
+              >
+                Users
+              </Button>
+              <Button
+                color={changeView === 1 ? 'secondary' : 'primary'}
+                variant='contained'
+                size='large'
+                sx={buttonSX}
+                onClick={() => {
+                  handleView(1);
+                  setFilter({ ...filter, admin: true });
+                }}
+              >
+                Admins
+              </Button>
+            </Box>
+            <Box
+              justifyContent='right'
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                width: '100%',
+              }}
             >
-              All
-            </Button>
-            <Button
-              color={changeView === 2 ? 'secondary' : 'primary'}
-              variant='contained'
-              size='large'
-              sx={buttonSX}
-              onClick={() => handleView(2)}
-            >
-              Users
-            </Button>
-            <Button
-              color={changeView === 1 ? 'secondary' : 'primary'}
-              variant='contained'
-              size='large'
-              sx={buttonSX}
-              onClick={() => handleView(1)}
-            >
-              Admins
-            </Button>
-          </Box>
-          <Box
-            justifyContent='right'
-            sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}
-          >
-            {userAccount !== null && userAccount.admin ? (
-              <AddMemberModal />
-            ) : (
-              <></>
-            )}
+              {userAccount !== null && userAccount.admin ? (
+                <AddMemberModal />
+              ) : (
+                <></>
+              )}
+            </Box>
           </Box>
         </Box>
-
-        <Stack>{viewArray[changeView]}</Stack>
+        <Box sx={{ width: '90%' }}>
+          <BasicCard
+            key={1}
+            pageTrigger={pageTrigger}
+            filter={filter}
+            setFilter={setFilter}
+          />
+        </Box>
       </Box>
     );
   }
@@ -494,7 +520,7 @@ const AddMemberModal = () => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weapon.map(weap => weap.weapon)}
-                defaultValue={'None Selected'}
+                //defaultValue={'None Selected'}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}

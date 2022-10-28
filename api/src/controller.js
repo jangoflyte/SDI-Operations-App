@@ -158,6 +158,11 @@ const postUsers = async users => {
       return result;
     } else {
       let result = await knex('user_table').insert(users, ['*']);
+      await knex('notification_user').insert({
+        notification_id: 1,
+        user_id: result[0].id,
+        read: false,
+      });
       return result;
     }
   }
@@ -424,11 +429,11 @@ const getAllNotifications = async () => {
 };
 
 const patchNotifications = async ({ id, notification }) => {
-  console.log('patch notifications ran');
+  console.log('patch notifications ran ', notification);
 
   let result = await knex('notification_user')
     .where({ id: notification.id })
-    .update({ read: true }, ['*']);
+    .update({ read: notification.read }, ['*']);
   return result;
 };
 

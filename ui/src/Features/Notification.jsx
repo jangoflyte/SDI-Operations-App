@@ -24,6 +24,7 @@ export const NotificationModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { triggerFetch } = useContext(MemberContext);
   const { userAccount, API } = useContext(MemberContext);
   const [notifications, setNotifications] = useState([]);
   const [unreadArray, setUnreadArray] = useState([]);
@@ -47,7 +48,7 @@ export const NotificationModal = () => {
 
   useEffect(() => {
     getNotification();
-  }, [triggerNotification]);
+  }, [triggerNotification, triggerFetch]);
 
   // useEffect(() => {
   //   console.log('unread array, ', unreadArray);
@@ -62,20 +63,20 @@ export const NotificationModal = () => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(`data before set`, data);
+        // console.log(`data before set`, data);
         // const notif = data.filter(
         //   notification => notification.user_id === userAccount.id
         // );
         data.sort(({ id: a }, { id: b }) => a - b);
         setNotifications(data);
         setUnreadArray(data.filter(notification => !notification.read));
-        console.log(`notifications after set`, notifications);
+        // console.log(`notifications after set`, notifications);
       })
       .catch(err => {
         console.log('Error: ', err);
       });
-    console.log('user account', userAccount);
-    console.log(`notification`);
+    // console.log('user account', userAccount);
+    // console.log(`notification`);
   };
 
   const handleClick = () => {
@@ -84,22 +85,19 @@ export const NotificationModal = () => {
     setTriggerNotification(!triggerNotification);
   };
 
-  const NotificationRead = notifId => {
+  const NotificationRead = (notifId, read) => {
     fetch(`${API}/notifications/${userAccount.id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         id: notifId,
-        read: true,
+        read: read,
       }),
       headers: {
         'Content-Type': 'application/json',
       },
     })
       .then(res => res.json())
-      .then(data => {
-        console.log(`data after patch`, data);
-        setTriggerNotification(!triggerNotification);
-      })
+      .then(setTriggerNotification(!triggerNotification))
       .catch(err => {
         console.log('Error: ', err);
       });
@@ -116,10 +114,7 @@ export const NotificationModal = () => {
       },
     })
       .then(res => res.json())
-      .then(data => {
-        console.log(`data after delete`, data);
-        setTriggerNotification(!triggerNotification);
-      })
+      .then(setTriggerNotification(!triggerNotification))
       .catch(err => {
         console.log('Error: ', err);
       });
@@ -183,111 +178,134 @@ export const NotificationModal = () => {
                 You have no new notifications{' '}
               </Typography>
             )}
-            {notifications.map((notif, index) => (
-              <Accordion key={index}>
-                <Card
-                  sx={
-                    notif.read
-                      ? {
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'start',
-                          paddingLeft: 1,
-                          backgroundColor: '#edeef0',
-                        }
-                      : {
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'start',
-                          paddingLeft: 1,
-                        }
-                  }
-                >
-                  <Avatar sx={{ bgcolor: '#6D7AE5' }}>
-                    <CalendarTodayIcon />
-                  </Avatar>
 
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-around',
-                      padding: 1,
-                      width: '100%',
-                    }}
+            {notifications.map((notif, index) => (
+              <span key={index + 'span'}>
+                {!notif.read ? (
+                  <Typography>Unread</Typography>
+                ) : (
+                  <Typography>Read</Typography>
+                )}
+
+                <Accordion key={index}>
+                  <Card
+                    sx={
+                      notif.read
+                        ? {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'start',
+                            paddingLeft: 1,
+                            backgroundColor: '#edeef0',
+                          }
+                        : {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'start',
+                            paddingLeft: 1,
+                          }
+                    }
                   >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls='panel1a-content'
-                      id='panel1a-header'
-                      onClick={() => {
-                        if (notif.read) return;
-                        NotificationRead(notif.id);
+                    <Avatar
+                      sx={
+                        notif.read
+                          ? { bgcolor: '#61F568' }
+                          : { bgcolor: '#6D7AE5' }
+                      }
+                    >
+                      <CalendarTodayIcon />
+                    </Avatar>
+
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        padding: 1,
+                        width: '100%',
                       }}
                     >
-                      <Typography>{notif.notification.name}</Typography>
-                    </AccordionSummary>
-                  </Box>
-                </Card>
-                <AccordionDetails>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-around',
-                      padding: 1,
-                      width: '100%',
-                    }}
-                  >
-                    <Typography>
-                      Date Received:{' '}
-                      {new Date(notif.notification.date_time).toDateString()}
-                    </Typography>
-                    <Typography>
-                      Time Received:{' '}
-                      {
-                        new Date(notif.notification.date_time)
-                          .toTimeString()
-                          .split(' ')[0]
-                      }
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-around',
-                      padding: 1,
-                      width: '100%',
-                    }}
-                  >
-                    <Chip
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls='panel1a-content'
+                        id='panel1a-header'
+                        onClick={() => {
+                          if (notif.read) return;
+                          NotificationRead(notif.id, true);
+                        }}
+                      >
+                        <Typography>{notif.notification.name}</Typography>
+                      </AccordionSummary>
+                    </Box>
+                  </Card>
+                  <AccordionDetails>
+                    <Box
                       sx={{
-                        borderRadius: 10,
-                        color: 'green',
-                        mr: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        padding: 1,
+                        width: '100%',
                       }}
-                      onClick={() => NotificationRead(notif.id)}
-                      size='small'
-                      icon={<CheckIcon />}
-                      label='Notification Unread'
-                      clickable
-                    />
-                    <Chip
+                    >
+                      <Typography>
+                        Date Received:{' '}
+                        {new Date(notif.notification.date_time).toDateString()}
+                      </Typography>
+                      <Typography>
+                        Time Received:{' '}
+                        {
+                          new Date(notif.notification.date_time)
+                            .toTimeString()
+                            .split(' ')[0]
+                        }
+                      </Typography>
+                    </Box>
+                    <Box
                       sx={{
-                        borderRadius: 10,
-                        color: 'red',
-                        mr: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                        padding: 1,
+                        width: '100%',
                       }}
-                      onClick={() => NotificationDelete(notif.id)}
-                      size='small'
-                      label='Delete Notification'
-                      icon={<ClearIcon />}
-                      clickable
-                    />
-                  </Box>
-                </AccordionDetails>
-              </Accordion>
+                    >
+                      <Chip
+                        sx={{
+                          borderRadius: 10,
+                          color: 'green',
+                          mr: 1,
+                        }}
+                        //onClick={() => NotificationRead(!notif.id)}
+                        onClick={() => {
+                          if (!notif.read) return;
+                          NotificationRead(notif.id, false);
+                          //handleClose();
+                        }}
+                        size='small'
+                        icon={<CheckIcon />}
+                        label='Notification Unread'
+                        clickable
+                      />
+                      <Chip
+                        sx={{
+                          borderRadius: 10,
+                          color: 'red',
+                          mr: 1,
+                        }}
+                        onClick={() => {
+                          NotificationDelete(notif.id);
+                          //handleClose();
+                        }}
+                        size='small'
+                        label='Delete Notification'
+                        icon={<ClearIcon />}
+                        clickable
+                      />
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </span>
             ))}
           </Box>
         </Box>

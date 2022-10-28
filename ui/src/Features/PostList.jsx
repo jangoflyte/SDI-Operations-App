@@ -30,7 +30,8 @@ import { WeaponQuals } from './WeaponQuals';
 import { useNavigate } from 'react-router-dom';
 
 export default function CollapsibleTable() {
-  const { API, toggleAlert, setToggleAlert } = useContext(MemberContext);
+  const { API, toggleAlert, setToggleAlert, userAccount } =
+    useContext(MemberContext);
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
@@ -47,7 +48,7 @@ export default function CollapsibleTable() {
   // console.log('todays date, date end', currentDate, dateEnd);
 
   const fetchPosts = () => {
-    console.log('fetching positions');
+    //console.log('fetching positions');
     fetch(`${API}/position`, {
       method: 'GET',
       // credentials: 'include',
@@ -70,7 +71,7 @@ export default function CollapsibleTable() {
   };
 
   const fetchSchedule = () => {
-    console.log('fetching schedule');
+    //console.log('fetching schedule');
     let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
@@ -95,7 +96,7 @@ export default function CollapsibleTable() {
   };
 
   const delSchedule = id => {
-    console.log(`deleting schedule ${id}`);
+    //console.log(`deleting schedule ${id}`);
     fetch(`${API}/schedule/${id}`, {
       method: 'DELETE',
       // credentials: 'include',
@@ -211,6 +212,44 @@ export default function CollapsibleTable() {
     }, 3000);
   }, [toggleAlert]);
 
+  let filteredArray = [];
+  // useMemo(() => {
+  //   rows.map(row => {
+  //     //console.log(row.users);
+  //     filteredArray =
+  //       row.users.filter(user => user.noUser === true).length === 0;
+  //     //console.log(row.users.length);
+  //   });
+  //   //row.users.filter(user => user.noUser === true).length === 0
+  //   console.log('post', filteredArray);
+  // }, [rows, filteredArray]);
+  const replace = 9; //take this off when works
+  console.log('filter', filteredArray);
+
+  const handleFinalize = () => {
+    //console.log(userAccount.id);
+    fetch(`${API}/notifications/${userAccount.id}`, {
+      method: 'POST',
+      // credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      body: JSON.stringify({ name: 'New schedule posted' }),
+    })
+      .then(res => {
+        // console.log(res.status);
+        return res.json();
+      })
+      .then(data => {
+        // console.log(data);
+        data;
+      })
+      .catch(err => {
+        console.log('error: ', err);
+      });
+  };
+
   return (
     <Box
       sx={{
@@ -243,7 +282,7 @@ export default function CollapsibleTable() {
           // fontFamily":"Roboto",
           shift === 'Days'
             ? {
-                color: '#6D7AE5',
+                color: '#7A8AFF',
                 textShadow: '1px 1px 2px #454545',
               }
             : {
@@ -269,7 +308,7 @@ export default function CollapsibleTable() {
           label='Start Date'
           type='date'
           defaultValue={startDate.toISOString().split('T')[0]}
-          sx={{ width: 220, backgroundColor: 'white' }}
+          sx={{ width: 220, backgroundColor: 'white', cursor: 'pointer' }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -287,6 +326,40 @@ export default function CollapsibleTable() {
             }
           }}
         />
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant='h5'>
+            {' '}
+            {replace} of {rows.length} Post
+          </Typography>
+          {rows.map((row, index) => (
+            <span key={index}>
+              {
+                (filteredArray =
+                  row.users.filter(user => user.noUser === true).length === 0 &&
+                  row.users.length)
+              }
+
+              {/* {console.log(row.users)} */}
+            </span>
+          ))}
+          {replace === rows.length ? (
+            <Button
+              onClick={() => handleFinalize()}
+              color='secondary'
+              variant='contained'
+              sx={{ borderRadius: '30px' }}
+            >
+              Finalize
+            </Button>
+          ) : null}
+        </Box>
         <Box
           sx={{
             display: 'flex',

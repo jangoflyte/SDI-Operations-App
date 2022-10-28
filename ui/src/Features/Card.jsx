@@ -22,9 +22,10 @@ import { Filter } from '../Components/Filter.js';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { WeaponQuals } from './WeaponQuals';
+import { useMemo } from 'react';
 
 const BasicCard = props => {
-  const { pageTrigger } = props;
+  const { pageTrigger, filter, setFilter } = props;
   const { setMember, API, usersArray, setTriggerFetch, userAccount, color } =
     useContext(MemberContext);
   const navigate = useNavigate();
@@ -32,6 +33,53 @@ const BasicCard = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openItem, setOpenItem] = React.useState(false);
+
+  // filter check helper functions
+  const certificationCheck = user => {
+    if (filter.certification.length > 0) {
+      return filter.certification.includes(user.cert_id);
+    } else {
+      return true;
+    }
+  };
+  const weaponCheck = user => {
+    if (filter.weapon.length > 0) {
+      return user.weapons.some(wep => {
+        // console.log('weapon filter', filter.weapon);
+        return filter.weapon.some(filterWep => {
+          return filterWep === wep.weapon;
+        });
+        // return filter.weapon.includes(wep.weapon);
+      });
+    } else {
+      return true;
+    }
+  };
+  const armingCheck = user => {
+    if (filter.arming_status.length > 0) {
+      return filter.arming_status.includes(user.weapon_arming.toString());
+    } else {
+      return true;
+    }
+  };
+  const adminCheck = user => {
+    if (filter.admin !== null) {
+      return user.admin === filter.admin;
+    } else {
+      return true;
+    }
+  };
+
+  // filter users
+  let filteredUsers = useMemo(() => {
+    return usersArray.filter(
+      user =>
+        certificationCheck(user) &&
+        weaponCheck(user) &&
+        armingCheck(user) &&
+        adminCheck(user)
+    );
+  }, [usersArray, filter]);
 
   useEffect(() => {
     setPage(0);
@@ -117,7 +165,7 @@ const BasicCard = props => {
           </Box>
 
           <Box justifyContent='right' sx={{ display: 'flex' }}>
-            <Filter />
+            <Filter filter={filter} setFilter={setFilter} />
           </Box>
         </Stack>
 
@@ -178,7 +226,7 @@ const BasicCard = props => {
         </Stack>
 
         <Stack sx={{ py: 5 }}>
-          {usersArray
+          {filteredUsers
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((member, index) => (
               <Stack
