@@ -336,7 +336,7 @@ export default function CollapsibleTable() {
         >
           <Typography variant='h5'>
             {' '}
-            {replace} of {rows.length} Post
+            {replace}/{rows.length} Post Assigned
           </Typography>
           {rows.map((row, index) => (
             <span key={index}>

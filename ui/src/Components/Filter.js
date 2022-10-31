@@ -94,7 +94,7 @@ export const Filter = ({ setFilter, filter }) => {
       >
         Filter
       </Button>
-      <Button
+      {/* <Button
         onClick={() =>
           setFilter({
             ...filter,
@@ -108,7 +108,7 @@ export const Filter = ({ setFilter, filter }) => {
         sx={{ borderRadius: '30px' }}
       >
         Clear Filter
-      </Button>
+      </Button> */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -267,15 +267,18 @@ export const Filter = ({ setFilter, filter }) => {
             }}
           >
             <Button
-              onClick={() =>
+              onClick={() => {
                 setFilter({
                   ...filter,
                   certification: [],
                   weapon: [],
                   arming_status: [],
-                })
-              }
-              sx={{ cursor: 'pointer' }}
+                });
+                handleClose();
+              }}
+              variant='outlined'
+              color='secondary'
+              sx={{ cursor: 'pointer', borderRadius: '30px' }}
             >
               Clear Filter
             </Button>

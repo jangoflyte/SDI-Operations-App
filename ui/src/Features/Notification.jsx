@@ -10,6 +10,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Avatar,
+  Button,
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -280,7 +281,7 @@ export const NotificationModal = () => {
                         onClick={() => {
                           if (!notif.read) return;
                           NotificationRead(notif.id, false);
-                          //handleClose();
+                          handleClose();
                         }}
                         size='small'
                         icon={<CheckIcon />}
@@ -307,6 +308,16 @@ export const NotificationModal = () => {
                 </Accordion>
               </span>
             ))}
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              bottom: 0,
+              mt: 3,
+            }}
+          >
+            <Button variant='text'>Clear Notifications</Button>
           </Box>
         </Box>
       </Modal>
