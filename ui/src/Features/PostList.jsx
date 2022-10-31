@@ -28,6 +28,8 @@ import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { WeaponQuals } from './WeaponQuals';
 import { useNavigate } from 'react-router-dom';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -38,6 +40,8 @@ export default function CollapsibleTable() {
   const [schedDate, setSchedDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([]);
+  const [postsAssigned, setPostsAssigned] = useState(0);
+  const [finalizedIcon, setFinalizedIcon] = useState(<HighlightOffIcon />);
   // let currentDate = new Date().toISOString().split('T')[0];
 
   let dateEnd = new Date();
@@ -154,6 +158,7 @@ export default function CollapsibleTable() {
   };
 
   const rows = useMemo(() => {
+    let numberOfAssigned = 0;
     let row = [];
     let shiftTime;
     if (shift === 'Days') shiftTime = '06:00:00';
@@ -176,6 +181,15 @@ export default function CollapsibleTable() {
         while (filUsers.length < position.man_req) {
           filUsers.push({ noUser: true });
         }
+
+        let missingPosition = filUsers.some(user => user.noUser);
+        console.log(missingPosition);
+        if (!filUsers.some(user => user.noUser === true)) {
+          console.log('no user test ++');
+          numberOfAssigned = numberOfAssigned + 1;
+        }
+        setPostsAssigned(numberOfAssigned);
+
         // console.log('fil schedule', filUsers)
         return PostList(
           position.name,
@@ -188,6 +202,7 @@ export default function CollapsibleTable() {
           delSchedule,
           schedDate,
           shift
+          // missingPosition
         );
       });
     }
@@ -212,20 +227,6 @@ export default function CollapsibleTable() {
     }, 3000);
   }, [toggleAlert]);
 
-  let filteredArray = [];
-  // useMemo(() => {
-  //   rows.map(row => {
-  //     //console.log(row.users);
-  //     filteredArray =
-  //       row.users.filter(user => user.noUser === true).length === 0;
-  //     //console.log(row.users.length);
-  //   });
-  //   //row.users.filter(user => user.noUser === true).length === 0
-  //   console.log('post', filteredArray);
-  // }, [rows, filteredArray]);
-  const replace = 9; //take this off when works
-  console.log('filter', filteredArray);
-
   const handleFinalize = () => {
     //console.log(userAccount.id);
     fetch(`${API}/notifications/${userAccount.id}`, {
@@ -234,8 +235,11 @@ export default function CollapsibleTable() {
       headers: {
         'Content-Type': 'application/json',
       },
-      redirect: 'follow',
-      body: JSON.stringify({ name: 'New schedule posted' }),
+      //redirect: 'follow',
+      body: JSON.stringify({
+        name: 'New schedule posted',
+        notes: 'Schedule finalized',
+      }),
     })
       .then(res => {
         // console.log(res.status);
@@ -245,6 +249,7 @@ export default function CollapsibleTable() {
         // console.log(data);
         data;
       })
+      .then(() => setFinalizedIcon(<CheckCircleOutlineIcon />))
       .catch(err => {
         console.log('error: ', err);
       });
@@ -282,11 +287,11 @@ export default function CollapsibleTable() {
           // fontFamily":"Roboto",
           shift === 'Days'
             ? {
-                color: '#7A8AFF',
+                color: '#ffa726',
                 textShadow: '1px 1px 2px #454545',
               }
             : {
-                color: '#ffa726',
+                color: '#7A8AFF',
                 textShadow: '1px 1px 2px #454545',
               }
         }
@@ -335,26 +340,15 @@ export default function CollapsibleTable() {
           }}
         >
           <Typography variant='h5'>
-            {' '}
-            {replace}/{rows.length} Post Assigned
+            {postsAssigned}/{rows.length} Post Assigned
           </Typography>
-          {rows.map((row, index) => (
-            <span key={index}>
-              {
-                (filteredArray =
-                  row.users.filter(user => user.noUser === true).length === 0 &&
-                  row.users.length)
-              }
 
-              {/* {console.log(row.users)} */}
-            </span>
-          ))}
-          {replace === rows.length ? (
+          {postsAssigned === rows.length ? (
             <Button
               onClick={() => handleFinalize()}
               color='secondary'
               variant='contained'
-              sx={{ borderRadius: '30px' }}
+              sx={{ borderRadius: '30px', ml: 3 }}
             >
               Finalize
             </Button>
@@ -393,7 +387,7 @@ export default function CollapsibleTable() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       border: 2,
-                      borderColor: shift === 'Days' ? '#6D7AE5' : '#ffa726',
+                      borderColor: shift === 'Days' ? '#ffa726 ' : '#6D7AE5',
                       borderRadius: 1,
                     }
                   : {
@@ -409,31 +403,12 @@ export default function CollapsibleTable() {
                 {date.toDateString()}
               </Typography>
               <Divider flexItem={true}>SHIFT</Divider>
-              <Button
-                fullWidth={true}
-                color='info'
-                sx={
-                  shift === 'Days' &&
-                  schedDate.toDateString() === date.toDateString()
-                    ? {
-                        backgroundColor: 'rgba(66, 135, 245, 0.2)',
-                        borderRadius: 0,
-                      }
-                    : { borderRadius: 0 }
-                }
-                onClick={() => {
-                  setSchedDate(date);
-                  setShift('Days');
-                  fetchSchedule();
-                }}
-              >
-                Days
-              </Button>
+
               <Button
                 fullWidth={true}
                 color='warning'
                 sx={
-                  shift === 'Mids' &&
+                  shift === 'Days' &&
                   schedDate.toDateString() === date.toDateString()
                     ? {
                         backgroundColor: 'rgba(229, 115, 115, 0.2)',
@@ -443,9 +418,33 @@ export default function CollapsibleTable() {
                 }
                 onClick={() => {
                   setSchedDate(date);
+                  setShift('Days');
+                  fetchSchedule();
+                }}
+                endIcon={finalizedIcon}
+              >
+                Days
+              </Button>
+
+              <Button
+                fullWidth={true}
+                color='info'
+                sx={
+                  shift === 'Mids' &&
+                  schedDate.toDateString() === date.toDateString()
+                    ? {
+                        backgroundColor: 'rgba(66, 135, 245, 0.2)',
+
+                        borderRadius: 0,
+                      }
+                    : { borderRadius: 0 }
+                }
+                onClick={() => {
+                  setSchedDate(date);
                   setShift('Mids');
                   fetchSchedule();
                 }}
+                endIcon={finalizedIcon}
               >
                 Mids
               </Button>
@@ -457,7 +456,7 @@ export default function CollapsibleTable() {
         component={Paper}
         sx={{
           boxShadow: 5,
-          borderColor: shift === 'Days' ? '#6D7AE5' : '#ffa726',
+          borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
         }}
       >
         <Table aria-label='collapsible table'>
@@ -493,6 +492,8 @@ const Row = props => {
   const splitArr = row.weapons.split(' ');
   const { color } = useContext(MemberContext);
   const navigate = useNavigate();
+
+  // console.log('this is the row ', row);
 
   return (
     <React.Fragment>

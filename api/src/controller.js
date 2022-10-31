@@ -158,11 +158,15 @@ const postUsers = async users => {
       return result;
     } else {
       let result = await knex('user_table').insert(users, ['*']);
-      await knex('notification_user').insert({
+      let notification = await knex('notification_user').insert({
         notification_id: 1,
         user_id: result[0].id,
         read: false,
+        // not in right place
+        // link_text: 'Edit Your Profile',
+        // link: `/sfmembers/${result[0].id}`,
       });
+      console.log('register notification result ', notification);
       return result;
     }
   }
@@ -446,6 +450,15 @@ const deleteNotificationsById = async joinId => {
   return result;
 };
 
+const deleteNotificationsByUserId = async userId => {
+  console.log('delete notifications userId ', userId);
+  let result = await knex('notification_user')
+    .where({ user_id: userId })
+    .delete(['*']);
+  console.log('delete notification results', result);
+  return result;
+};
+
 const postNotification = async ({ userId, notification }) => {
   console.log('post notification ran', userId, notification);
   let joinResult = await knex('notification').insert(notification, ['*']);
@@ -491,4 +504,5 @@ module.exports = {
   patchNotifications,
   deleteNotificationsById,
   postNotification,
+  deleteNotificationsByUserId,
 };

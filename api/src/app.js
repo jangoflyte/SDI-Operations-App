@@ -37,6 +37,7 @@ const {
   patchNotifications,
   deleteNotificationsById,
   postNotification,
+  deleteNotificationsByUserId,
 } = require('./controller.js');
 
 const whitelist = [
@@ -210,6 +211,12 @@ app.post('/notifications/:userId', (req, res) => {
 
 app.delete('/notifications/:joinId', (req, res) => {
   deleteNotificationsById(req.params.joinId)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.delete('/notifications/user/:userId', (req, res) => {
+  deleteNotificationsByUserId(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });

@@ -38,7 +38,7 @@ export const PostCard = props => {
       sx={{
         mx: 10,
         mb: 5,
-        width: '60vw',
+        width: '50vw',
         boxShadow: 5,
         borderRadius: 3,
         backgroundColor: 'white',

@@ -26,11 +26,19 @@ import { useMemo } from 'react';
 
 const BasicCard = props => {
   const { pageTrigger, filter, setFilter } = props;
-  const { setMember, API, usersArray, setTriggerFetch, userAccount, color } =
-    useContext(MemberContext);
+  const {
+    setMember,
+    API,
+    usersArray,
+    setTriggerFetch,
+    userAccount,
+    color,
+    page,
+    setPage,
+  } = useContext(MemberContext);
   const navigate = useNavigate();
   const [idArray, setIdArray] = useState([]);
-  const [page, setPage] = useState(0);
+  //const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openItem, setOpenItem] = React.useState(false);
 
@@ -110,10 +118,6 @@ const BasicCard = props => {
       setIdArray(idArray.filter(id => id !== member.id));
     }
   };
-
-  useEffect(() => {
-    setPage(0);
-  }, []);
 
   const navigateToMember = member => {
     // console.log('current member', member);
@@ -458,7 +462,7 @@ const BasicCard = props => {
 
           <Box>
             <Pagination
-              count={Math.ceil(usersArray.length / rowsPerPage)}
+              count={Math.ceil(filteredUsers.length / rowsPerPage)}
               onChange={onDataPageChange}
               page={page + 1}
               color='secondary'
@@ -469,7 +473,7 @@ const BasicCard = props => {
             <TablePagination
               rowsPerPageOptions={[5, 10, 20, 30, 50]}
               component='div'
-              count={usersArray.length}
+              count={filteredUsers.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}

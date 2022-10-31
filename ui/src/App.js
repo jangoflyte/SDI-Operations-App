@@ -11,6 +11,11 @@ import SignIn from './Components/SignIn.jsx';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
 import { Footer } from './Components/Footer.jsx';
+import { Training } from './Components/Training';
+import { Chat } from './Components/Chat';
+import { LeaveWeb } from './Components/LeaveWeb';
+import { Weather } from './Components/Weather';
+import { Calendar } from './Features/Calendar';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -23,6 +28,7 @@ const App = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
   const [userAccount, setUserAccount] = useState(null);
   const [color, setColor] = useState('gray');
+  const [page, setPage] = useState(0);
 
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
@@ -82,6 +88,8 @@ const App = () => {
     allFlights,
     color,
     setColor,
+    page,
+    setPage,
   };
 
   return (
@@ -99,6 +107,12 @@ const App = () => {
                 element={<IndividualMember />}
               />
               <Route path='/settings' element={<Settings />} />
+              <Route path='/training' element={<Training />} />
+              <Route path='/chat' element={<Chat />} />
+              <Route path='/leave' element={<LeaveWeb />} />
+              <Route path='/calendar' element={<Calendar />} />
+              <Route path='/weather' element={<Weather />} />
+
               <Route path='*' element={<Home />} />
             </Routes>
             <Footer />

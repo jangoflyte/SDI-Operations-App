@@ -20,6 +20,7 @@ import { useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useNavigate } from 'react-router-dom';
 
 export const NotificationModal = () => {
   const [open, setOpen] = useState(false);
@@ -30,6 +31,7 @@ export const NotificationModal = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadArray, setUnreadArray] = useState([]);
   const [triggerNotification, setTriggerNotification] = useState(false);
+  const navigate = useNavigate();
 
   const style = {
     position: 'absolute',
@@ -109,13 +111,20 @@ export const NotificationModal = () => {
   const NotificationDelete = joinId => {
     fetch(`${API}/notifications/${joinId}`, {
       method: 'DELETE',
-      body: JSON.stringify({}),
-      headers: {
-        'Content-Type': 'application/json',
-      },
     })
       .then(res => res.json())
       .then(setTriggerNotification(!triggerNotification))
+      .catch(err => {
+        console.log('Error: ', err);
+      });
+  };
+
+  const clearNotifications = userId => {
+    fetch(`${API}/notifications/user/${userId}`, {
+      method: 'DELETE',
+    })
+      .then(res => res.json())
+      .then(setTriggerNotification(curr => !curr))
       .catch(err => {
         console.log('Error: ', err);
       });
@@ -243,18 +252,17 @@ export const NotificationModal = () => {
                     <Box
                       sx={{
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
+                        justifyContent: 'space-between',
                         padding: 1,
-                        width: '100%',
+                        width: '90%',
                       }}
                     >
                       <Typography>
-                        Date Received:{' '}
+                        <b>Date Received: </b>
                         {new Date(notif.notification.date_time).toDateString()}
                       </Typography>
                       <Typography>
-                        Time Received:{' '}
+                        <b>Time Received: </b>
                         {
                           new Date(notif.notification.date_time)
                             .toTimeString()
@@ -265,10 +273,55 @@ export const NotificationModal = () => {
                     <Box
                       sx={{
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
                         padding: 1,
-                        width: '100%',
+                        width: '90%',
+                        flexDirection: 'column',
+                      }}
+                    >
+                      {notif.notification.link !== null ? (
+                        notif.notification.link_text !== null ? (
+                          <Button
+                            color={'secondary'}
+                            variant={'contained'}
+                            sx={{ borderRadius: '30px' }}
+                            onClick={() => {
+                              navigate(notif.notification.link);
+                              handleClose();
+                            }}
+                          >
+                            {notif.notification.link_text}
+                          </Button>
+                        ) : (
+                          <Button
+                            color={'secondary'}
+                            variant={'contained'}
+                            sx={{ borderRadius: '30px' }}
+                            onClick={() => {
+                              navigate(notif.notification.link);
+                              handleClose();
+                            }}
+                          >
+                            Click Here
+                          </Button>
+                        )
+                      ) : null}
+
+                      <p>
+                        {notif.notification.notes === null ? (
+                          <b>Details: none</b>
+                        ) : (
+                          <>
+                            <b>Details:</b> {notif.notification.notes}
+                          </>
+                        )}
+                      </p>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        padding: 1,
+                        width: '90%',
                       }}
                     >
                       <Chip
@@ -317,7 +370,18 @@ export const NotificationModal = () => {
               mt: 3,
             }}
           >
-            <Button variant='text'>Clear Notifications</Button>
+            {notifications.length <= 0 ? null : (
+              <Button
+                variant='text'
+                // color='red'
+                onClick={() => {
+                  clearNotifications(userAccount.id);
+                  handleClose();
+                }}
+              >
+                Clear Notifications
+              </Button>
+            )}
           </Box>
         </Box>
       </Modal>

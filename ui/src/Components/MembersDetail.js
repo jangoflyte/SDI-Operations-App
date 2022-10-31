@@ -34,6 +34,7 @@ export const MemberDetails = () => {
     userAccount,
     toggleAlert,
     setToggleAlert,
+    setPage,
   } = useContext(MemberContext);
   const [searchText, setSearchText] = useState('');
   const [changeView, setChangeView] = useState(0);
@@ -60,6 +61,7 @@ export const MemberDetails = () => {
   const handleView = view => {
     setChangeView(view);
     setFlag(!flag);
+    setPage(0);
   };
 
   useMemo(() => {

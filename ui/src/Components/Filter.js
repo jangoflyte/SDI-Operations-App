@@ -216,7 +216,7 @@ export const Filter = ({ setFilter, filter }) => {
                           checked={filter.weapon.includes(wep.weapon)}
                         />
                       }
-                      label={wep.weapon}
+                      label={wep.weapon.toUpperCase()}
                       id={wep.weapon}
                       onClick={e => {
                         handleCheckQual(e.target);

@@ -17,6 +17,7 @@ import {
   Button,
 } from '@mui/material';
 import MuiAppBar from '@mui/material/AppBar';
+import CloudIcon from '@mui/icons-material/Cloud';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -30,6 +31,9 @@ import logo from '../passlogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
 import { NotificationModal } from '../Features/Notification.jsx';
 import { AvatarMenu } from '../Features/AvatarMenu';
+import ChatIcon from '@mui/icons-material/Chat';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const drawerWidth = 240;
 
@@ -243,6 +247,15 @@ export default function PersistentDrawerLeft() {
           </ListItem>
 
           <ListItem disablePadding>
+            <ListItemButton onClick={() => handleNavigate('/weather')}>
+              <ListItemIcon>
+                <CloudIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Weather' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
             <ListItemButton
               disabled={!(userAccount !== null && userAccount.admin)}
               onClick={() => handleNavigate('/training')}
@@ -251,6 +264,42 @@ export default function PersistentDrawerLeft() {
                 <SchoolIcon sx={{ color: 'white' }} />
               </ListItemIcon>
               <ListItemText primary='Training' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/chat')}
+            >
+              <ListItemIcon>
+                <ChatIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Chat' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/calendar')}
+            >
+              <ListItemIcon>
+                <CalendarMonthIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='Calendar' sx={{ color: 'white' }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate('/leave')}
+            >
+              <ListItemIcon>
+                <ScheduleIcon sx={{ color: 'white' }} />
+              </ListItemIcon>
+              <ListItemText primary='LeaveWeb' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
 
