@@ -289,6 +289,7 @@ const deleteScheduleById = async id => {
 const deleteUser = async id => {
   await deleteWeaponUserByUser(id)
   await deletePostSchedule(id)
+  await deleteNotificationsByUserId(id)
   return await knex('user_table')
     .where({ id: id })
     .delete()
@@ -359,7 +360,8 @@ const postPosition = async req => {
   let postObject = {
     name: req.body.name,
     man_req: req.body.man_req,
-    cert_id: req.body.cert_id
+    cert_id: req.body.cert_id,
+    shift: req.body.shift
   }
   let result = await knex('position').insert(postObject, ['*'])
   console.log('result ', result)

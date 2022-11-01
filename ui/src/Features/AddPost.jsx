@@ -43,7 +43,7 @@ const MenuProps = {
   },
 };
 
-export const AddPost = () => {
+export const AddPost = props => {
   const { API, setTriggerFetch, allWeapons } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -53,14 +53,17 @@ export const AddPost = () => {
   const [weaponIdArray, setWeaponIdArray] = useState([]);
   const [manReq, setManReq] = useState('');
   const [cert, setCert] = useState('');
+  const { isDay } = props;
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
+    const shift = isDay ? "days" : "mids";
     const newPost = {
       name: postName,
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
+      shift: shift
     };
     console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
@@ -130,7 +133,7 @@ export const AddPost = () => {
         variant='contained'
         sx={{ borderRadius: '50px', width: 150 }}
       >
-        Add Post
+        Add {isDay ? "Day" : "Night"} Post
       </Button>
       <Modal
         open={open}

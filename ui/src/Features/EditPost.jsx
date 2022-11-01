@@ -244,7 +244,6 @@ export const EditPost = props => {
                 label='Certifications'
                 onChange={e => setCert(e.target.value)}
               >
-                <MenuItem value={null}></MenuItem>
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>

@@ -91,7 +91,7 @@ export const Settings = () => {
             justifyContent: 'right'
           }}
         >
-          <AddPost />
+          <AddPost isDay={isDay} />
         </Stack>
         {postArray.map((post, index) => {
           return <PostCard post={post} key={index} />
