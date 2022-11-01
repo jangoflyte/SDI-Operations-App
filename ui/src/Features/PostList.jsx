@@ -125,7 +125,7 @@ export default function CollapsibleTable() {
   useEffect(() => {
     fetchSchedule();
     fetchPosts();
-  }, [schedDate]);
+  }, [schedDate, finalizedIcon]);
 
   const PostList = (
     name,
@@ -421,7 +421,13 @@ export default function CollapsibleTable() {
                   setShift('Days');
                   fetchSchedule();
                 }}
-                endIcon={finalizedIcon}
+                endIcon={
+                  postsAssigned === rows.length ? (
+                    <CheckCircleOutlineIcon />
+                  ) : (
+                    <HighlightOffIcon />
+                  )
+                }
               >
                 Days
               </Button>
@@ -444,7 +450,13 @@ export default function CollapsibleTable() {
                   setShift('Mids');
                   fetchSchedule();
                 }}
-                endIcon={finalizedIcon}
+                endIcon={
+                  postsAssigned === rows.length ? (
+                    <CheckCircleOutlineIcon />
+                  ) : (
+                    <HighlightOffIcon />
+                  )
+                }
               >
                 Mids
               </Button>

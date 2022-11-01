@@ -5,29 +5,14 @@ import {
   Divider,
   Chip,
   Alert,
-  Fade,
-  TextField,
-  Avatar,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
 } from '@mui/material/';
-import Collapse from '@mui/material/Collapse';
-import IconButton from '@mui/material/IconButton';
-
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { MemberContext } from '../Components/MemberContext';
-import PostMemberModal from './AddMember';
-import EditSchedule from './EditSchedule';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import SecurityIcon from '@mui/icons-material/Security';
-import { WeaponQuals } from './WeaponQuals';
-import { useNavigate } from 'react-router-dom';
-import { display } from '@mui/system';
 
 export const Calendar = () => {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -37,16 +22,21 @@ export const Calendar = () => {
   const [shift, setShift] = useState('Days');
   const [schedDate, setSchedDate] = useState(new Date());
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
+  const [currYear, setCurrYear] = useState(new Date().getFullYear());
   const [startDate, setStartDate] = useState(new Date());
 
   const [dateRange, setDateRange] = useState([]);
 
   useMemo(() => {
     let dateRange2 = [];
+    // change i to start on a sunday so that the week days are allways on
+    // the same column
     for (let i = 0; i < 42; i++) {
-      let workingDate = new Date();
-      workingDate.setMonth(currMonth, -6);
+      let workingDate = new Date('2022-10-01');
+      // workingDate.setMonth(currMonth, -6);
+      let beforeDays = -6;
 
+      workingDate.setFullYear(currYear, currMonth, beforeDays);
       let newDate = new Date(workingDate.setDate(workingDate.getDate() + i));
       //console.log('created date', newDate.toISOString());
       dateRange2.push(newDate);
@@ -54,9 +44,27 @@ export const Calendar = () => {
     setDateRange(dateRange2);
   }, [currMonth]);
 
-  // grab the month from the current date.
-  // construct month view for display
-  // highlight the current date
+  const handleChangeMonthGreater = () => {
+    if (currMonth < 11) {
+      setCurrMonth(currMonth + 1);
+    } else {
+      setCurrMonth(0);
+      setCurrYear(currYear + 1);
+    }
+  };
+  const handleChangeMonthLesser = () => {
+    if (currMonth > 0) {
+      setCurrMonth(currMonth - 1);
+    } else {
+      setCurrMonth(11);
+      setCurrYear(currYear - 1);
+    }
+  };
+  const handleChangeToday = () => {
+    setCurrMonth(new Date().getMonth());
+    setCurrYear(new Date().getFullYear());
+    setSchedDate(new Date());
+  };
 
   return (
     <Box
@@ -71,10 +79,14 @@ export const Calendar = () => {
       <Box
         sx={{ width: '80vw', display: 'flex', justifyContent: 'space-between' }}
       >
-        <Box sx={{ minWidth: 120, display: 'flex', alignItems: 'center' }}>
+        <Box
+          pl={4}
+          sx={{ minWidth: 120, display: 'flex', alignItems: 'center', gap: 1 }}
+        >
           <FormControl fullWidth>
             <InputLabel id='Month'>Month</InputLabel>
             <Select
+              color='info'
               labelId='Month'
               id='Month'
               value={currMonth}
@@ -97,16 +109,27 @@ export const Calendar = () => {
               <MenuItem value={11}>December</MenuItem>
             </Select>
           </FormControl>
+          <Button variant='outlined' color='info' onClick={handleChangeToday}>
+            Today
+          </Button>
         </Box>
         <Box
           sx={{
             width: '60%',
             display: 'flex',
-            justifyContent: 'start',
+            justifyContent: 'space-around',
             alignItems: 'center',
           }}
         >
-          <Typography variant='h2'>
+          <Button
+            size='small'
+            color='info'
+            sx={{ height: '50%' }}
+            onClick={handleChangeMonthLesser}
+          >
+            <Typography variant='h2' component='span'>{`<`}</Typography>
+          </Button>
+          <Typography variant='h2' color='primary'>
             {currMonth === 0 && `January`}
             {currMonth === 1 && `February`}
             {currMonth === 2 && `March`}
@@ -120,6 +143,14 @@ export const Calendar = () => {
             {currMonth === 10 && `November`}
             {currMonth === 11 && `December`}
           </Typography>
+          <Button
+            size='small'
+            color='info'
+            sx={{ height: '50%' }}
+            onClick={handleChangeMonthGreater}
+          >
+            <Typography variant='h2' component='span'>{`>`}</Typography>
+          </Button>
         </Box>
       </Box>
       <Box
@@ -139,6 +170,7 @@ export const Calendar = () => {
             sx={
               date.getMonth() === currMonth
                 ? {
+                    cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
                     backgroundColor:
@@ -147,6 +179,7 @@ export const Calendar = () => {
                         : 'none',
                   }
                 : {
+                    cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
                     backgroundColor:
@@ -155,6 +188,10 @@ export const Calendar = () => {
                         : '#edeef0',
                   }
             }
+            onClick={() => {
+              setSchedDate(date);
+              setShift('Days');
+            }}
           >
             <Box
               sx={
@@ -164,7 +201,7 @@ export const Calendar = () => {
                       flexWrap: 'wrap',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                       border: 1,
                       height: '100%',
                       borderColor: shift === 'Days' ? '#ffa726 ' : '#6D7AE5',
@@ -178,39 +215,31 @@ export const Calendar = () => {
                       border: 1,
                       borderRadius: 1,
                       height: '100%',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
                     }
               }
             >
-              <Typography component='span' sx={{ px: 3, py: 2 }}>
-                {`${date.toDateString().split(' ')[0]} ${
-                  date.toDateString().split(' ')[1]
-                } ${date.toDateString().split(' ')[2]}`}
-              </Typography>
-              <Divider flexItem={true}></Divider>
-              <Box sx={{ display: 'flex', width: '100%' }}>
-                <Button
-                  fullWidth={true}
-                  color='warning'
-                  size='small'
-                  sx={
-                    shift === 'Days' &&
-                    schedDate.toDateString() === date.toDateString()
-                      ? {
-                          backgroundColor: 'rgba(66, 135, 245, 0.2)',
-                          borderRadius: 0,
-                        }
-                      : { borderRadius: 0 }
-                  }
-                  onClick={() => {
-                    setSchedDate(date);
-                    setShift('Days');
-                    //fetchSchedule();
-                  }}
-                >
-                  Select
-                </Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  width: '90%',
+                }}
+              >
+                <Typography component='span'>
+                  {date.toDateString().split(' ')[0]}
+                </Typography>
+                <Typography component='span'>
+                  {date.toDateString().split(' ')[3]}
+                </Typography>
               </Box>
+
+              <Typography variant='h4' component='span'>{`${
+                date.toDateString().split(' ')[1]
+              } ${date.toDateString().split(' ')[2]}`}</Typography>
+
+              <Box sx={{ display: 'flex', width: '100%' }}></Box>
             </Box>
           </Paper>
         ))}
