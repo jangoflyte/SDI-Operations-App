@@ -13,6 +13,8 @@ import {
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { MemberContext } from '../Components/MemberContext';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export const Calendar = () => {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -24,8 +26,47 @@ export const Calendar = () => {
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
   const [startDate, setStartDate] = useState(new Date());
-
   const [dateRange, setDateRange] = useState([]);
+  const [schedFilled, setSchedFilled] = useState([]);
+
+  // set up function to fetch and check if positions have been filled in
+  // fetch with array of objects containing date and filled boolean
+  // [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null}...]
+  // returns if filled true/false
+
+  const fetchIfScheduleFilled = () => {
+    //console.log('fetching schedule');
+    let fetchDate = schedDate.toISOString().split('T')[0];
+
+    fetch(`${API}/schedule/date`, {
+      method: 'POST',
+      // credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      body: JSON.stringify(schedFilled),
+    })
+      .then(res => {
+        // console.log(res.status);
+        return res.json();
+      })
+      .then(data => {
+        // console.log(data);
+        setSchedule(data);
+      })
+      .catch(err => {
+        console.log('error: ', err);
+      });
+  };
+
+  // icons for schedule ex...
+  // endIcon={
+  //   postsAssigned === rows.length ? (
+  //     <CheckCircleOutlineIcon />
+  //   ) : (
+  //     <HighlightOffIcon />
+  //   )
 
   useMemo(() => {
     let dateRange2 = [];

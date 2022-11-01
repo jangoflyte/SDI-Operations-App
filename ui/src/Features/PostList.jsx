@@ -431,7 +431,6 @@ export default function CollapsibleTable() {
               >
                 Days
               </Button>
-
               <Button
                 fullWidth={true}
                 color='info'
