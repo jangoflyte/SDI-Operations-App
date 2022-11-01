@@ -1,8 +1,7 @@
 version: '3'
 
-volumes:
-  pgdatasource:
-
+# volumes:
+#   pgdatasource:
 
 services:
   capstone-db:
@@ -17,12 +16,12 @@ services:
     ports:
       - '5432:5432'
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
       timeout: 5s
       retries: 10
-    volumes:
-      - pgdatasource:/var/lib/postgresql/data
+    # volumes:
+    #   - pgdatasource:/var/lib/postgresql/data
 
   capstone-api:
     build: api/

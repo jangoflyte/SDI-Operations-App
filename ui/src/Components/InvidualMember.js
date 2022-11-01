@@ -104,32 +104,35 @@ const IndividualMember = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              gap: 1,
             }}
           >
             {userAccount !== null ? (
               userAccount.id === parseInt(memberId) ? (
                 <EditAvatar avatar={member} memberId={memberId} />
               ) : (
-                <Avatar
-                  sx={{
-                    width: 80,
-                    height: 80,
-                    bgcolor: color,
-                  }}
-                  src={member.avatar}
-                  alt='avatar'
-                  size='large'
-                >
-                  {member.first_name
-                    ? `${member.first_name.charAt(0).toUpperCase()}`
-                    : `F`}
-                  {member.last_name
-                    ? `${member.last_name.charAt(0).toUpperCase()}`
-                    : `L`}
-                </Avatar>
+                <Tooltip title='Change Avatar'>
+                  <Avatar
+                    sx={{
+                      width: 80,
+                      height: 80,
+                      bgcolor: color,
+                    }}
+                    src={member.avatar}
+                    alt='avatar'
+                    size='large'
+                  >
+                    {member.first_name
+                      ? `${member.first_name.charAt(0).toUpperCase()}`
+                      : `F`}
+                    {member.last_name
+                      ? `${member.last_name.charAt(0).toUpperCase()}`
+                      : `L`}
+                  </Avatar>
+                </Tooltip>
               )
             ) : null}
-            {/* <EditAvatar avatar={member} memberId={memberId} /> */}
+
             <Typography variant='h1'>
               {member.first_name
                 ? `${member.first_name

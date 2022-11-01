@@ -45,6 +45,7 @@ export const MemberDetails = () => {
     weapon: [],
     arming_status: [],
     admin: null,
+    flight: [],
   });
 
   useEffect(() => {

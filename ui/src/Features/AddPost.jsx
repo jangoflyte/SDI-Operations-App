@@ -57,13 +57,13 @@ export const AddPost = props => {
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
-    const shift = isDay ? "days" : "mids";
+    const shift = isDay ? 'days' : 'mids';
     const newPost = {
       name: postName,
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
-      shift: shift
+      shift: shift,
     };
     console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
@@ -79,17 +79,11 @@ export const AddPost = props => {
       // .then(window.location.reload(false))
       .then(() => {
         handleClose();
-
         setTriggerFetch(curr => !curr);
-
         setPostName(null);
-
         setManReq(null);
-
         setCert(null);
-
         setWeapon([]);
-
         // setToggleAlert(true);
       })
       .catch(err => {
@@ -133,7 +127,7 @@ export const AddPost = props => {
         variant='contained'
         sx={{ borderRadius: '50px', width: 150 }}
       >
-        Add {isDay ? "Day" : "Night"} Post
+        Add {isDay ? 'Day' : 'Mid'} Post
       </Button>
       <Modal
         open={open}

@@ -66,11 +66,11 @@ export default function CollapsibleTable() {
         return res.json();
       })
       .then(data => {
-
         // console.log(shift.toLowerCase(), 'this is data ', data)
-        const filteredPosts = data.filter(post => post.shift === shift.toLowerCase())
+        const filteredPosts = data.filter(
+          post => post.shift === shift.toLowerCase()
+        );
         // console.log('this is filtered psots ', filteredPosts)
-
         setPositions(filteredPosts);
       })
       .catch(err => {
@@ -186,10 +186,10 @@ export default function CollapsibleTable() {
           filUsers.push({ noUser: true });
         }
 
-        let missingPosition = filUsers.some(user => user.noUser);
-        console.log(missingPosition);
+        //let missingPosition = filUsers.some(user => user.noUser);
+        //console.log(missingPosition);
         if (!filUsers.some(user => user.noUser === true)) {
-          console.log('no user test ++');
+          //console.log('no user test ++');
           numberOfAssigned = numberOfAssigned + 1;
         }
         setPostsAssigned(numberOfAssigned);
@@ -427,9 +427,9 @@ export default function CollapsibleTable() {
                 }}
                 endIcon={
                   postsAssigned === rows.length ? (
-                    <CheckCircleOutlineIcon />
+                    <CheckCircleOutlineIcon sx={{ color: 'green' }} />
                   ) : (
-                    <HighlightOffIcon />
+                    <HighlightOffIcon sx={{ color: 'red' }} />
                   )
                 }
               >
@@ -455,9 +455,9 @@ export default function CollapsibleTable() {
                 }}
                 endIcon={
                   postsAssigned === rows.length ? (
-                    <CheckCircleOutlineIcon />
+                    <CheckCircleOutlineIcon sx={{ color: 'green' }} />
                   ) : (
-                    <HighlightOffIcon />
+                    <HighlightOffIcon sx={{ color: 'red' }} />
                   )
                 }
               >
@@ -591,11 +591,19 @@ const Row = props => {
             >
               {splitArr.map((wep, index) => (
                 <Box key={index}>
-                  <Chip
-                    icon={<SecurityIcon />}
-                    label={wep.toUpperCase()}
-                    color='secondary'
-                  />
+                  {wep.length === 0 ? (
+                    <Chip
+                      icon={<SecurityIcon />}
+                      label='No Weapon'
+                      color='primary'
+                    />
+                  ) : (
+                    <Chip
+                      icon={<SecurityIcon />}
+                      label={wep.toUpperCase()}
+                      color='secondary'
+                    />
+                  )}
                 </Box>
               ))}
             </Box>

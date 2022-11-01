@@ -38,6 +38,7 @@ const {
   deleteNotificationsById,
   postNotification,
   deleteNotificationsByUserId,
+  getIfScheduleFilled,
 } = require('./controller.js');
 
 const whitelist = [
@@ -235,6 +236,7 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to the API');
 });
 
+// Schedule ///////////////////////////////////////////////////////////
 app.get('/schedule', (request, response) => {
   getAllSchedule()
     .then(data => response.status(200).send(data))
@@ -268,6 +270,19 @@ app.delete('/schedule/:id', (req, res) => {
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
+
+// set up function to fetch and check if positions have been filled in
+// fetch with array of objects containing date and filled boolean
+// [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null}...]
+// returns if filled true/false
+
+app.post('/schedule/filled', (req, res) => {
+  getIfScheduleFilled(req.body)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+///////////////////////////////////////////// schedule ////////////////
 
 app.get('/users', (request, response) => {
   getAllUsers()

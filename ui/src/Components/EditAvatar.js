@@ -13,7 +13,9 @@ import {
   DialogContentText,
   DialogTitle,
   Box,
+  IconButton,
 } from '@mui/material';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 export const EditAvatar = props => {
   const { avatar, memberId } = props;
@@ -164,6 +166,26 @@ export const EditAvatar = props => {
                   onChange={e => setPic(e.target.value)}
                 ></TextField>
               </FormControl>
+            </Box>
+            <Box>
+              <IconButton
+                color='primary'
+                aria-label='upload picture'
+                component='label'
+                onClick={() => handlePic()}
+              >
+                <input
+                  hidden
+                  accept='image/*'
+                  type='file'
+                  id='myfile'
+                  onChange={e => {
+                    console.log(e.target.files[0]);
+                    setPic(e.target.files[0]);
+                  }}
+                />
+                <PhotoCamera />
+              </IconButton>
             </Box>
           </DialogContentText>
           <DialogActions>

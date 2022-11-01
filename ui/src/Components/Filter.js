@@ -14,7 +14,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 export const Filter = ({ setFilter, filter }) => {
-  const { allWeapons } = useContext(MemberContext);
+  const { allWeapons, allFlights } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -31,6 +31,7 @@ export const Filter = ({ setFilter, filter }) => {
     boxShadow: 24,
     p: 4,
     borderRadius: 4,
+    overflowY: 'scroll',
   };
 
   const handleCheckCert = box => {
@@ -63,6 +64,28 @@ export const Filter = ({ setFilter, filter }) => {
       setFilter(prev => {
         let newArr = prev.weapon.filter(cert => cert !== id);
         return { ...prev, weapon: newArr };
+      });
+    }
+  };
+
+  const handleCheckFlight = box => {
+    // console.log('Box for check flight', box);
+
+    const id = box.parentNode.parentNode.id;
+    const name = box.name;
+    console.log(box.checked, id);
+    console.log('This is filter ', filter);
+    if (box.checked) {
+      setFilter(prev => {
+        let newArr = prev.flight;
+        newArr.push(name);
+        console.log('new arr ', newArr);
+        return { ...prev, flight: newArr };
+      });
+    } else {
+      setFilter(prev => {
+        let newArr = prev.flight.filter(flight => flight !== name);
+        return { ...prev, flight: newArr };
       });
     }
   };
@@ -258,6 +281,38 @@ export const Filter = ({ setFilter, filter }) => {
                 }}
               />
             </FormGroup>
+
+            <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
+              By Flight
+            </FormLabel>
+            <FormGroup>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {allFlights.map((flight, index) => (
+                  <Box key={index} sx={{ width: '50%' }}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name={flight.flight}
+                          checked={filter.flight.includes(flight.flight)}
+                        />
+                      }
+                      label={flight.flight.toUpperCase()}
+                      id={flight.flight}
+                      onClick={e => {
+                        handleCheckFlight(e.target);
+                      }}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </FormGroup>
           </FormControl>
           <Box
             sx={{
@@ -278,7 +333,7 @@ export const Filter = ({ setFilter, filter }) => {
               }}
               variant='outlined'
               color='secondary'
-              sx={{ cursor: 'pointer', borderRadius: '30px' }}
+              sx={{ cursor: 'pointer', borderRadius: '30px', border: 2 }}
             >
               Clear Filter
             </Button>

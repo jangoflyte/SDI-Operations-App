@@ -1,30 +1,30 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { MemberContext } from './MemberContext'
-import '../styles/MembersDetail.css'
-import '../styles/Card.css'
-import { Box, LinearProgress, Typography, Stack, Button } from '@mui/material'
-import { PostCard } from './PostCard'
-import { AddPost } from '../Features/AddPost'
+import React, { useContext, useState, useEffect } from 'react';
+import { MemberContext } from './MemberContext';
+import '../styles/MembersDetail.css';
+import '../styles/Card.css';
+import { Box, LinearProgress, Typography, Stack, Button } from '@mui/material';
+import { PostCard } from './PostCard';
+import { AddPost } from '../Features/AddPost';
 
 export const Settings = () => {
-  const { API, triggerFetch } = useContext(MemberContext)
-  const [postArray, setPostArray] = useState([])
-  const [isDay, setIsDay] = useState(true)
+  const { API, triggerFetch } = useContext(MemberContext);
+  const [postArray, setPostArray] = useState([]);
+  const [isDay, setIsDay] = useState(true);
 
   useEffect(() => {
     fetch(`${API}/position`, {
-      method: 'GET'
+      method: 'GET',
     })
       .then(res => res.json())
       .then(data => {
-        const shift = isDay ? 'days' : 'mids'
-        console.log(shift, 'this is data ', data)
-        const filteredPosts = data.filter(post => post.shift === shift)
-        console.log('this is filtered psots ', filteredPosts)
-        setPostArray(filteredPosts)
+        const shift = isDay ? 'days' : 'mids';
+        console.log(shift, 'this is data ', data);
+        const filteredPosts = data.filter(post => post.shift === shift);
+        console.log('this is filtered psots ', filteredPosts);
+        setPostArray(filteredPosts);
       })
-      .catch(err => console.log(err))
-  }, [triggerFetch, isDay])
+      .catch(err => console.log(err));
+  }, [triggerFetch, isDay]);
 
   // useEffect(() => {
   //   console.log('post array: ', postArray);
@@ -35,14 +35,14 @@ export const Settings = () => {
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
       </Box>
-    )
+    );
   } else {
     return (
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <Typography
@@ -54,7 +54,7 @@ export const Settings = () => {
           Settings
         </Typography>
         <Typography variant='h5' component='span' pb={2} sx={{}}>
-          {postArray.length} Posts
+          {postArray.length} {isDay ? 'Day' : 'Mid'} Posts
         </Typography>
         <Stack
           direction='row'
@@ -62,7 +62,7 @@ export const Settings = () => {
           sx={{
             width: 300,
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Button
@@ -71,7 +71,7 @@ export const Settings = () => {
             sx={{ borderRadius: '30px' }}
             onClick={() => setIsDay(true)}
           >
-            Day Posts
+            Days
           </Button>
           <Button
             color={!isDay ? 'secondary' : 'primary'}
@@ -79,7 +79,7 @@ export const Settings = () => {
             sx={{ borderRadius: '30px' }}
             onClick={() => setIsDay(false)}
           >
-            Night Posts
+            Mids
           </Button>
         </Stack>
         <Stack
@@ -88,15 +88,15 @@ export const Settings = () => {
             my: 4,
             display: 'flex',
             width: '50vw',
-            justifyContent: 'right'
+            justifyContent: 'right',
           }}
         >
           <AddPost isDay={isDay} />
         </Stack>
         {postArray.map((post, index) => {
-          return <PostCard post={post} key={index} />
+          return <PostCard post={post} key={index} />;
         })}
       </Box>
-    )
+    );
   }
-}
+};

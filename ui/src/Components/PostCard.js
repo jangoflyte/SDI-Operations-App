@@ -123,7 +123,7 @@ export const PostCard = props => {
               <Typography component='span' sx={{ fontWeight: 'bold' }}>
                 {post.weapon_req.length === 0 ? (
                   <Chip
-                    color='secondary'
+                    color='primary'
                     icon={<SecurityIcon />}
                     label='No Weapons'
                   />

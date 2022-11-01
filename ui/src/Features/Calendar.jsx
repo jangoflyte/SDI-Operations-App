@@ -15,10 +15,13 @@ import Paper from '@mui/material/Paper';
 import { MemberContext } from '../Components/MemberContext';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useTheme } from '@mui/material/styles';
+import { useEffect } from 'react';
 
 export const Calendar = () => {
   const { API, toggleAlert, setToggleAlert, userAccount } =
     useContext(MemberContext);
+  const theme = useTheme();
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
@@ -31,24 +34,32 @@ export const Calendar = () => {
 
   // set up function to fetch and check if positions have been filled in
   // fetch with array of objects containing date and filled boolean
-  // [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null}...]
+  // [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null, shift: 'all'}...]
   // returns if filled true/false
 
   const fetchIfScheduleFilled = () => {
-    //console.log('fetching schedule');
-    let fetchDate = schedDate.toISOString().split('T')[0];
-
-    fetch(`${API}/schedule/date`, {
+    console.log('fetching if schedule filled');
+    let datesToPost = [];
+    if (dateRange.length === 0) return;
+    for (let dateIn of dateRange) {
+      let workingDate = {
+        date: dateIn.toISOString().split('T')[0],
+        filled: null,
+        shift: 'all',
+      };
+      datesToPost.push(workingDate);
+    }
+    fetch(`${API}/schedule/filled`, {
       method: 'POST',
       // credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify(schedFilled),
+      body: JSON.stringify(datesToPost),
     })
       .then(res => {
-        // console.log(res.status);
+        console.log(res.status);
         return res.json();
       })
       .then(data => {
@@ -59,6 +70,9 @@ export const Calendar = () => {
         console.log('error: ', err);
       });
   };
+  useEffect(() => {
+    fetchIfScheduleFilled();
+  }, [dateRange]);
 
   // icons for schedule ex...
   // endIcon={
@@ -73,7 +87,7 @@ export const Calendar = () => {
     // change i to start on a sunday so that the week days are allways on
     // the same column
     for (let i = 0; i < 42; i++) {
-      let workingDate = new Date('2022-10-01');
+      let workingDate = new Date('2022-10-30');
       // workingDate.setMonth(currMonth, -6);
       let beforeDays = -6;
 
@@ -207,13 +221,15 @@ export const Calendar = () => {
         {dateRange.map((date, index) => (
           <Paper
             key={index}
-            elevation={0}
+            elevation={3}
             sx={
               date.getMonth() === currMonth
                 ? {
                     cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
+                    border: 1,
+                    borderColor: theme.palette.grey[400],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
@@ -223,10 +239,12 @@ export const Calendar = () => {
                     cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
+                    border: 1,
+                    borderColor: theme.palette.grey[400],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
-                        : '#edeef0',
+                        : theme.palette.grey[200],
                   }
             }
             onClick={() => {
@@ -235,52 +253,96 @@ export const Calendar = () => {
             }}
           >
             <Box
-              sx={
-                schedDate.toDateString() === date.toDateString()
-                  ? {
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      border: 1,
-                      height: '100%',
-                      borderColor: shift === 'Days' ? '#ffa726 ' : '#6D7AE5',
-                      borderRadius: 1,
-                    }
-                  : {
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      border: 1,
-                      borderRadius: 1,
-                      height: '100%',
-                      justifyContent: 'space-between',
-                    }
-              }
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                border: schedDate.toDateString() === date.toDateString() && 1,
+                borderRadius: 1,
+                height: '100%',
+                borderColor:
+                  schedDate.toDateString() === date.toDateString() && '#6D7AE5',
+              }}
             >
+              <Box
+                mt={1}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                  width: '100%',
+                }}
+              >
+                <Typography
+                  component='span'
+                  sx={
+                    date.getMonth() === currMonth
+                      ? {
+                          color: '',
+                        }
+                      : { color: theme.palette.grey[500] }
+                  }
+                >
+                  {date.toDateString().split(' ')[0]}
+                </Typography>
+                <Typography
+                  component='span'
+                  sx={
+                    date.getMonth() === currMonth
+                      ? {
+                          color: '',
+                        }
+                      : { color: theme.palette.grey[500] }
+                  }
+                >
+                  {date.toDateString().split(' ')[3]}
+                </Typography>
+              </Box>
+              <Divider flexItem={true} />
               <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '90%',
+                  justifyContent: 'center',
+                  gap: 1,
+                  width: '100%',
                 }}
               >
-                <Typography component='span'>
-                  {date.toDateString().split(' ')[0]}
+                <Typography
+                  variant='h4'
+                  component='span'
+                  sx={
+                    date.getMonth() === currMonth
+                      ? {
+                          color: theme.palette.info.main,
+                        }
+                      : { color: theme.palette.grey[500] }
+                  }
+                >
+                  {date.toDateString().split(' ')[1]}
                 </Typography>
-                <Typography component='span'>
-                  {date.toDateString().split(' ')[3]}
+                <Typography
+                  variant='h4'
+                  component='span'
+                  sx={
+                    date.getMonth() === currMonth
+                      ? {
+                          color: theme.palette.warning.main,
+                        }
+                      : { color: theme.palette.grey[500] }
+                  }
+                >
+                  {date.toDateString().split(' ')[2]}
                 </Typography>
               </Box>
-
-              <Typography variant='h4' component='span'>{`${
-                date.toDateString().split(' ')[1]
-              } ${date.toDateString().split(' ')[2]}`}</Typography>
-
-              <Box sx={{ display: 'flex', width: '100%' }}></Box>
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                }}
+              ></Box>
             </Box>
           </Paper>
         ))}

@@ -63,6 +63,17 @@ const BasicCard = props => {
       return true;
     }
   };
+  const flightCheck = user => {
+    // console.log('this is user ', user);
+    if (filter.flight.length > 0) {
+      return filter.flight.some(flight => {
+        // console.log('this is flight ', flight);
+        return user.flight === flight;
+      });
+    } else {
+      return true;
+    }
+  };
   const armingCheck = user => {
     if (filter.arming_status.length > 0) {
       return filter.arming_status.includes(user.weapon_arming.toString());
@@ -85,7 +96,8 @@ const BasicCard = props => {
         certificationCheck(user) &&
         weaponCheck(user) &&
         armingCheck(user) &&
-        adminCheck(user)
+        adminCheck(user) &&
+        flightCheck(user)
     );
   }, [usersArray, filter]);
 
