@@ -66,8 +66,12 @@ export default function CollapsibleTable() {
         return res.json();
       })
       .then(data => {
-        // console.log(data);
-        setPositions(data);
+
+        // console.log(shift.toLowerCase(), 'this is data ', data)
+        const filteredPosts = data.filter(post => post.shift === shift.toLowerCase())
+        // console.log('this is filtered psots ', filteredPosts)
+
+        setPositions(filteredPosts);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -125,7 +129,7 @@ export default function CollapsibleTable() {
   useEffect(() => {
     fetchSchedule();
     fetchPosts();
-  }, [schedDate]);
+  }, [schedDate, shift]);
 
   const PostList = (
     name,

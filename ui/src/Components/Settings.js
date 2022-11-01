@@ -9,20 +9,26 @@ import { AddPost } from '../Features/AddPost'
 export const Settings = () => {
   const { API, triggerFetch } = useContext(MemberContext)
   const [postArray, setPostArray] = useState([])
-  const [flag, setFlag] = useState(false)
+  const [isDay, setIsDay] = useState(true)
 
   useEffect(() => {
     fetch(`${API}/position`, {
       method: 'GET'
     })
       .then(res => res.json())
-      .then(data => setPostArray(data))
+      .then(data => {
+        const shift = isDay ? 'days' : 'mids'
+        console.log(shift, 'this is data ', data)
+        const filteredPosts = data.filter(post => post.shift === shift)
+        console.log('this is filtered psots ', filteredPosts)
+        setPostArray(filteredPosts)
+      })
       .catch(err => console.log(err))
-  }, [triggerFetch])
+  }, [triggerFetch, isDay])
 
-  useEffect(() => {
-    //console.log('post array: ', postArray);
-  }, [postArray])
+  // useEffect(() => {
+  //   console.log('post array: ', postArray);
+  // }, [postArray])
 
   if (postArray.length === 0) {
     return (
@@ -47,6 +53,9 @@ export const Settings = () => {
         >
           Settings
         </Typography>
+        <Typography variant='h5' component='span' pb={2} sx={{}}>
+          {postArray.length} Posts
+        </Typography>
         <Stack
           direction='row'
           mt={3}
@@ -57,18 +66,18 @@ export const Settings = () => {
           }}
         >
           <Button
-            color={flag ? 'primary' : 'secondary'}
+            color={isDay ? 'secondary' : 'primary'}
             variant='contained'
             sx={{ borderRadius: '30px' }}
-            onClick={() => handleClick(0)}
+            onClick={() => setIsDay(true)}
           >
             Day Posts
           </Button>
           <Button
-            color={flag ? 'secondary' : 'primary'}
+            color={!isDay ? 'secondary' : 'primary'}
             variant='contained'
             sx={{ borderRadius: '30px' }}
-            onClick={() => handleClick(1)}
+            onClick={() => setIsDay(false)}
           >
             Night Posts
           </Button>
@@ -85,11 +94,6 @@ export const Settings = () => {
           <AddPost />
         </Stack>
         {postArray.map((post, index) => {
-          // console.log('shift', post.shift.includes(day));
-          //console.log(post.shift);
-          // post.shift.includes(day) ? (
-          //   <PostCard post={post} key={index} />
-          // ) : null;
           return <PostCard post={post} key={index} />
         })}
       </Box>
