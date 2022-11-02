@@ -5,6 +5,8 @@ import '../styles/Card.css';
 import { Box, LinearProgress, Typography, Stack, Button } from '@mui/material';
 import { PostCard } from './PostCard';
 import { AddPost } from '../Features/AddPost';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import NightlightIcon from '@mui/icons-material/Nightlight';
 
 export const Settings = () => {
   const { API, triggerFetch } = useContext(MemberContext);
@@ -70,6 +72,7 @@ export const Settings = () => {
             variant='contained'
             sx={{ borderRadius: '30px' }}
             onClick={() => setIsDay(true)}
+            startIcon={<Brightness7Icon />}
           >
             Days
           </Button>
@@ -77,6 +80,7 @@ export const Settings = () => {
             color={!isDay ? 'secondary' : 'primary'}
             variant='contained'
             sx={{ borderRadius: '30px' }}
+            startIcon={<NightlightIcon />}
             onClick={() => setIsDay(false)}
           >
             Mids
