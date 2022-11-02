@@ -276,45 +276,55 @@ export const NotificationModal = () => {
                         padding: 1,
                         width: '90%',
                         flexDirection: 'column',
+                        gap: 1,
                       }}
                     >
-                      {notif.notification.link !== null ? (
-                        notif.notification.link_text !== null ? (
-                          <Button
-                            color={'secondary'}
-                            variant={'contained'}
-                            sx={{ borderRadius: '30px' }}
-                            onClick={() => {
-                              navigate(notif.notification.link);
-                              handleClose();
-                            }}
-                          >
-                            {notif.notification.link_text}
-                          </Button>
-                        ) : (
-                          <Button
-                            color={'secondary'}
-                            variant={'contained'}
-                            sx={{ borderRadius: '30px' }}
-                            onClick={() => {
-                              navigate(notif.notification.link);
-                              handleClose();
-                            }}
-                          >
-                            Click Here
-                          </Button>
-                        )
-                      ) : null}
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        {notif.notification.link !== null ? (
+                          notif.notification.link_text !== null ? (
+                            <Button
+                              color={'secondary'}
+                              variant={'contained'}
+                              sx={{ borderRadius: '30px', width: '40%' }}
+                              onClick={() => {
+                                navigate(notif.notification.link);
+                                handleClose();
+                              }}
+                            >
+                              {notif.notification.link_text}
+                            </Button>
+                          ) : (
+                            <Button
+                              color={'secondary'}
+                              variant={'contained'}
+                              sx={{ borderRadius: '30px', width: '40%' }}
+                              onClick={() => {
+                                navigate(notif.notification.link);
+                                handleClose();
+                              }}
+                            >
+                              Click Here
+                            </Button>
+                          )
+                        ) : null}
+                      </Box>
 
-                      <p>
-                        {notif.notification.notes === null ? (
-                          <b>Details: none</b>
-                        ) : (
-                          <>
-                            <b>Details:</b> {notif.notification.notes}
-                          </>
-                        )}
-                      </p>
+                      <Box>
+                        <span>
+                          {notif.notification.notes === null ? (
+                            <b>Details: none</b>
+                          ) : (
+                            <>
+                              <b>Details:</b> {notif.notification.notes}
+                            </>
+                          )}
+                        </span>
+                      </Box>
                     </Box>
                     <Box
                       sx={{

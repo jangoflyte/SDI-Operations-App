@@ -256,7 +256,7 @@ app.post('/schedule/date', (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
-app.patch('/schedule/', (req, res) => {
+app.patch('/schedule', (req, res) => {
   console.log('recieved schedule patch', req.body);
   patchSchedule(req.body)
     .then(data => res.status(200).send(data))

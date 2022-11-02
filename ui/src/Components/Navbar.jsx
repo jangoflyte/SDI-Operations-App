@@ -25,14 +25,15 @@ import HomeIcon from '@mui/icons-material/Home';
 import SignalWifiStatusbar4BarIcon from '@mui/icons-material/SignalWifiStatusbar4Bar';
 import GroupsIcon from '@mui/icons-material/Groups';
 import SettingsIcon from '@mui/icons-material/Settings';
-import SchoolIcon from '@mui/icons-material/School';
 import '../styles/MembersDetail.css';
 import logo from '../passlogo.svg';
+import fullLogo from '../fullLogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
 import { NotificationModal } from '../Features/Notification.jsx';
 import { AvatarMenu } from '../Features/AvatarMenu';
-import ChatIcon from '@mui/icons-material/Chat';
-import ScheduleIcon from '@mui/icons-material/Schedule';
+// import SchoolIcon from '@mui/icons-material/School';
+// import ChatIcon from '@mui/icons-material/Chat';
+// import ScheduleIcon from '@mui/icons-material/Schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 const drawerWidth = 240;
@@ -131,7 +132,7 @@ export default function PersistentDrawerLeft() {
           >
             {flag === true ? null : (
               <Button onClick={() => navigate('/')}>
-                <img src={logo} alt='logo' style={{ width: 140 }} />
+                <img src={fullLogo} alt='logo' style={{ height: 50 }} />
               </Button>
             )}
           </Box>
@@ -142,14 +143,13 @@ export default function PersistentDrawerLeft() {
             alignItems='center'
             mr={2}
           >
-            {toggle === false ? (
+            {/* {toggle === false ? (
               <Typography
                 variant='subtitle2'
                 component='span'
                 onClick={() => handleToggle()}
                 sx={{ cursor: 'pointer' }}
               >
-                {/* <b>PASS</b> */}
                 <b>PASS</b>
               </Typography>
             ) : (
@@ -160,9 +160,8 @@ export default function PersistentDrawerLeft() {
                 sx={{ cursor: 'pointer', fontWeight: 'bold' }}
               >
                 <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
-                {/* // link to nowhere interupting the flow */}
               </Typography>
-            )}
+            )} */}
             {userAccount === null ? (
               <Typography variant='h5' component='h6'>
                 <Button
@@ -255,9 +254,10 @@ export default function PersistentDrawerLeft() {
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          {/* <ListItem disablePadding>
             <ListItemButton
-              disabled={!(userAccount !== null && userAccount.admin)}
+              //disabled={!(userAccount !== null && userAccount.admin)}
+              disabled={true}
               onClick={() => handleNavigate('/training')}
             >
               <ListItemIcon>
@@ -265,11 +265,11 @@ export default function PersistentDrawerLeft() {
               </ListItemIcon>
               <ListItemText primary='Training' sx={{ color: 'white' }} />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem disablePadding>
+          {/* <ListItem disablePadding>
             <ListItemButton
-              disabled={!(userAccount !== null && userAccount.admin)}
+              disabled={true}
               onClick={() => handleNavigate('/chat')}
             >
               <ListItemIcon>
@@ -277,7 +277,7 @@ export default function PersistentDrawerLeft() {
               </ListItemIcon>
               <ListItemText primary='Chat' sx={{ color: 'white' }} />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem disablePadding>
             <ListItemButton
@@ -291,9 +291,9 @@ export default function PersistentDrawerLeft() {
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          {/* <ListItem disablePadding>
             <ListItemButton
-              disabled={!(userAccount !== null && userAccount.admin)}
+              disabled={true}
               onClick={() => handleNavigate('/leave')}
             >
               <ListItemIcon>
@@ -301,7 +301,7 @@ export default function PersistentDrawerLeft() {
               </ListItemIcon>
               <ListItemText primary='LeaveWeb' sx={{ color: 'white' }} />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem disablePadding>
             <ListItemButton

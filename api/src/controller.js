@@ -162,9 +162,6 @@ const postUsers = async users => {
         notification_id: 1,
         user_id: result[0].id,
         read: false,
-        // not in right place
-        // link_text: 'Edit Your Profile',
-        // link: `/sfmembers/${result[0].id}`,
       });
       console.log('register notification result ', notification);
       return result;
@@ -240,12 +237,56 @@ const getScheduleById = async userId => {
 };
 
 const getIfScheduleFilled = async checkDates => {
-  console.log('if schedule filled: ', checkDates);
+  // console.log('if schedule filled: ', checkDates);
   // ToDo
-  // grab all posts by shift
-  // check by date if schedule has number of people for man required
+  let dateFilledResults = checkDates;
+  for (let dateCheck of dateFilledResults) {
+    // dateCheck ex. { date: '2022-11-01', filled: null, shift: 'all'}
+    // grab all posts by shift
+    let positions = await knex('position').select('*').orderBy('id', 'asc');
+
+    let positionsMids = await knex('position')
+      .select('*')
+      .where('shift', 'mids')
+      .orderBy('id', 'asc');
+
+    let positionsDays = await knex('position')
+      .select('*')
+      .where('shift', 'days')
+      .orderBy('id', 'asc');
+
+    // check by date if schedule has number of people for man required
+    const totalManningFilledCheck = async () => {
+      let totalManningFilled = [];
+      for (let post of positions) {
+        let schedules = await knex('post_schedule')
+          .select('*')
+          .where('position_id', post.id)
+          .andWhere('date', `${dateCheck.date}T00:00:00.000Z`);
+
+        if (schedules.length >= Number(post.man_req) && post.shift === 'days') {
+          // console.log(post.shift);
+          totalManningFilled.push('days');
+        } else if (
+          schedules.length >= Number(post.man_req) &&
+          post.shift === 'mids'
+        ) {
+          totalManningFilled.push('mids');
+        }
+        // todo make a set to remove duplicates
+      }
+      return totalManningFilled;
+    };
+    let manningFilled = await totalManningFilledCheck();
+    //console.log('dateCheck', dateCheck);
+    dateCheck.filled = manningFilled;
+    dateCheck.positions_all = positions.length;
+    dateCheck.positions_days = positionsMids.length;
+    dateCheck.positions_mids = positionsDays.length;
+  }
+
   // return if the position has been filled
-  return 'WIP';
+  return dateFilledResults;
 };
 
 const schedAddUsers = async schedules => {
@@ -478,16 +519,36 @@ const postNotification = async ({ userId, notification }) => {
   console.log('post notification ran', userId, notification);
   let joinResult = await knex('notification').insert(notification, ['*']);
 
-  let result = await knex('notification_user').insert(
-    {
-      user_id: userId,
-      notification_id: joinResult[0].id,
-    },
-    ['*']
-  );
-  // .where({ user_id: userId });
-  console.log('post notification join results', joinResult, 'result ', result);
-  return result;
+  if (userId === 'all') {
+    let allUserIds = await knex('user_table').select('id');
+    console.log(allUserIds);
+
+    for (let user of allUserIds) {
+      await knex('notification_user').insert(
+        {
+          user_id: user.id,
+          notification_id: joinResult[0].id,
+        },
+        ['*']
+      );
+    }
+  } else {
+    let result = await knex('notification_user').insert(
+      {
+        user_id: userId,
+        notification_id: joinResult[0].id,
+      },
+      ['*']
+    );
+    // .where({ user_id: userId });
+    console.log(
+      'post notification join results',
+      joinResult,
+      'result ',
+      result
+    );
+    return result;
+  }
 };
 
 module.exports = {

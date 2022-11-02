@@ -143,9 +143,33 @@ export const Filter = ({ setFilter, filter }) => {
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
 
-          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
-            Filters
-          </Typography>
+          <Box
+            mt={3}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
+              Filters
+            </Typography>
+            <Button
+              onClick={() => {
+                setFilter({
+                  ...filter,
+                  certification: [],
+                  weapon: [],
+                  arming_status: [],
+                });
+                handleClose();
+              }}
+              variant='outlined'
+              color='secondary'
+              sx={{ cursor: 'pointer', borderRadius: '30px', border: 2 }}
+            >
+              Clear Filter
+            </Button>
+          </Box>
 
           <FormControl sx={{ m: 3 }} component='fieldset' variant='standard'>
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
@@ -159,7 +183,7 @@ export const Filter = ({ setFilter, filter }) => {
                   alignItems: 'center',
                 }}
               >
-                <Box>
+                <Box sx={{ width: '50%' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -187,7 +211,7 @@ export const Filter = ({ setFilter, filter }) => {
                     }}
                   />
                 </Box>
-                <Box>
+                <Box sx={{ width: '50%' }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -253,33 +277,47 @@ export const Filter = ({ setFilter, filter }) => {
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
               Arming Status
             </FormLabel>
+
             <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name='arm'
-                    checked={filter.arming_status.includes('true')}
-                  />
-                }
-                label='Can Arm'
-                id='true'
-                onClick={e => {
-                  handleCheckArming(e.target);
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name='no arm'
-                    checked={filter.arming_status.includes('false')}
+              >
+                <Box sx={{ width: '50%' }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='arm'
+                        checked={filter.arming_status.includes('true')}
+                      />
+                    }
+                    label='Can Arm'
+                    id='true'
+                    onClick={e => {
+                      handleCheckArming(e.target);
+                    }}
                   />
-                }
-                label='Cannot Arm'
-                id='false'
-                onClick={e => {
-                  handleCheckArming(e.target);
-                }}
-              />
+                </Box>
+
+                <Box sx={{ width: '50%' }}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name='no arm'
+                        checked={filter.arming_status.includes('false')}
+                      />
+                    }
+                    label='Cannot Arm'
+                    id='false'
+                    onClick={e => {
+                      handleCheckArming(e.target);
+                    }}
+                  />
+                </Box>
+              </Box>
             </FormGroup>
 
             <FormLabel component='legend' sx={{ fontWeight: 'bold' }}>
@@ -314,30 +352,6 @@ export const Filter = ({ setFilter, filter }) => {
               </Box>
             </FormGroup>
           </FormControl>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              onClick={() => {
-                setFilter({
-                  ...filter,
-                  certification: [],
-                  weapon: [],
-                  arming_status: [],
-                });
-                handleClose();
-              }}
-              variant='outlined'
-              color='secondary'
-              sx={{ cursor: 'pointer', borderRadius: '30px', border: 2 }}
-            >
-              Clear Filter
-            </Button>
-          </Box>
         </Box>
       </Modal>
     </Box>

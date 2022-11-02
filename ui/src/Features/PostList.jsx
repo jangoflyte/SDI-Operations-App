@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import Box from '@mui/material/Box';
 import {
   Button,
   Divider,
@@ -8,6 +7,7 @@ import {
   Fade,
   TextField,
   Avatar,
+  Box,
 } from '@mui/material/';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -30,10 +30,12 @@ import { WeaponQuals } from './WeaponQuals';
 import { useNavigate } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useParams } from 'react-router';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert, userAccount } =
     useContext(MemberContext);
+  const navigate = useNavigate();
   const [positions, setPositions] = useState({});
   const [schedule, setSchedule] = useState([]);
   const [shift, setShift] = useState('Days');
@@ -41,10 +43,10 @@ export default function CollapsibleTable() {
   const [startDate, setStartDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([]);
   const [postsAssigned, setPostsAssigned] = useState(0);
-  const [finalizedIcon, setFinalizedIcon] = useState(<HighlightOffIcon />);
-  // let currentDate = new Date().toISOString().split('T')[0];
+  const [schedFilled, setSchedFilled] = useState([]);
+  const { urlDate } = useParams();
 
-  let dateEnd = new Date();
+  let dateEnd = new Date(startDate);
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
     .toISOString()
     .split('T')[0];
@@ -103,6 +105,45 @@ export default function CollapsibleTable() {
       });
   };
 
+  const fetchIfScheduleFilled = () => {
+    console.log('fetching if schedule filled');
+    let datesToPost = [];
+    if (dateRange.length === 0) return;
+    for (let dateIn of dateRange) {
+      let workingDate = {
+        date: `${dateIn.getFullYear()}-${
+          dateIn.getMonth() + 1
+        }-${dateIn.getDate()}`,
+        filled: null,
+        shift: 'all',
+      };
+      datesToPost.push(workingDate);
+    }
+    fetch(`${API}/schedule/filled`, {
+      method: 'POST',
+      // credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      redirect: 'follow',
+      body: JSON.stringify(datesToPost),
+    })
+      .then(res => {
+        //console.log(res.status);
+        return res.json();
+      })
+      .then(data => {
+        //console.log(data);
+        setSchedFilled(data);
+      })
+      .catch(err => {
+        console.log('error: ', err);
+      });
+  };
+  useEffect(() => {
+    fetchIfScheduleFilled();
+  }, [dateRange, schedule]);
+
   const delSchedule = id => {
     //console.log(`deleting schedule ${id}`);
     fetch(`${API}/schedule/${id}`, {
@@ -127,9 +168,18 @@ export default function CollapsibleTable() {
   };
 
   useEffect(() => {
+    if (urlDate !== undefined) {
+      let splitDate = urlDate.split('-');
+      if (splitDate[2] < 10) splitDate[2] = `0${splitDate[2]}`;
+      setStartDate(new Date(splitDate[0], splitDate[1] - 1, splitDate[2]));
+      setSchedDate(new Date(splitDate[0], splitDate[1] - 1, splitDate[2]));
+    }
+  }, [urlDate]);
+
+  useEffect(() => {
     fetchSchedule();
     fetchPosts();
-  }, [schedDate, shift, finalizedIcon]);
+  }, [schedDate, shift]);
 
   const PostList = (
     name,
@@ -232,8 +282,8 @@ export default function CollapsibleTable() {
   }, [toggleAlert]);
 
   const handleFinalize = () => {
-    //console.log(userAccount.id);
-    fetch(`${API}/notifications/${userAccount.id}`, {
+    console.log(userAccount);
+    fetch(`${API}/notifications/all`, {
       method: 'POST',
       // credentials: 'include',
       headers: {
@@ -241,8 +291,17 @@ export default function CollapsibleTable() {
       },
       //redirect: 'follow',
       body: JSON.stringify({
-        name: 'New schedule posted',
-        notes: 'Schedule finalized',
+        name: 'New Schedule Posted',
+        link_text: 'Click to See Schedule',
+        link: `/${schedDate.getFullYear()}-${
+          schedDate.getMonth() + 1
+        }-${schedDate.getDate()}`,
+
+        notes: `Schedule finalized by ${userAccount.first_name} ${
+          userAccount.last_name
+        } for ${
+          shift === 'Days' ? 'Day' : 'Mid'
+        } Shift on ${schedDate.toDateString()}`,
       }),
     })
       .then(res => {
@@ -253,10 +312,27 @@ export default function CollapsibleTable() {
         // console.log(data);
         data;
       })
-      .then(() => setFinalizedIcon(<CheckCircleOutlineIcon />))
       .catch(err => {
         console.log('error: ', err);
       });
+  };
+
+  const checkboxDisplay = (date, index, shiftInfo) => {
+    if (schedFilled.length > 0) {
+      if (
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
+          schedFilled[index].date &&
+        schedFilled[index].filled.filter(
+          post => post.toLowerCase() === shiftInfo.toLowerCase()
+        ).length === schedFilled[index][`positions_${shiftInfo}`]
+      ) {
+        return <CheckCircleOutlineIcon color='info' />;
+      } else {
+        return <HighlightOffIcon color='error' />;
+      }
+    } else {
+      return <HighlightOffIcon color='error' />;
+    }
   };
 
   return (
@@ -335,6 +411,13 @@ export default function CollapsibleTable() {
             }
           }}
         />
+        <Button
+          color='info'
+          variant='outlined'
+          onClick={() => navigate('/calendar')}
+        >
+          Month View
+        </Button>
         <Box
           sx={{
             display: 'flex',
@@ -425,13 +508,7 @@ export default function CollapsibleTable() {
                   setShift('Days');
                   fetchSchedule();
                 }}
-                endIcon={
-                  postsAssigned === rows.length ? (
-                    <CheckCircleOutlineIcon sx={{ color: 'green' }} />
-                  ) : (
-                    <HighlightOffIcon sx={{ color: 'red' }} />
-                  )
-                }
+                endIcon={checkboxDisplay(date, index, 'days')}
               >
                 Days
               </Button>
@@ -453,13 +530,7 @@ export default function CollapsibleTable() {
                   setShift('Mids');
                   fetchSchedule();
                 }}
-                endIcon={
-                  postsAssigned === rows.length ? (
-                    <CheckCircleOutlineIcon sx={{ color: 'green' }} />
-                  ) : (
-                    <HighlightOffIcon sx={{ color: 'red' }} />
-                  )
-                }
+                endIcon={checkboxDisplay(date, index, 'mids')}
               >
                 Mids
               </Button>

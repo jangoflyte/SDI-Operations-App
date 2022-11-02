@@ -3,8 +3,6 @@ import Box from '@mui/material/Box';
 import {
   Button,
   Divider,
-  Chip,
-  Alert,
   FormControl,
   InputLabel,
   Select,
@@ -17,18 +15,15 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useTheme } from '@mui/material/styles';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Calendar = () => {
-  const { API, toggleAlert, setToggleAlert, userAccount } =
-    useContext(MemberContext);
+  const { API } = useContext(MemberContext);
   const theme = useTheme();
-  const [positions, setPositions] = useState({});
-  const [schedule, setSchedule] = useState([]);
-  const [shift, setShift] = useState('Days');
+  const navigate = useNavigate();
   const [schedDate, setSchedDate] = useState(new Date());
   const [currMonth, setCurrMonth] = useState(new Date().getMonth());
   const [currYear, setCurrYear] = useState(new Date().getFullYear());
-  const [startDate, setStartDate] = useState(new Date());
   const [dateRange, setDateRange] = useState([]);
   const [schedFilled, setSchedFilled] = useState([]);
 
@@ -43,7 +38,9 @@ export const Calendar = () => {
     if (dateRange.length === 0) return;
     for (let dateIn of dateRange) {
       let workingDate = {
-        date: dateIn.toISOString().split('T')[0],
+        date: `${dateIn.getFullYear()}-${
+          dateIn.getMonth() + 1
+        }-${dateIn.getDate()}`,
         filled: null,
         shift: 'all',
       };
@@ -59,12 +56,12 @@ export const Calendar = () => {
       body: JSON.stringify(datesToPost),
     })
       .then(res => {
-        console.log(res.status);
+        //console.log(res.status);
         return res.json();
       })
       .then(data => {
-        // console.log(data);
-        setSchedule(data);
+        //console.log(data);
+        setSchedFilled(data);
       })
       .catch(err => {
         console.log('error: ', err);
@@ -81,6 +78,70 @@ export const Calendar = () => {
   //   ) : (
   //     <HighlightOffIcon />
   //   )
+
+  const checkboxDisplay = (date, index, check) => {
+    if (schedFilled.length > 0) {
+      if (
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
+          schedFilled[index].date &&
+        schedFilled[index].filled.length === schedFilled[index].positions_all
+      ) {
+        return (
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              bgcolor:
+                check === true
+                  ? 'none'
+                  : date.getMonth() === currMonth
+                  ? theme.palette.info.light + '60'
+                  : theme.palette.info.light + '30',
+            }}
+          >
+            <CheckCircleOutlineIcon color='info' />
+          </Box>
+        );
+      } else {
+        return (
+          <Box
+            sx={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              bgcolor:
+                check === true
+                  ? 'none'
+                  : date.getMonth() === currMonth
+                  ? theme.palette.error.light + '60'
+                  : theme.palette.error.light + '30',
+            }}
+          >
+            <HighlightOffIcon color='error' />
+          </Box>
+        );
+      }
+    } else {
+      return (
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            bgcolor:
+              check === true
+                ? 'none'
+                : date.getMonth() === currMonth
+                ? theme.palette.error.light + '60'
+                : theme.palette.error.light + '30',
+          }}
+        >
+          <HighlightOffIcon color='error' />
+        </Box>
+      );
+    }
+  };
 
   useMemo(() => {
     let dateRange2 = [];
@@ -249,7 +310,6 @@ export const Calendar = () => {
             }
             onClick={() => {
               setSchedDate(date);
-              setShift('Days');
             }}
           >
             <Box
@@ -341,8 +401,46 @@ export const Calendar = () => {
                 sx={{
                   display: 'flex',
                   width: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-              ></Box>
+              >
+                {/* <Box sx={{ width: '100%' }}> */}
+                {schedDate.toDateString() === date.toDateString() ? (
+                  <Button
+                    variant='contained'
+                    size='small'
+                    color='info'
+                    fullWidth={true}
+                    sx={{
+                      borderRadius: 0,
+                      bgcolor: theme.palette.info.light + '80',
+                    }}
+                    onClick={() => {
+                      console.log(
+                        'clicked modify',
+                        `/${date.getFullYear()}-${
+                          date.getMonth() + 1
+                        }-${date.getDate()}`
+                      );
+                      navigate(
+                        `/${date.getFullYear()}-${
+                          date.getMonth() + 1
+                        }-${date.getDate()}`
+                      );
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      Modify
+                      {checkboxDisplay(date, index, true)}
+                    </Box>
+                  </Button>
+                ) : (
+                  checkboxDisplay(date, index, false)
+                )}
+                {/* </Box> */}
+                {/* {checkboxDisplay(date, index)} */}
+              </Box>
             </Box>
           </Paper>
         ))}

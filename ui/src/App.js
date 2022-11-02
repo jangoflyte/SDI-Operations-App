@@ -99,7 +99,7 @@ const App = () => {
           <>
             <PersistentDrawerLeft />
             <Routes>
-              <Route path='/' element={<Home />} />
+              <Route path='/:urlDate' element={<Home />} />
               <Route path='/data' element={<DataSources />} />
               <Route path='/sfmembers' element={<MemberDetails />} />
               <Route
@@ -107,9 +107,9 @@ const App = () => {
                 element={<IndividualMember />}
               />
               <Route path='/settings' element={<Settings />} />
-              <Route path='/training' element={<Training />} />
-              <Route path='/chat' element={<Chat />} />
-              <Route path='/leave' element={<LeaveWeb />} />
+              {/* <Route path='/training' element={<Training />} /> */}
+              {/* <Route path='/chat' element={<Chat />} />
+              <Route path='/leave' element={<LeaveWeb />} /> */}
               <Route path='/calendar' element={<Calendar />} />
               <Route path='/weather' element={<Weather />} />
 

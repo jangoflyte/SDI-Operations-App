@@ -14,6 +14,7 @@ import {
   DialogTitle,
   Box,
   IconButton,
+  Tooltip,
 } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
@@ -113,18 +114,22 @@ export const EditAvatar = props => {
 
   return (
     <>
-      <Avatar
-        onClick={handleClickOpen}
-        sx={{ cursor: 'pointer', width: 80, height: 80, bgcolor: color }}
-        src={pic}
-        alt='avatar'
-        size='large'
-      >
-        {avatar.first_name
-          ? `${avatar.first_name.charAt(0).toUpperCase()}`
-          : `F`}
-        {avatar.last_name ? `${avatar.last_name.charAt(0).toUpperCase()}` : `L`}
-      </Avatar>
+      <Tooltip title='Change Avatar'>
+        <Avatar
+          onClick={handleClickOpen}
+          sx={{ cursor: 'pointer', width: 80, height: 80, bgcolor: color }}
+          src={pic}
+          alt='avatar'
+          size='large'
+        >
+          {avatar.first_name
+            ? `${avatar.first_name.charAt(0).toUpperCase()}`
+            : `F`}
+          {avatar.last_name
+            ? `${avatar.last_name.charAt(0).toUpperCase()}`
+            : `L`}
+        </Avatar>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -137,6 +142,7 @@ export const EditAvatar = props => {
         <DialogContent>
           <DialogContentText id='customized-dialog-description'>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {console.log('pic', pic)}
               {pic === null ? (
                 <Avatar
                   src=''
@@ -168,24 +174,26 @@ export const EditAvatar = props => {
               </FormControl>
             </Box>
             <Box>
-              <IconButton
-                color='primary'
-                aria-label='upload picture'
-                component='label'
-                onClick={() => handlePic()}
-              >
-                <input
-                  hidden
-                  accept='image/*'
-                  type='file'
-                  id='myfile'
-                  onChange={e => {
-                    console.log(e.target.files[0]);
-                    setPic(e.target.files[0]);
-                  }}
-                />
-                <PhotoCamera />
-              </IconButton>
+              <Tooltip title='Upload File'>
+                <IconButton
+                  color='primary'
+                  aria-label='upload picture'
+                  component='label'
+                >
+                  <input
+                    hidden
+                    accept='image/*'
+                    type='file'
+                    id='myfile'
+                    onChange={e => {
+                      console.log(e.target.files[0]);
+                      let img = e.target.files[0];
+                      setPic(URL.createObjectURL(img));
+                    }}
+                  />
+                  <PhotoCamera />
+                </IconButton>
+              </Tooltip>
             </Box>
           </DialogContentText>
           <DialogActions>

@@ -56,15 +56,18 @@ const PostMemberModal = props => {
 
   useMemo(() => {
     let results = data.filter(user => {
-      let wepResults = weaponsReq.map(wep => {
-        let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
-        // console.log('inside filter', tests, user)
-        if (tests.includes(true)) {
-          return true;
-        } else {
-          return false;
-        }
-      });
+      let wepResults = [true];
+      if (weaponsReq[0] !== '') {
+        wepResults = weaponsReq.map(wep => {
+          let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
+          // console.log('inside filter', tests, user)
+          if (tests.includes(true)) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+      }
       let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
       // console.log('results', certResults)
       if (
