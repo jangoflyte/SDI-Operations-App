@@ -94,7 +94,7 @@ export const Calendar = () => {
               justifyContent: 'center',
               bgcolor:
                 check === true
-                  ? 'none'
+                  ? 'inherit'
                   : date.getMonth() === currMonth
                   ? theme.palette.info.light + '60'
                   : theme.palette.info.light + '30',
@@ -112,7 +112,7 @@ export const Calendar = () => {
               justifyContent: 'center',
               bgcolor:
                 check === true
-                  ? 'none'
+                  ? 'inherit'
                   : date.getMonth() === currMonth
                   ? theme.palette.error.light + '60'
                   : theme.palette.error.light + '30',
@@ -131,7 +131,7 @@ export const Calendar = () => {
             justifyContent: 'center',
             bgcolor:
               check === true
-                ? 'none'
+                ? 'inherit'
                 : date.getMonth() === currMonth
                 ? theme.palette.error.light + '60'
                 : theme.palette.error.light + '30',
@@ -228,6 +228,14 @@ export const Calendar = () => {
           <Button variant='outlined' color='info' onClick={handleChangeToday}>
             Today
           </Button>
+          <Button
+            variant='outlined'
+            color='info'
+            onClick={() => navigate('/')}
+            sx={{ width: 250 }}
+          >
+            Weekly View
+          </Button>
         </Box>
         <Box
           sx={{
@@ -245,7 +253,7 @@ export const Calendar = () => {
           >
             <Typography variant='h2' component='span'>{`<`}</Typography>
           </Button>
-          <Typography variant='h2' color='primary'>
+          <Typography variant='h2'>
             {currMonth === 0 && `January`}
             {currMonth === 1 && `February`}
             {currMonth === 2 && `March`}
@@ -290,22 +298,30 @@ export const Calendar = () => {
                     width: '13%',
                     minHeight: 120,
                     border: 1,
-                    borderColor: theme.palette.grey[400],
+                    borderColor:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.grey[400]
+                        : theme.palette.grey[900],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
-                        : 'none',
+                        : 'inherit',
                   }
                 : {
                     cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
                     border: 1,
-                    borderColor: theme.palette.grey[400],
+                    borderColor:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.grey[400]
+                        : theme.palette.grey[900],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
-                        : theme.palette.grey[200],
+                        : theme.palette.mode === 'light'
+                        ? theme.palette.grey[200]
+                        : theme.palette.grey[900],
                   }
             }
             onClick={() => {

@@ -23,6 +23,7 @@ import {
   Tooltip,
   Divider,
   Avatar,
+  Paper,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from 'react-router';
@@ -33,6 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserPost } from './UserPost';
 import { WeaponQuals } from '../Features/WeaponQuals';
 import { EditAvatar } from './EditAvatar';
+import { useTheme } from '@mui/material/styles';
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount, color } =
@@ -40,6 +42,7 @@ const IndividualMember = () => {
   const { memberId } = useParams();
   const [scheduleArray, setScheduleArray] = useState(null);
   const [upcoming, setUpcoming] = useState(true);
+  const theme = useTheme();
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`)
@@ -131,7 +134,12 @@ const IndividualMember = () => {
               )
             ) : null}
 
-            <Typography variant='h1'>
+            <Typography
+              variant='h1'
+              sx={{
+                color: theme.palette.mode === 'light' ? 'inherit' : 'white',
+              }}
+            >
               {member.first_name
                 ? `${member.first_name
                     .charAt(0)
@@ -144,6 +152,7 @@ const IndividualMember = () => {
             </Typography>
           </Box>
         </Box>
+
         <Box
           sx={{
             display: 'flex',
@@ -155,14 +164,14 @@ const IndividualMember = () => {
             mt: 5,
           }}
         >
-          <Box
+          <Paper
             sx={{
               height: 600,
-              width: 500,
+              width: 600,
               boxShadow: 3,
               borderRadius: 3,
               p: 5,
-              backgroundColor: 'white',
+              //backgroundColor: 'white',
             }}
           >
             <Stack
@@ -276,7 +285,7 @@ const IndividualMember = () => {
                 overflow: 'auto',
                 maxHeight: 100,
                 mt: 2,
-                bgcolor: '#edeef0',
+                //bgcolor: '#edeef0',
                 borderRadius: 2,
                 p: 1,
               }}
@@ -287,15 +296,16 @@ const IndividualMember = () => {
                 <Typography sx={{ mb: 5 }}>{member.notes}</Typography>
               )}
             </Box>
-          </Box>
-          <Box
+          </Paper>
+          <Paper
             sx={{
               mx: 5,
-              width: 500,
+              width: 600,
+              height: 600,
               boxShadow: 3,
               borderRadius: 3,
               p: 5,
-              backgroundColor: 'white',
+              //backgroundColor: 'white',
             }}
           >
             <Stack
@@ -319,21 +329,30 @@ const IndividualMember = () => {
                 }}
               >
                 <Button
-                  color={upcoming ? 'secondary' : 'primary'}
-                  // variant='outlined'
                   variant={upcoming ? 'contained' : 'outlined'}
                   sx={{
                     borderRadius: '30px',
+                    bgcolor: upcoming
+                      ? theme.palette.secondary.main
+                      : theme.palette.mode === 'light'
+                      ? 'inherit'
+                      : theme.palette.grey[800],
                   }}
                   onClick={() => setUpcoming(true)}
                 >
                   Upcoming
                 </Button>
                 <Button
-                  color={upcoming ? 'primary' : 'secondary'}
                   // variant='outlined'
                   variant={!upcoming ? 'contained' : 'outlined'}
-                  sx={{ borderRadius: '30px' }}
+                  sx={{
+                    borderRadius: '30px',
+                    bgcolor: !upcoming
+                      ? theme.palette.secondary.main
+                      : theme.palette.mode === 'light'
+                      ? 'inherit'
+                      : theme.palette.grey[800],
+                  }}
                   onClick={() => setUpcoming(false)}
                 >
                   Past
@@ -374,18 +393,30 @@ const IndividualMember = () => {
               </Box>
             </Stack>
 
-            {scheduleArray !== null && scheduleArray.length > 0 ? (
-              scheduleArray.map((schedule, index) => {
-                // console.log('INDEX ', index);
-                schedule.upcoming = upcoming;
-                return (
-                  <UserPost schedule={schedule} key={index} index={index} />
-                );
-              })
-            ) : (
-              <>Not Assigned to Any Posts</>
-            )}
-          </Box>
+            <Box
+              component='div'
+              sx={{
+                overflow: 'scroll',
+                maxHeight: 400,
+                mt: 2,
+                //bgcolor: '#edeef0',
+                borderRadius: 2,
+                p: 1,
+              }}
+            >
+              {scheduleArray !== null && scheduleArray.length > 0 ? (
+                scheduleArray.map((schedule, index) => {
+                  // console.log('INDEX ', index);
+                  schedule.upcoming = upcoming;
+                  return (
+                    <UserPost schedule={schedule} key={index} index={index} />
+                  );
+                })
+              ) : (
+                <p>Not Assigned to Any Posts</p>
+              )}
+            </Box>
+          </Paper>
         </Box>
       </Box>
     );
@@ -398,7 +429,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 650,
-  height: 650,
+  height: 700,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,

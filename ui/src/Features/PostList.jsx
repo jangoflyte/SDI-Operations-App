@@ -31,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useParams } from 'react-router';
+import { useTheme } from '@mui/material/styles';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -45,6 +46,7 @@ export default function CollapsibleTable() {
   const [postsAssigned, setPostsAssigned] = useState(0);
   const [schedFilled, setSchedFilled] = useState([]);
   const { urlDate } = useParams();
+  const theme = useTheme();
 
   let dateEnd = new Date(startDate);
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
@@ -319,12 +321,20 @@ export default function CollapsibleTable() {
 
   const checkboxDisplay = (date, index, shiftInfo) => {
     if (schedFilled.length > 0) {
+      let test = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}`;
+      console.log('test filter', test, schedFilled[index].date);
+      console.log(
+        'test 2',
+        schedFilled[index].filled.filter(item => item === shiftInfo).length,
+        schedFilled[index][`positions_${shiftInfo}`]
+      );
       if (
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
           schedFilled[index].date &&
-        schedFilled[index].filled.filter(
-          post => post.toLowerCase() === shiftInfo.toLowerCase()
-        ).length === schedFilled[index][`positions_${shiftInfo}`]
+        schedFilled[index].filled.filter(item => item === shiftInfo).length ===
+          schedFilled[index][`positions_${shiftInfo}`]
       ) {
         return <CheckCircleOutlineIcon color='info' />;
       } else {
@@ -393,7 +403,14 @@ export default function CollapsibleTable() {
           label='Start Date'
           type='date'
           defaultValue={startDate.toISOString().split('T')[0]}
-          sx={{ width: 220, backgroundColor: 'white', cursor: 'pointer' }}
+          sx={{
+            width: 220,
+            backgroundColor:
+              theme.palette.mode === 'light'
+                ? 'white'
+                : theme.palette.grey[900],
+            cursor: 'pointer',
+          }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -430,7 +447,9 @@ export default function CollapsibleTable() {
             {postsAssigned}/{rows.length} Post Assigned
           </Typography>
 
-          {postsAssigned === rows.length ? (
+          {postsAssigned === rows.length &&
+          userAccount !== null &&
+          userAccount.admin ? (
             <Button
               onClick={() => handleFinalize()}
               color='secondary'

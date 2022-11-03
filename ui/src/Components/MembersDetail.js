@@ -110,7 +110,14 @@ export const MemberDetails = () => {
           </Fade>
         </Stack>
         <Box sx={{ width: '90%' }}>
-          <Typography variant='h3' ml={10} pb={4} sx={{ fontWeight: 'bold' }}>
+          <Typography
+            variant='h3'
+            ml={10}
+            pb={4}
+            sx={{
+              fontWeight: 'bold',
+            }}
+          >
             People
           </Typography>
           <Stack
@@ -128,7 +135,7 @@ export const MemberDetails = () => {
                 display: 'flex',
               }}
             >
-              <FormControl sx={{ width: '40ch', backgroundColor: 'white' }}>
+              <FormControl sx={{ width: '40ch' }}>
                 <TextField
                   label='Search People'
                   id='fullWidth'
@@ -222,7 +229,7 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 650,
-  height: 600,
+  height: 650,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,

@@ -240,21 +240,21 @@ const getIfScheduleFilled = async checkDates => {
   // console.log('if schedule filled: ', checkDates);
   // ToDo
   let dateFilledResults = checkDates;
+  let positions = await knex('position').select('*').orderBy('id', 'asc');
+
+  let positionsMids = await knex('position')
+    .select('*')
+    .where('shift', 'mids')
+    .orderBy('id', 'asc');
+
+  let positionsDays = await knex('position')
+    .select('*')
+    .where('shift', 'days')
+    .orderBy('id', 'asc');
+
   for (let dateCheck of dateFilledResults) {
     // dateCheck ex. { date: '2022-11-01', filled: null, shift: 'all'}
     // grab all posts by shift
-    let positions = await knex('position').select('*').orderBy('id', 'asc');
-
-    let positionsMids = await knex('position')
-      .select('*')
-      .where('shift', 'mids')
-      .orderBy('id', 'asc');
-
-    let positionsDays = await knex('position')
-      .select('*')
-      .where('shift', 'days')
-      .orderBy('id', 'asc');
-
     // check by date if schedule has number of people for man required
     const totalManningFilledCheck = async () => {
       let totalManningFilled = [];
@@ -281,8 +281,8 @@ const getIfScheduleFilled = async checkDates => {
     //console.log('dateCheck', dateCheck);
     dateCheck.filled = manningFilled;
     dateCheck.positions_all = positions.length;
-    dateCheck.positions_days = positionsMids.length;
-    dateCheck.positions_mids = positionsDays.length;
+    dateCheck.positions_days = positionsDays.length;
+    dateCheck.positions_mids = positionsMids.length;
   }
 
   // return if the position has been filled

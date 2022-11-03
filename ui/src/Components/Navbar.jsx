@@ -31,10 +31,9 @@ import fullLogo from '../fullLogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
 import { NotificationModal } from '../Features/Notification.jsx';
 import { AvatarMenu } from '../Features/AvatarMenu';
-// import SchoolIcon from '@mui/icons-material/School';
-// import ChatIcon from '@mui/icons-material/Chat';
-// import ScheduleIcon from '@mui/icons-material/Schedule';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 const drawerWidth = 240;
 
@@ -87,8 +86,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
-  const [toggle, setToggle] = React.useState(false);
-  const { userAccount } = useContext(MemberContext);
+  const { userAccount, darkMode, setDarkMode } = useContext(MemberContext);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -104,10 +102,6 @@ export default function PersistentDrawerLeft() {
   const handleNavigate = path => {
     navigate(path);
     handleDrawerClose();
-  };
-
-  const handleToggle = () => {
-    setToggle(!toggle);
   };
 
   return (
@@ -176,8 +170,21 @@ export default function PersistentDrawerLeft() {
               </Typography>
             ) : (
               <>
+                <IconButton
+                  color='inherit'
+                  onClick={() =>
+                    setDarkMode(prevMode =>
+                      prevMode === 'light' ? 'dark' : 'light'
+                    )
+                  }
+                >
+                  {darkMode === 'light' ? (
+                    <Brightness7Icon />
+                  ) : (
+                    <Brightness4Icon />
+                  )}
+                </IconButton>
                 <NotificationModal />
-
                 <AvatarMenu />
               </>
             )}
@@ -237,11 +244,11 @@ export default function PersistentDrawerLeft() {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigate('/sfmembers')}>
+            <ListItemButton onClick={() => handleNavigate('/calendar')}>
               <ListItemIcon>
-                <GroupsIcon sx={{ color: 'white' }} />
+                <CalendarMonthIcon sx={{ color: 'white' }} />
               </ListItemIcon>
-              <ListItemText primary='People' sx={{ color: 'white' }} />
+              <ListItemText primary='Calendar' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
 
@@ -254,55 +261,14 @@ export default function PersistentDrawerLeft() {
             </ListItemButton>
           </ListItem>
 
-          {/* <ListItem disablePadding>
-            <ListItemButton
-              //disabled={!(userAccount !== null && userAccount.admin)}
-              disabled={true}
-              onClick={() => handleNavigate('/training')}
-            >
-              <ListItemIcon>
-                <SchoolIcon sx={{ color: 'white' }} />
-              </ListItemIcon>
-              <ListItemText primary='Training' sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem> */}
-
-          {/* <ListItem disablePadding>
-            <ListItemButton
-              disabled={true}
-              onClick={() => handleNavigate('/chat')}
-            >
-              <ListItemIcon>
-                <ChatIcon sx={{ color: 'white' }} />
-              </ListItemIcon>
-              <ListItemText primary='Chat' sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem> */}
-
           <ListItem disablePadding>
-            <ListItemButton
-              disabled={!(userAccount !== null && userAccount.admin)}
-              onClick={() => handleNavigate('/calendar')}
-            >
+            <ListItemButton onClick={() => handleNavigate('/sfmembers')}>
               <ListItemIcon>
-                <CalendarMonthIcon sx={{ color: 'white' }} />
+                <GroupsIcon sx={{ color: 'white' }} />
               </ListItemIcon>
-              <ListItemText primary='Calendar' sx={{ color: 'white' }} />
+              <ListItemText primary='People' sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
-
-          {/* <ListItem disablePadding>
-            <ListItemButton
-              disabled={true}
-              onClick={() => handleNavigate('/leave')}
-            >
-              <ListItemIcon>
-                <ScheduleIcon sx={{ color: 'white' }} />
-              </ListItemIcon>
-              <ListItemText primary='LeaveWeb' sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem> */}
-
           <ListItem disablePadding>
             <ListItemButton
               disabled={!(userAccount !== null && userAccount.admin)}

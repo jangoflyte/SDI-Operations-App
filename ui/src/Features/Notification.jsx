@@ -11,6 +11,7 @@ import {
   AccordionDetails,
   Avatar,
   Button,
+  Divider,
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -21,6 +22,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 export const NotificationModal = () => {
   const [open, setOpen] = useState(false);
@@ -32,6 +34,7 @@ export const NotificationModal = () => {
   const [unreadArray, setUnreadArray] = useState([]);
   const [triggerNotification, setTriggerNotification] = useState(false);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const style = {
     position: 'absolute',
@@ -189,14 +192,12 @@ export const NotificationModal = () => {
               </Typography>
             )}
 
+            {/* <Typography>Unread</Typography>
+            <Divider />
+            <Typography>Read</Typography> */}
+
             {notifications.map((notif, index) => (
               <span key={index + 'span'}>
-                {!notif.read ? (
-                  <Typography>Unread</Typography>
-                ) : (
-                  <Typography>Read</Typography>
-                )}
-
                 <Accordion key={index}>
                   <Card
                     sx={
@@ -206,7 +207,10 @@ export const NotificationModal = () => {
                             alignItems: 'center',
                             justifyContent: 'start',
                             paddingLeft: 1,
-                            backgroundColor: '#edeef0',
+                            backgroundColor:
+                              theme.palette.mode === 'light'
+                                ? '#edeef0'
+                                : theme.palette.grey[800],
                           }
                         : {
                             display: 'flex',
@@ -229,8 +233,7 @@ export const NotificationModal = () => {
                     <Box
                       sx={{
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
+                        justifyContent: 'center',
                         padding: 1,
                         width: '100%',
                       }}
@@ -290,7 +293,7 @@ export const NotificationModal = () => {
                             <Button
                               color={'secondary'}
                               variant={'contained'}
-                              sx={{ borderRadius: '30px', width: '40%' }}
+                              sx={{ borderRadius: '30px', width: '50%' }}
                               onClick={() => {
                                 navigate(notif.notification.link);
                                 handleClose();
@@ -302,7 +305,7 @@ export const NotificationModal = () => {
                             <Button
                               color={'secondary'}
                               variant={'contained'}
-                              sx={{ borderRadius: '30px', width: '40%' }}
+                              sx={{ borderRadius: '30px', width: '50%' }}
                               onClick={() => {
                                 navigate(notif.notification.link);
                                 handleClose();
@@ -317,7 +320,9 @@ export const NotificationModal = () => {
                       <Box>
                         <span>
                           {notif.notification.notes === null ? (
-                            <b>Details: none</b>
+                            <>
+                              <b>Details:</b> none
+                            </>
                           ) : (
                             <>
                               <b>Details:</b> {notif.notification.notes}
@@ -331,7 +336,7 @@ export const NotificationModal = () => {
                         display: 'flex',
                         justifyContent: 'space-between',
                         padding: 1,
-                        width: '90%',
+                        width: '100%',
                       }}
                     >
                       <Chip
@@ -387,6 +392,9 @@ export const NotificationModal = () => {
                 onClick={() => {
                   clearNotifications(userAccount.id);
                   handleClose();
+                }}
+                sx={{
+                  color: theme.palette.mode === 'light' ? 'inherit' : 'white',
                 }}
               >
                 Clear Notifications
