@@ -31,6 +31,7 @@ import { useNavigate } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useParams } from 'react-router';
+import { useTheme } from '@mui/material/styles';
 
 export default function CollapsibleTable() {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -45,6 +46,7 @@ export default function CollapsibleTable() {
   const [postsAssigned, setPostsAssigned] = useState(0);
   const [schedFilled, setSchedFilled] = useState([]);
   const { urlDate } = useParams();
+  const theme = useTheme();
 
   let dateEnd = new Date(startDate);
   dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
@@ -158,7 +160,7 @@ export default function CollapsibleTable() {
         // console.log(res.status);
         return res.json();
       })
-      .then(data => {
+      .then(() => {
         // console.log(data);
         fetchSchedule();
       })
@@ -293,7 +295,7 @@ export default function CollapsibleTable() {
       body: JSON.stringify({
         name: 'New Schedule Posted',
         link_text: 'Click to See Schedule',
-        link: `/${schedDate.getFullYear()}-${
+        link: `/date/${schedDate.getFullYear()}-${
           schedDate.getMonth() + 1
         }-${schedDate.getDate()}`,
 
@@ -319,12 +321,20 @@ export default function CollapsibleTable() {
 
   const checkboxDisplay = (date, index, shiftInfo) => {
     if (schedFilled.length > 0) {
+      let test = `${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}`;
+      console.log('test filter', test, schedFilled[index].date);
+      console.log(
+        'test 2',
+        schedFilled[index].filled.filter(item => item === shiftInfo).length,
+        schedFilled[index][`positions_${shiftInfo}`]
+      );
       if (
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
           schedFilled[index].date &&
-        schedFilled[index].filled.filter(
-          post => post.toLowerCase() === shiftInfo.toLowerCase()
-        ).length === schedFilled[index][`positions_${shiftInfo}`]
+        schedFilled[index].filled.filter(item => item === shiftInfo).length ===
+          schedFilled[index][`positions_${shiftInfo}`]
       ) {
         return <CheckCircleOutlineIcon color='info' />;
       } else {
@@ -360,97 +370,117 @@ export default function CollapsibleTable() {
           </Alert>
         </Box>
       </Fade>
-      <Typography
-        variant='h1'
-        component='span'
-        sx={
-          // fontFamily":"Roboto",
-          shift === 'Days'
-            ? {
-                color: '#ffa726',
-                textShadow: '1px 1px 2px #454545',
-              }
-            : {
-                color: '#7A8AFF',
-                textShadow: '1px 1px 2px #454545',
-              }
-        }
-      >
-        {schedDate.toDateString()}
-      </Typography>
       <Box
         sx={{
           display: 'flex',
           flexWrap: 'wrap',
           flexDirection: 'row',
-          alignItems: 'center',
+          alignItems: 'end',
           justifyContent: 'space-between',
           width: '100%',
+          gap: 3,
         }}
       >
-        <TextField
-          id='date'
-          label='Start Date'
-          type='date'
-          defaultValue={startDate.toISOString().split('T')[0]}
-          sx={{ width: 220, backgroundColor: 'white', cursor: 'pointer' }}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          onChange={e => {
-            // console.log('target value: ', e.target.value);
-            // let dateArr = e.target.value.split('-');
-            // console.log('settign start date: ', dateArr);
-            if (e.target.value === '') {
-              setStartDate(new Date());
-              e.target.value = new Date().toISOString().split('T')[0];
-              setSchedDate(new Date(`${e.target.value}T00:00:00`));
-            } else {
-              setStartDate(new Date(`${e.target.value}T00:00:00`));
-              setSchedDate(new Date(`${e.target.value}T00:00:00`));
-            }
-          }}
-        />
-        <Button
-          color='info'
-          variant='outlined'
-          onClick={() => navigate('/calendar')}
-        >
-          Month View
-        </Button>
         <Box
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
             flexDirection: 'row',
-            alignItems: 'center',
+            alignItems: 'end',
+            justifyContent: 'start',
+            gap: 2,
           }}
         >
-          <Typography variant='h5'>
-            {postsAssigned}/{rows.length} Post Assigned
-          </Typography>
-
-          {postsAssigned === rows.length ? (
+          <TextField
+            id='date'
+            label='Start Date'
+            type='date'
+            defaultValue={startDate.toISOString().split('T')[0]}
+            sx={{
+              width: 220,
+              backgroundColor:
+                theme.palette.mode === 'light'
+                  ? 'white'
+                  : theme.palette.grey[900],
+              cursor: 'pointer',
+            }}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            onChange={e => {
+              // console.log('target value: ', e.target.value);
+              // let dateArr = e.target.value.split('-');
+              // console.log('settign start date: ', dateArr);
+              if (e.target.value === '') {
+                setStartDate(new Date());
+                e.target.value = new Date().toISOString().split('T')[0];
+                setSchedDate(new Date(`${e.target.value}T00:00:00`));
+              } else {
+                setStartDate(new Date(`${e.target.value}T00:00:00`));
+                setSchedDate(new Date(`${e.target.value}T00:00:00`));
+              }
+            }}
+          />
+          <Button
+            color='info'
+            variant='outlined'
+            sx={{ height: 55 }}
+            onClick={() => navigate('/calendar')}
+          >
+            Month View
+          </Button>
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
             <Button
+              disabled={
+                postsAssigned === rows.length && userAccount.admin
+                  ? false
+                  : true
+              }
+              variant='outlined'
+              color={
+                postsAssigned !== rows.length
+                  ? 'primary'
+                  : userAccount !== null && userAccount.admin
+                  ? 'secondary'
+                  : 'primary'
+              }
+              sx={{ height: 55, cursor: 'pointer' }}
               onClick={() => handleFinalize()}
-              color='secondary'
-              variant='contained'
-              sx={{ borderRadius: '30px', ml: 3 }}
             >
-              Finalize
+              {`${postsAssigned} of ${rows.length} Assigned`}
+
+              {postsAssigned === rows.length &&
+              userAccount !== null &&
+              userAccount.admin ? (
+                <Typography
+                  color='secondary'
+                  variant='contained'
+                  sx={{ borderRadius: '30px', ml: 3 }}
+                >
+                  Finalize
+                </Typography>
+              ) : null}
             </Button>
-          ) : null}
+          </Box>
         </Box>
-        <Box
+
+        <Typography
+          variant='h1'
+          component='span'
           sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            flexDirection: 'row',
-            alignItems: 'center',
+            color: shift === 'Days' ? '#ffa726' : '#7A8AFF',
+            textShadow: '1px 1px 2px #454545',
           }}
         >
-          <Typography variant='h5'>{`Panama 12's `}</Typography>
-        </Box>
+          {schedDate.toDateString()}
+        </Typography>
       </Box>
       <Box
         sx={{
@@ -487,7 +517,7 @@ export default function CollapsibleTable() {
               }
             >
               <Typography sx={{ px: 3, py: 2 }}>
-                {date.toDateString()}
+                <b>{date.toDateString()}</b>
               </Typography>
               <Divider flexItem={true}>SHIFT</Divider>
 
@@ -543,9 +573,11 @@ export default function CollapsibleTable() {
         sx={{
           boxShadow: 5,
           borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
+          //maxHeight: 500,
+          //overflow: 'auto',
         }}
       >
-        <Table aria-label='collapsible table'>
+        <Table aria-label='collapsible table' stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell />
@@ -707,8 +739,12 @@ const Row = props => {
                     <TableCell align='left' sx={{ fontWeight: 'bold' }}>
                       Members
                     </TableCell>
-                    <TableCell align='right'> </TableCell>
-                    <TableCell align='right'> </TableCell>
+                    <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                      Weapon
+                    </TableCell>
+                    <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                      Cert
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

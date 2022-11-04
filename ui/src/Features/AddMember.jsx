@@ -194,9 +194,9 @@ const PostMemberModal = props => {
                 p: 3,
               }}
             >
-              {currentDate.toDateString()}
+              <b>{currentDate.toDateString()}</b>
               <br />
-              Post: {post}&nbsp;&nbsp;&nbsp;
+              <b>Post:</b> {post}&nbsp;&nbsp;&nbsp;
               {role === 0 && `Shift: Lead`}
               {role === 1 && `Shift: Alpha`}
               {role === 2 && `Shift: Bravo`}

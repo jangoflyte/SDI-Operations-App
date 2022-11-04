@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, Typography, Stack, Chip } from '@mui/material';
+import { Box, Typography, Stack, Chip, Paper } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
@@ -34,14 +34,15 @@ export const PostCard = props => {
   };
 
   return (
-    <Box
+    <Paper
+      elevation={3}
       sx={{
         mx: 10,
         mb: 5,
         width: '50vw',
-        boxShadow: 5,
+
         borderRadius: 3,
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
         pl: 5,
         pt: 2,
         pb: 5,
@@ -145,6 +146,6 @@ export const PostCard = props => {
           </Stack>
         );
       })}
-    </Box>
+    </Paper>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Divider } from '@mui/material';
+import { Box, Divider, Paper } from '@mui/material';
 
 export const UserPost = props => {
   const { schedule, index } = props;
@@ -17,7 +17,7 @@ export const UserPost = props => {
     <>
       {schedule.upcoming === laterDate ? (
         <>
-          <Box
+          <Paper
             // backgroundColor={checkEven ? '#edeef0' : '#FFFFFF'}
             sx={{
               display: 'flex',
@@ -32,7 +32,7 @@ export const UserPost = props => {
             <Box sx={{ width: '20%' }}>{schedule.role}</Box>
             <Box sx={{ width: '30%' }}>{scheduleDay.toDateString()}</Box>
             <Box sx={{ width: '20%' }}>{schedule.time}</Box>
-          </Box>
+          </Paper>
           <Divider sx={{ width: '100%' }}></Divider>
         </>
       ) : (

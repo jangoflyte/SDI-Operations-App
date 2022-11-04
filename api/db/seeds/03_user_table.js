@@ -36,7 +36,7 @@ exports.seed = async function (knex) {
             email: 'nicks@spaceforce.mil',
 
             avatar:
-              'https://www.istockphoto.com/photo/portrait-head-shot-of-military-man-in-camouflage-gm891717172-246905032',
+              'https://images.unsplash.com/photo-1539538507524-eab6a4184604?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
             // avatar:
             // 'https://media4.giphy.com/media/1rSQ3HLhM8G6NPzLqG/giphy.gif',
           },
@@ -50,7 +50,7 @@ exports.seed = async function (knex) {
             admin: false,
             email: 'greg@spaceforce.mil',
             avatar:
-              'https://www.istockphoto.com/photo/serious-looking-airman-gm171359868-21177645',
+              'https://images.unsplash.com/photo-1511989130945-c2b632959395?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
             // avatar: 'https://media.giphy.com/media/D7z8JfNANqahW/giphy.gif',
           },
           {
@@ -66,7 +66,7 @@ exports.seed = async function (knex) {
             // avatar:
             //   'https://media1.giphy.com/media/3ornjPteRwwUdSWifC/giphy.gif',
             avatar:
-              'https://www.istockphoto.com/photo/marine-at-obsyacle-course-gm162662707-16317049',
+              'https://plus.unsplash.com/premium_photo-1661757906736-f82257dbbd57?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
           },
           {
             first_name: 'George',
@@ -79,7 +79,7 @@ exports.seed = async function (knex) {
             email: 'george@spaceforce.mil',
 
             avatar:
-              'https://www.istockphoto.com/photo/young-female-american-soldier-in-army-camouflage-uniform-gm155441403-21137862',
+              'https://images.unsplash.com/photo-1569242840510-9fe6f0112cee?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2369&q=80',
             // avatar:
             // 'https://media.tenor.com/8JC0Q8897jwAAAAM/facepalm-picard.gif',
           },
@@ -93,7 +93,7 @@ exports.seed = async function (knex) {
             admin: false,
             email: 'nick@spaceforce.mil',
             avatar:
-              'https://www.istockphoto.com/photo/us-marine-in-uniform-holding-the-us-flag-gm1065452832-284916425',
+              'https://images.unsplash.com/photo-1571795184552-5f1df723de54?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2352&q=80',
             // avatar: 'https://media.giphy.com/media/q7kofYLObTVUk/giphy.gif',
           },
           {
@@ -107,7 +107,7 @@ exports.seed = async function (knex) {
             email: 'elizsims@spaceforce.mil',
 
             avatar:
-              'https://www.istockphoto.com/photo/black-female-soldier-gm97914782-12311743',
+              'https://images.unsplash.com/photo-1542328025-50d8b06fc769?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80',
             // avatar:
             // 'https://media.tenor.com/epNMHGvRyHcAAAAC/gigachad-chad.gif',
           },
@@ -121,7 +121,7 @@ exports.seed = async function (knex) {
             admin: false,
             email: 'j.chavez@spaceforce.mil',
             avatar:
-              'https://www.istockphoto.com/photo/portrait-of-soldier-in-uniform-gm82778367-82778367',
+              'https://images.unsplash.com/photo-1453683685760-b8db0bbb8dc2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=987&q=80',
             //  avatar: 'https://media.giphy.com/media/XepyCu939TXLtpJ2gl/giphy.gif',
           },
           {
@@ -134,7 +134,7 @@ exports.seed = async function (knex) {
             admin: true,
             email: 'willp@spaceforce.mil',
             avatar:
-              'https://www.istockphoto.com/photo/american-military-officer-head-shot-gm474923281-35297416',
+              'https://images.unsplash.com/photo-1569242840838-2a6bdd402fe4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2369&q=80',
             // avatar: 'https://media3.giphy.com/media/gVXENYotXZvi0/200.gif',
           },
         ]);

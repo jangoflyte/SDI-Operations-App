@@ -11,11 +11,13 @@ import SignIn from './Components/SignIn.jsx';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
 import { Footer } from './Components/Footer.jsx';
-import { Training } from './Components/Training';
-import { Chat } from './Components/Chat';
-import { LeaveWeb } from './Components/LeaveWeb';
+// import { Training } from './Components/Training';
+// import { Chat } from './Components/Chat';
+// import { LeaveWeb } from './Components/LeaveWeb';
 import { Weather } from './Components/Weather';
 import { Calendar } from './Features/Calendar';
+import { ThemeProvider, createTheme } from '@mui/material/';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -29,6 +31,7 @@ const App = () => {
   const [userAccount, setUserAccount] = useState(null);
   const [color, setColor] = useState('gray');
   const [page, setPage] = useState(0);
+  const [darkMode, setDarkMode] = useState('light');
 
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
@@ -36,7 +39,6 @@ const App = () => {
   useMemo(() => {
     if (cookies.user) {
       setUserAccount(cookies.user);
-      // console.log('cookies ', cookies);
     }
   }, [cookies]);
 
@@ -67,6 +69,25 @@ const App = () => {
       .catch(err => console.log(err));
   }, [API]);
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#212121',
+      },
+      secondary: {
+        main: '#BD5334',
+      },
+      info: {
+        main: '#6D7AE5',
+        light: '#8f95c3',
+      },
+      background: {
+        default: darkMode === 'light' ? '#FAFAFF' : '#303030',
+      },
+      mode: darkMode,
+    },
+  });
+
   const obj = {
     data,
     setData,
@@ -90,41 +111,47 @@ const App = () => {
     setColor,
     page,
     setPage,
+    darkMode,
+    setDarkMode,
   };
 
   return (
     <MemberContext.Provider value={obj}>
-      <Router>
-        {userAccount !== null ? (
-          <>
-            <PersistentDrawerLeft />
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          {userAccount !== null ? (
+            <>
+              <PersistentDrawerLeft />
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/date/:urlDate' element={<Home />} />
+                <Route path='/sfmembers' element={<MemberDetails />} />
+                <Route
+                  path='/sfmembers/:memberId'
+                  element={<IndividualMember />}
+                />
+                <Route path='/calendar' element={<Calendar />} />
+                <Route path='/weather' element={<Weather />} />
+                <Route path='*' element={<Home />} />
+                {userAccount.admin ? (
+                  <>
+                    <Route path='/data' element={<DataSources />} />
+                    <Route path='/settings' element={<Settings />} />
+                  </>
+                ) : null}
+              </Routes>
+              <Footer />
+            </>
+          ) : (
             <Routes>
-              <Route path='/:urlDate' element={<Home />} />
-              <Route path='/data' element={<DataSources />} />
-              <Route path='/sfmembers' element={<MemberDetails />} />
-              <Route
-                path='/sfmembers/:memberId'
-                element={<IndividualMember />}
-              />
-              <Route path='/settings' element={<Settings />} />
-              {/* <Route path='/training' element={<Training />} /> */}
-              {/* <Route path='/chat' element={<Chat />} />
-              <Route path='/leave' element={<LeaveWeb />} /> */}
-              <Route path='/calendar' element={<Calendar />} />
-              <Route path='/weather' element={<Weather />} />
-
-              <Route path='*' element={<Home />} />
+              <Route path='/login' element={<SignIn />} />
+              <Route path='/signup' element={<SignUp />} />
+              <Route path='*' element={<SignIn />} />
             </Routes>
-            <Footer />
-          </>
-        ) : (
-          <Routes>
-            <Route path='/login' element={<SignIn />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='*' element={<SignIn />} />
-          </Routes>
-        )}
-      </Router>
+          )}
+        </Router>
+      </ThemeProvider>
     </MemberContext.Provider>
   );
 };

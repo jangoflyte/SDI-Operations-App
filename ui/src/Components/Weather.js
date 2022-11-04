@@ -46,7 +46,7 @@ export const Weather = () => {
     weatherFetch();
   }, []);
 
-  if (weather.length < 0) {
+  if (weather.length === 0) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />

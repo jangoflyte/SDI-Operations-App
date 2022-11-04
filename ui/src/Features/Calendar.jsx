@@ -94,7 +94,7 @@ export const Calendar = () => {
               justifyContent: 'center',
               bgcolor:
                 check === true
-                  ? 'none'
+                  ? 'inherit'
                   : date.getMonth() === currMonth
                   ? theme.palette.info.light + '60'
                   : theme.palette.info.light + '30',
@@ -112,7 +112,7 @@ export const Calendar = () => {
               justifyContent: 'center',
               bgcolor:
                 check === true
-                  ? 'none'
+                  ? 'inherit'
                   : date.getMonth() === currMonth
                   ? theme.palette.error.light + '60'
                   : theme.palette.error.light + '30',
@@ -131,7 +131,7 @@ export const Calendar = () => {
             justifyContent: 'center',
             bgcolor:
               check === true
-                ? 'none'
+                ? 'inherit'
                 : date.getMonth() === currMonth
                 ? theme.palette.error.light + '60'
                 : theme.palette.error.light + '30',
@@ -193,12 +193,14 @@ export const Calendar = () => {
       }}
     >
       <Box
-        sx={{ width: '80vw', display: 'flex', justifyContent: 'space-between' }}
+        sx={{
+          width: '77vw',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}
       >
-        <Box
-          pl={4}
-          sx={{ minWidth: 120, display: 'flex', alignItems: 'center', gap: 1 }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <FormControl fullWidth>
             <InputLabel id='Month'>Month</InputLabel>
             <Select
@@ -225,13 +227,25 @@ export const Calendar = () => {
               <MenuItem value={11}>December</MenuItem>
             </Select>
           </FormControl>
-          <Button variant='outlined' color='info' onClick={handleChangeToday}>
+          <Button
+            color='info'
+            variant='outlined'
+            sx={{ height: 55, width: 250 }}
+            onClick={() => navigate('/')}
+          >
+            Weekly View
+          </Button>
+          <Button
+            color='info'
+            variant='outlined'
+            sx={{ height: 55 }}
+            onClick={handleChangeToday}
+          >
             Today
           </Button>
         </Box>
         <Box
           sx={{
-            width: '60%',
             display: 'flex',
             justifyContent: 'space-around',
             alignItems: 'center',
@@ -245,7 +259,7 @@ export const Calendar = () => {
           >
             <Typography variant='h2' component='span'>{`<`}</Typography>
           </Button>
-          <Typography variant='h2' color='primary'>
+          <Typography variant='h2'>
             {currMonth === 0 && `January`}
             {currMonth === 1 && `February`}
             {currMonth === 2 && `March`}
@@ -290,22 +304,30 @@ export const Calendar = () => {
                     width: '13%',
                     minHeight: 120,
                     border: 1,
-                    borderColor: theme.palette.grey[400],
+                    borderColor:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.grey[400]
+                        : theme.palette.grey[900],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
-                        : 'none',
+                        : 'inherit',
                   }
                 : {
                     cursor: 'pointer',
                     width: '13%',
                     minHeight: 120,
                     border: 1,
-                    borderColor: theme.palette.grey[400],
+                    borderColor:
+                      theme.palette.mode === 'light'
+                        ? theme.palette.grey[400]
+                        : theme.palette.grey[900],
                     backgroundColor:
                       schedDate.toDateString() === date.toDateString()
                         ? 'rgba(66, 135, 245, 0.2)'
-                        : theme.palette.grey[200],
+                        : theme.palette.mode === 'light'
+                        ? theme.palette.grey[200]
+                        : theme.palette.grey[900],
                   }
             }
             onClick={() => {
@@ -424,7 +446,7 @@ export const Calendar = () => {
                         }-${date.getDate()}`
                       );
                       navigate(
-                        `/${date.getFullYear()}-${
+                        `/date/${date.getFullYear()}-${
                           date.getMonth() + 1
                         }-${date.getDate()}`
                       );

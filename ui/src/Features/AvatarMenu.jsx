@@ -111,6 +111,7 @@ export const AvatarMenu = () => {
             removeCookie('auth');
             setUserAccount(null);
             navigate('/login');
+            location.reload();
           }}
         >
           <ListItemIcon>

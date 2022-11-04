@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogActions,
   Avatar,
+  Paper,
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
@@ -157,13 +158,12 @@ const BasicCard = props => {
   };
 
   return (
-    <Box
+    <Paper
+      elevation={3}
       sx={{
-        boxShadow: 5,
         mx: 10,
         my: 5,
         borderRadius: 3,
-        backgroundColor: 'white',
       }}
     >
       <Box sx={{ px: 5, py: 5 }}>
@@ -494,7 +494,7 @@ const BasicCard = props => {
           </Box>
         </Stack>
       </Box>
-    </Box>
+    </Paper>
   );
 };
 
