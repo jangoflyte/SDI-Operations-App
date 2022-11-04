@@ -160,7 +160,7 @@ export default function CollapsibleTable() {
         // console.log(res.status);
         return res.json();
       })
-      .then(data => {
+      .then(() => {
         // console.log(data);
         fetchSchedule();
       })
