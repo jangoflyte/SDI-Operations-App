@@ -178,15 +178,6 @@ export const EditPost = props => {
           <Box sx={{ display: 'flex', justifyContent: 'right' }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
-
-          <Typography
-            id='modal-modal-title'
-            variant='h6'
-            component='h2'
-            sx={{ textAlign: 'center' }}
-          >
-            POSTS
-          </Typography>
           <Typography
             id='modal-modal-description'
             variant='h4'
