@@ -97,9 +97,11 @@ export const Settings = () => {
         >
           <AddPost isDay={isDay} />
         </Stack>
-        {postArray.map((post, index) => {
-          return <PostCard post={post} key={index} />;
-        })}
+        <Box>
+          {postArray.map((post, index) => {
+            return <PostCard post={post} key={index} />;
+          })}
+        </Box>
       </Box>
     );
   }

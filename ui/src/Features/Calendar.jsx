@@ -193,12 +193,14 @@ export const Calendar = () => {
       }}
     >
       <Box
-        sx={{ width: '80vw', display: 'flex', justifyContent: 'space-between' }}
+        sx={{
+          width: '77vw',
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}
       >
-        <Box
-          pl={4}
-          sx={{ minWidth: 120, display: 'flex', alignItems: 'center', gap: 1 }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <FormControl fullWidth>
             <InputLabel id='Month'>Month</InputLabel>
             <Select
@@ -225,21 +227,25 @@ export const Calendar = () => {
               <MenuItem value={11}>December</MenuItem>
             </Select>
           </FormControl>
-          <Button variant='outlined' color='info' onClick={handleChangeToday}>
-            Today
-          </Button>
           <Button
-            variant='outlined'
             color='info'
+            variant='outlined'
+            sx={{ height: 55, width: 250 }}
             onClick={() => navigate('/')}
-            sx={{ width: 250 }}
           >
             Weekly View
+          </Button>
+          <Button
+            color='info'
+            variant='outlined'
+            sx={{ height: 55 }}
+            onClick={handleChangeToday}
+          >
+            Today
           </Button>
         </Box>
         <Box
           sx={{
-            width: '60%',
             display: 'flex',
             justifyContent: 'space-around',
             alignItems: 'center',
@@ -440,7 +446,7 @@ export const Calendar = () => {
                         }-${date.getDate()}`
                       );
                       navigate(
-                        `/${date.getFullYear()}-${
+                        `/date/${date.getFullYear()}-${
                           date.getMonth() + 1
                         }-${date.getDate()}`
                       );

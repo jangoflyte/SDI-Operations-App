@@ -396,8 +396,8 @@ const IndividualMember = () => {
             <Box
               component='div'
               sx={{
-                overflow: 'scroll',
-                maxHeight: 400,
+                //overflow: 'scroll',
+                //maxHeight: 400,
                 mt: 2,
                 //bgcolor: '#edeef0',
                 borderRadius: 2,
