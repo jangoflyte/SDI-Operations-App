@@ -376,7 +376,7 @@ export default function CollapsibleTable() {
           flexWrap: 'wrap',
           flexDirection: 'row',
           alignItems: 'end',
-          justifyContent: 'space-between',
+          justifyContent: 'center',
           width: '100%',
           gap: 3,
         }}
@@ -389,6 +389,7 @@ export default function CollapsibleTable() {
             alignItems: 'end',
             justifyContent: 'start',
             gap: 2,
+            width: 620,
           }}
         >
           <TextField
@@ -489,11 +490,11 @@ export default function CollapsibleTable() {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 3,
+          gap: 1,
         }}
       >
         {dateRange.map((date, index) => (
-          <Paper key={index} elevation={5}>
+          <Paper key={index} elevation={4}>
             <Box
               sx={
                 schedDate.toDateString() === date.toDateString()
@@ -516,10 +517,47 @@ export default function CollapsibleTable() {
                     }
               }
             >
-              <Typography sx={{ px: 3, py: 2 }}>
-                <b>{date.toDateString()}</b>
-              </Typography>
-              <Divider flexItem={true}>SHIFT</Divider>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  px: 1,
+                  pt: 1,
+                  gap: 1,
+                }}
+              >
+                <Typography
+                  fontWeight='bold'
+                  component='span'
+                  sx={{ color: theme.palette.grey[700] }}
+                >
+                  {date.toDateString().split(' ')[0]}
+                </Typography>
+                <Typography
+                  variant='h4'
+                  component='span'
+                  sx={{ color: theme.palette.info.main }}
+                >
+                  {date.toDateString().split(' ')[1]}
+                </Typography>
+                <Typography
+                  variant='h4'
+                  component='span'
+                  //sx={{ color: theme.palette.warning.main }}
+                >
+                  {date.toDateString().split(' ')[2]}
+                </Typography>
+                <Typography
+                  fontWeight='bold'
+                  component='span'
+                  sx={{ color: theme.palette.grey[700] }}
+                >
+                  {date.toDateString().split(' ')[3]}
+                </Typography>
+              </Box>
+              <Divider flexItem={true} sx={{ color: theme.palette.grey[600] }}>
+                SHIFT
+              </Divider>
 
               <Button
                 fullWidth={true}
@@ -550,7 +588,6 @@ export default function CollapsibleTable() {
                   schedDate.toDateString() === date.toDateString()
                     ? {
                         backgroundColor: 'rgba(66, 135, 245, 0.2)',
-
                         borderRadius: 0,
                       }
                     : { borderRadius: 0 }
