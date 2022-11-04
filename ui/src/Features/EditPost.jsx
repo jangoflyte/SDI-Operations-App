@@ -83,10 +83,6 @@ export const EditPost = props => {
     handleClose();
   };
 
-  // const [checkedArray, setCheckedArray] = useState(
-  //   makeCheckedArray(allWeapons)
-  // );
-
   //need to modify this so old data is persisted
   const handleAdd = () => {
     const newPost = {
@@ -96,8 +92,6 @@ export const EditPost = props => {
       weapon_req: weaponIdArray,
       shift: shift,
     };
-
-    // console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
 
     fetch(`${API}/position/${post.id}`, {
       method: 'PATCH',
@@ -153,11 +147,6 @@ export const EditPost = props => {
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
   };
-
-  // useEffect(() => {
-  //   // console.log('the weapons ', weapon);
-  //   console.log('weapon id Array ', weaponIdArray);
-  // }, [weaponIdArray]);
 
   return (
     <>
@@ -241,28 +230,6 @@ export const EditPost = props => {
                 <MenuItem value={4}>Flight Sergreant</MenuItem>
               </Select>
             </FormControl>
-
-            {/* <FormControl sx={{ width: '40ch' }}>
-                        <InputLabel id="demo-simple-select-label">Weapon Qualifications</InputLabel>
-                        <Select
-  
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={weapon}
-                        label="Weapon"
-                        onChange={(e) => setWeapon(e.target.value)}
-                        >
-                            <MenuItem value={null}></MenuItem>
-                            <MenuItem value={1}>M4</MenuItem>
-                            <MenuItem value={2}>M18</MenuItem>
-                            <MenuItem value={3}>X26P Tazer</MenuItem>
-                            <MenuItem value={4}>M249</MenuItem>
-                            <MenuItem value={5}>M240</MenuItem>
-                            <MenuItem value={6}>M107</MenuItem>
-                            <MenuItem value={7}>M320</MenuItem>
-                        </Select>
-                      </FormControl> */}
-
             <FormControl sx={{ width: '40ch' }}>
               <InputLabel id='demo-multiple-checkbox-label'>Weapons</InputLabel>
               <Select
@@ -270,8 +237,6 @@ export const EditPost = props => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weapon.map(weap => weap.weapon)}
-                // onChange={handleChange}
-                // onClick={handleChange}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -291,7 +256,7 @@ export const EditPost = props => {
                       //   wep => wep.weapon_id === weaponObject.id
                       // )}
 
-                      // make seperate component
+                      // make seperate component ?
                     />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>
@@ -305,25 +270,9 @@ export const EditPost = props => {
             pt={2}
             sx={{
               display: 'flex',
-              //justifyContent: 'center',
               justifyContent: 'space-between',
             }}
-          >
-            {/* <FormControl sx={{ width: '40ch' }}>
-              <InputLabel id='demo-simple-select-label'>Shift</InputLabel>
-              <Select
-                htmlFor='shift'
-                labelId='demo-simple-select-label'
-                id='demo-simple-select'
-                value={shift}
-                label='Shift'
-                onChange={e => setShift(e.target.value)}
-              >
-                <MenuItem value='day'>Day</MenuItem>
-                <MenuItem value='night'>Night</MenuItem>
-              </Select>
-            </FormControl> */}
-          </Stack>
+          ></Stack>
 
           <Stack
             direction='row'

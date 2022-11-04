@@ -13,7 +13,6 @@ import {
   FormControl,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-// import SearchIcon from '@mui/icons-material/Search';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -114,11 +113,6 @@ export const AddPost = props => {
     }
   };
 
-  // useEffect(() => {
-  //   // console.log('the weapons ', weapon);
-  //   console.log('weapon id Array ', weaponIdArray);
-  // }, [weaponIdArray]);
-
   return (
     <>
       <Button
@@ -211,28 +205,6 @@ export const AddPost = props => {
                 <MenuItem value={4}>Flight Sergreant</MenuItem>
               </Select>
             </FormControl>
-
-            {/* <FormControl sx={{ width: '40ch' }}>
-                        <InputLabel id="demo-simple-select-label">Weapon Qualifications</InputLabel>
-                        <Select
-  
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={weapon}
-                        label="Weapon"
-                        onChange={(e) => setWeapon(e.target.value)}
-                        >
-                            <MenuItem value={null}></MenuItem>
-                            <MenuItem value={1}>M4</MenuItem>
-                            <MenuItem value={2}>M18</MenuItem>
-                            <MenuItem value={3}>X26P Tazer</MenuItem>
-                            <MenuItem value={4}>M249</MenuItem>
-                            <MenuItem value={5}>M240</MenuItem>
-                            <MenuItem value={6}>M107</MenuItem>
-                            <MenuItem value={7}>M320</MenuItem>
-                        </Select>
-                      </FormControl> */}
-
             <FormControl sx={{ width: '40ch' }}>
               <InputLabel id='demo-multiple-checkbox-label'>Weapons</InputLabel>
               <Select
@@ -240,8 +212,6 @@ export const AddPost = props => {
                 id='demo-multiple-checkbox'
                 multiple
                 value={weapon.map(weap => weap.weapon)}
-                // onChange={handleChange}
-                // onClick={handleChange}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -261,7 +231,7 @@ export const AddPost = props => {
                       //   wep => wep.weapon_id === weaponObject.id
                       // )}
 
-                      // make seperate component
+                      // make seperate component ?
                     />
                     <ListItemText primary={weaponObject.weapon} />
                   </MenuItem>

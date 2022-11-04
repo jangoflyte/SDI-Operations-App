@@ -61,11 +61,8 @@ export default function SignUp() {
         }
       })
       .then(data => {
-        // console.log('fetch data', data);
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
-          let user_id = data.user;
-          // console.log(user_id);
           setCookie('user', JSON.stringify(data.user), {
             path: '/',
             maxAge: cookieInfo[2].maxAge,

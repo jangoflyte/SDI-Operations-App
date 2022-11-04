@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import { Button, Modal, Box, Typography } from '@mui/material/';
 import CloseIcon from '@mui/icons-material/Close';
 import { MemberContext } from '../Components/MemberContext';
-//import ReplaceMemberModal from './ReplaceMember';
 
 const EditSchedule = props => {
   const { role, post, delSchedule, currentDate, userRow } = props;
@@ -23,17 +22,11 @@ const EditSchedule = props => {
     p: 4,
   };
 
-  // console.log(userRow);
-  // let splitDate = currentDate.split('-');
-  // let date = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
-
   return (
     <>
       {userAccount !== null && userAccount.admin ? (
         <Button
           onClick={() => {
-            // console.log(role)
-            // console.log(post)
             setOpen(true);
           }}
           variant='outlined'
@@ -83,11 +76,7 @@ const EditSchedule = props => {
               (role === 2 && `Bravo`) ||
               (role === 3 && `Charle`)
             } assignment?`}</Typography>
-          {/* <Typography
-            sx={{ textAlign: 'center', fontSize: '1.2rem' }}
-          >{`Do you want to remove ${userRow.user_info[0].rank.toUpperCase()} ${
-            userRow.user_info[0].first_name
-          } ${userRow.user_info[0].last_name}?`}</Typography> */}
+
           <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <Box
               sx={{
@@ -116,21 +105,16 @@ const EditSchedule = props => {
           <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4 }}>
             <Button
               onClick={() => {
-                // console.log('clicked save');
                 handleClose();
               }}
-              // color='error'
               color='secondary'
               variant='contained'
-              // variant='text'
               sx={{ mt: 5, borderRadius: '30px' }}
             >
               Cancel
             </Button>
-            {/* <ReplaceMemberModal /> */}
             <Button
               onClick={() => {
-                // console.log('clicked save', userRow.id);
                 handleClose();
                 delSchedule(userRow.id);
               }}

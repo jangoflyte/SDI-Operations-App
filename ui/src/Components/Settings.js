@@ -28,10 +28,6 @@ export const Settings = () => {
       .catch(err => console.log(err));
   }, [triggerFetch, isDay]);
 
-  // useEffect(() => {
-  //   console.log('post array: ', postArray);
-  // }, [postArray])
-
   if (postArray.length === 0) {
     return (
       <Box sx={{ width: '100%' }}>

@@ -388,15 +388,7 @@ const BasicCard = props => {
                       label='No Weapons'
                     />
                   ) : member.weapons.length > 2 ? (
-                    <>
-                      {/* <Chip
-                        icon={<SecurityIcon />}
-                        label={member.weapons.length + ' Weapons...'}
-                        color='secondary'
-                        sx={{ m: 1 / 4 }}
-                      /> */}
-                      <WeaponQuals weapon={member.weapons} />
-                    </>
+                    <WeaponQuals weapon={member.weapons} />
                   ) : (
                     member.weapons.map((weapon, index) => (
                       <Chip
@@ -457,9 +449,6 @@ const BasicCard = props => {
                     mr: 2,
                   }}
                   onClick={() => {
-                    // const confirmation = window.confirm(
-                    //   'Are you sure you want to delete users? It will permanently delete their account'
-                    // );
                     const confirmation = true;
                     if (confirmation) {
                       handleDeleteUser(idArray);
@@ -472,7 +461,6 @@ const BasicCard = props => {
               </DialogActions>
             </Dialog>
           </Box>
-
           <Box>
             <Pagination
               count={Math.ceil(filteredUsers.length / rowsPerPage)}
@@ -481,7 +469,6 @@ const BasicCard = props => {
               color='secondary'
             />
           </Box>
-
           <Box>
             <TablePagination
               rowsPerPageOptions={[5, 10, 20, 30, 50]}

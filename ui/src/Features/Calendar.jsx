@@ -71,14 +71,6 @@ export const Calendar = () => {
     fetchIfScheduleFilled();
   }, [dateRange]);
 
-  // icons for schedule ex...
-  // endIcon={
-  //   postsAssigned === rows.length ? (
-  //     <CheckCircleOutlineIcon />
-  //   ) : (
-  //     <HighlightOffIcon />
-  //   )
-
   const checkboxDisplay = (date, index, check) => {
     if (schedFilled.length > 0) {
       if (
@@ -428,7 +420,6 @@ export const Calendar = () => {
                   justifyContent: 'center',
                 }}
               >
-                {/* <Box sx={{ width: '100%' }}> */}
                 {schedDate.toDateString() === date.toDateString() ? (
                   <Button
                     variant='contained'
@@ -461,8 +452,6 @@ export const Calendar = () => {
                 ) : (
                   checkboxDisplay(date, index, false)
                 )}
-                {/* </Box> */}
-                {/* {checkboxDisplay(date, index)} */}
               </Box>
             </Box>
           </Paper>

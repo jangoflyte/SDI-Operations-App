@@ -86,21 +86,6 @@ export const DataSources = () => {
           <Upload uploadType={'PATCH'} />
         </CardActions>
       </Card>
-
-      {/* <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
-        <CardContent>
-          <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
-            Weapon Qualifications
-          </Typography>
-          <p>
-            Upload your .csv file including airman name and current weapons
-            certifications.
-          </p>
-        </CardContent>
-        <CardActions>
-          <Upload />
-        </CardActions>
-      </Card> */}
     </Box>
   );
 };
@@ -113,7 +98,7 @@ const Upload = props => {
   const handleClose = () => setOpen(false);
   const [flag, setFlag] = useState(false);
   const [selectedFile, setSelectedFile] = useState('');
-  const [isFilePicked, setIsFilePicked] = useState(false);
+  //const [isFilePicked, setIsFilePicked] = useState(false);
   const [parsed, setParsed] = useState([]);
 
   const style = {
@@ -139,22 +124,16 @@ const Upload = props => {
     setFlag(!flag);
   };
 
-  // const handleClickAdd = () => {
-  //   setToggleAlert(true);
-  //   handleClose();
-  // };
-
   const changeHandler = event => {
     setFlag(!flag);
     setSelectedFile(event.target.files[0]);
-
     // setSelectedFile(event.target.files[0]);
     Papa.parse(event.target.files[0], {
       header: true,
       complete: function (results) {
         setParsed(results.data);
         JSON.stringify(parsed);
-        setIsFilePicked(true);
+        //setIsFilePicked(true);
       },
     });
     console.log('This is our selected file', parsed);

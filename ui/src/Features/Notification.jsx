@@ -11,7 +11,6 @@ import {
   AccordionDetails,
   Avatar,
   Button,
-  Divider,
 } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -56,10 +55,6 @@ export const NotificationModal = () => {
     getNotification();
   }, [triggerNotification, triggerFetch]);
 
-  // useEffect(() => {
-  //   console.log('unread array, ', unreadArray);
-  // }, [unreadArray]);
-
   const getNotification = () => {
     fetch(`${API}/notifications/${userAccount.id}`, {
       method: 'GET',
@@ -69,20 +64,13 @@ export const NotificationModal = () => {
     })
       .then(res => res.json())
       .then(data => {
-        // console.log(`data before set`, data);
-        // const notif = data.filter(
-        //   notification => notification.user_id === userAccount.id
-        // );
         data.sort(({ id: a }, { id: b }) => a - b);
         setNotifications(data);
         setUnreadArray(data.filter(notification => !notification.read));
-        // console.log(`notifications after set`, notifications);
       })
       .catch(err => {
         console.log('Error: ', err);
       });
-    // console.log('user account', userAccount);
-    // console.log(`notification`);
   };
 
   const handleClick = () => {
@@ -191,11 +179,6 @@ export const NotificationModal = () => {
                 You have no new notifications{' '}
               </Typography>
             )}
-
-            {/* <Typography>Unread</Typography>
-            <Divider />
-            <Typography>Read</Typography> */}
-
             {notifications.map((notif, index) => (
               <span key={index + 'span'}>
                 <Accordion key={index}>
@@ -345,7 +328,6 @@ export const NotificationModal = () => {
                           color: 'green',
                           mr: 1,
                         }}
-                        //onClick={() => NotificationRead(!notif.id)}
                         onClick={() => {
                           if (!notif.read) return;
                           NotificationRead(notif.id, false);
@@ -364,7 +346,6 @@ export const NotificationModal = () => {
                         }}
                         onClick={() => {
                           NotificationDelete(notif.id);
-                          //handleClose();
                         }}
                         size='small'
                         label='Delete Notification'
@@ -388,7 +369,6 @@ export const NotificationModal = () => {
             {notifications.length <= 0 ? null : (
               <Button
                 variant='text'
-                // color='red'
                 onClick={() => {
                   clearNotifications(userAccount.id);
                   handleClose();

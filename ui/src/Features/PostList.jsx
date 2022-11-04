@@ -53,8 +53,6 @@ export default function CollapsibleTable() {
     .toISOString()
     .split('T')[0];
 
-  // console.log('todays date, date end', currentDate, dateEnd);
-
   const fetchPosts = () => {
     //console.log('fetching positions');
     fetch(`${API}/position`, {
@@ -223,9 +221,6 @@ export default function CollapsibleTable() {
     if (positions.length > 0) {
       row = positions.map(position => {
         // figure out personnel position and push to postlist generation
-        // console.log('selectedDate', selectedDate)
-
-        // if (schedule[0] !== undefined)  console.log('schedule date', schedule[0].date)
         let filUsers = schedule.filter(
           sched =>
             sched.position_id === position.id &&
@@ -233,20 +228,14 @@ export default function CollapsibleTable() {
               schedDate.toISOString().split('T')[0] &&
             sched.time === shiftTime
         );
-        // console.log(position.name)
         while (filUsers.length < position.man_req) {
           filUsers.push({ noUser: true });
         }
-
-        //let missingPosition = filUsers.some(user => user.noUser);
-        //console.log(missingPosition);
         if (!filUsers.some(user => user.noUser === true)) {
-          //console.log('no user test ++');
-          numberOfAssigned = numberOfAssigned + 1;
+          numberOfAssigned += 1;
         }
         setPostsAssigned(numberOfAssigned);
 
-        // console.log('fil schedule', filUsers)
         return PostList(
           position.name,
           position.man_req,
@@ -258,7 +247,6 @@ export default function CollapsibleTable() {
           delSchedule,
           schedDate,
           shift
-          // missingPosition
         );
       });
     }
@@ -269,9 +257,7 @@ export default function CollapsibleTable() {
     let dateRange2 = [];
     for (let i = 0; i < 7; i++) {
       let workingDate = new Date(startDate);
-      //console.log('working date, i:', workingDate, i);
       let newDate = new Date(workingDate.setDate(workingDate.getDate() + i));
-      //console.log('created date', newDate.toISOString());
       dateRange2.push(newDate);
     }
     setDateRange(dateRange2);
@@ -409,9 +395,6 @@ export default function CollapsibleTable() {
               shrink: true,
             }}
             onChange={e => {
-              // console.log('target value: ', e.target.value);
-              // let dateArr = e.target.value.split('-');
-              // console.log('settign start date: ', dateArr);
               if (e.target.value === '') {
                 setStartDate(new Date());
                 e.target.value = new Date().toISOString().split('T')[0];
@@ -540,11 +523,7 @@ export default function CollapsibleTable() {
                 >
                   {date.toDateString().split(' ')[1]}
                 </Typography>
-                <Typography
-                  variant='h4'
-                  component='span'
-                  //sx={{ color: theme.palette.warning.main }}
-                >
+                <Typography variant='h4' component='span'>
                   {date.toDateString().split(' ')[2]}
                 </Typography>
                 <Typography
@@ -610,8 +589,6 @@ export default function CollapsibleTable() {
         sx={{
           boxShadow: 5,
           borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
-          //maxHeight: 500,
-          //overflow: 'auto',
         }}
       >
         <Table aria-label='collapsible table' stickyHeader>
@@ -647,8 +624,6 @@ const Row = props => {
   const splitArr = row.weapons.split(' ');
   const { color } = useContext(MemberContext);
   const navigate = useNavigate();
-
-  // console.log('this is the row ', row);
 
   return (
     <React.Fragment>
