@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, Typography, Stack, Chip, Paper } from '@mui/material';
+import { Box, Typography, Stack, Chip, Paper, Divider } from '@mui/material';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { EditPost } from '../Features/EditPost';
@@ -40,9 +40,7 @@ export const PostCard = props => {
         mx: 10,
         mb: 5,
         width: '50vw',
-
         borderRadius: 3,
-        //backgroundColor: 'white',
         pl: 5,
         pt: 2,
         pb: 5,
@@ -56,19 +54,16 @@ export const PostCard = props => {
         sx={{ display: 'flex' }}
       >
         <Typography
-          variant='h6'
-          pb={3}
+          variant='h4'
+          pb={2}
           onClick={() => setPostsPage(true)}
-          sx={{
-            mt: 4,
-            fontWeight: 'bold',
-          }}
+          mt={2}
         >
           {post.name.charAt(0).toUpperCase() + post.name.slice(1)}
         </Typography>
         <EditPost post={post} />
       </Stack>
-
+      <Divider />
       <Stack
         component='span'
         direction='row'
@@ -77,15 +72,13 @@ export const PostCard = props => {
         sx={{ display: 'flex' }}
       >
         <Box width='33%'>
-          <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
+          <Typography variant='h6'>Role</Typography>
         </Box>
         <Box width='33%'>
-          <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
+          <Typography variant='h6'>Certifications</Typography>
         </Box>
         <Box width='33%'>
-          <Typography sx={{ fontWeight: 'bold' }}>
-            Weapon Qualification
-          </Typography>
+          <Typography variant='h6'>Weapon Qualification</Typography>
         </Box>
       </Stack>
       {roleArray(post).map((role, index) => {

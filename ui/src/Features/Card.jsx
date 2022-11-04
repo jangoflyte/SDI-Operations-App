@@ -16,6 +16,7 @@ import {
   DialogActions,
   Avatar,
   Paper,
+  Divider,
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
@@ -184,7 +185,7 @@ const BasicCard = props => {
             <Filter filter={filter} setFilter={setFilter} />
           </Box>
         </Stack>
-
+        <Divider />
         <Stack
           component='span'
           direction='row'
@@ -241,7 +242,7 @@ const BasicCard = props => {
           </Box>
         </Stack>
 
-        <Stack sx={{ py: 5 }}>
+        <Stack sx={{ pb: 1, pt: 1 }}>
           {filteredUsers
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((member, index) => (
@@ -411,7 +412,7 @@ const BasicCard = props => {
               </Stack>
             ))}
         </Stack>
-
+        <Divider />
         <Stack
           component='span'
           direction='row'

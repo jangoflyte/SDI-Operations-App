@@ -11,6 +11,7 @@ import {
   Modal,
   Alert,
   Fade,
+  Divider,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import Papa from 'papaparse';
@@ -62,6 +63,7 @@ export const DataSources = () => {
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Add Member(s)
           </Typography>
+          <Divider />
           <p>Upload your .csv file to update member list</p>
         </CardContent>
         <CardActions>
@@ -74,6 +76,7 @@ export const DataSources = () => {
           <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
             Update Member(s) Certifications or Arming Status.
           </Typography>
+          <Divider />
           <p>
             Upload your .csv file including airman name and corresponding
             certifications/qualifications/arming status.
