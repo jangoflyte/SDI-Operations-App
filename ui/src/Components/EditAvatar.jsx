@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo } from 'react';
-import { MemberContext } from '../Components/MemberContext';
+import { MemberContext } from './MemberContext';
 import '../styles/Card.css';
 import {
   Avatar,

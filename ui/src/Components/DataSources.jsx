@@ -1,5 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react';
-import { MemberContext } from '../Components/MemberContext';
+import { MemberContext } from './MemberContext';
 import {
   Stack,
   Box,

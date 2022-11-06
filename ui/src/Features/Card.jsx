@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
-import { Filter } from '../Components/Filter.js';
+import { Filter } from '../Components/Filter';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import SecurityIcon from '@mui/icons-material/Security';
 import { WeaponQuals } from './WeaponQuals';

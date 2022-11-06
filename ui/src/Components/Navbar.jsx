@@ -29,7 +29,7 @@ import '../styles/MembersDetail.css';
 import logo from '../passlogo.svg';
 import fullLogo from '../fullLogo.svg';
 import Grid from '@mui/material/Unstable_Grid2';
-import { NotificationModal } from '../Features/Notification.jsx';
+import { NotificationModal } from '../Features/Notification';
 import { AvatarMenu } from '../Features/AvatarMenu';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
