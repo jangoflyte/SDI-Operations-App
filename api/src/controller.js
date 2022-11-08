@@ -169,8 +169,15 @@ const postUsers = async users => {
   }
 };
 
+const postPwReset = async userPw => {
+  console.log('PwReset controller', userPw);
+  return await knex('user_table')
+    .where({ email: userPw.email })
+    .update(userPw, ['*']);
+};
+
 const updateUser = async req => {
-  console.log('This is req.body for update user: ', req.body);
+  // console.log('This is req.body for update user: ', req.body);
 
   const newUser = {
     first_name: req.body.first_name,
@@ -184,7 +191,7 @@ const updateUser = async req => {
     flight: req.body.flight,
     avatar: req.body.avatar,
   };
-  console.log('new user ', newUser);
+  // console.log('new user ', newUser);
 
   if (req.body.weaponIdArray !== undefined) {
     await deleteWeaponUser(req.params.id);
@@ -415,9 +422,8 @@ const deletePosition = async positionId => {
   console.log('delete position ran');
   await deleteWeaponPosition(positionId);
   await deletePostScheduleByPosition(positionId);
-  let result = await knex('position').where({ id: positionId }).delete();
+  let result = await knex('position').where({ id: positionId }).delete(['*']);
   console.log('delete position result ', result);
-
   return result;
 };
 
@@ -582,4 +588,5 @@ module.exports = {
   postNotification,
   deleteNotificationsByUserId,
   getIfScheduleFilled,
+  postPwReset,
 };

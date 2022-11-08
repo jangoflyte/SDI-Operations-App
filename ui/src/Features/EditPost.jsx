@@ -95,6 +95,7 @@ export const EditPost = props => {
 
     fetch(`${API}/position/${post.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify(newPost),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -114,7 +115,10 @@ export const EditPost = props => {
   };
 
   const handleDelete = positionId => {
-    fetch(`${API}/position/${positionId}`, { method: 'DELETE' })
+    fetch(`${API}/position/${positionId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
       .then(() => {
         setTriggerFetch(curr => !curr);
         setToggleAlert(!toggleAlert);

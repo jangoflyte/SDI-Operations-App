@@ -51,6 +51,7 @@ export const EditAvatar = props => {
     if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify({
         avatar: null,
       }),
@@ -84,6 +85,7 @@ export const EditAvatar = props => {
     if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify({
         avatar: pic,
       }),

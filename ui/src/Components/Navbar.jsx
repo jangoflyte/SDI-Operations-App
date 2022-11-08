@@ -99,6 +99,17 @@ export default function PersistentDrawerLeft() {
     setFlag(!flag);
   };
 
+  //   handleClickOutside(event) {
+  //     if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+  //       alert("You clicked outside of me!");
+  //     }
+  //   }
+
+  //   render() {
+  //     return <div ref={this.wrapperRef}>{this.props.children}</div>;
+  //   }
+  // }
+
   const handleNavigate = path => {
     navigate(path);
     handleDrawerClose();
@@ -137,25 +148,6 @@ export default function PersistentDrawerLeft() {
             alignItems='center'
             mr={2}
           >
-            {/* {toggle === false ? (
-              <Typography
-                variant='subtitle2'
-                component='span'
-                onClick={() => handleToggle()}
-                sx={{ cursor: 'pointer' }}
-              >
-                <b>PASS</b>
-              </Typography>
-            ) : (
-              <Typography
-                variant='subtitle2'
-                component='span'
-                onClick={() => handleToggle()}
-                sx={{ cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                <u>P</u>ost <u>A</u>ssignment <u>S</u>cheduling <u>S</u>ystem
-              </Typography>
-            )} */}
             {userAccount === null ? (
               <Typography variant='h5' component='h6'>
                 <Button

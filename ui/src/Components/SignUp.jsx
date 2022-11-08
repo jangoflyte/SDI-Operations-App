@@ -142,7 +142,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id='email'
-                  label='eMail'
+                  label='Email'
                   name='email'
                   autoComplete='email'
                   autoFocus

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+// import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -26,7 +27,7 @@ export default function SignIn() {
   }, [API]);
 
   useEffect(() => {
-    // console.log('api res ', apiRes.ok);
+    console.log('api res ', apiRes);
   }, [apiRes]);
 
   const postLogin = () => {
@@ -34,7 +35,7 @@ export default function SignIn() {
     setFailedLogin(false);
     fetch(`${API}/login`, {
       method: 'POST',
-      credentials: 'include',
+      //credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -42,7 +43,7 @@ export default function SignIn() {
       body: JSON.stringify(loginCredentials),
     })
       .then(res => {
-        // console.log(res.status);
+        console.log(res.status);
         if (res.status === 200) {
           return res.json();
         } else {
@@ -53,7 +54,7 @@ export default function SignIn() {
         // console.log(data);
         if (data === undefined) return;
         if (data.cookie !== undefined) {
-          // console.log('return data', data);
+          console.log('return data', data);
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
             maxAge: cookieInfo[2].maxAge,
@@ -157,6 +158,7 @@ export default function SignIn() {
               }}
             />
           </Box>
+
           <Button
             fullWidth
             variant='contained'
@@ -184,6 +186,22 @@ export default function SignIn() {
             onClick={() => navigate('/signup')}
           >
             Create Account
+          </Button>
+
+          <Button
+            fullWidth
+            variant='text'
+            color='secondary'
+            size='medium'
+            sx={{
+              borderRadius: '30px',
+              width: 200,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            onClick={() => navigate('/forgot')}
+          >
+            Forgot Password?
           </Button>
           {!apiRes.ok ? (
             <Box sx={{ m: 2, width: '100%' }}>

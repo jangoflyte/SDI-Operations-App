@@ -93,6 +93,7 @@ export const EditMemberModal = props => {
 
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify(updatedUser),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -114,6 +115,7 @@ export const EditMemberModal = props => {
     if (deleteUser === true) {
       fetch(`${API}/deleteuser/${member.id}`, {
         method: 'DELETE',
+        credentials: 'include',
       })
         .then(res => res.json())
         .then(() => {

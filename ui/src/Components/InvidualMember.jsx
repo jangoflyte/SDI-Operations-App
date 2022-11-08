@@ -30,13 +30,19 @@ const IndividualMember = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    fetch(`${API}/users/${memberId}`)
+    fetch(`${API}/users/${memberId}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then(res => res.json())
       .then(data => setMember(data[0]));
   }, [triggerFetch, memberId]);
 
   useEffect(() => {
-    fetch(`${API}/schedule/${memberId}`)
+    fetch(`${API}/schedule/${memberId}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
       .then(res => res.json())
       .then(data => {
         // console.log('schedule data', data);
@@ -156,7 +162,6 @@ const IndividualMember = () => {
               boxShadow: 3,
               borderRadius: 3,
               p: 5,
-              //backgroundColor: 'white',
             }}
           >
             <Stack
@@ -268,9 +273,9 @@ const IndividualMember = () => {
               component='div'
               sx={{
                 overflow: 'auto',
-                maxHeight: 100,
-                mt: 2,
-                //bgcolor: '#edeef0',
+                maxHeight: '15%',
+                bgcolor: theme.palette.mode === 'light' ? '#FAFAFF' : '#303030',
+                mt: 1,
                 borderRadius: 2,
                 p: 1,
               }}
@@ -290,7 +295,6 @@ const IndividualMember = () => {
               boxShadow: 3,
               borderRadius: 3,
               p: 5,
-              //backgroundColor: 'white',
             }}
           >
             <Stack
@@ -357,22 +361,22 @@ const IndividualMember = () => {
               }}
             >
               <Box sx={{ width: '20%' }}>
-                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                   Post
                 </Typography>
               </Box>
               <Box sx={{ width: '20%' }}>
-                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                   Position
                 </Typography>
               </Box>
               <Box sx={{ width: '30%' }}>
-                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                   Date
                 </Typography>
               </Box>
               <Box sx={{ width: '20%' }}>
-                <Typography variant='h6' sx={{ fontWeight: 'bold', mb: 2 }}>
+                <Typography variant='h6' sx={{ fontWeight: 'bold' }}>
                   Time
                 </Typography>
               </Box>
@@ -381,10 +385,10 @@ const IndividualMember = () => {
             <Box
               component='div'
               sx={{
-                //overflow: 'scroll',
-                //maxHeight: 400,
-                mt: 2,
-                //bgcolor: '#edeef0',
+                overflow: 'scroll',
+                maxHeight: '80%',
+                mt: 1,
+                bgcolor: theme.palette.mode === 'light' ? '#FAFAFF' : '#303030',
                 borderRadius: 2,
                 p: 1,
               }}

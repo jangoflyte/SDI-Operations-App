@@ -16,6 +16,7 @@ export const Settings = () => {
   useEffect(() => {
     fetch(`${API}/position`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => {

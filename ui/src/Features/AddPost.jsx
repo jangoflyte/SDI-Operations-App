@@ -68,6 +68,7 @@ export const AddPost = props => {
 
     fetch(`${API}/position/`, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify(newPost),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',

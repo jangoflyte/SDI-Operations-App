@@ -78,7 +78,7 @@ const ReplaceMemberModal = props => {
     console.log('patching schedule');
     fetch(`${API}/schedule`, {
       method: 'PATCH',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },

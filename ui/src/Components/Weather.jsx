@@ -21,6 +21,15 @@ export const Weather = () => {
   };
   //console.log('weather', weather);
 
+  // icon being depreciated according to weather.gov
+  // using short forcast would be better
+  const weatherIcon = iconUrl => {
+    if (iconUrl.toLowerCase().includes('rain')) {
+      // test
+    }
+    //return icon src img url
+  };
+
   useEffect(() => {
     weatherFetch();
   }, []);

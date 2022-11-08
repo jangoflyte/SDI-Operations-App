@@ -1,5 +1,13 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { Button, Divider, Alert, Fade, TextField, Box } from '@mui/material/';
+import {
+  Button,
+  Divider,
+  Alert,
+  Fade,
+  TextField,
+  Box,
+  IconButton,
+} from '@mui/material/';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -15,6 +23,10 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import { RowTableSched } from './RowTableSched';
+import PrintIcon from '@mui/icons-material/Print';
+import jsPDF from 'jspdf';
+//import autoTable from 'jspdf-autotable';
+import 'jspdf-autotable';
 
 export const ScheduleTable = () => {
   const { API, toggleAlert, setToggleAlert, userAccount } =
@@ -52,7 +64,7 @@ export const ScheduleTable = () => {
     }
     fetch(`${API}/schedule/filled`, {
       method: 'POST',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -90,7 +102,7 @@ export const ScheduleTable = () => {
     //console.log('fetching positions');
     fetch(`${API}/position`, {
       method: 'GET',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -118,7 +130,7 @@ export const ScheduleTable = () => {
     let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -142,7 +154,7 @@ export const ScheduleTable = () => {
     //console.log(`deleting schedule ${id}`);
     fetch(`${API}/schedule/${id}`, {
       method: 'DELETE',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -162,14 +174,14 @@ export const ScheduleTable = () => {
   };
 
   const handleFinalize = () => {
-    console.log(userAccount);
+    // console.log(userAccount);
     fetch(`${API}/notifications/all`, {
       method: 'POST',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
-      //redirect: 'follow',
+      redirect: 'follow',
       body: JSON.stringify({
         name: 'New Schedule Posted',
         link_text: 'Click to See Schedule',
@@ -199,15 +211,6 @@ export const ScheduleTable = () => {
 
   const checkboxDisplay = (date, index, shiftInfo) => {
     if (schedFilled.length > 0) {
-      let test = `${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}`;
-      console.log('test filter', test, schedFilled[index].date);
-      console.log(
-        'test 2',
-        schedFilled[index].filled.filter(item => item === shiftInfo).length,
-        schedFilled[index][`positions_${shiftInfo}`]
-      );
       if (
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
           schedFilled[index].date &&
@@ -311,6 +314,56 @@ export const ScheduleTable = () => {
     return row;
   }, [positions, schedule, schedDate, shift]);
 
+  const handleDownloadTable = () => {
+    const pdf = new jsPDF();
+    //pdf.text('Hello world!', 10, 10);
+    var head = [['Post', 'Position', 'Member', 'Weapon', 'Cert']];
+    //pdf.autoTable({ html: '#table' });
+
+    let tableBody = [];
+    console.log('rows', rows);
+
+    rows.forEach(row => {
+      let postUsers = row.users.map(user => {
+        if (user.user_info === undefined)
+          return [row.name, 'N/A', 'No one posted', 'N/A', 'N/A'];
+        let workingRow = [
+          `${user.user_info[0].first_name} ${user.user_info[0].last_name}`,
+        ];
+        let wepResults = '';
+        for (let wep of user.user_info[0].weapons) {
+          if (wepResults.length > 0) {
+            wepResults += `, ${wep.weapon}`;
+          } else {
+            wepResults += `${wep.weapon}`;
+          }
+        }
+        workingRow.push(wepResults);
+        let certResults = '';
+        for (let cert of user.user_info[0].certs) {
+          if (certResults.length > 0) {
+            certResults += `, ${cert.cert}`;
+          } else {
+            certResults += `${cert.cert}`;
+          }
+        }
+        workingRow.push(certResults);
+        workingRow.unshift(user.role);
+        workingRow.unshift(row.name);
+        return workingRow;
+      });
+      for (let userRow of postUsers) {
+        console.log(userRow);
+        tableBody.push(userRow);
+      }
+    });
+
+    console.log('body: ', tableBody);
+    // pdf.text('title');
+    pdf.autoTable({ head: head, body: tableBody });
+    pdf.save('schedule.pdf');
+  };
+
   return (
     <Box
       sx={{
@@ -356,6 +409,7 @@ export const ScheduleTable = () => {
             justifyContent: 'start',
             gap: 2,
             width: 620,
+            //width: '90%',
           }}
         >
           <TextField
@@ -432,6 +486,9 @@ export const ScheduleTable = () => {
                 </Typography>
               ) : null}
             </Button>
+            <IconButton onClick={() => handleDownloadTable()}>
+              <PrintIcon />
+            </IconButton>
           </Box>
         </Box>
 
@@ -446,6 +503,7 @@ export const ScheduleTable = () => {
           {schedDate.toDateString()}
         </Typography>
       </Box>
+
       <Box
         sx={{
           display: 'flex',
@@ -454,6 +512,9 @@ export const ScheduleTable = () => {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 1,
+          whiteSpace: 'no-wrap',
+          // maxWidth: '100%',
+          // overflowX: 'auto',
         }}
       >
         {dateRange.map((date, index) => (
@@ -571,7 +632,7 @@ export const ScheduleTable = () => {
           borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
         }}
       >
-        <Table aria-label='collapsible table' stickyHeader>
+        <Table aria-label='collapsible table' stickyHeader id='table'>
           <TableHead>
             <TableRow>
               <TableCell />

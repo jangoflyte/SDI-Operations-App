@@ -43,6 +43,7 @@ export const MemberDetails = () => {
   useEffect(() => {
     fetch(`${API}/usersearch/${searchText}`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => {

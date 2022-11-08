@@ -143,6 +143,7 @@ const BasicCard = props => {
     for (let userId of inputArray) {
       fetch(`${API}/deleteuser/${userId}`, {
         method: 'DELETE',
+        credentials: 'include',
       })
         .then(res => res.json())
         .then(() => {

@@ -102,6 +102,7 @@ export const AddMemberModal = () => {
     console.log(newUser);
     fetch(`${API}/postusers/`, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify([newUser]),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',

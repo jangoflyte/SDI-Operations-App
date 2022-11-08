@@ -10,6 +10,7 @@ import {
   ListItemIcon,
 } from '@mui/material';
 import Logout from '@mui/icons-material/Logout';
+import Key from '@mui/icons-material/Key';
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from '../Components/MemberContext';
 
@@ -102,6 +103,17 @@ export const AvatarMenu = () => {
             {userAccount.last_name.charAt(0).toUpperCase()}
           </Avatar>{' '}
           My account
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate(`/changepass`);
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <Key fontSize='small' />
+          </ListItemIcon>
+          Change Password
         </MenuItem>
         <Divider />
 

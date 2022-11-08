@@ -148,6 +148,7 @@ const Upload = props => {
     if (uploadType === 'POST') {
       fetch(`${API}/postusers`, {
         method: 'POST',
+        credentials: 'include',
         body: JSON.stringify(parsed),
         headers: {
           'Content-Type': 'application/json',
@@ -163,6 +164,7 @@ const Upload = props => {
     } else {
       fetch(`${API}/updateusers`, {
         method: 'PATCH',
+        credentials: 'include',
         body: JSON.stringify(parsed),
         headers: {
           'Content-Type': 'application/json',
