@@ -16,40 +16,42 @@ export default function ForgotPass() {
   const { API } = useContext(MemberContext);
   let navigate = useNavigate();
   const [failedReset, setFailedReset] = useState(false);
-  const [passwordReset, setPasswordReset] = useState({
+  const [resetObject, setResetObject] = useState({
     email: '',
-    password: '',
   });
 
   // post pw to api
-  const postPassword = () => {
-    setFailedReset(false);
-    fetch(`${API}/pwreset`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      body: JSON.stringify(passwordReset),
-    })
-      .then(res => {
-        // console.log(res.status);
-        if (res.status === 200) {
+  const notifyAdmins = () => {
+    console.log('notify admins ran');
+    if (resetObject.email === '') {
+      setFailedReset(true);
+    } else {
+      fetch(`${API}/notifications/admin`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        body: JSON.stringify({
+          name: 'Password Reset',
+          link_text: 'Click to Reset Users password',
+          link: `/changepass/${resetObject.email}`,
+          notes: `User has requested to reset their password. The email is ${resetObject.email}`,
+        }),
+      })
+        .then(res => {
+          // console.log(res.status);
           return res.json();
-        } else {
-          setFailedReset(true);
-        }
-      })
-      .then(data => {
-        console.log(data);
-        if (data === undefined) return;
-        // console.log('return data', data);
-        navigate('/login');
-      })
-      .catch(err => {
-        console.log('error: ', err);
-      });
+        })
+        .then(data => {
+          // console.log(data);
+          data;
+        })
+        .catch(err => {
+          console.log('error: ', err);
+        });
+    }
   };
 
   return (
@@ -87,7 +89,7 @@ export default function ForgotPass() {
                 align='center'
                 color='error'
               >
-                All info required.
+                Please Give Email for Account You Want to Reset Password
               </Typography>
             </>
           )}
@@ -102,49 +104,15 @@ export default function ForgotPass() {
                   required
                   fullWidth
                   id='email'
-                  label='Email'
+                  label='Your Email'
                   name='email'
                   autoComplete='email'
                   autoFocus
                   onChange={e => {
-                    setPasswordReset(prev => {
+                    setResetObject(prev => {
                       return { ...prev, email: e.target.value };
                     });
                   }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  error={failedReset}
-                  required
-                  fullWidth
-                  id='new Password'
-                  label='New Password'
-                  name='New Password'
-                  autoComplete='new Password'
-                  autoFocus
-                  onChange={e => {
-                    setPasswordReset(prev => {
-                      return { ...prev, password: e.target.value };
-                    });
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  error={failedReset}
-                  required
-                  fullWidth
-                  id='verify Password'
-                  label='Verify Password'
-                  name='Verify Password'
-                  autoComplete='verify Password'
-                  autoFocus
-                  //   onChange={e => {
-                  //     setpasswordReset(prev => {
-                  //       return { ...prev, email: e.target.value };
-                  //     });
-                  //   }}
                 />
               </Grid>
             </Grid>
@@ -159,9 +127,9 @@ export default function ForgotPass() {
               borderRadius: '30px',
               width: 200,
             }}
-            onClick={() => postPassword()}
+            onClick={() => notifyAdmins()}
           >
-            Reset Password
+            Notify Admins
           </Button>
           <Button
             fullWidth

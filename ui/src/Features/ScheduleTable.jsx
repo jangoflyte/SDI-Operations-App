@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   IconButton,
+  Tooltip,
 } from '@mui/material/';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -25,7 +26,6 @@ import { useTheme } from '@mui/material/styles';
 import { RowTableSched } from './RowTableSched';
 import PrintIcon from '@mui/icons-material/Print';
 import jsPDF from 'jspdf';
-//import autoTable from 'jspdf-autotable';
 import 'jspdf-autotable';
 
 export const ScheduleTable = () => {
@@ -359,7 +359,7 @@ export const ScheduleTable = () => {
     });
 
     console.log('body: ', tableBody);
-    // pdf.text('title');
+    pdf.text(`Schedule for: ${schedDate.toDateString()}`, 10, 10);
     pdf.autoTable({ head: head, body: tableBody });
     pdf.save('schedule.pdf');
   };
@@ -397,7 +397,7 @@ export const ScheduleTable = () => {
           alignItems: 'end',
           justifyContent: 'center',
           width: '100%',
-          gap: 3,
+          gap: 2,
         }}
       >
         <Box
@@ -472,7 +472,8 @@ export const ScheduleTable = () => {
               sx={{ height: 55, cursor: 'pointer' }}
               onClick={() => handleFinalize()}
             >
-              {`${postsAssigned} of ${rows.length} Assigned`}
+              {`${postsAssigned} of ${rows.length}`}
+              {postsAssigned !== rows.length && ' Assigned'}
 
               {postsAssigned === rows.length &&
               userAccount !== null &&
@@ -480,15 +481,20 @@ export const ScheduleTable = () => {
                 <Typography
                   color='secondary'
                   variant='contained'
-                  sx={{ borderRadius: '30px', ml: 3 }}
+                  sx={{ borderRadius: '30px', ml: 0.5 }}
                 >
                   Finalize
                 </Typography>
               ) : null}
             </Button>
-            <IconButton onClick={() => handleDownloadTable()}>
-              <PrintIcon />
-            </IconButton>
+          </Box>
+
+          <Box sx={{}}>
+            <Tooltip title="Print Today's Schedule">
+              <IconButton onClick={() => handleDownloadTable()}>
+                <PrintIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Box>
 
@@ -511,7 +517,7 @@ export const ScheduleTable = () => {
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 1,
+          gap: 3,
           whiteSpace: 'no-wrap',
           // maxWidth: '100%',
           // overflowX: 'auto',
@@ -567,13 +573,13 @@ export const ScheduleTable = () => {
                 <Typography variant='h4' component='span'>
                   {date.toDateString().split(' ')[2]}
                 </Typography>
-                <Typography
+                {/* <Typography
                   fontWeight='bold'
                   component='span'
                   sx={{ color: theme.palette.grey[700] }}
                 >
                   {date.toDateString().split(' ')[3]}
-                </Typography>
+                </Typography> */}
               </Box>
               <Divider flexItem={true} sx={{ color: theme.palette.grey[600] }}>
                 SHIFT

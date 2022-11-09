@@ -538,6 +538,21 @@ const postNotification = async ({ userId, notification }) => {
         ['*']
       );
     }
+  } else if (userId === 'admin') {
+    let allAdmins = await knex('user_table')
+      .select('id')
+      .where({ admin: true });
+    console.log(allAdmins);
+    console.log('this is all admins ', allAdmins);
+    for (let user of allAdmins) {
+      await knex('notification_user').insert(
+        {
+          user_id: user.id,
+          notification_id: joinResult[0].id,
+        },
+        ['*']
+      );
+    }
   } else {
     let result = await knex('notification_user').insert(
       {

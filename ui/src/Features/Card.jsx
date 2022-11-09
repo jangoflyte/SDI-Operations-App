@@ -178,7 +178,7 @@ const BasicCard = props => {
         >
           <Box justifyContent='left' pb={2} sx={{ display: 'flex' }}>
             <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
-              All Users
+              Members
             </Typography>
           </Box>
 

@@ -268,7 +268,7 @@ export default function SignUp() {
             }}
             onClick={() => navigate('/login')}
           >
-            Sign In
+            Back
           </Button>
         </Box>
       </Container>

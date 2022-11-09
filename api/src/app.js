@@ -184,7 +184,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.post('/pwreset', async (req, res) => {
+app.post('/pwreset', authenticateToken, async (req, res) => {
   try {
     const { email, password } = req.body;
     // check if all information is provided
@@ -226,7 +226,9 @@ app.get('/notifications/:userId', authenticateToken, (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
-app.post('/notifications/:userId', authenticateToken, (req, res) => {
+// todo, secure this route for users requesting pw reset
+// app.post('/notifications/:userId', authenticateToken, (req, res) => {
+app.post('/notifications/:userId', (req, res) => {
   //post notification with userid?
   postNotification({ userId: req.params.userId, notification: req.body })
     .then(data => res.status(200).send(data))

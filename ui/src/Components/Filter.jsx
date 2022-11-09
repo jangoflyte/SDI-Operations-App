@@ -145,6 +145,7 @@ export const Filter = ({ setFilter, filter }) => {
                   certification: [],
                   weapon: [],
                   arming_status: [],
+                  flight: [],
                 });
                 handleClose();
               }}

@@ -5,7 +5,7 @@ import { Settings } from './Components/Settings';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { MemberContext } from './Components/MemberContext';
 import PersistentDrawerLeft from './Components/Navbar';
-import { DataSources } from './Components/DataSources';
+import { DataSources } from './Data Page/DataSources';
 import IndividualMember from './Components/InvidualMember';
 import ForgotPass from './Components/ForgotPass';
 import ChangePass from './Components/ChangePass';
@@ -13,11 +13,11 @@ import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
 import { Footer } from './Components/Footer';
-import { Weather } from './Components/Weather';
+import { Weather } from './Weather Page/Weather';
 import { Calendar } from './Features/Calendar';
 import { ThemeProvider, createTheme } from '@mui/material/';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Navbar2 } from './Components/Navbar2';
+//import { Navbar2 } from './Components/Navbar2';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -32,6 +32,8 @@ const App = () => {
   const [color, setColor] = useState('gray');
   const [page, setPage] = useState(0);
   const [darkMode, setDarkMode] = useState('light');
+
+  //const MemberContext = React.createContext();
 
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
@@ -142,6 +144,7 @@ const App = () => {
                   <>
                     <Route path='/data' element={<DataSources />} />
                     <Route path='/settings' element={<Settings />} />
+                    <Route path='/changepass/:email' element={<ChangePass />} />
                   </>
                 ) : null}
               </Routes>

@@ -9,18 +9,31 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
-import { useState, useContext } from 'react';
-import logo from '../passlogo.svg';
+import { useState, useContext, useEffect } from 'react';
+import { useParams } from 'react-router';
+import { useTheme } from '@mui/material/styles';
 
 export default function ChangePass() {
   const { API, userAccount } = useContext(MemberContext);
   let navigate = useNavigate();
+  const { email } = useParams();
   const [failedReset, setFailedReset] = useState(false);
   const [passwordReset, setPasswordReset] = useState({
-    email: '',
+    email: userAccount.email,
     password: '',
   });
+  const theme = useTheme();
 
+  useEffect(() => {
+    setPasswordReset(prev => {
+      return {
+        ...prev,
+        email: email === undefined ? userAccount.email : email,
+      };
+    });
+  }, [email]);
+
+  console.log('this is email ', email);
   // post pw to api
   const postPassword = () => {
     setFailedReset(false);
@@ -94,7 +107,9 @@ export default function ChangePass() {
 
           <Box
             sx={{
-              backgroundColor: '#FAFAFF',
+              //backgroundColor: '#FAFAFF',
+              backgroundColor:
+                theme.palette.mode === 'light' ? '#FAFAFF' : '#212121',
               borderRadius: 3,
               px: 4,
               py: 2,
@@ -110,7 +125,7 @@ export default function ChangePass() {
                   id='email'
                   label='Email'
                   name='email'
-                  defaultValue={userAccount.email}
+                  defaultValue={email === undefined ? userAccount.email : email}
                   //   disabled={!userAccount.admin}
                   disabled={true}
                   autoComplete='email'
