@@ -207,7 +207,7 @@ app.post('/pwreset', authenticateToken, async (req, res) => {
         console.log(data[0]);
         res.status(200).send(data[0]);
       })
-      .catch(err => res.status(500).send(err));
+      .catch(err => res.status(500).send(err));https://github.com/jangoflyte/SDI-Operations-App
   } catch {
     err => res.status(500).send({ status: err });
   }

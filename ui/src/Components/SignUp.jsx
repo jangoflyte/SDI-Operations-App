@@ -43,7 +43,7 @@ export default function SignUp() {
     }
     fetch(`${API}/register`, {
       method: 'POST',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -71,6 +71,8 @@ export default function SignUp() {
           });
 
           setCookie(cookieInfo[0], cookieInfo[1], {
+            domain: 'cyberhelm.com',
+            path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',

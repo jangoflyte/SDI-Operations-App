@@ -35,7 +35,7 @@ export default function SignIn() {
     setFailedLogin(false);
     fetch(`${API}/login`, {
       method: 'POST',
-      //credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -62,6 +62,7 @@ export default function SignIn() {
             secure: 'true',
           });
           setCookie(cookieInfo[0], cookieInfo[1], {
+            domain: 'cyberhelm.com',
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',

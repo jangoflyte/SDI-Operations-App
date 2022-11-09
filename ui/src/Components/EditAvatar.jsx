@@ -52,6 +52,7 @@ export const EditAvatar = props => {
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
       credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify({
         avatar: null,
       }),
@@ -86,6 +87,7 @@ export const EditAvatar = props => {
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
       credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify({
         avatar: pic,
       }),

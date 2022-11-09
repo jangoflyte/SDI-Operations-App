@@ -33,6 +33,7 @@ const IndividualMember = () => {
     fetch(`${API}/users/${memberId}`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(data => setMember(data[0]));
@@ -42,6 +43,7 @@ const IndividualMember = () => {
     fetch(`${API}/schedule/${memberId}`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(data => {

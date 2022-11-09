@@ -58,6 +58,7 @@ const App = () => {
     fetch(`${API}/allweapons`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(data => setAllWeapons(data))

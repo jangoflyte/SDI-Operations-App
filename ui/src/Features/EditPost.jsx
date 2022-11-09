@@ -96,6 +96,7 @@ export const EditPost = props => {
     fetch(`${API}/position/${post.id}`, {
       method: 'PATCH',
       credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
@@ -118,6 +119,7 @@ export const EditPost = props => {
     fetch(`${API}/position/${positionId}`, {
       method: 'DELETE',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(() => {
         setTriggerFetch(curr => !curr);

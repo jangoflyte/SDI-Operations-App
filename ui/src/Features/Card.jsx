@@ -144,6 +144,7 @@ const BasicCard = props => {
       fetch(`${API}/deleteuser/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
+        redirect: 'follow',
       })
         .then(res => res.json())
         .then(() => {

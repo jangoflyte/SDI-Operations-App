@@ -44,6 +44,7 @@ export const MemberDetails = () => {
     fetch(`${API}/usersearch/${searchText}`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(data => {

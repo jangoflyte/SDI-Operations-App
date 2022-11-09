@@ -17,6 +17,7 @@ export const Settings = () => {
     fetch(`${API}/position`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(data => {

@@ -69,6 +69,7 @@ export const AddPost = props => {
     fetch(`${API}/position/`, {
       method: 'POST',
       credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',

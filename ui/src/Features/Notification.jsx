@@ -59,6 +59,7 @@ export const NotificationModal = () => {
     fetch(`${API}/notifications/${userAccount.id}`, {
       method: 'GET',
       credentials: 'include',
+      redirect: 'follow',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -84,6 +85,7 @@ export const NotificationModal = () => {
     fetch(`${API}/notifications/${userAccount.id}`, {
       method: 'PATCH',
       credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify({
         id: notifId,
         read: read,
@@ -105,6 +107,7 @@ export const NotificationModal = () => {
     fetch(`${API}/notifications/${joinId}`, {
       method: 'DELETE',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(setTriggerNotification(!triggerNotification))
@@ -117,6 +120,7 @@ export const NotificationModal = () => {
     fetch(`${API}/notifications/user/${userId}`, {
       method: 'DELETE',
       credentials: 'include',
+      redirect: 'follow',
     })
       .then(res => res.json())
       .then(setTriggerNotification(curr => !curr))
