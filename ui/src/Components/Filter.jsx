@@ -117,21 +117,6 @@ export const Filter = ({ setFilter, filter }) => {
       >
         Filter
       </Button>
-      {/* <Button
-        onClick={() =>
-          setFilter({
-            ...filter,
-            certification: [],
-            weapon: [],
-            arming_status: [],
-          })
-        }
-        variant='outlined'
-        color='secondary'
-        sx={{ borderRadius: '30px' }}
-      >
-        Clear Filter
-      </Button> */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -160,6 +145,7 @@ export const Filter = ({ setFilter, filter }) => {
                   certification: [],
                   weapon: [],
                   arming_status: [],
+                  flight: [],
                 });
                 handleClose();
               }}

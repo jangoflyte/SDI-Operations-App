@@ -16,6 +16,7 @@ export const Settings = () => {
   useEffect(() => {
     fetch(`${API}/position`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => {
@@ -27,10 +28,6 @@ export const Settings = () => {
       })
       .catch(err => console.log(err));
   }, [triggerFetch, isDay]);
-
-  // useEffect(() => {
-  //   console.log('post array: ', postArray);
-  // }, [postArray])
 
   if (postArray.length === 0) {
     return (

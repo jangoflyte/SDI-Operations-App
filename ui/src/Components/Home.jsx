@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { MemberContext } from './MemberContext';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
-import PostList from '../Features/PostList';
+import { ScheduleTable } from '../Features/ScheduleTable';
 
 const Home = () => {
   const { data } = useContext(MemberContext);
@@ -25,7 +25,7 @@ const Home = () => {
           justifyContent: 'center',
         }}
       >
-        <PostList />
+        <ScheduleTable />
       </Box>
     );
   }

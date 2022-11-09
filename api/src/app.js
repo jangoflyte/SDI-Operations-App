@@ -4,6 +4,7 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 require('dotenv').config();
 
 // controller imports ///////////////////////////
@@ -17,7 +18,6 @@ const {
   updateWeaponUser,
   allWeapons,
   deleteWeaponUser,
-  onlyWeaponUserTable,
   getAllSchedule,
   getScheduleByDate,
   getAllposition,
@@ -39,6 +39,7 @@ const {
   postNotification,
   deleteNotificationsByUserId,
   getIfScheduleFilled,
+  postPwReset,
 } = require('./controller.js');
 
 const whitelist = [
@@ -85,7 +86,7 @@ const authenticateToken = (req, res, next) => {
 app.post('/login', async (req, res) => {
   // authenticate user
   const user = await userCheck(req.body.email);
-  console.log('usercheck: ', user, `\nemail: `, req.body.email);
+  // console.log('usercheck: ', user, `\nemail: `, req.body.email);
   if (user === null) return res.status(400).send('Cannot find user');
   try {
     // console.log(user);
@@ -113,7 +114,7 @@ app.post('/login', async (req, res) => {
 
 //{first_name: 'John', last_name: 'Doe', rank: 'e5', flight: 'alpha-1',cert_id: 4, weapon_arming: true, admin: true }
 app.post('/register', async (req, res) => {
-  console.log('recieved registration request', req.body);
+  // console.log('recieved registration req', req.body);
   try {
     const { first_name, last_name, email, password, rank } = req.body;
     // check if all information is provided
@@ -124,7 +125,7 @@ app.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
     // console.log('salt', salt);
-    console.log('hashed pw', hashedPassword);
+    // console.log('hashed pw', hashedPassword);
     const user = {
       first_name: first_name,
       last_name: last_name,
@@ -136,37 +137,33 @@ app.post('/register', async (req, res) => {
 
     // check if user exists already
     const userExist = await userCheck(email);
-    console.log('user exists', userExist);
+    // console.log('user exists', userExist);
     if (userExist !== null && userExist.password !== null) {
       return res.status(409).send('User Already Exist. Please Login');
     } else if (userExist !== null && userExist.password === null) {
       delete user.admin;
       addPassword({ user: user, id: userExist.id })
         .then(results => {
-          console.log('creatifng token');
+          // console.log('creating token');
           const userToken = { email: user.email };
           const accessToken = jwt.sign(
             userToken,
             process.env.ACCESS_TOKEN_SECRET
           );
           delete results[0].password;
-          return (
-            res
-              .status(201)
-              // .cookie('auth', accessToken, { maxAge: 900000 })
-              .send({
-                status: 'success',
-                user: results[0],
-                cookie: ['auth', accessToken, { maxAge: 900000 }],
-              })
-          );
+
+          return res.status(201).send({
+            status: 'success',
+            user: results[0],
+            cookie: ['auth', accessToken, { maxAge: 900000 }],
+          });
         })
         .catch(err => res.status(500).send(err));
     } else {
       // push user to db
       postUsers([user])
         .then(results => {
-          console.log('creating token');
+          // console.log('creating token');
           const userToken = { email: user.email };
 
           const accessToken = jwt.sign(
@@ -174,14 +171,11 @@ app.post('/register', async (req, res) => {
             process.env.ACCESS_TOKEN_SECRET
           );
           delete results[0].password;
-          res
-            .status(201)
-            // .cookie('auth', accessToken, { maxAge: 900000 })
-            .send({
-              status: 'success',
-              user: results[0],
-              cookie: ['auth', accessToken, { maxAge: 900000 }],
-            });
+          res.status(201).send({
+            status: 'success',
+            user: results[0],
+            cookie: ['auth', accessToken, { maxAge: 900000 }],
+          });
         })
         .catch(err => res.status(500).send(err));
     }
@@ -190,19 +184,50 @@ app.post('/register', async (req, res) => {
   }
 });
 
+app.post('/pwreset', authenticateToken, async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // check if all information is provided
+    if (!(email && password)) {
+      res.status(400).send('All input is required');
+    }
+    // create user
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // console.log('salt', salt);
+    // console.log('hashed pw', hashedPassword);
+    const userUpdate = {
+      email: email,
+      password: hashedPassword,
+    };
+
+    postPwReset(userUpdate)
+      .then(data => {
+        delete data[0].password;
+        console.log(data[0]);
+        res.status(200).send(data[0]);
+      })
+      .catch(err => res.status(500).send(err));
+  } catch {
+    err => res.status(500).send({ status: err });
+  }
+});
+
 // notifications ///////////////////////////////////////////////////
-app.get('/notifications', (req, res) => {
+app.get('/notifications', authenticateToken, (req, res) => {
   getAllNotifications()
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.get('/notifications/:userId', (req, res) => {
+app.get('/notifications/:userId', authenticateToken, (req, res) => {
   getAllNotificationsById(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
+// todo, secure this route for users requesting pw reset
+// app.post('/notifications/:userId', authenticateToken, (req, res) => {
 app.post('/notifications/:userId', (req, res) => {
   //post notification with userid?
   postNotification({ userId: req.params.userId, notification: req.body })
@@ -210,60 +235,65 @@ app.post('/notifications/:userId', (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
-app.delete('/notifications/:joinId', (req, res) => {
+app.delete('/notifications/:joinId', authenticateToken, (req, res) => {
   deleteNotificationsById(req.params.joinId)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.delete('/notifications/user/:userId', (req, res) => {
+app.delete('/notifications/user/:userId', authenticateToken, (req, res) => {
   deleteNotificationsByUserId(req.params.userId)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.patch('/notifications/:id', (req, res) => {
+app.patch('/notifications/:id', authenticateToken, (req, res) => {
   patchNotifications({ id: req.params.id, notification: req.body })
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
   //update notification read status
 });
 
-///////////////////////////////////////////// notifications ///////////
+///////////////////////////////////////////// home ///////////
 
-app.get('/', (request, response) => {
-  response.set('Access-Control-Allow-Origin', '*');
-  response.status(200).send('Welcome to the API');
+// app.get('/', (req, res) => {
+//   res.set('Access-Control-Allow-Origin', '*');
+//   res.status(200).send('Welcome to the API');
+// });
+
+app.get('/', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.status(200).sendFile(path.join(__dirname, '/index.html'));
 });
 
 // Schedule ///////////////////////////////////////////////////////////
-app.get('/schedule', (request, response) => {
+app.get('/schedule', authenticateToken, (req, res) => {
   getAllSchedule()
-    .then(data => response.status(200).send(data))
-    .catch(err => response.status(500).send(err));
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
-app.get('/schedule/:userId', (request, response) => {
-  getScheduleById(request.params.userId)
-    .then(data => response.status(200).send(data))
-    .catch(err => response.status(500).send(err));
+app.get('/schedule/:userId', authenticateToken, (req, res) => {
+  getScheduleById(req.params.userId)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
-app.post('/schedule/date', (req, res) => {
+app.post('/schedule/date', authenticateToken, (req, res) => {
   console.log('recieved schedule date req', req.body);
   getScheduleByDate(req.body)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.patch('/schedule', (req, res) => {
+app.patch('/schedule', authenticateToken, (req, res) => {
   console.log('recieved schedule patch', req.body);
   patchSchedule(req.body)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.delete('/schedule/:id', (req, res) => {
+app.delete('/schedule/:id', authenticateToken, (req, res) => {
   let { id } = req.params;
   console.log('recieved schedule patch', req.body);
   deleteScheduleById(id)
@@ -271,12 +301,7 @@ app.delete('/schedule/:id', (req, res) => {
     .catch(err => res.status(500).send(err));
 });
 
-// set up function to fetch and check if positions have been filled in
-// fetch with array of objects containing date and filled boolean
-// [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null}...]
-// returns if filled true/false
-
-app.post('/schedule/filled', (req, res) => {
+app.post('/schedule/filled', authenticateToken, (req, res) => {
   getIfScheduleFilled(req.body)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
@@ -284,96 +309,90 @@ app.post('/schedule/filled', (req, res) => {
 
 ///////////////////////////////////////////// schedule ////////////////
 
-app.get('/users', (request, response) => {
+app.get('/users', authenticateToken, (req, res) => {
   getAllUsers()
-    .then(data => response.status(200).send(data))
-    .catch(err => response.status(500).send(err));
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
-app.get('/usersearch', (request, response) => {
+app.get('/usersearch', authenticateToken, (req, res) => {
   getAllUsers()
-    .then(data => response.status(200).send(data))
-    .catch(err => response.status(500).send(err));
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
-app.get('/usersearch/:search', (request, response) => {
-  searchUsers(request.params.search)
-    .then(data => response.status(200).send(data))
-    .catch(err => response.status(500).send(err));
+app.get('/usersearch/:search', authenticateToken, (req, res) => {
+  searchUsers(req.params.search)
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
 });
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', authenticateToken, (req, res) => {
   let { id } = req.params;
   individualUser(id)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.get('/allweapons', (req, res) => {
+app.get('/allweapons', authenticateToken, (req, res) => {
   allWeapons()
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.get('/onlyweaponusertable', (req, res) => {
-  onlyWeaponUserTable()
-    .then(data => res.status(200).send(data))
-    .catch(err => res.status(500).send(err));
-});
-
-app.get('/position', (req, res) => {
+app.get('/position', authenticateToken, (req, res) => {
   getAllposition()
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.get('/flight', (req, res) => {
+app.get('/flight', authenticateToken, (req, res) => {
   allFlights()
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.patch('/position/:id', (req, res) => {
+app.patch('/position/:id', authenticateToken, (req, res) => {
   console.log('patching position');
   patchPosition(req)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.post('/position', (req, res) => {
+app.post('/position', authenticateToken, (req, res) => {
   console.log('posting position');
   postPosition(req)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.delete('/position/:id', (req, res) => {
+app.delete('/position/:id', authenticateToken, (req, res) => {
   console.log('deleting position');
   deletePosition(req.params.id)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });
 
-app.post('/postusers', (req, res) => {
+app.post('/postusers', authenticateToken, (req, res) => {
   console.log('posting users');
   postUsers(req.body)
     .then(() => res.send({ message: 'We have posted a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.post('/postweaponuser', (req, res) => {
+app.post('/postweaponuser', authenticateToken, (req, res) => {
   postWeaponUser(req.body)
     .then(() => res.send({ message: 'We have posted a weapon to a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.patch('/updateuser/:id', (req, res) => {
+app.patch('/updateuser/:id', authenticateToken, (req, res) => {
   updateUser(req)
     .then(() => res.send({ message: 'We have updated a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.patch('/updateusers', (req, res) => {
+app.patch('/updateusers', authenticateToken, (req, res) => {
   updateMultipleUsers(req.body)
     .then(data =>
       res.send({ message: 'We have updated a users.', users: data })
@@ -381,19 +400,19 @@ app.patch('/updateusers', (req, res) => {
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.patch('/updateweaponuser/:id', (req, res) => {
+app.patch('/updateweaponuser/:id', authenticateToken, (req, res) => {
   updateWeaponUser(req)
     .then(() => res.send({ message: 'We have updated a weapon to a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.delete('/deleteuser/:id', (req, res) => {
+app.delete('/deleteuser/:id', authenticateToken, (req, res) => {
   deleteUser(req.params.id)
     .then(() => res.send({ message: 'We have deleted a user.' }))
     .catch(err => res.status(500).send(console.log(err)));
 });
 
-app.delete('/deleteweaponuser/:id', (req, res) => {
+app.delete('/deleteweaponuser/:id', authenticateToken, (req, res) => {
   deleteWeaponUser(req.params.id)
     .then(() => res.send({ message: 'We have deleted a weapon from a user.' }))
     .catch(err => res.status(500).send(console.log(err)));

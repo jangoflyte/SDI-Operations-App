@@ -1,9 +1,7 @@
 import React from 'react';
-import { Box, Container, Typography, Paper } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Box, Container, Typography } from '@mui/material';
 
 export const Footer = () => {
-  const theme = useTheme();
   return (
     <Container maxWidth='lg'>
       <Box

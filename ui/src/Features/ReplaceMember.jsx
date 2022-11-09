@@ -28,19 +28,16 @@ const ReplaceMemberModal = props => {
   } = props;
   const { API, data, setPostAlert } = useContext(MemberContext);
   const [open, setOpen] = useState(false);
-  //const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = useState({});
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  //  console.log(cert_req)
   let weaponsReq = weapon_req.split(' ');
 
   const filterFlight = data.filter(user => {
     let wepResults = weaponsReq.map(wep => {
       let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
-      // console.log('inside filter', tests, user)
       if (tests.includes(true)) {
         return true;
       } else {
@@ -48,7 +45,6 @@ const ReplaceMemberModal = props => {
       }
     });
     let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
-    // console.log('results', certResults)
     if (wepResults.includes(true) && certResults.includes(true)) {
       return true;
     } else {
@@ -64,8 +60,6 @@ const ReplaceMemberModal = props => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  // console.log('flight filter', filterFlight, weapon_req)
 
   const style = {
     position: 'absolute',
@@ -84,7 +78,7 @@ const ReplaceMemberModal = props => {
     console.log('patching schedule');
     fetch(`${API}/schedule`, {
       method: 'PATCH',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -117,8 +111,6 @@ const ReplaceMemberModal = props => {
     <>
       <Button
         onClick={() => {
-          // console.log(role)
-          // console.log(post)
           setOpen(true);
         }}
         variant='outlined'
@@ -166,7 +158,6 @@ const ReplaceMemberModal = props => {
           <Stack
             sx={{
               display: 'flex',
-              //justifyContent: 'center',
               justifyContent: 'space-between',
               flexDirection: 'column',
               gap: 1,
@@ -196,7 +187,6 @@ const ReplaceMemberModal = props => {
                           {
                             display: 'flex',
                             alignItems: 'center',
-                            // justifyContent: 'space-around',
                             flexDirection: 'row',
                             p: 2,
                             width: '100%',
@@ -213,10 +203,6 @@ const ReplaceMemberModal = props => {
                         <Box
                           sx={{ textAlign: 'left', minWidth: '30%' }}
                         >{`${user.first_name} ${user.last_name}`}</Box>
-
-                        {/* <Box
-                        sx={{ textAlign: 'left', minWidth: '30%' }}
-                      >{`${user.certs[0].cert}`}</Box> */}
                         <Box sx={{ textAlign: 'center', minWidth: '30%' }}>
                           {
                             <Chip
@@ -226,10 +212,6 @@ const ReplaceMemberModal = props => {
                             />
                           }
                         </Box>
-
-                        {/* <Box
-                        sx={{ textAlign: 'center', minWidth: '30%' }}
-                      >{`${user.weapons.map(wep => `${wep.weapon} `)}`}</Box> */}
                         <Box sx={{ textAlign: 'right', minWidth: '40%' }}>
                           {user.weapons.map((wep, index) => (
                             <span key={index}>
@@ -255,14 +237,12 @@ const ReplaceMemberModal = props => {
           >
             <Box
               justifyContent='left'
-              // width='10%'
               alignItems='center'
               sx={{ borderRadius: '30px', display: 'flex' }}
             >
               <Button
                 onClick={() => {
                   handleClose();
-                  // console.log('selected person', selected);
                   let shiftTime;
                   if (shift === 'Days') shiftTime = '06:00:00';
                   if (shift === 'Mids') shiftTime = '18:00:00';
@@ -298,7 +278,6 @@ const ReplaceMemberModal = props => {
 
             <Box
               justifyContent='left'
-              // width='35%'
               alignItems='center'
               sx={{ display: 'flex', justifyContent: 'space-between' }}
             >
@@ -310,11 +289,7 @@ const ReplaceMemberModal = props => {
               />
             </Box>
 
-            <Box
-              justifyContent='right'
-              // width='30%'
-              sx={{ display: 'flex' }}
-            >
+            <Box justifyContent='right' sx={{ display: 'flex' }}>
               <TablePagination
                 rowsPerPageOptions={[5, 10]}
                 component='div'

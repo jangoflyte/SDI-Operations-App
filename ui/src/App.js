@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Home from './Components/Home.js';
-import { MemberDetails } from './Components/MembersDetail.js';
-import { Settings } from './Components/Settings.js';
+import Home from './Components/Home';
+import { MemberDetails } from './Components/MembersDetail';
+import { Settings } from './Components/Settings';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { MemberContext } from './Components/MemberContext.js';
-import PersistentDrawerLeft from './Components/Navbar.jsx';
-import { DataSources } from './Components/DataSources.js';
-import IndividualMember from './Components/InvidualMember.js';
-import SignIn from './Components/SignIn.jsx';
+import { MemberContext } from './Components/MemberContext';
+import PersistentDrawerLeft from './Components/Navbar';
+import { DataSources } from './Data Page/DataSources';
+import IndividualMember from './Components/InvidualMember';
+import ForgotPass from './Components/ForgotPass';
+import ChangePass from './Components/ChangePass';
+import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
 import { useCookies } from 'react-cookie';
-import { Footer } from './Components/Footer.jsx';
-// import { Training } from './Components/Training';
-// import { Chat } from './Components/Chat';
-// import { LeaveWeb } from './Components/LeaveWeb';
-import { Weather } from './Components/Weather';
+import { Footer } from './Components/Footer';
+import { Weather } from './Weather Page/Weather';
 import { Calendar } from './Features/Calendar';
 import { ThemeProvider, createTheme } from '@mui/material/';
 import CssBaseline from '@mui/material/CssBaseline';
+//import { Navbar2 } from './Components/Navbar2';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -33,6 +33,8 @@ const App = () => {
   const [page, setPage] = useState(0);
   const [darkMode, setDarkMode] = useState('light');
 
+  //const MemberContext = React.createContext();
+
   const API = 'http://localhost:8080';
   // const API = 'https://api.cyberhelm.com';
 
@@ -45,29 +47,32 @@ const App = () => {
   useEffect(() => {
     fetch(`${API}/users`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => setData(data))
       .catch(err => console.log(err));
-  }, [API, triggerFetch]);
+  }, [API, triggerFetch, userAccount]);
 
   useEffect(() => {
     fetch(`${API}/allweapons`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => setAllWeapons(data))
       .catch(err => console.log(err));
-  }, [API]);
+  }, [API, userAccount]);
 
   useEffect(() => {
     fetch(`${API}/flight`, {
       method: 'GET',
+      credentials: 'include',
     })
       .then(res => res.json())
       .then(data => setAllFlights(data))
       .catch(err => console.log(err));
-  }, [API]);
+  }, [API, userAccount]);
 
   const theme = createTheme({
     palette: {
@@ -127,6 +132,7 @@ const App = () => {
                 <Route path='/' element={<Home />} />
                 <Route path='/date/:urlDate' element={<Home />} />
                 <Route path='/sfmembers' element={<MemberDetails />} />
+                <Route path='/changepass' element={<ChangePass />} />
                 <Route
                   path='/sfmembers/:memberId'
                   element={<IndividualMember />}
@@ -138,6 +144,7 @@ const App = () => {
                   <>
                     <Route path='/data' element={<DataSources />} />
                     <Route path='/settings' element={<Settings />} />
+                    <Route path='/changepass/:email' element={<ChangePass />} />
                   </>
                 ) : null}
               </Routes>
@@ -147,6 +154,7 @@ const App = () => {
             <Routes>
               <Route path='/login' element={<SignIn />} />
               <Route path='/signup' element={<SignUp />} />
+              <Route path='/forgot' element={<ForgotPass />} />
               <Route path='*' element={<SignIn />} />
             </Routes>
           )}

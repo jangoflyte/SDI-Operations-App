@@ -27,11 +27,6 @@ export const Calendar = () => {
   const [dateRange, setDateRange] = useState([]);
   const [schedFilled, setSchedFilled] = useState([]);
 
-  // set up function to fetch and check if positions have been filled in
-  // fetch with array of objects containing date and filled boolean
-  // [{ date: '2022-11-01', filled: null, shift: 'all'}, { date: '2022-11-02', filled: null, shift: 'all'}...]
-  // returns if filled true/false
-
   const fetchIfScheduleFilled = () => {
     console.log('fetching if schedule filled');
     let datesToPost = [];
@@ -48,7 +43,7 @@ export const Calendar = () => {
     }
     fetch(`${API}/schedule/filled`, {
       method: 'POST',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -70,14 +65,6 @@ export const Calendar = () => {
   useEffect(() => {
     fetchIfScheduleFilled();
   }, [dateRange]);
-
-  // icons for schedule ex...
-  // endIcon={
-  //   postsAssigned === rows.length ? (
-  //     <CheckCircleOutlineIcon />
-  //   ) : (
-  //     <HighlightOffIcon />
-  //   )
 
   const checkboxDisplay = (date, index, check) => {
     if (schedFilled.length > 0) {
@@ -428,7 +415,6 @@ export const Calendar = () => {
                   justifyContent: 'center',
                 }}
               >
-                {/* <Box sx={{ width: '100%' }}> */}
                 {schedDate.toDateString() === date.toDateString() ? (
                   <Button
                     variant='contained'
@@ -461,8 +447,6 @@ export const Calendar = () => {
                 ) : (
                   checkboxDisplay(date, index, false)
                 )}
-                {/* </Box> */}
-                {/* {checkboxDisplay(date, index)} */}
               </Box>
             </Box>
           </Paper>

@@ -1,5 +1,5 @@
 import React, { useContext, useState, useMemo } from 'react';
-import { MemberContext } from '../Components/MemberContext';
+import { MemberContext } from './MemberContext';
 import '../styles/Card.css';
 import {
   Avatar,
@@ -51,6 +51,7 @@ export const EditAvatar = props => {
     if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify({
         avatar: null,
       }),
@@ -84,6 +85,7 @@ export const EditAvatar = props => {
     if (avatar.id === cookies.user.id) removeCookie('user');
     fetch(`${API}/updateuser/${member.id}`, {
       method: 'PATCH',
+      credentials: 'include',
       body: JSON.stringify({
         avatar: pic,
       }),

@@ -61,11 +61,8 @@ export default function SignUp() {
         }
       })
       .then(data => {
-        // console.log('fetch data', data);
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
-          let user_id = data.user;
-          // console.log(user_id);
           setCookie('user', JSON.stringify(data.user), {
             path: '/',
             maxAge: cookieInfo[2].maxAge,
@@ -145,7 +142,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id='email'
-                  label='eMail'
+                  label='Email'
                   name='email'
                   autoComplete='email'
                   autoFocus
@@ -271,7 +268,7 @@ export default function SignUp() {
             }}
             onClick={() => navigate('/login')}
           >
-            Sign In
+            Back
           </Button>
         </Box>
       </Container>

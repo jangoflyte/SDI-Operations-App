@@ -21,23 +21,10 @@ export function WeaponQuals(props) {
 
   return (
     <>
-      {/* <Stack direction='row'>
-        <Typography sx={{ mb: 5 }}>{weapon.length} Weapons</Typography>
-
-        <IconButton
-          variant='outlined'
-          onClick={handleClickOpen}
-          size='small'
-          sx={{ ml: 2, width: 33, height: 33 }}
-        >
-          <AddCircleOutlineIcon />
-        </IconButton>
-      </Stack> */}
       <Chip
         onClick={handleClickOpen}
         label={`${weapon.length} Weapons`}
         icon={<AddCircleOutlineIcon />}
-        //deleteicon={<AddCircleOutlineIcon />}
         color='secondary'
         clickable
       />

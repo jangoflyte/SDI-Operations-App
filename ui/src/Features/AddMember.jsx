@@ -36,7 +36,6 @@ const PostMemberModal = props => {
   const { API, data, setToggleAlert, userAccount, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = useState(false);
-  //const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [selected, setSelected] = useState({});
   const [page, setPage] = useState(0);
@@ -96,7 +95,7 @@ const PostMemberModal = props => {
     console.log('patching schedule');
     fetch(`${API}/schedule`, {
       method: 'PATCH',
-      // credentials: 'include',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -107,7 +106,7 @@ const PostMemberModal = props => {
         // console.log(res.status);
         return res.json();
       })
-      .then(data => {
+      .then(() => {
         // console.log(data);
         // call update for users
         fetchSchedule();
@@ -377,7 +376,6 @@ const PostMemberModal = props => {
               <Button
                 onClick={() => {
                   handleClose();
-                  // console.log('selected person', selected);
                   let shiftTime;
                   if (shift === 'Days') shiftTime = '06:00:00';
                   if (shift === 'Mids') shiftTime = '18:00:00';
@@ -400,7 +398,6 @@ const PostMemberModal = props => {
                   {
                     role === 3 && (postUser.role = 'Charlie');
                   }
-                  // console.log('user info to post', postUser);
                   patchSchedule(postUser);
                 }}
                 color='secondary'
