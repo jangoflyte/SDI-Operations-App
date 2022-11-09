@@ -57,6 +57,8 @@ export default function SignIn() {
           console.log('return data', data);
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
+            domain: 'cyberhelm.com',
+            path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',

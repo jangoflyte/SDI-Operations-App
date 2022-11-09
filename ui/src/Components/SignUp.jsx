@@ -64,6 +64,7 @@ export default function SignUp() {
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
+            domain: 'cyberhelm.com',
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
