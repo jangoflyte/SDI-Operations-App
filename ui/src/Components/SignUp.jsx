@@ -14,7 +14,8 @@ import { useState, useContext } from 'react';
 import logo from '../passlogo.svg';
 
 export default function SignUp() {
-  const { API, setCookie, setUserAccount } = useContext(MemberContext);
+  const { API, setCookie, setUserAccount, authDomain, userDomain } =
+    useContext(MemberContext);
   let navigate = useNavigate();
   const [failedRegister, setFailedRegister] = useState(false);
   const [userExists, setUserExists] = useState(false);
@@ -64,7 +65,7 @@ export default function SignUp() {
         if (data.cookie !== undefined) {
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
-            domain: 'cyberhelm.com',
+            domain: userDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
@@ -72,7 +73,7 @@ export default function SignUp() {
           });
 
           setCookie(cookieInfo[0], cookieInfo[1], {
-            domain: 'cyberhelm.com',
+            domain: authDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',

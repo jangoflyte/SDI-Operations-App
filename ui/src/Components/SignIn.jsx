@@ -12,7 +12,8 @@ import { useContext } from 'react';
 import logo from '../passlogo.svg';
 
 export default function SignIn() {
-  const { API, setCookie, setUserAccount } = useContext(MemberContext);
+  const { API, setCookie, setUserAccount, authDomain, userDomain } =
+    useContext(MemberContext);
   const [loginCredentials, setLoginCredentials] = useState({
     email: '',
     password: '',
@@ -57,14 +58,14 @@ export default function SignIn() {
           console.log('return data', data);
           let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
-            domain: 'cyberhelm.com',
+            domain: userDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
             secure: 'true',
           });
           setCookie(cookieInfo[0], cookieInfo[1], {
-            domain: 'cyberhelm.com',
+            domain: authDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',

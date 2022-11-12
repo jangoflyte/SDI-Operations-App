@@ -35,8 +35,12 @@ const App = () => {
 
   //const MemberContext = React.createContext();
 
-  const API = 'http://localhost:8080';
-  // const API = 'https://api.cyberhelm.com';
+  const API = 'https://api.cyberhelm.com';
+  const authDomain = 'api.cyberhelm.com';
+  const userDomain = 'www.cyberhelm.com';
+  // const API = 'http://localhost:8080';
+  // const authDomain = 'localhost';
+  // const userDomain = 'localhost';
 
   useMemo(() => {
     if (cookies.user) {
@@ -119,6 +123,8 @@ const App = () => {
     setPage,
     darkMode,
     setDarkMode,
+    authDomain,
+    userDomain,
   };
 
   return (
