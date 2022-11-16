@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useParams } from 'react-router';
 import { UserPost } from './UserPost';
+import { useNavigate } from 'react-router-dom';
 import { WeaponQuals } from '../Features/WeaponQuals';
 import { EditAvatar } from './EditAvatar';
 import { useTheme } from '@mui/material/styles';
@@ -28,6 +29,7 @@ const IndividualMember = () => {
   const [scheduleArray, setScheduleArray] = useState(null);
   const [upcoming, setUpcoming] = useState(true);
   const theme = useTheme();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch(`${API}/users/${memberId}`, {
@@ -77,12 +79,12 @@ const IndividualMember = () => {
             }}
           >
             <Stack direction='row' spacing={2}>
-              <a
-                href='/sfmembers'
-                style={{ textDecoration: 'none', color: '#6D7AE5' }}
+              <Typography
+                onClick={()=>navigate('/sfmembers')}
+                style={{ textDecoration: 'none', color: '#6D7AE5', cursor:'pointer' }}
               >
                 People&nbsp;
-              </a>
+              </Typography>
               {`> `}
               {member.first_name
                 ? `${member.first_name

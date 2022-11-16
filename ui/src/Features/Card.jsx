@@ -302,6 +302,7 @@ const BasicCard = props => {
                         width: '100%',
                         gap: 1,
                       }}
+                      onClick={() => navigateToMember(member)}
                     >
                       <Avatar
                         sx={{ cursor: 'pointer', mr: 1, bgcolor: color }}

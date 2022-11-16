@@ -130,32 +130,45 @@ export const EditMemberModal = props => {
     }
   };
 
-  const handleChange = event => {
-    const {
-      target: { checked },
-    } = event;
-    console.log(event);
-    console.log(
-      'value: checked ',
-      event.target.parentNode.parentNode.id,
-      checked
-    );
-    let wepId = parseInt(event.target.parentNode.parentNode.id);
-    if (checked && !weaponIdArray.includes(wepId)) {
+  // const handleChange = event => {
+  //   const {
+  //     target: { checked },
+  //   } = event;
+  //   console.log(event);
+  //   console.log(
+  //     'value: checked ',
+  //     event.target.parentNode.parentNode.id,
+  //     checked
+  //   );
+  //   let wepId = parseInt(event.target.parentNode.parentNode.id);
+  //   if (checked && !weaponIdArray.includes(wepId)) {
+  //     setWeaponIdArray(curr => [...curr, wepId]);
+  //     setWeaponArr(curr => [
+  //       ...curr,
+  //       allWeapons.filter(weapon => weapon.id === wepId)[0],
+  //     ]);
+  //   } else if (!checked) {
+  //     setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+  //     setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId));
+  //   }
+  // };
+
+  const handleWeaponBox = (wepId) => {
+    if (!weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
       setWeaponArr(curr => [
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else if (!checked) {
+    } else if (weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId));
     }
-  };
+  }
 
-  useEffect(() => {
-    //console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
-  }, [weaponIdArray, allFlights]);
+  // useEffect(() => {
+  //   console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
+  // }, [weaponIdArray, allFlights]);
 
   const style = {
     position: 'absolute',
@@ -357,10 +370,11 @@ export const EditMemberModal = props => {
                     id={weaponObject.id}
                     key={index}
                     value={weaponObject.id}
+                    onClick={()=>handleWeaponBox(weaponObject.id)}
                   >
                     <Checkbox
-                      onChange={handleChange}
-                      defaultChecked={weaponArr.some(
+                      // onChange={handleChange}
+                      checked={weaponArr.some(
                         wep => wep.id === weaponObject.id
                       )}
                     />
