@@ -40,11 +40,12 @@ export const EditMemberModal = props => {
   const [rank, setRank] = useState(memberObject.rank);
   const [cert, setCert] = useState(memberObject.cert_id);
   const [weaponArr, setWeaponArr] = useState(memberObject.weapons);
-  const [status, setStatus] = useState(memberObject.weapon_arming);
+  const [wepStatus, setWepStatus] = useState(memberObject.weapon_arming);
   const [flight, setFlight] = useState(memberObject.flight);
   const [email, setEmail] = useState(memberObject.email);
   const [notes, setNotes] = useState(memberObject.notes);
   const [openItem, setOpenItem] = React.useState(false);
+  // const [status, setStatus] = useState(memberObject.status);
 
   useEffect(() => {
     setFirstName(memberObject.first_name);
@@ -53,7 +54,7 @@ export const EditMemberModal = props => {
     setRank(memberObject.rank);
     setCert(memberObject.cert_id);
     setWeaponArr(memberObject.weapons);
-    setStatus(memberObject.weapon_arming);
+    setWepStatus(memberObject.weapon_arming);
     setFlight(memberObject.flight);
     setEmail(memberObject.email);
     setNotes(memberObject.notes);
@@ -83,11 +84,12 @@ export const EditMemberModal = props => {
       admin: userType,
       rank: rank,
       cert_id: cert,
-      weapon_arming: status,
+      weapon_arming: wepStatus,
       flight: flight,
       email: email,
       notes: notes,
       weaponIdArray: weaponIdArray,
+      // status:'test'
     };
     //console.log('updated user, ', updatedUser);
 
@@ -315,10 +317,10 @@ export const EditMemberModal = props => {
               <Select
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
-                value={status}
+                value={wepStatus}
                 label='Arm'
                 sx={{ mb: 2 }}
-                onChange={e => setStatus(e.target.value)}
+                onChange={e => setWepStatus(e.target.value)}
                 disabled={!(userAccount !== null && userAccount.admin)}
               >
                 <MenuItem value={true}>Arm 🟢</MenuItem>
