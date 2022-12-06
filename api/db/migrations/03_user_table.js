@@ -8,8 +8,8 @@ exports.up = function (knex) {
     table.string('first_name', 250);
     table.string('last_name', 250);
     table.string('rank', 250);
-    table.string('flight');
-    table.foreign('flight').references('flight').inTable('flight');
+    table.integer('flight');
+    table.foreign('flight').references('id').inTable('flight');
     table.integer('cert_id');
     table.foreign('cert_id').references('id').inTable('certification');
     table.boolean('weapon_arming');

@@ -15,7 +15,7 @@ exports.up = function (knex) {
     table
       .dateTime('start_datetime', { precision: 6 })
       .defaultTo(knex.fn.now(6));
-    table.dateTime('end_datetime', { precision: 6 });
+    table.dateTime('end_datetime', { precision: 6 }).defaultTo(knex.fn.now(6));
   });
 };
 

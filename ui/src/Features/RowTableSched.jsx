@@ -203,7 +203,10 @@ export const RowTableSched = props => {
                             }}
                           >
                             <Avatar
-                              sx={{ cursor: 'pointer', bgcolor: color }}
+                              sx={{
+                                cursor: 'pointer',
+                                bgcolor: userRow.user_info[0].avatar_background,
+                              }}
                               src={userRow.user_info[0].avatar}
                               alt='avatar'
                               size='small'

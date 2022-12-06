@@ -57,6 +57,7 @@ const PostMemberModal = props => {
     let results = data.filter(user => {
       let wepResults = [true];
       if (weaponsReq[0] !== '') {
+        filterFlight;
         wepResults = weaponsReq.map(wep => {
           let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
           // console.log('inside filter', tests, user)
@@ -72,7 +73,7 @@ const PostMemberModal = props => {
       if (
         wepResults.includes(true) &&
         certResults.includes(true) &&
-        user.flight === flight
+        user.flight.flight === flight
       ) {
         return true;
       } else {
@@ -296,7 +297,10 @@ const PostMemberModal = props => {
                         }}
                       >
                         <Avatar
-                          sx={{ cursor: 'pointer' }}
+                          sx={{
+                            cursor: 'pointer',
+                            bgcolor: user.avatar_background,
+                          }}
                           src={user.avatar}
                           alt='avatar'
                           size='small'

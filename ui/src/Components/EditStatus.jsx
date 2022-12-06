@@ -1,57 +1,45 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { MemberContext } from './MemberContext'
-import '../styles/Card.css'
+import React, { useContext, useState, useEffect } from 'react';
+import { MemberContext } from './MemberContext';
+import '../styles/Card.css';
 import {
   Box,
   Button,
   Typography,
   Modal,
-  TextField,
   InputLabel,
   MenuItem,
   Select,
   Stack,
   FormControl,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Chip
-} from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import ListItemText from '@mui/material/ListItemText'
-import Checkbox from '@mui/material/Checkbox'
-import { useNavigate } from 'react-router-dom'
+  Chip,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 export const EditStatus = props => {
-  const { memberObj, memberId } = props
-  console.log('member obj ', memberObj)
-  const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
-    useContext(MemberContext)
-  const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
-  const [openItem, setOpenItem] = React.useState(false)
-  const [status, setStatus] = useState(memberObj.status)
+  const { memberObj, memberId } = props;
+  const { API, member, setTriggerFetch, userAccount } =
+    useContext(MemberContext);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [openItem, setOpenItem] = React.useState(false);
+  const [status, setStatus] = useState(memberObj.status);
+  // console.log('member obj ', memberObj);
 
   const handleItemClickOpen = () => {
-    setOpenItem(true)
-  }
+    setOpenItem(true);
+  };
 
   const handleItemClose = () => {
-    setOpenItem(false)
-    handleClose()
-  }
-
-  const navigate = useNavigate()
+    setOpenItem(false);
+    handleClose();
+  };
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
     const updatedUser = {
-      status: status
-    }
+      status: status,
+    };
     //console.log('updated user, ', updatedUser);
 
     fetch(`${API}/updateuser/${member.id}`, {
@@ -60,18 +48,18 @@ export const EditStatus = props => {
       redirect: 'follow',
       body: JSON.stringify(updatedUser),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      }
+        'Content-Type': 'application/json; charset=utf-8',
+      },
     })
       .then(res => res.json())
       .then(() => {
-        setTriggerFetch(curr => !curr)
-        handleClose()
+        setTriggerFetch(curr => !curr);
+        handleClose();
       })
       .catch(err => {
-        console.log('Error: ', err)
-      })
-  }
+        console.log('Error: ', err);
+      });
+  };
 
   // useEffect(() => {
   //   console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
@@ -88,19 +76,19 @@ export const EditStatus = props => {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    borderRadius: 4
-  }
+    borderRadius: 4,
+  };
 
-  const ITEM_HEIGHT = 48
-  const ITEM_PADDING_TOP = 8
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
   const MenuProps = {
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250
-      }
-    }
-  }
+        width: 250,
+      },
+    },
+  };
 
   return (
     <>
@@ -108,14 +96,18 @@ export const EditStatus = props => {
         <Chip
           // onClick={handleOpen}
           onClick={() => {
-            if (userAccount !== null && userAccount.id === parseInt(memberId)) {
-              handleOpen()
+            if (
+              (userAccount !== null && userAccount.id === parseInt(memberId)) ||
+              userAccount.admin
+            ) {
+              handleOpen();
             }
           }}
           label={member.status}
           color='error'
           sx={
-            userAccount !== null && userAccount.id === parseInt(memberId)
+            (userAccount !== null && userAccount.id === parseInt(memberId)) ||
+            userAccount.admin
               ? { fontSize: '25px', p: 2, cursor: 'pointer' }
               : { fontSize: '25px', p: 2, cursor: 'default' }
           }
@@ -124,14 +116,18 @@ export const EditStatus = props => {
         <Chip
           // onClick={handleOpen}
           onClick={() => {
-            if (userAccount !== null && userAccount.id === parseInt(memberId)) {
-              handleOpen()
+            if (
+              (userAccount !== null && userAccount.id === parseInt(memberId)) ||
+              userAccount.admin
+            ) {
+              handleOpen();
             }
           }}
           label='Available'
           color='success'
           sx={
-            userAccount !== null && userAccount.id === parseInt(memberId)
+            (userAccount !== null && userAccount.id === parseInt(memberId)) ||
+            userAccount.admin
               ? { fontSize: '25px', p: 2, cursor: 'pointer' }
               : { fontSize: '25px', p: 2, cursor: 'default' }
           }
@@ -162,7 +158,7 @@ export const EditStatus = props => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -195,5 +191,5 @@ export const EditStatus = props => {
         </Box>
       </Modal>
     </>
-  )
-}
+  );
+};

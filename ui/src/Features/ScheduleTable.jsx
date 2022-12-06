@@ -576,7 +576,7 @@ export const ScheduleTable = () => {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'left',
-              gap: 3,
+              gap: 2,
               whiteSpace: 'no-wrap',
               // maxWidth: '100%',
               // overflowX: 'auto',

@@ -43,6 +43,7 @@ export const AvatarMenu = () => {
               src={userAccount.avatar}
               sx={{
                 cursor: 'pointer',
+                bgcolor: userAccount.avatar_background,
               }}
             >
               {userAccount.first_name.charAt(0).toUpperCase()}
@@ -97,6 +98,7 @@ export const AvatarMenu = () => {
             src={userAccount.avatar}
             sx={{
               cursor: 'pointer',
+              bgcolor: userAccount.avatar_background,
             }}
           >
             {userAccount.first_name.charAt(0).toUpperCase()}

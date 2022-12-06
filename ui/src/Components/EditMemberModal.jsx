@@ -27,7 +27,7 @@ import { useNavigate } from 'react-router-dom';
 export const EditMemberModal = props => {
   let memberObject = props;
   memberObject = memberObject.memberObject;
-  // console.log('member object, ', memberObject);
+  console.log('member object, ', memberObject);
 
   const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
     useContext(MemberContext);
@@ -55,7 +55,9 @@ export const EditMemberModal = props => {
     setCert(memberObject.cert_id);
     setWeaponArr(memberObject.weapons);
     setWepStatus(memberObject.weapon_arming);
-    setFlight(memberObject.flight);
+    if (memberObject.flight !== null) {
+      setFlight(memberObject.flight.id);
+    }
     setEmail(memberObject.email);
     setNotes(memberObject.notes);
   }, [props]);
@@ -155,7 +157,7 @@ export const EditMemberModal = props => {
   //   }
   // };
 
-  const handleWeaponBox = (wepId) => {
+  const handleWeaponBox = wepId => {
     if (!weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
       setWeaponArr(curr => [
@@ -166,7 +168,7 @@ export const EditMemberModal = props => {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeaponArr(curr => curr.filter(weapon => weapon.id !== wepId));
     }
-  }
+  };
 
   // useEffect(() => {
   //   console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
@@ -372,7 +374,7 @@ export const EditMemberModal = props => {
                     id={weaponObject.id}
                     key={index}
                     value={weaponObject.id}
-                    onClick={()=>handleWeaponBox(weaponObject.id)}
+                    onClick={() => handleWeaponBox(weaponObject.id)}
                   >
                     <Checkbox
                       // onChange={handleChange}
@@ -419,7 +421,7 @@ export const EditMemberModal = props => {
                   <MenuItem
                     id={flightObject.id}
                     key={index}
-                    value={flightObject.flight}
+                    value={flightObject.id}
                   >
                     {flightObject.flight}
                   </MenuItem>

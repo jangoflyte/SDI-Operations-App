@@ -5,6 +5,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 
 export const Roster = props => {
   const { rows } = props;
+
   const { API, data, userAccount, allFlights } = useContext(MemberContext);
   const [flight, setFlight] = useState('alpha-1');
   const [filterFlight, setFilterFlight] = useState([]);
@@ -21,7 +22,8 @@ export const Roster = props => {
       });
     });
   });
-  // console.log('posted from roster.js', posted);
+  console.log('posted from roster.js', posted);
+  console.log('rows', rows);
 
   return (
     <Box sx={{ borderRadius: '5px', width: '100%' }} p={2}>
@@ -98,7 +100,7 @@ export const Roster = props => {
             }}
           >
             <Icon>
-              <CircleIcon />
+              <CircleIcon sx={{ color: '#25CA12' }} />
             </Icon>
           </Box>
           <Box

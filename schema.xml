@@ -37,7 +37,7 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="80" y="428" name="Flight">
+</datatypes><table x="61" y="402" name="Flight">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -49,7 +49,7 @@
 <part>flight</part>
 </key>
 </table>
-<table x="72" y="529" name="Certification">
+<table x="59" y="519" name="Certification">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -75,7 +75,7 @@
 <default>NULL</default></row>
 <row name="flight" null="1" autoincrement="0">
 <datatype>VARCHAR</datatype>
-<default>NULL</default><relation table="Flight" row="flight" />
+<default>NULL</default><relation table="Flight" row="id" />
 </row>
 <row name="cert_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>

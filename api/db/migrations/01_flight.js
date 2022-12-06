@@ -5,7 +5,7 @@
 exports.up = function (knex) {
   return knex.schema.createTable('flight', table => {
     table.increments('id');
-    table.string('flight', 250).primary();
+    table.string('flight', 250);
   });
 };
 

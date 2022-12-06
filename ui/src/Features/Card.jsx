@@ -34,7 +34,6 @@ const BasicCard = props => {
     usersArray,
     setTriggerFetch,
     userAccount,
-    color,
     page,
     setPage,
   } = useContext(MemberContext);
@@ -70,7 +69,7 @@ const BasicCard = props => {
     if (filter.flight.length > 0) {
       return filter.flight.some(flight => {
         // console.log('this is flight ', flight);
-        return user.flight === flight;
+        return user.flight.flight === flight;
       });
     } else {
       return true;
@@ -305,7 +304,11 @@ const BasicCard = props => {
                       onClick={() => navigateToMember(member)}
                     >
                       <Avatar
-                        sx={{ cursor: 'pointer', mr: 1, bgcolor: color }}
+                        sx={{
+                          cursor: 'pointer',
+                          mr: 1,
+                          bgcolor: member.avatar_background,
+                        }}
                         src={member.avatar}
                         alt='avatar'
                         size='small'

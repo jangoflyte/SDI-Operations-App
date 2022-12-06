@@ -29,7 +29,6 @@ const App = () => {
   const [allFlights, setAllFlights] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
   const [userAccount, setUserAccount] = useState(null);
-  const [color, setColor] = useState('gray');
   const [page, setPage] = useState(0);
   const [darkMode, setDarkMode] = useState('light');
 
@@ -117,8 +116,6 @@ const App = () => {
     userAccount,
     setUserAccount,
     allFlights,
-    color,
-    setColor,
     page,
     setPage,
     darkMode,
