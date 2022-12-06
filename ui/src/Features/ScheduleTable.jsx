@@ -8,6 +8,7 @@ import {
   Box,
   IconButton,
   Tooltip,
+  Stack,
 } from '@mui/material/';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -24,6 +25,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import { RowTableSched } from './RowTableSched';
+import { Roster } from './Roster';
 import PrintIcon from '@mui/icons-material/Print';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
@@ -389,278 +391,335 @@ export const ScheduleTable = () => {
           </Alert>
         </Box>
       </Fade>
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          alignItems: 'end',
-          justifyContent: 'center',
-          width: '100%',
-          gap: 2,
-        }}
+
+      <Stack
+        component='span'
+        direction='row'
+        alignItems='top'
+        justifyContent='space-between'
+        mt={2}
+        sx={{ display: 'flex' }}
       >
         <Box
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
-            flexDirection: 'row',
-            alignItems: 'end',
-            justifyContent: 'start',
+            //height: '110vh',
+            //flexDirection: 'row',
+            //alignItems: 'end',
+            //justifyContent: 'start',
             gap: 2,
-            width: 620,
-            //width: '90%',
+            width: '25%',
           }}
         >
-          <TextField
-            id='date'
-            label='Start Date'
-            type='date'
-            defaultValue={startDate.toISOString().split('T')[0]}
+          <Paper sx={{ width: '95%' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                //flexWrap: 'wrap',
+                flexDirection: 'row',
+                alignItems: 'start',
+                justifyContent: 'left',
+                width: '100%',
+                //height: '100vh',
+                gap: 2,
+              }}
+            >
+              <Roster rows={rows} />
+              <Box sx={{}}>
+                <Tooltip title="Print Today's Schedule">
+                  <IconButton onClick={() => handleDownloadTable()}>
+                    <PrintIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            </Box>
+          </Paper>
+        </Box>
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            //flexDirection: 'row',
+            // alignItems: 'end',
+            justifyContent: 'left',
+            gap: 2,
+            width: '75%',
+          }}
+        >
+          <Box
             sx={{
-              width: 220,
-              backgroundColor:
-                theme.palette.mode === 'light'
-                  ? 'white'
-                  : theme.palette.grey[900],
-              cursor: 'pointer',
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              alignItems: 'end',
+              // justifyContent: 'left',
+              width: '100%',
+              gap: 2,
             }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            onChange={e => {
-              if (e.target.value === '') {
-                setStartDate(new Date());
-                e.target.value = new Date().toISOString().split('T')[0];
-                setSchedDate(new Date(`${e.target.value}T00:00:00`));
-              } else {
-                setStartDate(new Date(`${e.target.value}T00:00:00`));
-                setSchedDate(new Date(`${e.target.value}T00:00:00`));
-              }
-            }}
-          />
-          <Button
-            color='info'
-            variant='outlined'
-            sx={{ height: 55 }}
-            onClick={() => navigate('/calendar')}
           >
-            Month View
-          </Button>
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                flexDirection: 'row',
+                alignItems: 'end',
+                justifyContent: 'left',
+                gap: 2,
+                width: 620,
+                //width: '90%',
+              }}
+            >
+              <TextField
+                id='date'
+                label='Start Date'
+                type='date'
+                defaultValue={startDate.toISOString().split('T')[0]}
+                sx={{
+                  width: 220,
+                  backgroundColor:
+                    theme.palette.mode === 'light'
+                      ? 'white'
+                      : theme.palette.grey[900],
+                  cursor: 'pointer',
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={e => {
+                  if (e.target.value === '') {
+                    setStartDate(new Date());
+                    e.target.value = new Date().toISOString().split('T')[0];
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  } else {
+                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  }
+                }}
+              />
+              <Button
+                color='info'
+                variant='outlined'
+                sx={{ height: 55 }}
+                onClick={() => navigate('/calendar')}
+              >
+                Month View
+              </Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}
+              >
+                <Button
+                  disabled={
+                    postsAssigned === rows.length && userAccount.admin
+                      ? false
+                      : true
+                  }
+                  variant='outlined'
+                  color={
+                    postsAssigned !== rows.length
+                      ? 'primary'
+                      : userAccount !== null && userAccount.admin
+                      ? 'secondary'
+                      : 'primary'
+                  }
+                  sx={{ height: 55, cursor: 'pointer' }}
+                  onClick={() => handleFinalize()}
+                >
+                  {`${postsAssigned} of ${rows.length}`}
+                  {postsAssigned !== rows.length && ' Assigned'}
+
+                  {postsAssigned === rows.length &&
+                  userAccount !== null &&
+                  userAccount.admin ? (
+                    <Typography
+                      color='secondary'
+                      variant='contained'
+                      sx={{ borderRadius: '30px', ml: 0.5 }}
+                    >
+                      Finalize
+                    </Typography>
+                  ) : null}
+                </Button>
+              </Box>
+
+              {/* <Box sx={{}}>
+                <Tooltip title="Print Today's Schedule">
+                  <IconButton onClick={() => handleDownloadTable()}>
+                    <PrintIcon />
+                  </IconButton>
+                </Tooltip>
+              </Box> */}
+            </Box>
+
+            <Typography
+              variant='h1'
+              component='span'
+              sx={{
+                color: shift === 'Days' ? '#ffa726' : '#7A8AFF',
+                textShadow: '1px 1px 2px #454545',
+              }}
+            >
+              {schedDate.toDateString()}
+            </Typography>
+          </Box>
+
           <Box
             sx={{
               display: 'flex',
               flexWrap: 'wrap',
               flexDirection: 'row',
               alignItems: 'center',
+              justifyContent: 'left',
+              gap: 3,
+              whiteSpace: 'no-wrap',
+              // maxWidth: '100%',
+              // overflowX: 'auto',
             }}
           >
-            <Button
-              disabled={
-                postsAssigned === rows.length && userAccount.admin
-                  ? false
-                  : true
-              }
-              variant='outlined'
-              color={
-                postsAssigned !== rows.length
-                  ? 'primary'
-                  : userAccount !== null && userAccount.admin
-                  ? 'secondary'
-                  : 'primary'
-              }
-              sx={{ height: 55, cursor: 'pointer' }}
-              onClick={() => handleFinalize()}
-            >
-              {`${postsAssigned} of ${rows.length}`}
-              {postsAssigned !== rows.length && ' Assigned'}
-
-              {postsAssigned === rows.length &&
-              userAccount !== null &&
-              userAccount.admin ? (
-                <Typography
-                  color='secondary'
-                  variant='contained'
-                  sx={{ borderRadius: '30px', ml: 0.5 }}
+            {dateRange.map((date, index) => (
+              <Paper key={index} elevation={4}>
+                <Box
+                  sx={
+                    schedDate.toDateString() === date.toDateString()
+                      ? {
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: 2,
+                          borderColor:
+                            shift === 'Days' ? '#ffa726 ' : '#6D7AE5',
+                          borderRadius: 1,
+                        }
+                      : {
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }
+                  }
                 >
-                  Finalize
-                </Typography>
-              ) : null}
-            </Button>
-          </Box>
-
-          <Box sx={{}}>
-            <Tooltip title="Print Today's Schedule">
-              <IconButton onClick={() => handleDownloadTable()}>
-                <PrintIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        </Box>
-
-        <Typography
-          variant='h1'
-          component='span'
-          sx={{
-            color: shift === 'Days' ? '#ffa726' : '#7A8AFF',
-            textShadow: '1px 1px 2px #454545',
-          }}
-        >
-          {schedDate.toDateString()}
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 3,
-          whiteSpace: 'no-wrap',
-          // maxWidth: '100%',
-          // overflowX: 'auto',
-        }}
-      >
-        {dateRange.map((date, index) => (
-          <Paper key={index} elevation={4}>
-            <Box
-              sx={
-                schedDate.toDateString() === date.toDateString()
-                  ? {
+                  <Box
+                    sx={{
                       display: 'flex',
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      alignItems: 'center',
                       justifyContent: 'center',
-                      border: 2,
-                      borderColor: shift === 'Days' ? '#ffa726 ' : '#6D7AE5',
-                      borderRadius: 1,
-                    }
-                  : {
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }
-              }
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  px: 1,
-                  pt: 1,
-                  gap: 1,
-                }}
-              >
-                <Typography
-                  fontWeight='bold'
-                  component='span'
-                  sx={{ color: theme.palette.grey[700] }}
-                >
-                  {date.toDateString().split(' ')[0]}
-                </Typography>
-                <Typography
-                  variant='h4'
-                  component='span'
-                  sx={{ color: theme.palette.info.main }}
-                >
-                  {date.toDateString().split(' ')[1]}
-                </Typography>
-                <Typography variant='h4' component='span'>
-                  {date.toDateString().split(' ')[2]}
-                </Typography>
-                {/* <Typography
-                  fontWeight='bold'
-                  component='span'
-                  sx={{ color: theme.palette.grey[700] }}
-                >
-                  {date.toDateString().split(' ')[3]}
-                </Typography> */}
-              </Box>
-              <Divider flexItem={true} sx={{ color: theme.palette.grey[600] }}>
-                SHIFT
-              </Divider>
+                      px: 1,
+                      pt: 1,
+                      gap: 1,
+                    }}
+                  >
+                    <Typography
+                      fontWeight='bold'
+                      component='span'
+                      sx={{ color: theme.palette.grey[700] }}
+                    >
+                      {date.toDateString().split(' ')[0]}
+                    </Typography>
+                    <Typography
+                      variant='h4'
+                      component='span'
+                      sx={{ color: theme.palette.info.main }}
+                    >
+                      {date.toDateString().split(' ')[1]}
+                    </Typography>
+                    <Typography variant='h4' component='span'>
+                      {date.toDateString().split(' ')[2]}
+                    </Typography>
+                  </Box>
+                  <Divider
+                    flexItem={true}
+                    sx={{ color: theme.palette.grey[600] }}
+                  >
+                    SHIFT
+                  </Divider>
 
-              <Button
-                fullWidth={true}
-                color='warning'
-                sx={
-                  shift === 'Days' &&
-                  schedDate.toDateString() === date.toDateString()
-                    ? {
-                        backgroundColor: 'rgba(229, 115, 115, 0.2)',
-                        borderRadius: 0,
-                      }
-                    : { borderRadius: 0 }
-                }
-                onClick={() => {
-                  setSchedDate(date);
-                  setShift('Days');
-                  fetchSchedule();
-                }}
-                endIcon={checkboxDisplay(date, index, 'days')}
-              >
-                Days
-              </Button>
-              <Button
-                fullWidth={true}
-                color='info'
-                sx={
-                  shift === 'Mids' &&
-                  schedDate.toDateString() === date.toDateString()
-                    ? {
-                        backgroundColor: 'rgba(66, 135, 245, 0.2)',
-                        borderRadius: 0,
-                      }
-                    : { borderRadius: 0 }
-                }
-                onClick={() => {
-                  setSchedDate(date);
-                  setShift('Mids');
-                  fetchSchedule();
-                }}
-                endIcon={checkboxDisplay(date, index, 'mids')}
-              >
-                Mids
-              </Button>
-            </Box>
-          </Paper>
-        ))}
-      </Box>
-      <TableContainer
-        component={Paper}
-        sx={{
-          boxShadow: 5,
-          borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
-        }}
-      >
-        <Table aria-label='collapsible table' stickyHeader id='table'>
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell sx={{ fontWeight: 'bold' }}>Post</TableCell>
-              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                Manning Requirements
-              </TableCell>
-              <TableCell align='center' sx={{ fontWeight: 'bold' }}>
-                Weapon Requirements
-              </TableCell>
-              <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                Certification Required
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row, index) => (
-              <RowTableSched key={index} row={row} />
+                  <Button
+                    fullWidth={true}
+                    color='warning'
+                    sx={
+                      shift === 'Days' &&
+                      schedDate.toDateString() === date.toDateString()
+                        ? {
+                            backgroundColor: 'rgba(229, 115, 115, 0.2)',
+                            borderRadius: 0,
+                          }
+                        : { borderRadius: 0 }
+                    }
+                    onClick={() => {
+                      setSchedDate(date);
+                      setShift('Days');
+                      fetchSchedule();
+                    }}
+                    endIcon={checkboxDisplay(date, index, 'days')}
+                  >
+                    Days
+                  </Button>
+                  <Button
+                    fullWidth={true}
+                    color='info'
+                    sx={
+                      shift === 'Mids' &&
+                      schedDate.toDateString() === date.toDateString()
+                        ? {
+                            backgroundColor: 'rgba(66, 135, 245, 0.2)',
+                            borderRadius: 0,
+                          }
+                        : { borderRadius: 0 }
+                    }
+                    onClick={() => {
+                      setSchedDate(date);
+                      setShift('Mids');
+                      fetchSchedule();
+                    }}
+                    endIcon={checkboxDisplay(date, index, 'mids')}
+                  >
+                    Mids
+                  </Button>
+                </Box>
+              </Paper>
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+          </Box>
+
+          <TableContainer
+            component={Paper}
+            sx={{
+              boxShadow: 5,
+              borderColor: shift === 'Days' ? '#ffa726' : '#6D7AE5',
+            }}
+          >
+            <Table aria-label='collapsible table' stickyHeader id='table'>
+              <TableHead>
+                <TableRow>
+                  <TableCell />
+                  <TableCell sx={{ fontWeight: 'bold' }}>Post</TableCell>
+                  <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                    Manning Requirements
+                  </TableCell>
+                  <TableCell align='center' sx={{ fontWeight: 'bold' }}>
+                    Weapon Requirements
+                  </TableCell>
+                  <TableCell align='right' sx={{ fontWeight: 'bold' }}>
+                    Certification Required
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, index) => (
+                  <RowTableSched key={index} row={row} />
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Stack>
     </Box>
   );
 };

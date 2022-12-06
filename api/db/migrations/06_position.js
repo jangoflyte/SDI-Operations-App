@@ -10,6 +10,12 @@ exports.up = function (knex) {
     table.integer('cert_id');
     table.foreign('cert_id').references('id').inTable('certification');
     table.string('shift');
+    table.integer('flight_assigned');
+    table.foreign('flight_assigned').references('id').inTable('flight');
+    table
+      .dateTime('start_datetime', { precision: 6 })
+      .defaultTo(knex.fn.now(6));
+    table.dateTime('end_datetime', { precision: 6 });
   });
 };
 
@@ -21,6 +27,7 @@ exports.down = function (knex) {
   return knex.schema
     .alterTable('position', table => {
       table.dropForeign('cert_id');
+      table.dropForeign('flight_assigned');
     })
     .then(() => {
       return knex.schema.dropTableIfExists('position');

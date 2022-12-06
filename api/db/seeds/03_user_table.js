@@ -49,9 +49,10 @@ exports.seed = async function (knex) {
             weapon_arming: true,
             admin: false,
             email: 'greg@spaceforce.mil',
-            avatar:
-              'https://images.unsplash.com/photo-1511989130945-c2b632959395?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
+            // avatar:
+            // 'https://images.unsplash.com/photo-1511989130945-c2b632959395?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2370&q=80',
             // avatar: 'https://media.giphy.com/media/D7z8JfNANqahW/giphy.gif',
+            avatar_background: 'blue',
           },
           {
             first_name: 'Macy',

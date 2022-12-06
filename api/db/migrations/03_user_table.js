@@ -18,6 +18,7 @@ exports.up = function (knex) {
     table.string('email');
     table.string('password');
     table.string('avatar');
+    table.string('avatar_background');
   });
 };
 
