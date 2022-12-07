@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react'
 import {
   Modal,
   Card,
@@ -10,30 +10,30 @@ import {
   AccordionSummary,
   AccordionDetails,
   Avatar,
-  Button,
-} from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import CloseIcon from '@mui/icons-material/Close';
-import { MemberContext } from '../Components/MemberContext';
-import { useEffect } from 'react';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
-import { useNavigate } from 'react-router-dom';
-import { useTheme } from '@mui/material/styles';
+  Button
+} from '@mui/material'
+import NotificationsIcon from '@mui/icons-material/Notifications'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import CloseIcon from '@mui/icons-material/Close'
+import { MemberContext } from '../Components/MemberContext'
+import { useEffect } from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import CheckIcon from '@mui/icons-material/Check'
+import ClearIcon from '@mui/icons-material/Clear'
+import { useNavigate } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles'
 
 export const NotificationModal = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const { triggerFetch } = useContext(MemberContext);
-  const { userAccount, API } = useContext(MemberContext);
-  const [notifications, setNotifications] = useState([]);
-  const [unreadArray, setUnreadArray] = useState([]);
-  const [triggerNotification, setTriggerNotification] = useState(false);
-  const navigate = useNavigate();
-  const theme = useTheme();
+  const [open, setOpen] = useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+  const { triggerFetch } = useContext(MemberContext)
+  const { userAccount, API } = useContext(MemberContext)
+  const [notifications, setNotifications] = useState([])
+  const [unreadArray, setUnreadArray] = useState([])
+  const [triggerNotification, setTriggerNotification] = useState(false)
+  const navigate = useNavigate()
+  const theme = useTheme()
 
   const style = {
     position: 'absolute',
@@ -48,12 +48,12 @@ export const NotificationModal = () => {
     p: 4,
     borderRadius: 4,
     overflowY: 'scroll',
-    maxHeight: '90%',
-  };
+    maxHeight: '90%'
+  }
 
   useEffect(() => {
-    getNotification();
-  }, [triggerNotification, triggerFetch]);
+    getNotification()
+  }, [triggerNotification, triggerFetch])
 
   const getNotification = () => {
     fetch(`${API}/notifications/${userAccount.id}`, {
@@ -61,25 +61,25 @@ export const NotificationModal = () => {
       credentials: 'include',
       redirect: 'follow',
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => res.json())
       .then(data => {
-        data.sort(({ id: a }, { id: b }) => a - b);
-        setNotifications(data);
-        setUnreadArray(data.filter(notification => !notification.read));
+        data.sort(({ id: a }, { id: b }) => a - b)
+        setNotifications(data)
+        setUnreadArray(data.filter(notification => !notification.read))
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   const handleClick = () => {
-    getNotification();
-    handleOpen();
-    setTriggerNotification(!triggerNotification);
-  };
+    getNotification()
+    handleOpen()
+    setTriggerNotification(!triggerNotification)
+  }
 
   const NotificationRead = (notifId, read) => {
     fetch(`${API}/notifications/${userAccount.id}`, {
@@ -88,18 +88,18 @@ export const NotificationModal = () => {
       redirect: 'follow',
       body: JSON.stringify({
         id: notifId,
-        read: read,
+        read: read
       }),
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => res.json())
       .then(setTriggerNotification(!triggerNotification))
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   // /notifications/:joinId
 
@@ -107,27 +107,27 @@ export const NotificationModal = () => {
     fetch(`${API}/notifications/${joinId}`, {
       method: 'DELETE',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(res => res.json())
       .then(setTriggerNotification(!triggerNotification))
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   const clearNotifications = userId => {
     fetch(`${API}/notifications/user/${userId}`, {
       method: 'DELETE',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(res => res.json())
       .then(setTriggerNotification(curr => !curr))
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   // notifications.map(notif => notif.notification.name);
   return (
@@ -136,7 +136,7 @@ export const NotificationModal = () => {
         sx={{ m: 2, marginRight: 1 }}
         anchorOrigin={{
           vertical: 'top',
-          horizontal: 'right',
+          horizontal: 'right'
         }}
         color='secondary'
         overlap='circular'
@@ -149,7 +149,7 @@ export const NotificationModal = () => {
           alt='notification'
           src=''
           sx={{
-            cursor: 'pointer',
+            cursor: 'pointer'
           }}
         />
       </Badge>
@@ -180,7 +180,7 @@ export const NotificationModal = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   mt: 2,
-                  fontWeight: 'bold',
+                  fontWeight: 'bold'
                 }}
               >
                 {' '}
@@ -201,13 +201,13 @@ export const NotificationModal = () => {
                             backgroundColor:
                               theme.palette.mode === 'light'
                                 ? '#edeef0'
-                                : theme.palette.grey[800],
+                                : theme.palette.grey[800]
                           }
                         : {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'start',
-                            paddingLeft: 1,
+                            paddingLeft: 1
                           }
                     }
                   >
@@ -226,7 +226,7 @@ export const NotificationModal = () => {
                         display: 'flex',
                         justifyContent: 'center',
                         padding: 1,
-                        width: '100%',
+                        width: '100%'
                       }}
                     >
                       <AccordionSummary
@@ -234,8 +234,8 @@ export const NotificationModal = () => {
                         aria-controls='panel1a-content'
                         id='panel1a-header'
                         onClick={() => {
-                          if (notif.read) return;
-                          NotificationRead(notif.id, true);
+                          if (notif.read) return
+                          NotificationRead(notif.id, true)
                         }}
                       >
                         <Typography>{notif.notification.name}</Typography>
@@ -248,7 +248,7 @@ export const NotificationModal = () => {
                         display: 'flex',
                         justifyContent: 'space-between',
                         padding: 1,
-                        width: '90%',
+                        width: '90%'
                       }}
                     >
                       <Typography>
@@ -270,13 +270,13 @@ export const NotificationModal = () => {
                         padding: 1,
                         width: '90%',
                         flexDirection: 'column',
-                        gap: 1,
+                        gap: 1
                       }}
                     >
                       <Box
                         sx={{
                           display: 'flex',
-                          justifyContent: 'center',
+                          justifyContent: 'center'
                         }}
                       >
                         {notif.notification.link !== null ? (
@@ -286,8 +286,8 @@ export const NotificationModal = () => {
                               variant={'contained'}
                               sx={{ borderRadius: '30px', width: '50%' }}
                               onClick={() => {
-                                navigate(notif.notification.link);
-                                handleClose();
+                                navigate(notif.notification.link)
+                                handleClose()
                               }}
                             >
                               {notif.notification.link_text}
@@ -298,8 +298,8 @@ export const NotificationModal = () => {
                               variant={'contained'}
                               sx={{ borderRadius: '30px', width: '50%' }}
                               onClick={() => {
-                                navigate(notif.notification.link);
-                                handleClose();
+                                navigate(notif.notification.link)
+                                handleClose()
                               }}
                             >
                               Click Here
@@ -327,19 +327,19 @@ export const NotificationModal = () => {
                         display: 'flex',
                         justifyContent: 'space-between',
                         padding: 1,
-                        width: '100%',
+                        width: '100%'
                       }}
                     >
                       <Chip
                         sx={{
                           borderRadius: 10,
                           color: 'green',
-                          mr: 1,
+                          mr: 1
                         }}
                         onClick={() => {
-                          if (!notif.read) return;
-                          NotificationRead(notif.id, false);
-                          handleClose();
+                          if (!notif.read) return
+                          NotificationRead(notif.id, false)
+                          handleClose()
                         }}
                         size='small'
                         icon={<CheckIcon />}
@@ -350,10 +350,10 @@ export const NotificationModal = () => {
                         sx={{
                           borderRadius: 10,
                           color: 'red',
-                          mr: 1,
+                          mr: 1
                         }}
                         onClick={() => {
-                          NotificationDelete(notif.id);
+                          NotificationDelete(notif.id)
                         }}
                         size='small'
                         label='Delete Notification'
@@ -371,18 +371,18 @@ export const NotificationModal = () => {
               display: 'flex',
               justifyContent: 'flex-end',
               bottom: 0,
-              mt: 3,
+              mt: 3
             }}
           >
             {notifications.length <= 0 ? null : (
               <Button
                 variant='text'
                 onClick={() => {
-                  clearNotifications(userAccount.id);
-                  handleClose();
+                  clearNotifications(userAccount.id)
+                  handleClose()
                 }}
                 sx={{
-                  color: theme.palette.mode === 'light' ? 'inherit' : 'white',
+                  color: theme.palette.mode === 'light' ? 'inherit' : 'white'
                 }}
               >
                 Clear Notifications
@@ -392,5 +392,5 @@ export const NotificationModal = () => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}
