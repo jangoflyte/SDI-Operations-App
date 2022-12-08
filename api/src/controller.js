@@ -46,6 +46,18 @@ const addCerts = async users => {
   return modifiedUsers;
 };
 
+const addFlight = async users => {
+  let modifiedUsers = users;
+  for (let user of modifiedUsers) {
+    let flightInfo = await knex('flight').select('*').where('id', user.flight);
+    user.flight = flightInfo[0];
+    if (user.flight === undefined) {
+      user.flight = null;
+    }
+  }
+  return modifiedUsers;
+};
+
 const postWeapon = async posts => {
   let modifiedPosts = posts;
   for (let post of modifiedPosts) {
@@ -69,16 +81,18 @@ const postCert = async posts => {
   return modifiedPosts;
 };
 
-const addFlight = async users => {
-  let modifiedUsers = users;
-  for (let user of modifiedUsers) {
-    let flightInfo = await knex('flight').select('*').where('id', user.flight);
-    user.flight = flightInfo[0];
-    if (user.flight === undefined) {
-      user.flight = null;
+const postFlight = async posts => {
+  let modifiedPosts = posts;
+  for (let post of modifiedPosts) {
+    let flightInfo = await knex('certification')
+      .select('*')
+      .where('id', post.flight_assigned);
+    post.flightInfo = flightInfo;
+    if (post.flightInfo === undefined) {
+      post.flightInfo = null;
     }
   }
-  return modifiedUsers;
+  return modifiedPosts;
 };
 
 // user /////////////////////////////////////////////////////////////
@@ -368,7 +382,8 @@ const getAllposition = async () => {
   let positions = await knex('position').select('*').orderBy('id', 'asc');
   let positionsWeapon = await postWeapon(positions);
   let positionsCerts = await postCert(positionsWeapon);
-  return positionsCerts;
+  let positionFlights = await postFlight(positionsCerts);
+  return positionFlights;
 };
 
 const allWeapons = () => {

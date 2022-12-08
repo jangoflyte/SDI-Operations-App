@@ -27,7 +27,11 @@ const App = () => {
   const [toggleAlert, setToggleAlert] = useState(false); //for alerts
   const [allWeapons, setAllWeapons] = useState([]);
   const [allFlights, setAllFlights] = useState([]);
-  const [cookies, setCookie, removeCookie] = useCookies(['auth', 'user']);
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'auth',
+    'user',
+    'color_mode',
+  ]);
   const [userAccount, setUserAccount] = useState(null);
   const [page, setPage] = useState(0);
   const [darkMode, setDarkMode] = useState('light');
@@ -44,6 +48,9 @@ const App = () => {
   useMemo(() => {
     if (cookies.user) {
       setUserAccount(cookies.user);
+    }
+    if (cookies.color_mode) {
+      setDarkMode(cookies.color_mode);
     }
   }, [cookies]);
 

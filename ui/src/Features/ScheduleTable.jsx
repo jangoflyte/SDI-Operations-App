@@ -51,7 +51,7 @@ export const ScheduleTable = () => {
     .split('T')[0];
 
   useEffect(() => {
-    console.log('fetching if schedule filled');
+    // console.log('fetching if schedule filled');
     let datesToPost = [];
     if (dateRange.length === 0) return;
     for (let dateIn of dateRange) {
@@ -404,6 +404,7 @@ export const ScheduleTable = () => {
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
+            minWidth: 300,
             //height: '110vh',
             //flexDirection: 'row',
             //alignItems: 'end',
@@ -425,7 +426,7 @@ export const ScheduleTable = () => {
                 gap: 2,
               }}
             >
-              <Roster rows={rows} />
+              <Roster rows={rows} positions={positions} />
               <Box sx={{}}>
                 <Tooltip title="Print Today's Schedule">
                   <IconButton onClick={() => handleDownloadTable()}>

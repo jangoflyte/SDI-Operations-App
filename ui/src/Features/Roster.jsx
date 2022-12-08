@@ -1,30 +1,39 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import { Box, Typography, Divider, Stack, Icon } from '@mui/material/';
 import CircleIcon from '@mui/icons-material/Circle';
 
 export const Roster = props => {
-  const { rows } = props;
+  const { rows, positions } = props;
+  const { data } = useContext(MemberContext);
+  const [roster, setRoster] = useState([]);
+  const [scheduledUser, setScheduledUser] = useState([]);
 
-  const { API, data, userAccount, allFlights } = useContext(MemberContext);
-  const [flight, setFlight] = useState('alpha-1');
-  const [filterFlight, setFilterFlight] = useState([]);
-  const [trigerFilter, setTrigerFilter] = useState(true);
-
-  let posted = [];
-
-  rows.map(row => {
-    const position = row.name;
-    row.users.map(user => {
-      if (user.noUser) return;
-      user.user_info.map(info => {
-        posted.push({ user: info, position: position });
+  useEffect(() => {
+    // grabs user id for scheduled users
+    let posted = [];
+    rows.forEach(row => {
+      // console.log(row);
+      const position = row.name;
+      row.users.forEach(user => {
+        if (user.noUser) return;
+        // console.log(user);
+        posted.push({ user: user.user_info[0].id, position: position });
       });
+      // console.log('posted', posted);
     });
-  });
-  console.log('posted from roster.js', posted);
-  console.log('rows', rows);
+    setScheduledUser(posted);
 
+    // filters out roster for current flight from user data
+    if (positions.length > 0) {
+      let currentPersonnel = data.filter(
+        user => user.flight.id === positions[0].flight_assigned
+      );
+      setRoster(currentPersonnel);
+    }
+  }, [rows, positions]);
+
+  console.log(scheduledUser);
   return (
     <Box sx={{ borderRadius: '5px', width: '100%' }} p={2}>
       <Typography sx={{ fontWeight: 'bold' }} variant='h5'>
@@ -81,7 +90,7 @@ export const Roster = props => {
         </Box>
       </Stack>
 
-      {posted.map((post, index) => (
+      {roster.map((user, index) => (
         <Stack
           key={index}
           component='span'
@@ -91,6 +100,7 @@ export const Roster = props => {
           pt={2}
           sx={{ display: 'flex' }}
         >
+          {/* {console.log(user)} */}
           <Box
             alignItems='center'
             sx={{
@@ -100,7 +110,14 @@ export const Roster = props => {
             }}
           >
             <Icon>
-              <CircleIcon sx={{ color: '#25CA12' }} />
+              <CircleIcon
+                sx={
+                  // scheduledUser.includes(user.id)
+                  scheduledUser.filter(e => e.user === user.id).length > 0
+                    ? { color: '#25CA12' }
+                    : { color: 'red' }
+                }
+              />
             </Icon>
           </Box>
           <Box
@@ -112,7 +129,7 @@ export const Roster = props => {
             }}
           >
             <Typography>
-              {post.user.last_name}, {post.user.first_name}
+              {user.last_name}, {user.first_name}
             </Typography>
           </Box>
 
@@ -124,7 +141,7 @@ export const Roster = props => {
               width: '25%',
             }}
           >
-            <Typography>{post.user.rank.toUpperCase()}</Typography>
+            <Typography>{user.rank.toUpperCase()}</Typography>
           </Box>
 
           <Box
@@ -135,7 +152,14 @@ export const Roster = props => {
               width: '25%',
             }}
           >
-            <Typography>{post.position}</Typography>
+            <Typography>
+              {/* {user.status === null ? 'Available' : user.status} */}
+
+              {scheduledUser.filter(e => e.user === user.id).length > 0
+                ? 'available'
+                : null}
+              {/* this may work for the post as well */}
+            </Typography>
           </Box>
         </Stack>
       ))}

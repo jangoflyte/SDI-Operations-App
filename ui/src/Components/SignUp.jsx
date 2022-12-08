@@ -79,6 +79,7 @@ export default function SignUp() {
             sameSite: 'None',
             secure: 'true',
           });
+
           setUserAccount(data.user);
           navigate('/');
         }

@@ -87,7 +87,8 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
-  const { userAccount, darkMode, setDarkMode } = useContext(MemberContext);
+  const { userAccount, darkMode, setDarkMode, setCookie, authDomain } =
+    useContext(MemberContext);
   const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
@@ -165,11 +166,21 @@ export default function PersistentDrawerLeft() {
               <>
                 <IconButton
                   color='inherit'
-                  onClick={() =>
+                  onClick={() => {
                     setDarkMode(prevMode =>
                       prevMode === 'light' ? 'dark' : 'light'
-                    )
-                  }
+                    );
+                    setCookie(
+                      'color_mode',
+                      darkMode === 'light' ? 'dark' : 'light',
+                      {
+                        domain: authDomain,
+                        path: '/',
+                        sameSite: 'None',
+                        secure: 'true',
+                      }
+                    );
+                  }}
                 >
                   {darkMode === 'light' ? (
                     <Brightness7Icon />
