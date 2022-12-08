@@ -21,7 +21,7 @@ import { WeaponQuals } from '../Features/WeaponQuals';
 import { EditAvatar } from './EditAvatar';
 import { useTheme } from '@mui/material/styles';
 import { EditMemberModal } from './EditMemberModal';
-
+import { EditStatus } from './EditStatus';
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
     useContext(MemberContext);
@@ -152,6 +152,7 @@ const IndividualMember = () => {
                 : `N/A`}
             </Typography>
           </Box>
+          <EditStatus memberObj={member} memberId={memberId} />
         </Box>
 
         <Box

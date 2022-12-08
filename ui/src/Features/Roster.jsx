@@ -33,7 +33,7 @@ export const Roster = props => {
     }
   }, [rows, positions]);
 
-  // console.log(scheduledUser);
+  console.log(scheduledUser);
   return (
     <Box sx={{ borderRadius: '5px', width: '100%' }} p={2}>
       <Typography sx={{ fontWeight: 'bold' }} variant='h5'>
@@ -100,7 +100,7 @@ export const Roster = props => {
           pt={2}
           sx={{ display: 'flex' }}
         >
-          {console.log(user)}
+          {/* {console.log(user)} */}
           <Box
             alignItems='center'
             sx={{
@@ -112,7 +112,8 @@ export const Roster = props => {
             <Icon>
               <CircleIcon
                 sx={
-                  scheduledUser.includes(user.id)
+                  // scheduledUser.includes(user.id)
+                  scheduledUser.filter(e => e.user === user.id).length > 0
                     ? { color: '#25CA12' }
                     : { color: 'red' }
                 }
@@ -151,7 +152,14 @@ export const Roster = props => {
               width: '25%',
             }}
           >
-            <Typography>{user.status}</Typography>
+            <Typography>
+              {/* {user.status === null ? 'Available' : user.status} */}
+
+              {scheduledUser.filter(e => e.user === user.id).length > 0
+                ? 'available'
+                : null}
+              {/* this may work for the post as well */}
+            </Typography>
           </Box>
         </Stack>
       ))}
