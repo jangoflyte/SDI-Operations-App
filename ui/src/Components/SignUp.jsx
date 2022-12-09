@@ -12,11 +12,13 @@ import { useNavigate } from 'react-router-dom';
 import { MemberContext } from './MemberContext';
 import { useState, useContext } from 'react';
 import logo from '../passlogo.svg';
+import { useTheme } from '@mui/material/styles';
 
 export default function SignUp() {
   const { API, setCookie, setUserAccount, authDomain, userDomain } =
     useContext(MemberContext);
   let navigate = useNavigate();
+  const theme = useTheme();
   const [failedRegister, setFailedRegister] = useState(false);
   const [userExists, setUserExists] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -138,7 +140,15 @@ export default function SignUp() {
             </span>
           )}
           <Box
-            sx={{ backgroundColor: '#FAFAFF', borderRadius: 3, px: 4, py: 2 }}
+            sx={{
+              backgroundColor:
+                theme.palette.mode === 'light'
+                  ? '#FAFAFF'
+                  : theme.palette.grey[800],
+              borderRadius: 3,
+              px: 4,
+              py: 2,
+            }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -151,6 +161,12 @@ export default function SignUp() {
                   name='email'
                   autoComplete='email'
                   autoFocus
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
                   onChange={e => {
                     setUserInfo(prev => {
                       return { ...prev, email: e.target.value };
@@ -167,6 +183,12 @@ export default function SignUp() {
                   fullWidth
                   id='firstname'
                   label='First Name'
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
                   onChange={e => {
                     setUserInfo(prev => {
                       return { ...prev, first_name: e.target.value };
@@ -182,6 +204,12 @@ export default function SignUp() {
                   id='lastname'
                   label='Last Name'
                   name='lastname'
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
                   onChange={e => {
                     setUserInfo(prev => {
                       return { ...prev, last_name: e.target.value };
@@ -199,6 +227,12 @@ export default function SignUp() {
                   name='rank'
                   defaultValue=''
                   select
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
                   onChange={e => {
                     setUserInfo(prev => {
                       return { ...prev, rank: e.target.value };
@@ -232,6 +266,12 @@ export default function SignUp() {
                   type='password'
                   id='password'
                   autoComplete='new-password'
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
                   onChange={e => {
                     setUserInfo(prev => {
                       return { ...prev, password: e.target.value };

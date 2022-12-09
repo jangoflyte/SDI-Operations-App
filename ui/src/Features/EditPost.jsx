@@ -29,7 +29,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  //width: 700,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -131,24 +131,37 @@ export const EditPost = props => {
       });
   };
 
-  const handleChange = event => {
-    const {
-      target: { checked },
-    } = event;
-    console.log(event);
-    console.log(
-      'value: checked ',
-      event.target.parentNode.parentNode.id,
-      checked
-    );
-    let wepId = parseInt(event.target.parentNode.parentNode.id);
-    if (checked && !weaponIdArray.includes(wepId)) {
+  // const handleChange = event => {
+  //   const {
+  //     target: { checked },
+  //   } = event;
+  //   console.log(event);
+  //   console.log(
+  //     'value: checked ',
+  //     event.target.parentNode.parentNode.id,
+  //     checked
+  //   );
+  //   let wepId = parseInt(event.target.parentNode.parentNode.id);
+  //   if (checked && !weaponIdArray.includes(wepId)) {
+  //     setWeaponIdArray(curr => [...curr, wepId]);
+  //     setWeapon(curr => [
+  //       ...curr,
+  //       allWeapons.filter(weapon => weapon.id === wepId)[0],
+  //     ]);
+  //   } else if (!checked) {
+  //     setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+  //     setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+  //   }
+  // };
+
+  const handleWeaponBox = wepId => {
+    if (!weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
       setWeapon(curr => [
         ...curr,
         allWeapons.filter(weapon => weapon.id === wepId)[0],
       ]);
-    } else if (!checked) {
+    } else if (weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
@@ -216,6 +229,7 @@ export const EditPost = props => {
               display: 'flex',
               //justifyContent: 'center',
               justifyContent: 'space-between',
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -252,12 +266,11 @@ export const EditPost = props => {
                     id={weaponObject.id}
                     key={index}
                     value={weaponObject.id}
+                    onClick={() => handleWeaponBox(weaponObject.id)}
                   >
                     <Checkbox
-                      onChange={handleChange}
-                      defaultChecked={weapon.some(
-                        wep => wep.id === weaponObject.id
-                      )}
+                      // onChange={handleChange}
+                      checked={weapon.some(wep => wep.id === weaponObject.id)}
                       // checked={weapon.some(
                       //   wep => wep.weapon_id === weaponObject.id
                       // )}

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import {
   Box,
   Divider,
@@ -8,14 +8,14 @@ import {
   Menu,
   Tooltip,
   Badge,
-  ListItemIcon
-} from '@mui/material'
-import Logout from '@mui/icons-material/Logout'
-import Key from '@mui/icons-material/Key'
-import { useNavigate } from 'react-router-dom'
-import { MemberContext } from '../Components/MemberContext'
-import { EditStatusNavbar } from '../Components/EditStatusNavbar'
-import { styled } from '@mui/material/styles'
+  ListItemIcon,
+} from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
+import Key from '@mui/icons-material/Key';
+import { useNavigate } from 'react-router-dom';
+import { MemberContext } from '../Components/MemberContext';
+import { EditStatusNavbar } from '../Components/EditStatusNavbar';
+// import { styled } from '@mui/material/styles'
 
 // const StyledBadge = styled(Badge)(({ theme }) => ({
 //   '& .MuiBadge-badge': {
@@ -49,17 +49,17 @@ import { styled } from '@mui/material/styles'
 // }))
 
 export const AvatarMenu = () => {
-  const navigate = useNavigate()
-  const { userAccount, removeCookie, setUserAccount } =
-    useContext(MemberContext)
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const open = Boolean(anchorEl)
+  const navigate = useNavigate();
+  const { userAccount, removeCookie, setUserAccount, member } =
+    useContext(MemberContext);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
   const handleClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -82,9 +82,9 @@ export const AvatarMenu = () => {
                   // color: '#44b700',
                   backgroundColor:
                     userAccount.status === null ||
-                    userAccount.status === 'Available'
-                      ? '#44b700'
-                      : '#EE4B2B',
+                    userAccount.status !== 'Available'
+                      ? '#EE4B2B'
+                      : '#44b700',
                   // member.status !== null && member.status !== 'Available'
                   boxShadow: `0 0 0 2px #fafafafa`,
                   '&::after': {
@@ -96,9 +96,9 @@ export const AvatarMenu = () => {
                     borderRadius: '50%',
                     animation: 'ripple 1.2s infinite ease-in-out',
                     border: '1px solid currentColor',
-                    content: '""'
-                  }
-                }
+                    content: '""',
+                  },
+                },
               }}
             >
               <Avatar
@@ -106,7 +106,7 @@ export const AvatarMenu = () => {
                 src={userAccount.avatar}
                 sx={{
                   cursor: 'pointer',
-                  bgcolor: userAccount.avatar_background
+                  bgcolor: userAccount.avatar_background,
                 }}
               >
                 {userAccount.first_name.charAt(0).toUpperCase()}
@@ -132,7 +132,7 @@ export const AvatarMenu = () => {
               width: 32,
               height: 32,
               ml: -0.5,
-              mr: 1
+              mr: 1,
             },
             '&:before': {
               content: '""',
@@ -144,17 +144,17 @@ export const AvatarMenu = () => {
               height: 10,
               bgcolor: 'background.paper',
               transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0
-            }
-          }
+              zIndex: 0,
+            },
+          },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem
           onClick={() => {
-            navigate(`/sfmembers/${userAccount.id}`)
-            handleClose()
+            navigate(`/sfmembers/${userAccount.id}`);
+            handleClose();
           }}
         >
           <Avatar
@@ -162,7 +162,7 @@ export const AvatarMenu = () => {
             src={userAccount.avatar}
             sx={{
               cursor: 'pointer',
-              bgcolor: userAccount.avatar_background
+              bgcolor: userAccount.avatar_background,
             }}
           >
             {userAccount.first_name.charAt(0).toUpperCase()}
@@ -172,8 +172,8 @@ export const AvatarMenu = () => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            navigate(`/changepass`)
-            handleClose()
+            navigate(`/changepass`);
+            handleClose();
           }}
         >
           <ListItemIcon>
@@ -190,11 +190,11 @@ export const AvatarMenu = () => {
 
         <MenuItem
           onClick={() => {
-            removeCookie('user')
-            removeCookie('auth')
-            setUserAccount(null)
-            navigate('/login')
-            location.reload()
+            removeCookie('user');
+            removeCookie('auth');
+            setUserAccount(null);
+            navigate('/login');
+            location.reload();
           }}
         >
           <ListItemIcon>
@@ -204,5 +204,5 @@ export const AvatarMenu = () => {
         </MenuItem>
       </Menu>
     </React.Fragment>
-  )
-}
+  );
+};

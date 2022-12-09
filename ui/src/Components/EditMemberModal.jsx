@@ -179,7 +179,7 @@ export const EditMemberModal = props => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 650,
+    //width: 650,
     height: 700,
     bgcolor: 'background.paper',
     border: '2px solid #000',
@@ -242,6 +242,7 @@ export const EditMemberModal = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: '40ch' }}>

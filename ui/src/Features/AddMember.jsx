@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useState, useMemo, useEffect } from 'react';
 import { MemberContext } from '../Components/MemberContext';
 import {
   Button,
@@ -33,7 +33,7 @@ const PostMemberModal = props => {
     currentDate,
     shift,
   } = props;
-  const { API, data, setToggleAlert, userAccount, allFlights } =
+  const { API, data, setToggleAlert, userAccount, allFlights, rows } =
     useContext(MemberContext);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
@@ -44,17 +44,40 @@ const PostMemberModal = props => {
   const [timeCheck, setTimeCheck] = useState(true);
   const [filterFlight, setFilterFlight] = useState([]);
   const [trigerFilter, setTrigerFilter] = useState(true);
+  const [scheduledUser, setScheduledUser] = useState([]);
 
   useMemo(() => {
     setTimeout(() => {
       setTimeCheck(!timeCheck);
     }, 1300);
   }, [filterFlight]);
-  //  console.log(cert_req)
+
   let weaponsReq = weapon_req.split(' ');
+
+  useEffect(() => {
+    // grabs user id for scheduled users
+    let posted = [];
+    rows.forEach(row => {
+      // console.log(row);
+      const position = row.name;
+      row.users.forEach(user => {
+        if (user.noUser) return;
+        // console.log(user);
+
+        posted.push({ user: user.user_info[0].id, position: position });
+      });
+      // console.log('posted', posted);
+    });
+    setScheduledUser(posted);
+  }, [rows]);
+
+  useEffect(() => {
+    console.log('rows from addMember.js', scheduledUser);
+  }, [setScheduledUser]);
 
   useMemo(() => {
     let results = data.filter(user => {
+      // console.log('user from addmember.jsx', user);
       let wepResults = [true];
       if (weaponsReq[0] !== '') {
         filterFlight;
@@ -73,7 +96,8 @@ const PostMemberModal = props => {
       if (
         wepResults.includes(true) &&
         certResults.includes(true) &&
-        user.flight.flight === flight
+        user.flight.flight === flight &&
+        user.status === 'Available'
       ) {
         return true;
       } else {

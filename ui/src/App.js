@@ -35,9 +35,9 @@ const App = () => {
   const [userAccount, setUserAccount] = useState(null);
   const [page, setPage] = useState(0);
   const [darkMode, setDarkMode] = useState('light');
+  const [rows, setRows] = useState([]);
 
   //const MemberContext = React.createContext();
-
   // const API = 'https://api.cyberhelm.com';
   // const authDomain = 'api.cyberhelm.com';
   // const userDomain = 'www.cyberhelm.com';
@@ -129,6 +129,8 @@ const App = () => {
     setDarkMode,
     authDomain,
     userDomain,
+    rows,
+    setRows,
   };
 
   return (
@@ -148,11 +150,13 @@ const App = () => {
                   path='/sfmembers/:memberId'
                   element={<IndividualMember />}
                 />
+                {/* <Route path='/login' element={<SignIn />} /> */}
                 <Route path='/calendar' element={<Calendar />} />
                 <Route path='/weather' element={<Weather />} />
                 <Route path='*' element={<Home />} />
                 {userAccount.admin ? (
                   <>
+                    {/* <Route path='/login' element={<SignIn />} /> */}
                     <Route path='/data' element={<DataSources />} />
                     <Route path='/settings' element={<Settings />} />
                     <Route path='/changepass/:email' element={<ChangePass />} />

@@ -31,7 +31,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
 export const ScheduleTable = () => {
-  const { API, toggleAlert, setToggleAlert, userAccount } =
+  const { API, toggleAlert, setToggleAlert, userAccount, setRows } =
     useContext(MemberContext);
   const navigate = useNavigate();
   const [positions, setPositions] = useState({});
@@ -314,6 +314,10 @@ export const ScheduleTable = () => {
       });
     }
     return row;
+  }, [positions, schedule, schedDate, shift]);
+
+  useEffect(() => {
+    setRows(rows);
   }, [positions, schedule, schedDate, shift]);
 
   const handleDownloadTable = () => {

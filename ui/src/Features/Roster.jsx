@@ -8,6 +8,7 @@ export const Roster = props => {
   const { data } = useContext(MemberContext);
   const [roster, setRoster] = useState([]);
   const [scheduledUser, setScheduledUser] = useState([]);
+  const [unavailable, setUnavailable] = useState([]);
 
   useEffect(() => {
     // grabs user id for scheduled users
@@ -18,6 +19,7 @@ export const Roster = props => {
       row.users.forEach(user => {
         if (user.noUser) return;
         // console.log(user);
+
         posted.push({ user: user.user_info[0].id, position: position });
       });
       // console.log('posted', posted);
@@ -26,20 +28,46 @@ export const Roster = props => {
 
     // filters out roster for current flight from user data
     if (positions.length > 0) {
-      let currentPersonnel = data.filter(
-        user => user.flight.id === positions[0].flight_assigned
-      );
+      let unavailablePersonnel = [];
+      let currentPersonnel = data.filter(user => {
+        if (user.flight === null) return false;
+        if (user.flight.id === positions[0].flight_assigned) {
+          if (
+            user.status === null ||
+            user.status.toLowerCase() !== 'available'
+          ) {
+            unavailablePersonnel.push(user);
+            return false;
+          }
+          return true;
+        }
+      });
       setRoster(currentPersonnel);
+      setUnavailable(unavailablePersonnel);
     }
   }, [rows, positions]);
 
-  console.log(scheduledUser);
+  // console.log('not flat roster', roster);
+  const flightName =
+    roster.length > 0
+      ? roster[0].flight.flight.charAt(0).toUpperCase() +
+        roster[0].flight.flight.slice(1)
+      : null;
+
+  const shiftTime =
+    rows.length > 0
+      ? rows[0].shift === 'Days'
+        ? '0700-1400'
+        : '1500-0600'
+      : null;
+
   return (
     <Box sx={{ borderRadius: '5px', width: '100%' }} p={2}>
       <Typography sx={{ fontWeight: 'bold' }} variant='h5'>
-        Personnel
+        Personnel - {flightName}
+        <br></br>[{shiftTime}]
       </Typography>
-      <Divider></Divider>
+      <Divider />
       <Stack
         component='span'
         direction='row'
@@ -72,7 +100,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            width: '25%',
+            width: '20%',
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
@@ -83,14 +111,25 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'right',
-            width: '25%',
+            width: '30%',
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Status</Typography>
         </Box>
       </Stack>
 
-      {roster.map((user, index) => (
+      <RosterPeople users={roster} scheduledUser={scheduledUser} />
+      <Typography variant='caption'>Currently Unavailable homies</Typography>
+      <RosterPeople users={unavailable} scheduledUser={scheduledUser} />
+    </Box>
+  );
+};
+
+const RosterPeople = props => {
+  const { users, scheduledUser } = props;
+  return (
+    <Box>
+      {users.map((user, index) => (
         <Stack
           key={index}
           component='span'
@@ -138,27 +177,27 @@ export const Roster = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '25%',
+              width: '20%',
             }}
           >
             <Typography>{user.rank.toUpperCase()}</Typography>
           </Box>
 
           <Box
-            alignItems='center'
+            alignItems='right'
             sx={{
               display: 'flex',
               justifyContent: 'right',
-              width: '25%',
+              width: '30%',
             }}
           >
             <Typography>
-              {/* {user.status === null ? 'Available' : user.status} */}
-
               {scheduledUser.filter(e => e.user === user.id).length > 0
-                ? 'available'
-                : null}
-              {/* this may work for the post as well */}
+                ? scheduledUser.filter(e => e.user === user.id)[0].position
+                : user.status === null ||
+                  user.status.toLowerCase() === 'other/unavailable'
+                ? 'U/A'
+                : user.status}
             </Typography>
           </Box>
         </Stack>

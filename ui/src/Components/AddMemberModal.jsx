@@ -44,7 +44,7 @@ export const AddMemberModal = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 650,
+    //width: 750,
     height: 650,
     bgcolor: 'background.paper',
     border: '2px solid #000',
@@ -202,6 +202,7 @@ export const AddMemberModal = () => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: '40ch' }}>

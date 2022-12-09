@@ -23,7 +23,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 700,
+  //width: 700,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -115,7 +115,7 @@ export const AddPost = props => {
   //   }
   // };
 
-  const handleWeaponBox = (wepId) => {
+  const handleWeaponBox = wepId => {
     if (!weaponIdArray.includes(wepId)) {
       setWeaponIdArray(curr => [...curr, wepId]);
       setWeapon(curr => [
@@ -126,7 +126,7 @@ export const AddPost = props => {
       setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
       setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
     }
-  }
+  };
 
   return (
     <>
@@ -171,6 +171,7 @@ export const AddPost = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -236,13 +237,11 @@ export const AddPost = props => {
                     id={weaponObject.id}
                     key={index}
                     value={weaponObject.id}
-                    onClick={()=>handleWeaponBox(weaponObject.id)}
+                    onClick={() => handleWeaponBox(weaponObject.id)}
                   >
                     <Checkbox
                       // onChange={handleChange}
-                      checked={weapon.some(
-                        wep => wep.id === weaponObject.id
-                      )}
+                      checked={weapon.some(wep => wep.id === weaponObject.id)}
                       // checked={weapon.some(
                       //   wep => wep.weapon_id === weaponObject.id
                       // )}

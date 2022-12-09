@@ -10,6 +10,7 @@ import { MemberContext } from './MemberContext';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import logo from '../passlogo.svg';
+import { useTheme } from '@mui/material/styles';
 
 export default function SignIn() {
   const { API, setCookie, setUserAccount, authDomain, userDomain } =
@@ -20,6 +21,7 @@ export default function SignIn() {
   });
   const [failedLogin, setFailedLogin] = useState(false);
   const [apiRes, setApiRes] = useState({ ok: false });
+  const theme = useTheme();
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -122,7 +124,15 @@ export default function SignIn() {
             </span>
           )}
           <Box
-            sx={{ backgroundColor: '#FAFAFF', borderRadius: 3, px: 4, py: 2 }}
+            sx={{
+              backgroundColor:
+                theme.palette.mode === 'light'
+                  ? '#FAFAFF'
+                  : theme.palette.grey[800],
+              borderRadius: 3,
+              px: 4,
+              py: 2,
+            }}
           >
             <TextField
               error={failedLogin}
@@ -138,6 +148,12 @@ export default function SignIn() {
                 setLoginCredentials(prev => {
                   return { ...prev, email: e.target.value };
                 });
+              }}
+              sx={{
+                backgroundColor:
+                  theme.palette.mode === 'light'
+                    ? 'white'
+                    : theme.palette.grey[900],
               }}
             />
             <TextField
@@ -159,6 +175,12 @@ export default function SignIn() {
                 if (event.key === 'Enter') {
                   postLogin();
                 }
+              }}
+              sx={{
+                backgroundColor:
+                  theme.palette.mode === 'light'
+                    ? 'white'
+                    : theme.palette.grey[900],
               }}
             />
           </Box>

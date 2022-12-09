@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react'
-import { MemberContext } from './MemberContext'
-import '../styles/Card.css'
+import React, { useContext, useState, useEffect } from 'react';
+import { MemberContext } from './MemberContext';
+import '../styles/Card.css';
 import {
   Box,
   Button,
@@ -11,27 +11,26 @@ import {
   Select,
   Stack,
   FormControl,
-  Chip,
-  ListItemIcon
-} from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
-import ShieldMoonIcon from '@mui/icons-material/ShieldMoon'
+  ListItemIcon,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import ShieldMoonIcon from '@mui/icons-material/ShieldMoon';
 
 export const EditStatusNavbar = props => {
-  const { memberObj, memberId } = props
-  const { API, member, setTriggerFetch, userAccount, setUserAccount } =
-    useContext(MemberContext)
-  const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const { memberObj, memberId } = props;
+  const { API, setTriggerFetch, userAccount, setUserAccount, setCookie } =
+    useContext(MemberContext);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   //   const [openItem, setOpenItem] = React.useState(false)
-  const [status, setStatus] = useState(memberObj.status)
+  const [status, setStatus] = useState(memberObj.status);
   // console.log('member obj ', memberObj);
 
   const handleEdit = () => {
     const updatedUser = {
-      status: status
-    }
+      status: status,
+    };
     //console.log('updated user, ', updatedUser);
 
     fetch(`${API}/updateuser/${memberId}`, {
@@ -40,19 +39,25 @@ export const EditStatusNavbar = props => {
       redirect: 'follow',
       body: JSON.stringify(updatedUser),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
-      }
+        'Content-Type': 'application/json; charset=utf-8',
+      },
     })
       .then(res => res.json())
       .then(() => {
-        setTriggerFetch(curr => !curr)
-        setUserAccount({ ...userAccount, status: status })
-        handleClose()
+        setTriggerFetch(curr => !curr);
+        setUserAccount({ ...userAccount, status: status });
+        handleClose();
+        // setCookie('user', status, {
+        //   // domain: userDomain,
+        //   path: '/',
+        //   sameSite: 'None',
+        //   secure: 'true',
+        // });
       })
       .catch(err => {
-        console.log('Error: ', err)
-      })
-  }
+        console.log('Error: ', err);
+      });
+  };
 
   // useEffect(() => {
   //   console.log('weapon id Array ', weaponIdArray, 'allFlights', allFlights);
@@ -69,19 +74,19 @@ export const EditStatusNavbar = props => {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
-    borderRadius: 4
-  }
+    borderRadius: 4,
+  };
 
-  const ITEM_HEIGHT = 48
-  const ITEM_PADDING_TOP = 8
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
   const MenuProps = {
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250
-      }
-    }
-  }
+        width: 250,
+      },
+    },
+  };
 
   return (
     <>
@@ -91,7 +96,7 @@ export const EditStatusNavbar = props => {
             (userAccount !== null && userAccount.id === parseInt(memberId)) ||
             userAccount.admin
           ) {
-            handleOpen()
+            handleOpen();
           }
         }}
       >
@@ -125,7 +130,7 @@ export const EditStatusNavbar = props => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             <FormControl sx={{ width: '25ch' }}>
@@ -158,5 +163,5 @@ export const EditStatusNavbar = props => {
         </Box>
       </Modal>
     </>
-  )
-}
+  );
+};

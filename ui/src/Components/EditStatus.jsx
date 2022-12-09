@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { MemberContext } from './MemberContext';
 import '../styles/Card.css';
 import {
@@ -16,24 +16,14 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 export const EditStatus = props => {
-  const { memberObj, memberId } = props;
+  const { memberObj, memberId, closeMainModal } = props;
   const { API, member, setTriggerFetch, userAccount } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [openItem, setOpenItem] = React.useState(false);
+  const handleClose = () => setOpen(false) || closeMainModal;
   const [status, setStatus] = useState(memberObj.status);
   // console.log('member obj ', memberObj);
-
-  const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
-
-  const handleItemClose = () => {
-    setOpenItem(false);
-    handleClose();
-  };
 
   //need to modify this so old data is persisted
   const handleEdit = () => {
@@ -79,20 +69,20 @@ export const EditStatus = props => {
     borderRadius: 4,
   };
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
+  // const ITEM_HEIGHT = 48;
+  // const ITEM_PADDING_TOP = 8;
+  // const MenuProps = {
+  //   PaperProps: {
+  //     style: {
+  //       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+  //       width: 250,
+  //     },
+  //   },
+  // };
 
   return (
     <>
-      {member.status !== null && member.status !== 'Available' ? (
+      {member.status === null || member.status !== 'Available' ? (
         <Chip
           // onClick={handleOpen}
           onClick={() => {
@@ -103,7 +93,7 @@ export const EditStatus = props => {
               handleOpen();
             }
           }}
-          label={member.status}
+          label={member.status === null ? 'Other/Unavailable' : member.status}
           color='error'
           sx={
             (userAccount !== null && userAccount.id === parseInt(memberId)) ||

@@ -40,6 +40,7 @@ const {
   deleteNotificationsByUserId,
   getIfScheduleFilled,
   postPwReset,
+  getPositionByDate,
 } = require('./controller.js');
 
 const whitelist = [
@@ -342,6 +343,13 @@ app.get('/allweapons', authenticateToken, (req, res) => {
 
 app.get('/position', authenticateToken, (req, res) => {
   getAllposition()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err));
+});
+
+app.post('/position/date', authenticateToken, (req, res) => {
+  console.log('recieved position date req', req.body);
+  getPositionByDate(req.body)
     .then(data => res.status(200).send(data))
     .catch(err => res.status(500).send(err));
 });

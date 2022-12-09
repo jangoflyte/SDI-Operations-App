@@ -19,7 +19,7 @@ import { WeaponQuals } from './WeaponQuals';
 import { useNavigate } from 'react-router-dom';
 
 export const RowTableSched = props => {
-  const { row } = props;
+  const { row, rows } = props;
   const [open, setOpen] = useState(false);
   const splitArr = row.weapons.split(' ');
   const { color } = useContext(MemberContext);
@@ -189,6 +189,7 @@ export const RowTableSched = props => {
                             fetchSchedule={row.fetchSchedule}
                             currentDate={row.currentDate}
                             shift={row.shift}
+                            row={row}
                           />
                         )}
                       </TableCell>

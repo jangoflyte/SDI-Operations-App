@@ -87,7 +87,7 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [flag, setFlag] = React.useState(false);
-  const { userAccount, darkMode, setDarkMode, setCookie, authDomain } =
+  const { userAccount, darkMode, setDarkMode, setCookie, userDomain } =
     useContext(MemberContext);
   const navigate = useNavigate();
 
@@ -174,7 +174,7 @@ export default function PersistentDrawerLeft() {
                       'color_mode',
                       darkMode === 'light' ? 'dark' : 'light',
                       {
-                        domain: authDomain,
+                        domain: userDomain,
                         path: '/',
                         sameSite: 'None',
                         secure: 'true',

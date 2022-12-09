@@ -8,7 +8,9 @@ exports.seed = async function (knex) {
   await knex('notification').insert([
     {
       name: 'Welcome to PASS! Your destination for post assignment and scheduling needs',
-      notes: 'Your a cool guy',
+      notes: 'Go to Home page to see Schedule',
+      link: '/',
+      link_text: 'See Schedule',
     },
     { name: 'test-notification 2', notes: 'test test' },
     { name: 'test-notification 3' },

@@ -17,6 +17,7 @@ import {
   Avatar,
   Paper,
   Divider,
+  Badge,
 } from '@mui/material';
 import '../styles/Card.css';
 import { useNavigate } from 'react-router-dom';
@@ -303,24 +304,58 @@ const BasicCard = props => {
                       }}
                       onClick={() => navigateToMember(member)}
                     >
-                      <Avatar
-                        sx={{
-                          cursor: 'pointer',
-                          mr: 1,
-                          bgcolor: member.avatar_background,
+                      <Badge
+                        overlap='circular'
+                        anchorOrigin={{
+                          vertical: 'bottom',
+                          horizontal: 'right',
                         }}
-                        src={member.avatar}
-                        alt='avatar'
-                        size='small'
-                        onClick={() => navigateToMember(member)}
+                        variant='dot'
+                        sx={{
+                          '& .MuiBadge-badge': {
+                            // backgroundColor: '#44b700',
+                            // color: '#44b700',
+                            backgroundColor:
+                              member.status === null ||
+                              member.status !== 'Available'
+                                ? '#EE4B2B'
+                                : '#44b700',
+                            // member.status !== null && member.status !== 'Available'
+                            boxShadow: `0 0 0 2px #fafafafa`,
+                            '&::after': {
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '50%',
+                              animation: 'ripple 1.2s infinite ease-in-out',
+                              border: '1px solid currentColor',
+                              content: '""',
+                            },
+                          },
+                        }}
                       >
-                        {member.first_name
-                          ? member.first_name.charAt(0).toUpperCase()
-                          : null}
-                        {member.last_name
-                          ? member.last_name.charAt(0).toUpperCase()
-                          : null}
-                      </Avatar>
+                        <Avatar
+                          sx={{
+                            cursor: 'pointer',
+                            mr: 1,
+                            bgcolor: member.avatar_background,
+                          }}
+                          src={member.avatar}
+                          alt='avatar'
+                          size='small'
+                          onClick={() => navigateToMember(member)}
+                        >
+                          {member.first_name
+                            ? member.first_name.charAt(0).toUpperCase()
+                            : null}
+                          {member.last_name
+                            ? member.last_name.charAt(0).toUpperCase()
+                            : null}
+                        </Avatar>
+                      </Badge>
+
                       <Typography
                         onClick={() => navigateToMember(member)}
                         sx={{

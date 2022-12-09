@@ -3,12 +3,13 @@ const knex = require('knex')(
 );
 
 // login or registration ////////////////////////////////////////
-const postNewUser = async userInfo => {
-  // console.log(userInfo);
-  let results = await knex('user_table').insert(userInfo, ['*']);
-  delete results.password;
-  return results;
-};
+
+// const postNewUser = async userInfo => {
+//   // console.log(userInfo);
+//   let results = await knex('user_table').insert(userInfo, ['*']);
+//   delete results.password;
+//   return results;
+// }; // delete if found after 2022 cause it didnt break anything
 
 const userCheck = async email => {
   console.log(email);
@@ -386,6 +387,20 @@ const getAllposition = async () => {
   return positionFlights;
 };
 
+const getPositionByDate = async props => {
+  console.log('before position date', props);
+  let positions = await knex('position')
+    .select('*')
+    .whereBetween('start_datetime', [props.start_date, props.end_date])
+    .orWhereBetween('end_datetime', [props.start_date, props.end_date])
+    .orderBy('id', 'asc');
+  console.log('after position date', positions);
+  // let positionsWeapon = await postWeapon(positions);
+  // let positionsCerts = await postCert(positionsWeapon);
+  // let positionFlights = await postFlight(positionsCerts);
+  return positions;
+};
+
 const allWeapons = () => {
   return knex('weapon').select('*');
 };
@@ -526,7 +541,7 @@ const getAllNotifications = async () => {
   return joinTable;
 };
 
-const patchNotifications = async ({ id, notification }) => {
+const patchNotifications = async ({ notification }) => {
   console.log('patch notifications ran ', notification);
 
   let result = await knex('notification_user')
@@ -636,4 +651,5 @@ module.exports = {
   deleteNotificationsByUserId,
   getIfScheduleFilled,
   postPwReset,
+  getPositionByDate,
 };
