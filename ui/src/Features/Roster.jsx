@@ -1,65 +1,65 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../Components/MemberContext';
-import { Box, Typography, Divider, Stack, Icon } from '@mui/material/';
-import CircleIcon from '@mui/icons-material/Circle';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../Components/MemberContext'
+import { Box, Typography, Divider, Stack, Icon } from '@mui/material/'
+import CircleIcon from '@mui/icons-material/Circle'
 
 export const Roster = props => {
-  const { rows, positions } = props;
-  const { data } = useContext(MemberContext);
-  const [roster, setRoster] = useState([]);
-  const [scheduledUser, setScheduledUser] = useState([]);
-  const [unavailable, setUnavailable] = useState([]);
+  const { rows, positions } = props
+  const { data } = useContext(MemberContext)
+  const [roster, setRoster] = useState([])
+  const [scheduledUser, setScheduledUser] = useState([])
+  const [unavailable, setUnavailable] = useState([])
 
   useEffect(() => {
     // grabs user id for scheduled users
-    let posted = [];
+    let posted = []
     rows.forEach(row => {
       // console.log(row);
-      const position = row.name;
+      const position = row.name
       row.users.forEach(user => {
-        if (user.noUser) return;
+        if (user.noUser) return
         // console.log(user);
 
-        posted.push({ user: user.user_info[0].id, position: position });
-      });
+        posted.push({ user: user.user_info[0].id, position: position })
+      })
       // console.log('posted', posted);
-    });
-    setScheduledUser(posted);
+    })
+    setScheduledUser(posted)
 
     // filters out roster for current flight from user data
     if (positions.length > 0) {
-      let unavailablePersonnel = [];
+      let unavailablePersonnel = []
       let currentPersonnel = data.filter(user => {
-        if (user.flight === null) return false;
+        if (user.flight === null) return false
         if (user.flight.id === positions[0].flight_assigned) {
           if (
             user.status === null ||
             user.status.toLowerCase() !== 'available'
           ) {
-            unavailablePersonnel.push(user);
-            return false;
+            unavailablePersonnel.push(user)
+            return false
           }
-          return true;
+          return true
         }
-      });
-      setRoster(currentPersonnel);
-      setUnavailable(unavailablePersonnel);
+      })
+      setRoster(currentPersonnel)
+      setUnavailable(unavailablePersonnel)
     }
-  }, [rows, positions]);
+  }, [rows, positions])
 
   // console.log('not flat roster', roster);
   const flightName =
     roster.length > 0
       ? roster[0].flight.flight.charAt(0).toUpperCase() +
         roster[0].flight.flight.slice(1)
-      : null;
+      : null
 
   const shiftTime =
     rows.length > 0
       ? rows[0].shift === 'Days'
         ? '0700-1400'
         : '1500-0600'
-      : null;
+      : null
 
   return (
     <Box sx={{ borderRadius: '5px', width: '100%' }} p={2}>
@@ -81,7 +81,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'left',
-            width: '5%',
+            width: '5%'
           }}
         ></Box>
         <Box
@@ -89,7 +89,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'left',
-            width: '20%',
+            width: '20%'
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
@@ -100,7 +100,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            width: '20%',
+            width: '20%'
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
@@ -111,7 +111,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'right',
-            width: '30%',
+            width: '30%'
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Status</Typography>
@@ -122,11 +122,11 @@ export const Roster = props => {
       <Typography variant='caption'>Currently Unavailable homies</Typography>
       <RosterPeople users={unavailable} scheduledUser={scheduledUser} />
     </Box>
-  );
-};
+  )
+}
 
 const RosterPeople = props => {
-  const { users, scheduledUser } = props;
+  const { users, scheduledUser } = props
   return (
     <Box>
       {users.map((user, index) => (
@@ -145,7 +145,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'left',
-              width: '5%',
+              width: '5%'
             }}
           >
             <Icon>
@@ -164,7 +164,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'left',
-              width: '20%',
+              width: '20%'
             }}
           >
             <Typography>
@@ -177,7 +177,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '20%',
+              width: '20%'
             }}
           >
             <Typography>{user.rank.toUpperCase()}</Typography>
@@ -188,7 +188,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'right',
-              width: '30%',
+              width: '30%'
             }}
           >
             <Typography>
@@ -203,5 +203,5 @@ const RosterPeople = props => {
         </Stack>
       ))}
     </Box>
-  );
-};
+  )
+}

@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from './MemberContext';
-import '../styles/Card.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from './MemberContext'
+import '../styles/Card.css'
 import {
   Box,
   Grid,
@@ -13,25 +13,25 @@ import {
   Divider,
   Avatar,
   Paper,
-  Badge,
-} from '@mui/material';
-import { useParams } from 'react-router';
-import { UserPost } from './UserPost';
-import { useNavigate } from 'react-router-dom';
-import { WeaponQuals } from '../Features/WeaponQuals';
-import { EditAvatar } from './EditAvatar';
-import { EditStatus } from './EditStatus';
-import { useTheme } from '@mui/material/styles';
-import { EditMemberModal } from './EditMemberModal';
+  Badge
+} from '@mui/material'
+import { useParams } from 'react-router'
+import { UserPost } from './UserPost'
+import { useNavigate } from 'react-router-dom'
+import { WeaponQuals } from '../Features/WeaponQuals'
+import { EditAvatar } from './EditAvatar'
+import { EditStatus } from './EditStatus'
+import { useTheme } from '@mui/material/styles'
+import { EditMemberModal } from './EditMemberModal'
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
-    useContext(MemberContext);
-  const { memberId } = useParams();
-  const [scheduleArray, setScheduleArray] = useState(null);
-  const [upcoming, setUpcoming] = useState(true);
-  const theme = useTheme();
-  const navigate = useNavigate();
+    useContext(MemberContext)
+  const { memberId } = useParams()
+  const [scheduleArray, setScheduleArray] = useState(null)
+  const [upcoming, setUpcoming] = useState(true)
+  const theme = useTheme()
+  const navigate = useNavigate()
 
   // console.log('this is member indiv member', member);
 
@@ -39,31 +39,31 @@ const IndividualMember = () => {
     fetch(`${API}/users/${memberId}`, {
       method: 'GET',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(res => res.json())
-      .then(data => setMember(data[0]));
-  }, [triggerFetch, memberId]);
+      .then(data => setMember(data[0]))
+  }, [triggerFetch, memberId])
 
   useEffect(() => {
     fetch(`${API}/schedule/${memberId}`, {
       method: 'GET',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(res => res.json())
       .then(data => {
         // console.log('schedule data', data);
-        setScheduleArray(data);
-      });
-  }, [triggerFetch, memberId]);
+        setScheduleArray(data)
+      })
+  }, [triggerFetch, memberId])
 
   if (member === undefined || member.length === 0) {
     return (
       <Box sx={{ width: '100%' }}>
         <LinearProgress />
       </Box>
-    );
+    )
   } else {
     return (
       <Box
@@ -71,7 +71,7 @@ const IndividualMember = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'center'
         }}
       >
         <Box>
@@ -79,7 +79,7 @@ const IndividualMember = () => {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'start',
+              justifyContent: 'start'
             }}
           >
             <Stack direction='row' spacing={2}>
@@ -88,7 +88,7 @@ const IndividualMember = () => {
                 style={{
                   textDecoration: 'none',
                   color: '#6D7AE5',
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
               >
                 People&nbsp;
@@ -110,7 +110,7 @@ const IndividualMember = () => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: 1,
+              gap: 1
             }}
           >
             {userAccount !== null ? (
@@ -119,7 +119,7 @@ const IndividualMember = () => {
                   overlap='circular'
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'right',
+                    horizontal: 'right'
                   }}
                   variant='dot'
                   sx={{
@@ -130,8 +130,12 @@ const IndividualMember = () => {
                         member.status === null || member.status !== 'Available'
                           ? '#EE4B2B'
                           : '#44b700',
+                      color:
+                        member.status === null || member.status !== 'Available'
+                          ? '#EE4B2B'
+                          : '#44b700',
                       // member.status !== null && member.status !== 'Available'
-                      boxShadow: `0 0 0 2px #fafafafa`,
+                      boxShadow: `0 0 0 1px #fafafafa`,
                       '&::after': {
                         position: 'absolute',
                         top: 0,
@@ -141,9 +145,9 @@ const IndividualMember = () => {
                         borderRadius: '50%',
                         animation: 'ripple 1.2s infinite ease-in-out',
                         border: '1px solid currentColor',
-                        content: '""',
-                      },
-                    },
+                        content: '""'
+                      }
+                    }
                   }}
                 >
                   <EditAvatar avatar={member} memberId={memberId} />
@@ -153,7 +157,7 @@ const IndividualMember = () => {
                   overlap='circular'
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'right',
+                    horizontal: 'right'
                   }}
                   variant='dot'
                   sx={{
@@ -164,8 +168,12 @@ const IndividualMember = () => {
                         member.status === null || member.status !== 'Available'
                           ? '#EE4B2B'
                           : '#44b700',
+                      color:
+                        member.status === null || member.status !== 'Available'
+                          ? '#EE4B2B'
+                          : '#44b700',
                       // member.status !== null && member.status !== 'Available'
-                      boxShadow: `0 0 0 2px #fafafafa`,
+                      boxShadow: `0 0 0 1px #fafafafa`,
                       '&::after': {
                         position: 'absolute',
                         top: 0,
@@ -175,16 +183,16 @@ const IndividualMember = () => {
                         borderRadius: '50%',
                         animation: 'ripple 1.2s infinite ease-in-out',
                         border: '1px solid currentColor',
-                        content: '""',
-                      },
-                    },
+                        content: '""'
+                      }
+                    }
                   }}
                 >
                   <Avatar
                     sx={{
                       width: 80,
                       height: 80,
-                      bgcolor: member.avatar_background,
+                      bgcolor: member.avatar_background
                     }}
                     src={member.avatar}
                     alt='avatar'
@@ -204,7 +212,7 @@ const IndividualMember = () => {
             <Typography
               variant='h1'
               sx={{
-                color: theme.palette.mode === 'light' ? 'inherit' : 'white',
+                color: theme.palette.mode === 'light' ? 'inherit' : 'white'
               }}
             >
               {member.first_name
@@ -229,7 +237,7 @@ const IndividualMember = () => {
             alignItems: 'top',
             justifyContent: 'center',
             gap: 3,
-            mt: 5,
+            mt: 5
           }}
         >
           <Paper
@@ -238,7 +246,7 @@ const IndividualMember = () => {
               width: 600,
               boxShadow: 3,
               borderRadius: 3,
-              p: 5,
+              p: 5
             }}
           >
             <Stack
@@ -358,7 +366,7 @@ const IndividualMember = () => {
                 bgcolor: theme.palette.mode === 'light' ? '#FAFAFF' : '#303030',
                 mt: 1,
                 borderRadius: 2,
-                p: 1,
+                p: 1
               }}
             >
               {member.notes === null || undefined ? (
@@ -375,7 +383,7 @@ const IndividualMember = () => {
               height: 600,
               boxShadow: 3,
               borderRadius: 3,
-              p: 5,
+              p: 5
             }}
           >
             <Stack
@@ -383,7 +391,7 @@ const IndividualMember = () => {
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: 'center'
               }}
             >
               <Typography variant='h5' sx={{ fontWeight: 'bold' }}>
@@ -395,7 +403,7 @@ const IndividualMember = () => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
-                  gap: 1.2,
+                  gap: 1.2
                 }}
               >
                 <Button
@@ -406,7 +414,7 @@ const IndividualMember = () => {
                       ? theme.palette.secondary.main
                       : theme.palette.mode === 'light'
                       ? 'inherit'
-                      : theme.palette.grey[800],
+                      : theme.palette.grey[800]
                   }}
                   onClick={() => setUpcoming(true)}
                 >
@@ -421,7 +429,7 @@ const IndividualMember = () => {
                       ? theme.palette.secondary.main
                       : theme.palette.mode === 'light'
                       ? 'inherit'
-                      : theme.palette.grey[800],
+                      : theme.palette.grey[800]
                   }}
                   onClick={() => setUpcoming(false)}
                 >
@@ -438,7 +446,7 @@ const IndividualMember = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 width: '100%',
-                p: 1,
+                p: 1
               }}
             >
               <Box sx={{ width: '20%' }}>
@@ -471,16 +479,16 @@ const IndividualMember = () => {
                 mt: 1,
                 bgcolor: theme.palette.mode === 'light' ? '#FAFAFF' : '#303030',
                 borderRadius: 2,
-                p: 1,
+                p: 1
               }}
             >
               {scheduleArray !== null && scheduleArray.length > 0 ? (
                 scheduleArray.map((schedule, index) => {
                   // console.log('INDEX ', index);
-                  schedule.upcoming = upcoming;
+                  schedule.upcoming = upcoming
                   return (
                     <UserPost schedule={schedule} key={index} index={index} />
-                  );
+                  )
                 })
               ) : (
                 <p>Not Assigned to Any Posts</p>
@@ -489,8 +497,8 @@ const IndividualMember = () => {
           </Paper>
         </Box>
       </Box>
-    );
+    )
   }
-};
+}
 
-export default IndividualMember;
+export default IndividualMember
