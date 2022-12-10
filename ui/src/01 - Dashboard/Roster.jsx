@@ -47,12 +47,13 @@ export const Roster = (props) => {
     }
   }, [rows, positions]);
 
-  // console.log('not flat roster', roster);
+  console.log('not flat roster', roster);
   const flightName =
     roster.length > 0
       ? roster[0].flight.flight.charAt(0).toUpperCase() +
         roster[0].flight.flight.slice(1)
       : null;
+  console.log(flightName);
 
   const shiftTime =
     rows.length > 0
@@ -60,6 +61,7 @@ export const Roster = (props) => {
         ? "0700-1400"
         : "1500-0600"
       : null;
+  // console.log(shiftTime);
 
   return (
     <Box sx={{ borderRadius: "5px", width: "100%" }} p={2}>

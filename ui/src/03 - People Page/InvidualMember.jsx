@@ -19,7 +19,7 @@ import { useParams } from "react-router";
 import { UserPost } from "./UserPost";
 import { useNavigate } from "react-router-dom";
 import { WeaponQuals } from "../00 - Features/WeaponQuals";
-import { EditAvatar } from "../00 - Features/EditAvatar";
+import { EditAvatar } from "./EditAvatar";
 import { EditStatus } from "../00 - Features/EditStatus";
 import { useTheme } from "@mui/material/styles";
 import { EditMemberModal } from "./EditMemberModal";

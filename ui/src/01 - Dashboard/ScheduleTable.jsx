@@ -417,7 +417,7 @@ export const ScheduleTable = () => {
             width: "25%",
           }}
         >
-          <Paper sx={{ width: "95%" }}>
+          <Paper sx={{ width: "95%", boxShadow: 5 }}>
             <Box
               sx={{
                 display: "flex",

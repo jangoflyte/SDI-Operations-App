@@ -81,13 +81,11 @@ export const AvatarMenu = () => {
                   // backgroundColor: '#44b700',
                   // color: '#44b700',
                   backgroundColor:
-                    userAccount.status === null ||
-                    userAccount.status !== "Available"
+                    member.status === null || member.status !== "Available"
                       ? "#EE4B2B"
                       : "#44b700",
                   color:
-                    userAccount.status === null ||
-                    userAccount.status !== "Available"
+                    member.status === null || member.status !== "Available"
                       ? "#EE4B2B"
                       : "#44b700",
                   // member.status !== null && member.status !== 'Available'
