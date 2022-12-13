@@ -18,8 +18,14 @@ import ShieldMoonIcon from "@mui/icons-material/ShieldMoon";
 
 export const EditStatusNavbar = (props) => {
   const { memberObj, memberId } = props;
-  const { API, setTriggerFetch, userAccount, setUserAccount, setCookie } =
-    useContext(MemberContext);
+  const {
+    API,
+    setTriggerFetch,
+    userAccount,
+    setUserAccount,
+    setCookie,
+    cookies,
+  } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -46,14 +52,20 @@ export const EditStatusNavbar = (props) => {
       .then(() => {
         setTriggerFetch((curr) => !curr);
         setUserAccount({ ...userAccount, status: status });
-        handleClose();
-        // setCookie('user', status, {
-        //   // domain: userDomain,
-        //   path: '/',
-        //   sameSite: 'None',
-        //   secure: 'true',
-        // });
+
+        let userInfo = cookies.user;
+        userInfo.status = status;
+        console.log("userInfo", userInfo);
+
+        setCookie("user", userInfo, {
+          path: "/",
+          maxAge: 90000,
+          sameSite: "None",
+          secure: "true",
+        });
+        // setUserAccount({ ...userAccount, status: status });
       })
+      .then(() => handleClose())
       .catch((err) => {
         console.log("Error: ", err);
       });

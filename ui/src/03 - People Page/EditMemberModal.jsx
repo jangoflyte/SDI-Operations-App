@@ -27,7 +27,7 @@ import { useNavigate } from "react-router-dom";
 export const EditMemberModal = (props) => {
   let memberObject = props;
   memberObject = memberObject.memberObject;
-  console.log("member object, ", memberObject);
+  // console.log("member object, ", memberObject);
 
   const { API, member, setTriggerFetch, allWeapons, allFlights, userAccount } =
     useContext(MemberContext);

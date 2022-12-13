@@ -17,6 +17,7 @@ import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import SecurityIcon from "@mui/icons-material/Security";
 import { WeaponQuals } from "../00 - Features/WeaponQuals";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 export const RowTableSched = (props) => {
   const { row, rows } = props;
@@ -24,6 +25,7 @@ export const RowTableSched = (props) => {
   const splitArr = row.weapons.split(" ");
   const { color } = useContext(MemberContext);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     <React.Fragment>
@@ -111,12 +113,14 @@ export const RowTableSched = (props) => {
                       icon={<SecurityIcon />}
                       label="No Weapon"
                       color="primary"
+                      sx={{ color: "white" }}
                     />
                   ) : (
                     <Chip
                       icon={<SecurityIcon />}
                       label={wep.toUpperCase()}
                       color="secondary"
+                      sx={{ color: "white" }}
                     />
                   )}
                 </Box>
@@ -130,6 +134,7 @@ export const RowTableSched = (props) => {
             icon={<WorkspacePremiumIcon />}
             label={row.cert.length > 0 ? row.cert[0].cert : null}
             color="success"
+            sx={{ color: "white" }}
           />
         </TableCell>
       </TableRow>
@@ -207,6 +212,10 @@ export const RowTableSched = (props) => {
                               sx={{
                                 cursor: "pointer",
                                 bgcolor: userRow.user_info[0].avatar_background,
+                                color:
+                                  theme.palette.mode === "light"
+                                    ? "inherit"
+                                    : "white",
                               }}
                               src={userRow.user_info[0].avatar}
                               alt="avatar"

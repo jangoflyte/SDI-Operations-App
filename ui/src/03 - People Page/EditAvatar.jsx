@@ -16,8 +16,11 @@ import {
   IconButton,
   Tooltip,
   Badge,
+  Paper,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import { useTheme } from "@mui/material/styles";
+import { ChromePicker } from "react-color";
 
 export const EditAvatar = (props) => {
   const { avatar, memberId } = props;
@@ -34,6 +37,7 @@ export const EditAvatar = (props) => {
   const [open, setOpen] = React.useState(false);
   const [pic, setPic] = useState(avatar.avatar);
   const [color, setColor] = useState(avatar.avatar_background);
+  const theme = useTheme();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,51 +126,18 @@ export const EditAvatar = (props) => {
       });
   };
 
-  const backgroundChange = () => {
-    if (avatar.id === cookies.user.id) removeCookie("user");
-    fetch(`${API}/updateuser/${member.id}`, {
-      method: "PATCH",
-      credentials: "include",
-      redirect: "follow",
-      body: JSON.stringify({
-        avatar: null,
-        avatar_background: "red",
-      }),
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-    })
-      .then((res) => res.json())
-      .then(() => {
-        setTriggerFetch((curr) => !curr);
-        if (avatar.id === cookies.user.id) {
-          let userInfo = cookies.user;
-          userInfo.avatar = null;
-          userInfo.avatar_background = "red";
-          setCookie("user", userInfo, {
-            path: "/",
-            maxAge: 90000,
-            sameSite: "None",
-            secure: "true",
-          });
-          setUserAccount({ ...userAccount, avatar: null });
-          setUserAccount({ ...userAccount, avatar_background: "red" });
-        }
-        setPic(null);
-        setColor("red");
-        handleClose();
-      })
-      .catch((err) => {
-        console.log("Error: ", err);
-      });
-  };
-
   return (
     <>
       <Tooltip title="Change Avatar">
         <Avatar
           onClick={handleClickOpen}
-          sx={{ cursor: "pointer", width: 80, height: 80, bgcolor: color }}
+          sx={{
+            cursor: "pointer",
+            width: 80,
+            height: 80,
+            bgcolor: color,
+            color: theme.palette.mode === "light" ? "inherit" : "white",
+          }}
           src={pic}
           alt="avatar"
           size="large"
@@ -179,19 +150,19 @@ export const EditAvatar = (props) => {
             : `L`}
         </Avatar>
       </Tooltip>
+
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="customized-dialog-title" sx={{ fontWeight: "bold" }}>
-          {"Edit Avatar"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="customized-dialog-description">
+        <Paper>
+          <DialogTitle id="customized-dialog-title" sx={{ fontWeight: "bold" }}>
+            {"Edit Avatar"}
+          </DialogTitle>
+          <DialogContent>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {console.log("pic", pic)}
               {pic === null ? (
                 <Badge
                   overlap="circular"
@@ -202,6 +173,12 @@ export const EditAvatar = (props) => {
                         color="primary"
                         aria-label="upload picture"
                         component="label"
+                        sx={{
+                          color:
+                            theme.palette.mode === "light"
+                              ? "inherit"
+                              : "white",
+                        }}
                       >
                         <input
                           hidden
@@ -209,7 +186,7 @@ export const EditAvatar = (props) => {
                           type="file"
                           id="myfile"
                           onChange={(e) => {
-                            console.log(e.target.files[0]);
+                            //console.log(e.target.files[0]);
                             let img = e.target.files[0];
                             setPic(URL.createObjectURL(img));
                           }}
@@ -222,7 +199,13 @@ export const EditAvatar = (props) => {
                   <Avatar
                     src=""
                     alt="avatar"
-                    sx={{ width: 100, height: 100, bgcolor: color }}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      bgcolor: color,
+                      color:
+                        theme.palette.mode === "light" ? "inherit" : "white",
+                    }}
                   >
                     {avatar.first_name
                       ? `${avatar.first_name.charAt(0).toUpperCase()}`
@@ -242,6 +225,12 @@ export const EditAvatar = (props) => {
                         color="primary"
                         aria-label="upload picture"
                         component="label"
+                        sx={{
+                          color:
+                            theme.palette.mode === "light"
+                              ? "inherit"
+                              : "white",
+                        }}
                       >
                         <input
                           hidden
@@ -249,7 +238,7 @@ export const EditAvatar = (props) => {
                           type="file"
                           id="myfile"
                           onChange={(e) => {
-                            console.log(e.target.files[0]);
+                            //console.log(e.target.files[0]);
                             let img = e.target.files[0];
                             setPic(URL.createObjectURL(img));
                           }}
@@ -278,24 +267,166 @@ export const EditAvatar = (props) => {
                 </Tooltip>
               </FormControl>
             </Box>
-          </DialogContentText>
-          <DialogActions>
-            <Stack
-              direction="row"
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              <Button onClick={() => handlePic()}>Change Avatar</Button>
-              <Button onClick={() => defaultPic()}>Default</Button>
-              <Button onClick={() => backgroundChange()}>
-                Change Background Color
-              </Button>
-            </Stack>
-          </DialogActions>
-        </DialogContent>
+
+            <DialogActions>
+              <Stack
+                direction="row"
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Button
+                  onClick={() => handlePic()}
+                  sx={{
+                    color: theme.palette.mode === "light" ? "inherit" : "white",
+                  }}
+                >
+                  Change Avatar
+                </Button>
+                <Button
+                  onClick={() => defaultPic()}
+                  sx={{
+                    color: theme.palette.mode === "light" ? "inherit" : "white",
+                  }}
+                >
+                  Default
+                </Button>
+                {/* <Button
+                  onClick={() => backgroundChange()}
+                  sx={{
+                    color: theme.palette.mode === "light" ? "inherit" : "white",
+                  }}
+                >
+                  Change Background Color
+                </Button> */}
+                <ChangeBackground avatar={avatar} memberId={memberId} />
+              </Stack>
+            </DialogActions>
+          </DialogContent>
+        </Paper>
+      </Dialog>
+    </>
+  );
+};
+
+const ChangeBackground = (props) => {
+  const { avatar, memberId } = props;
+  const {
+    API,
+    member,
+    setTriggerFetch,
+    cookies,
+    setCookie,
+    removeCookie,
+    userAccount,
+    setUserAccount,
+  } = useContext(MemberContext);
+  const [open, setOpen] = React.useState(false);
+  const [color, setColor] = useState("#808080");
+  const theme = useTheme();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  console.log(color);
+
+  useMemo(() => {
+    setColor(color);
+  }, [memberId, avatar]);
+
+  const backgroundChange = () => {
+    if (avatar.id === cookies.user.id) removeCookie("user");
+    fetch(`${API}/updateuser/${member.id}`, {
+      method: "PATCH",
+      credentials: "include",
+      redirect: "follow",
+      body: JSON.stringify({
+        avatar: null,
+        avatar_background: color,
+      }),
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    })
+      .then((res) => res.json())
+      .then(() => {
+        setTriggerFetch((curr) => !curr);
+        if (avatar.id === cookies.user.id) {
+          let userInfo = cookies.user;
+          userInfo.avatar = null;
+          userInfo.avatar_background = color;
+          setCookie("user", userInfo, {
+            path: "/",
+            maxAge: 90000,
+            sameSite: "None",
+            secure: "true",
+          });
+          setUserAccount({ ...userAccount, avatar: null });
+          setUserAccount({ ...userAccount, avatar_background: color });
+        }
+        //setColor(color);
+      })
+      .then(() => handleClose())
+      .catch((err) => {
+        console.log("Error: ", err);
+      });
+  };
+
+  return (
+    <>
+      <Tooltip title="Change Background">
+        <Button
+          onClick={handleClickOpen}
+          sx={{
+            color: theme.palette.mode === "light" ? "inherit" : "white",
+          }}
+        >
+          Change Background Color
+        </Button>
+      </Tooltip>
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Paper>
+          <DialogTitle id="customized-dialog-title" sx={{ fontWeight: "bold" }}>
+            {"Choose Color"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="customized-dialog-description">
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
+              </Box>
+            </DialogContentText>
+            <DialogActions>
+              <Stack
+                direction="row"
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  width: "100%",
+                }}
+              >
+                <Button
+                  onClick={() => backgroundChange()}
+                  sx={{
+                    color: theme.palette.mode === "light" ? "inherit" : "white",
+                  }}
+                >
+                  Change Background Color
+                </Button>
+              </Stack>
+            </DialogActions>
+          </DialogContent>
+        </Paper>
       </Dialog>
     </>
   );

@@ -21,6 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import SecurityIcon from "@mui/icons-material/Security";
 import { WeaponQuals } from "../00 - Features/WeaponQuals";
+import { useTheme } from "@mui/material/styles";
 
 const PostMemberModal = (props) => {
   const {
@@ -45,6 +46,7 @@ const PostMemberModal = (props) => {
   const [filterFlight, setFilterFlight] = useState([]);
   const [trigerFilter, setTrigerFilter] = useState(true);
   const [scheduledUser, setScheduledUser] = useState([]);
+  const theme = useTheme();
 
   useMemo(() => {
     setTimeout(() => {
@@ -66,24 +68,26 @@ const PostMemberModal = (props) => {
 
         posted.push({ user: user.user_info[0].id, position: position });
       });
-      // console.log('posted', posted);
     });
+    // console.log("posted", posted);
     setScheduledUser(posted);
   }, [rows]);
 
-  useEffect(() => {
-    console.log("rows from addMember.js", scheduledUser);
-  }, [setScheduledUser]);
+  // useEffect(() => {
+  console.log("posted homies from addmember", scheduledUser);
+
+  // console.log("not posted", notPosted);
 
   useMemo(() => {
     let results = data.filter((user) => {
-      // console.log('user from addmember.jsx', user);
       let wepResults = [true];
       if (weaponsReq[0] !== "") {
         filterFlight;
+
         wepResults = weaponsReq.map((wep) => {
+          // console.log("wep", wep);
           let tests = user.weapons.map((usrWep) => wep.includes(usrWep.weapon));
-          // console.log('inside filter', tests, user)
+          // console.log("inside filter", tests, user);
           if (tests.includes(true)) {
             return true;
           } else {
@@ -92,7 +96,9 @@ const PostMemberModal = (props) => {
         });
       }
       let certResults = user.certs.map((cert) => cert.id >= cert_req[0].id);
-      // console.log('results', certResults)
+      let posted = scheduledUser.map((user) => user.user);
+
+      if (posted.includes(user.id)) return false;
       if (
         wepResults.includes(true) &&
         certResults.includes(true) &&
@@ -267,7 +273,6 @@ const PostMemberModal = (props) => {
           <Stack
             sx={{
               display: "flex",
-
               justifyContent: "space-between",
               flexDirection: "column",
               gap: 1,
@@ -306,7 +311,7 @@ const PostMemberModal = (props) => {
                         },
                         {
                           "&:hover": {
-                            backgroundColor: "#DCDCDC",
+                            //backgroundColor: "#DCDCDC",
                           },
                         },
                       ]}
@@ -324,6 +329,10 @@ const PostMemberModal = (props) => {
                           sx={{
                             cursor: "pointer",
                             bgcolor: user.avatar_background,
+                            color:
+                              theme.palette.mode === "light"
+                                ? "inherit"
+                                : "white",
                           }}
                           src={user.avatar}
                           alt="avatar"
@@ -348,6 +357,9 @@ const PostMemberModal = (props) => {
                             icon={<WorkspacePremiumIcon />}
                             label={user.certs[0].cert}
                             color="success"
+                            sx={{
+                              color: "white",
+                            }}
                           />
                         }
                       </Box>
@@ -364,6 +376,9 @@ const PostMemberModal = (props) => {
                                 icon={<SecurityIcon />}
                                 label={wep.weapon.toUpperCase()}
                                 color="secondary"
+                                sx={{
+                                  color: "white",
+                                }}
                               />
                               &nbsp;
                             </span>

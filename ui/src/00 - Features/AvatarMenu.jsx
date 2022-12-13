@@ -15,38 +15,7 @@ import Key from "@mui/icons-material/Key";
 import { useNavigate } from "react-router-dom";
 import { MemberContext } from "../MemberContext";
 import { EditStatusNavbar } from "./EditStatusNavbar";
-// import { styled } from '@mui/material/styles'
-
-// const StyledBadge = styled(Badge)(({ theme }) => ({
-//   '& .MuiBadge-badge': {
-//     // backgroundColor: '#44b700',
-//     // color: '#44b700',
-//     // color: {member.status !== null && member.status !== 'Available' ? },
-//     // member.status !== null && member.status !== 'Available'
-//     boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-//     '&::after': {
-//       position: 'absolute',
-//       top: 0,
-//       left: 0,
-//       width: '100%',
-//       height: '100%',
-//       borderRadius: '50%',
-//       animation: 'ripple 1.2s infinite ease-in-out',
-//       border: '1px solid currentColor',
-//       content: '""'
-//     }
-//   },
-//   '@keyframes ripple': {
-//     '0%': {
-//       transform: 'scale(.8)',
-//       opacity: 1
-//     },
-//     '100%': {
-//       transform: 'scale(2.4)',
-//       opacity: 0
-//     }
-//   }
-// }))
+import { useTheme } from "@mui/material/styles";
 
 export const AvatarMenu = () => {
   const navigate = useNavigate();
@@ -54,6 +23,8 @@ export const AvatarMenu = () => {
     useContext(MemberContext);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const theme = useTheme();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -81,11 +52,13 @@ export const AvatarMenu = () => {
                   // backgroundColor: '#44b700',
                   // color: '#44b700',
                   backgroundColor:
-                    member.status === null || member.status !== "Available"
+                    userAccount.status === null ||
+                    userAccount.status !== "Available"
                       ? "#EE4B2B"
                       : "#44b700",
                   color:
-                    member.status === null || member.status !== "Available"
+                    userAccount.status === null ||
+                    userAccount.status !== "Available"
                       ? "#EE4B2B"
                       : "#44b700",
                   // member.status !== null && member.status !== 'Available'
@@ -110,6 +83,7 @@ export const AvatarMenu = () => {
                 sx={{
                   cursor: "pointer",
                   bgcolor: userAccount.avatar_background,
+                  color: theme.palette.mode === "light" ? "inherit" : "white",
                 }}
               >
                 {userAccount.first_name.charAt(0).toUpperCase()}
@@ -166,6 +140,7 @@ export const AvatarMenu = () => {
             sx={{
               cursor: "pointer",
               bgcolor: userAccount.avatar_background,
+              color: theme.palette.mode === "light" ? "inherit" : "white",
             }}
           >
             {userAccount.first_name.charAt(0).toUpperCase()}

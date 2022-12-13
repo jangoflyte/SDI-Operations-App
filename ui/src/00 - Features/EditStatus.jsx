@@ -16,12 +16,19 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 export const EditStatus = (props) => {
-  const { memberObj, memberId, closeMainModal } = props;
-  const { API, member, setTriggerFetch, userAccount } =
-    useContext(MemberContext);
+  const { memberObj, memberId } = props;
+  const {
+    API,
+    member,
+    setTriggerFetch,
+    userAccount,
+    setUserAccount,
+    setCookie,
+    cookies,
+  } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false) || closeMainModal;
+  const handleClose = () => setOpen(false);
   const [status, setStatus] = useState(memberObj.status);
   // console.log('member obj ', memberObj);
 
@@ -31,6 +38,7 @@ export const EditStatus = (props) => {
       status: status,
     };
     //console.log('updated user, ', updatedUser);
+    console.log("userInfo", userAccount.id);
 
     fetch(`${API}/updateuser/${member.id}`, {
       method: "PATCH",
@@ -44,8 +52,19 @@ export const EditStatus = (props) => {
       .then((res) => res.json())
       .then(() => {
         setTriggerFetch((curr) => !curr);
-        handleClose();
+        if (member.id === userAccount.id) {
+          setUserAccount({ ...userAccount, status: status });
+          let userInfo = cookies.user;
+          userInfo.status = status;
+          setCookie("user", userInfo, {
+            path: "/",
+            maxAge: 90000,
+            sameSite: "None",
+            secure: "true",
+          });
+        }
       })
+      .then(() => handleClose())
       .catch((err) => {
         console.log("Error: ", err);
       });
@@ -101,6 +120,7 @@ export const EditStatus = (props) => {
               ? { fontSize: "25px", p: 2, cursor: "pointer" }
               : { fontSize: "25px", p: 2, cursor: "default" }
           }
+          style={{ color: "white" }}
         />
       ) : (
         <Chip
@@ -121,6 +141,7 @@ export const EditStatus = (props) => {
               ? { fontSize: "25px", p: 2, cursor: "pointer" }
               : { fontSize: "25px", p: 2, cursor: "default" }
           }
+          style={{ color: "white" }}
         />
       )}
 

@@ -26,6 +26,7 @@ import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 import SecurityIcon from "@mui/icons-material/Security";
 import { WeaponQuals } from "../00 - Features/WeaponQuals";
 import { useMemo } from "react";
+import { useTheme } from "@mui/material/styles";
 
 const BasicCard = (props) => {
   const { pageTrigger, filter, setFilter } = props;
@@ -43,6 +44,7 @@ const BasicCard = (props) => {
   //const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openItem, setOpenItem] = React.useState(false);
+  const theme = useTheme();
 
   // filter check helper functions
   const certificationCheck = (user) => {
@@ -346,6 +348,10 @@ const BasicCard = (props) => {
                             cursor: "pointer",
                             // mr: 1,
                             bgcolor: member.avatar_background,
+                            color:
+                              theme.palette.mode === "light"
+                                ? "inherit"
+                                : "white",
                           }}
                           src={member.avatar}
                           alt="avatar"
@@ -411,12 +417,14 @@ const BasicCard = (props) => {
                       icon={<WorkspacePremiumIcon />}
                       label="No Certs"
                       color="primary"
+                      sx={{ color: "white" }}
                     />
                   ) : (
                     <Chip
                       icon={<WorkspacePremiumIcon />}
                       label={member.certs.map((cert) => cert.cert)}
                       color="success"
+                      sx={{ color: "white" }}
                     />
                   )}
                 </Box>
@@ -433,6 +441,7 @@ const BasicCard = (props) => {
                       color="primary"
                       icon={<SecurityIcon />}
                       label="No Weapons"
+                      sx={{ color: "white" }}
                     />
                   ) : member.weapons.length > 2 ? (
                     <WeaponQuals weapon={member.weapons} />
@@ -443,7 +452,7 @@ const BasicCard = (props) => {
                         icon={<SecurityIcon />}
                         label={weapon.weapon.toUpperCase()}
                         color="secondary"
-                        sx={{ m: 1 / 4 }}
+                        sx={{ m: 1 / 4, color: "white" }}
                       />
                     ))
                   )}

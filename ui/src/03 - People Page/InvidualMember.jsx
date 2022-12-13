@@ -193,6 +193,8 @@ const IndividualMember = () => {
                       width: 80,
                       height: 80,
                       bgcolor: member.avatar_background,
+                      color:
+                        theme.palette.mode === "light" ? "inherit" : "white",
                     }}
                     src={member.avatar}
                     alt="avatar"
@@ -340,9 +342,13 @@ const IndividualMember = () => {
                   Arm Status:
                 </Typography>
                 {member.weapon_arming === true ? (
-                  <Chip label="Arm" color="success" />
+                  <Chip label="Arm" color="success" sx={{ color: "white" }} />
                 ) : (
-                  <Chip label="Do Not Arm" color="error" />
+                  <Chip
+                    label="Do Not Arm"
+                    color="error"
+                    sx={{ color: "white" }}
+                  />
                 )}
 
                 <Typography mt={4} sx={{ fontWeight: "bold" }}>
