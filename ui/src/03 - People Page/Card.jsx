@@ -18,6 +18,7 @@ import {
   Paper,
   Divider,
   Badge,
+  Tooltip,
 } from "@mui/material";
 import "../styles/Card.css";
 import { useNavigate } from "react-router-dom";
@@ -68,11 +69,11 @@ const BasicCard = (props) => {
     }
   };
   const flightCheck = (user) => {
-    // console.log('this is user ', user);
+    console.log("this is user ", user);
     if (filter.flight.length > 0) {
       return filter.flight.some((flight) => {
         // console.log('this is flight ', flight);
-        return user.flight.flight === flight;
+        return user.flight !== null ? user.flight.flight === flight : false;
       });
     } else {
       return true;
@@ -306,66 +307,75 @@ const BasicCard = (props) => {
                       }}
                       onClick={() => navigateToMember(member)}
                     >
-                      <Badge
-                        overlap="circular"
-                        anchorOrigin={{
-                          vertical: "bottom",
-                          horizontal: "right",
-                        }}
-                        variant="dot"
-                        sx={{
-                          "& .MuiBadge-badge": {
-                            // backgroundColor: '#44b700',
-                            // color: '#44b700',
-                            backgroundColor:
-                              member.status === null ||
-                              member.status !== "Available"
-                                ? "#EE4B2B"
-                                : "#44b700",
-                            color:
-                              member.status === null ||
-                              member.status !== "Available"
-                                ? "#EE4B2B"
-                                : "#44b700",
-                            // member.status !== null && member.status !== 'Available'
-                            boxShadow: `0 0 0 1px #fafafafa`,
-                            "&::after": {
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              width: "100%",
-                              height: "100%",
-                              borderRadius: "50%",
-                              animation: "ripple 1.2s infinite ease-in-out",
-                              border: "1px solid currentColor",
-                              content: '""',
-                            },
-                          },
-                        }}
+                      {console.log(member.status)}
+                      <Tooltip
+                        title={
+                          member.status === null
+                            ? "Other/Unavailable"
+                            : member.status
+                        }
                       >
-                        <Avatar
-                          sx={{
-                            cursor: "pointer",
-                            // mr: 1,
-                            bgcolor: member.avatar_background,
-                            color:
-                              theme.palette.mode === "light"
-                                ? "inherit"
-                                : "white",
+                        <Badge
+                          overlap="circular"
+                          anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "right",
                           }}
-                          src={member.avatar}
-                          alt="avatar"
-                          size="small"
-                          onClick={() => navigateToMember(member)}
+                          variant="dot"
+                          sx={{
+                            "& .MuiBadge-badge": {
+                              // backgroundColor: '#44b700',
+                              // color: '#44b700',
+                              backgroundColor:
+                                member.status === null ||
+                                member.status !== "Available"
+                                  ? "#EE4B2B"
+                                  : "#44b700",
+                              color:
+                                member.status === null ||
+                                member.status !== "Available"
+                                  ? "#EE4B2B"
+                                  : "#44b700",
+                              // member.status !== null && member.status !== 'Available'
+                              boxShadow: `0 0 0 1px #fafafafa`,
+                              "&::after": {
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: "50%",
+                                animation: "ripple 1.2s infinite ease-in-out",
+                                border: "1px solid currentColor",
+                                content: '""',
+                              },
+                            },
+                          }}
                         >
-                          {member.first_name
-                            ? member.first_name.charAt(0).toUpperCase()
-                            : null}
-                          {member.last_name
-                            ? member.last_name.charAt(0).toUpperCase()
-                            : null}
-                        </Avatar>
-                      </Badge>
+                          <Avatar
+                            sx={{
+                              cursor: "pointer",
+                              // mr: 1,
+                              bgcolor: member.avatar_background,
+                              color:
+                                theme.palette.mode === "light"
+                                  ? "inherit"
+                                  : "white",
+                            }}
+                            src={member.avatar}
+                            alt="avatar"
+                            size="small"
+                            onClick={() => navigateToMember(member)}
+                          >
+                            {member.first_name
+                              ? member.first_name.charAt(0).toUpperCase()
+                              : null}
+                            {member.last_name
+                              ? member.last_name.charAt(0).toUpperCase()
+                              : null}
+                          </Avatar>
+                        </Badge>
+                      </Tooltip>
 
                       <Typography
                         onClick={() => navigateToMember(member)}

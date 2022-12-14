@@ -91,10 +91,10 @@ export const MemberDetails = () => {
       >
         <Stack
           sx={{
-            width: "100vw",
+            //width: "100vw",
             position: "absolute",
             left: 0,
-            top: "10vh",
+            //top: "10vh",
           }}
         >
           <Fade in={toggleAlert} timeout={1000}>
@@ -103,7 +103,7 @@ export const MemberDetails = () => {
             </Alert>
           </Fade>
         </Stack>
-        <Box sx={{ width: "90%" }}>
+        <Box sx={{ width: "100%" }}>
           <Typography
             variant="h3"
             ml={10}
@@ -204,7 +204,7 @@ export const MemberDetails = () => {
             </Box>
           </Box>
         </Box>
-        <Box sx={{ width: "90%" }}>
+        <Box sx={{ width: "100%" }}>
           <BasicCard
             key={1}
             pageTrigger={pageTrigger}

@@ -41,9 +41,10 @@ export const PostCard = (props) => {
         mb: 5,
         width: "50vw",
         borderRadius: 3,
-        pl: 5,
-        pt: 2,
-        pb: 5,
+        // pl: 5,
+        // pt: 2,
+        // pb: 5,
+        p: 3,
       }}
     >
       <Stack
@@ -103,12 +104,14 @@ export const PostCard = (props) => {
                     icon={<WorkspacePremiumIcon />}
                     label="No Certs"
                     color="success"
+                    sx={{ color: "white" }}
                   />
                 ) : (
                   <Chip
                     icon={<WorkspacePremiumIcon />}
                     label={post.cert_req.map((cert) => cert.cert)}
                     color="success"
+                    sx={{ color: "white" }}
                   />
                 )}
               </Typography>
@@ -120,6 +123,7 @@ export const PostCard = (props) => {
                     color="primary"
                     icon={<SecurityIcon />}
                     label="No Weapons"
+                    sx={{ color: "white" }}
                   />
                 ) : post.weapon_req.length > 3 ? (
                   <WeaponQuals weapon={post.weapon_req} />
@@ -130,7 +134,7 @@ export const PostCard = (props) => {
                       icon={<SecurityIcon />}
                       label={weapon.weapon.toUpperCase()}
                       color="secondary"
-                      sx={{ m: 1 / 4 }}
+                      sx={{ m: 1 / 4, color: "white" }}
                     />
                   ))
                 )}

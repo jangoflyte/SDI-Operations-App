@@ -10,6 +10,7 @@ export const Roster = (props) => {
   const [roster, setRoster] = useState([]);
   const [scheduledUser, setScheduledUser] = useState([]);
   const [unavailable, setUnavailable] = useState([]);
+  const [flight, setFlight] = useState([]);
 
   useEffect(() => {
     // grabs user id for scheduled users
@@ -27,21 +28,28 @@ export const Roster = (props) => {
     // filters out roster for current flight from user data
     if (positions.length > 0) {
       let unavailablePersonnel = [];
+      let flightArray = [];
       let currentPersonnel = data.filter((user) => {
-        if (user.flight === null) return false;
+        if (user.flight === null) {
+          return false;
+        }
         if (user.flight.id === positions[0].flight_assigned) {
           if (
             user.status === null ||
             user.status.toLowerCase() !== "available"
           ) {
             unavailablePersonnel.push(user);
+            flightArray.push(unavailablePersonnel);
+
             return false;
           }
+          flightArray.push(currentPersonnel);
           return true;
         }
       });
       setRoster(currentPersonnel);
       setUnavailable(unavailablePersonnel);
+      setFlight(flightArray);
     }
   }, [rows, positions]);
 
@@ -51,13 +59,20 @@ export const Roster = (props) => {
         roster[0].flight.flight.slice(1)
       : null;
 
+  // const flightName =
+  //   flight.length > 0
+  //     ? flight[0].flight.flight.charAt(0).toUpperCase() +
+  //       flight[0].flight.flight.slice(1)
+  //     : null;
+
   const shiftTime =
     rows.length > 0
       ? rows[0].shift === "Days"
         ? "0700-1400"
         : "1500-0600"
       : null;
-  // console.log(shiftTime);
+
+  console.log(flight.length);
 
   return (
     <Box sx={{ borderRadius: "5px", width: "100%" }} p={2}>

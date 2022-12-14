@@ -22,6 +22,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const NotificationModal = () => {
   const [open, setOpen] = useState(false);
@@ -168,7 +169,7 @@ export const NotificationModal = () => {
           <Typography
             id="modal-modal-description"
             variant="h6"
-            sx={{ mt: 1, textAlign: "Center", fontWeight: "bold" }}
+            sx={{ mt: 1, mb: 2, textAlign: "Center", fontWeight: "bold" }}
           >
             Notifications
           </Typography>
@@ -384,6 +385,7 @@ export const NotificationModal = () => {
                 sx={{
                   color: theme.palette.mode === "light" ? "inherit" : "white",
                 }}
+                startIcon={<DeleteIcon />}
               >
                 Clear Notifications
               </Button>

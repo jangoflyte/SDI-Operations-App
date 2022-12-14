@@ -26,10 +26,9 @@ export const DataSources = () => {
     <Box
       sx={{
         display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "column",
       }}
     >
       <Stack
@@ -47,42 +46,49 @@ export const DataSources = () => {
         </Fade>
       </Stack>
 
-      <Typography
-        variant="h3"
-        ml={10}
-        pb={4}
-        sx={{ fontWeight: "bold", width: 500 }}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
       >
-        Data Sources
-      </Typography>
-      <Card sx={{ boxShadow: 5, borderRadius: 3, width: 1000, p: 3 }}>
-        <CardContent>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            Add Member(s)
-          </Typography>
-          <Divider />
-          <p>Upload your .csv file to update member list</p>
-        </CardContent>
-        <CardActions>
-          <Upload uploadType={"POST"} />
-        </CardActions>
-      </Card>
+        <Typography variant="h3" ml={10} pb={4} sx={{ fontWeight: "bold" }}>
+          Data Sources
+        </Typography>
+      </Box>
 
-      <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, width: 1000, p: 3 }}>
-        <CardContent>
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            Update Member(s) Certifications or Arming Status.
-          </Typography>
-          <Divider />
-          <p>
-            Upload your .csv file including airman name and corresponding
-            certifications/qualifications/arming status.
-          </p>
-        </CardContent>
-        <CardActions id="updateMember">
-          <Upload uploadType={"PATCH"} />
-        </CardActions>
-      </Card>
+      <Box>
+        <Card sx={{ boxShadow: 5, borderRadius: 3, p: 3 }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              Add Member(s)
+            </Typography>
+            <Divider />
+            <p>Upload your .csv file to update member list</p>
+          </CardContent>
+          <CardActions>
+            <Upload uploadType={"POST"} />
+          </CardActions>
+        </Card>
+
+        <Card sx={{ boxShadow: 5, mt: 5, borderRadius: 3, p: 3 }}>
+          <CardContent>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+              Update Member(s) Certifications or Arming Status.
+            </Typography>
+            <Divider />
+            <p>
+              Upload your .csv file including airman name and corresponding
+              certifications/qualifications/arming status.
+            </p>
+          </CardContent>
+          <CardActions id="updateMember">
+            <Upload uploadType={"PATCH"} />
+          </CardActions>
+        </Card>
+      </Box>
     </Box>
   );
 };

@@ -56,28 +56,21 @@ const PostMemberModal = (props) => {
 
   let weaponsReq = weapon_req.split(" ");
 
+  /////////////// grabs user id for scheduled users //////////////////////////
   useEffect(() => {
-    // grabs user id for scheduled users
     let posted = [];
     rows.forEach((row) => {
-      // console.log(row);
       const position = row.name;
       row.users.forEach((user) => {
         if (user.noUser) return;
-        // console.log(user);
-
         posted.push({ user: user.user_info[0].id, position: position });
       });
     });
-    // console.log("posted", posted);
+
     setScheduledUser(posted);
   }, [rows]);
 
-  // useEffect(() => {
-  console.log("posted homies from addmember", scheduledUser);
-
-  // console.log("not posted", notPosted);
-
+  //////////////////filters personnel by flight & no double posting///////////////
   useMemo(() => {
     let results = data.filter((user) => {
       let wepResults = [true];
@@ -120,8 +113,7 @@ const PostMemberModal = (props) => {
     setPage(0);
   };
 
-  // console.log('flight filter', filterFlight, weapon_req)
-
+  ///////////////adds members to schedule//////////////////////////////
   const patchSchedule = (patchInfo) => {
     console.log("patching schedule");
     fetch(`${API}/schedule`, {
@@ -134,11 +126,9 @@ const PostMemberModal = (props) => {
       body: JSON.stringify(patchInfo),
     })
       .then((res) => {
-        // console.log(res.status);
         return res.json();
       })
       .then(() => {
-        // console.log(data);
         // call update for users
         fetchSchedule();
         setToggleAlert(true);
