@@ -1,8 +1,20 @@
 import React, { useContext, useState, useEffect } from "react";
 import { MemberContext } from "../MemberContext";
-import { Box, Typography, Divider, Stack, Icon } from "@mui/material/";
+import {
+  Box,
+  Typography,
+  Divider,
+  Stack,
+  Icon,
+  Tooltip,
+  Card,
+  Chip,
+  ListItem,
+  List,
+} from "@mui/material/";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 export const Roster = (props) => {
   const { rows, positions } = props;
@@ -10,7 +22,6 @@ export const Roster = (props) => {
   const [roster, setRoster] = useState([]);
   const [scheduledUser, setScheduledUser] = useState([]);
   const [unavailable, setUnavailable] = useState([]);
-  const [flight, setFlight] = useState([]);
 
   useEffect(() => {
     // grabs user id for scheduled users
@@ -19,7 +30,6 @@ export const Roster = (props) => {
       const position = row.name;
       row.users.forEach((user) => {
         if (user.noUser) return;
-
         posted.push({ user: user.user_info[0].id, position: position });
       });
     });
@@ -28,7 +38,6 @@ export const Roster = (props) => {
     // filters out roster for current flight from user data
     if (positions.length > 0) {
       let unavailablePersonnel = [];
-      let flightArray = [];
       let currentPersonnel = data.filter((user) => {
         if (user.flight === null) {
           return false;
@@ -39,17 +48,13 @@ export const Roster = (props) => {
             user.status.toLowerCase() !== "available"
           ) {
             unavailablePersonnel.push(user);
-            flightArray.push(unavailablePersonnel);
-
             return false;
           }
-          flightArray.push(currentPersonnel);
           return true;
         }
       });
       setRoster(currentPersonnel);
       setUnavailable(unavailablePersonnel);
-      setFlight(flightArray);
     }
   }, [rows, positions]);
 
@@ -57,13 +62,10 @@ export const Roster = (props) => {
     roster.length > 0
       ? roster[0].flight.flight.charAt(0).toUpperCase() +
         roster[0].flight.flight.slice(1)
+      : unavailable.length > 0
+      ? unavailable[0].flight.flight.charAt(0).toUpperCase() +
+        unavailable[0].flight.flight.slice(1)
       : null;
-
-  // const flightName =
-  //   flight.length > 0
-  //     ? flight[0].flight.flight.charAt(0).toUpperCase() +
-  //       flight[0].flight.flight.slice(1)
-  //     : null;
 
   const shiftTime =
     rows.length > 0
@@ -72,10 +74,8 @@ export const Roster = (props) => {
         : "1500-0600"
       : null;
 
-  console.log(flight.length);
-
   return (
-    <Box sx={{ borderRadius: "5px", width: "100%" }} p={2}>
+    <Box sx={{ borderRadius: "5px", width: "100%", mb: 1 }} p={2}>
       <Typography sx={{ fontWeight: "bold" }} variant="h5">
         Personnel - {flightName}
         <br></br>[{shiftTime}]
@@ -131,11 +131,19 @@ export const Roster = (props) => {
         </Box>
       </Stack>
 
-      <RosterPeople users={roster} scheduledUser={scheduledUser} />
+      {roster.length === 0 ? (
+        <Typography variant="caption" mt={1}>
+          No Homies
+        </Typography>
+      ) : (
+        <RosterPeople users={roster} scheduledUser={scheduledUser} />
+      )}
+
       <Divider sx={{ mb: 2 }} />
       <Typography variant="caption" mt={1}>
-        Currently Unavailable homies
+        Currently Unavailable Homies
       </Typography>
+
       <RosterPeople users={unavailable} scheduledUser={scheduledUser} />
     </Box>
   );
@@ -144,6 +152,7 @@ export const Roster = (props) => {
 const RosterPeople = (props) => {
   const { users, scheduledUser } = props;
   const navigate = useNavigate();
+  const theme = useTheme();
 
   //console.log(users);
 
@@ -155,113 +164,129 @@ const RosterPeople = (props) => {
   return (
     <Box>
       {users.map((user, index) => (
-        <Stack
+        <Card
           key={index}
-          component="span"
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          pt={2}
-          sx={{ display: "flex" }}
+          sx={{
+            bgcolor: theme.palette.mode === "light" ? "inherit" : "#212121",
+            gap: 2,
+            m: 1,
+            boxShadow: "1px 1px 2px #454545",
+          }}
         >
-          {/* {console.log(user)} */}
-          <Box
+          <Stack
+            component="span"
+            direction="row"
             alignItems="center"
-            sx={{
-              display: "flex",
-              justifyContent: "left",
-              width: "5%",
-            }}
+            justifyContent="space-between"
+            p={1}
+            sx={{ display: "flex" }}
           >
-            <Icon>
-              <CircleIcon
-                sx={
-                  // scheduledUser.includes(user.id)
-                  scheduledUser.filter((e) => e.user === user.id).length > 0
-                    ? { color: "#25CA12" }
-                    : user.status === "Available"
-                    ? { color: "orange" }
-                    : { color: "red" }
-                }
-              />
-            </Icon>
-          </Box>
-          <Box
-            alignItems="center"
-            sx={{
-              display: "flex",
-              justifyContent: "left",
-              width: "20%",
-            }}
-          >
-            {user.status === "Available" ? (
-              <Typography
-                sx={{ color: "#6D7AE5", cursor: "pointer" }}
-                onClick={() => navigateToMember(user.id)}
-              >
-                {user.last_name.charAt(0).toUpperCase() +
-                  user.last_name.slice(1)}
-                ,{" "}
-                {user.first_name.charAt(0).toUpperCase() +
-                  user.first_name.slice(1)}
-              </Typography>
-            ) : (
-              <Typography sx={{ color: "#454040" }}>
-                {user.last_name.charAt(0).toUpperCase() +
-                  user.last_name.slice(1)}
-                ,{" "}
-                {user.first_name.charAt(0).toUpperCase() +
-                  user.first_name.slice(1)}
-              </Typography>
-            )}
-          </Box>
+            {/* {console.log(user)} */}
+            <ListItem
+              alignItems="center"
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                width: "5%",
+              }}
+            >
+              <Icon>
+                <CircleIcon
+                  sx={
+                    // scheduledUser.includes(user.id)
+                    scheduledUser.filter((e) => e.user === user.id).length > 0
+                      ? { color: "#25CA12" }
+                      : user.status === "Available"
+                      ? { color: "orange" }
+                      : { color: "red" }
+                  }
+                />
+              </Icon>
+            </ListItem>
+            <Box
+              alignItems="center"
+              sx={{
+                display: "flex",
+                justifyContent: "left",
+                width: "20%",
+              }}
+            >
+              <Tooltip title="Go to Account">
+                {user.status === "Available" ? (
+                  <Typography
+                    sx={{ color: "#6D7AE5", cursor: "pointer" }}
+                    onClick={() => navigateToMember(user.id)}
+                  >
+                    {user.last_name.charAt(0).toUpperCase() +
+                      user.last_name.slice(1)}
+                    ,{" "}
+                    {user.first_name.charAt(0).toUpperCase() +
+                      user.first_name.slice(1)}
+                  </Typography>
+                ) : (
+                  <Typography
+                    sx={{ color: "#63666A", cursor: "pointer" }}
+                    onClick={() => navigateToMember(user.id)}
+                  >
+                    {user.last_name.charAt(0).toUpperCase() +
+                      user.last_name.slice(1)}
+                    ,{" "}
+                    {user.first_name.charAt(0).toUpperCase() +
+                      user.first_name.slice(1)}
+                  </Typography>
+                )}
+              </Tooltip>
+            </Box>
 
-          <Box
-            alignItems="center"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "20%",
-            }}
-          >
-            {user.status === "Available" ? (
-              <Typography>{user.rank.toUpperCase()}</Typography>
-            ) : (
-              <Typography sx={{ color: "#454040" }}>
-                {user.rank.toUpperCase()}
-              </Typography>
-            )}
-          </Box>
+            <Box
+              alignItems="center"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                width: "20%",
+              }}
+            >
+              {user.status === "Available" ? (
+                <Typography>{user.rank.toUpperCase()}</Typography>
+              ) : (
+                <Typography sx={{ color: "#63666A" }}>
+                  {user.rank.toUpperCase()}
+                </Typography>
+              )}
+            </Box>
 
-          <Box
-            alignItems="right"
-            sx={{
-              display: "flex",
-              justifyContent: "right",
-              width: "30%",
-            }}
-          >
-            {user.status === "Available" ? (
-              <Typography>
-                {scheduledUser.filter((e) => e.user === user.id).length > 0
-                  ? scheduledUser.filter((e) => e.user === user.id)[0].position
-                  : user.status === null ||
-                    user.status.toLowerCase() === "other/unavailable"
-                  ? "U/A"
-                  : user.status}
-              </Typography>
-            ) : (
-              <Typography sx={{ color: "#454040" }}>
-                {scheduledUser.filter((e) => e.user === user.id).length > 0
-                  ? scheduledUser.filter((e) => e.user === user.id)[0].position
-                  : user.status === null ||
-                    user.status.toLowerCase() === "other/unavailable"
-                  ? "U/A"
-                  : user.status}
-              </Typography>
-            )}
-          </Box>
-        </Stack>
+            <Box
+              alignItems="right"
+              sx={{
+                display: "flex",
+                justifyContent: "right",
+                width: "30%",
+              }}
+            >
+              {user.status === "Available" ? (
+                <Typography>
+                  {scheduledUser.filter((e) => e.user === user.id).length > 0
+                    ? scheduledUser.filter((e) => e.user === user.id)[0]
+                        .position
+                    : user.status === null ||
+                      user.status.toLowerCase() === "other/unavailable"
+                    ? "U/A"
+                    : user.status}
+                </Typography>
+              ) : (
+                <Typography sx={{ color: "#63666A" }}>
+                  {scheduledUser.filter((e) => e.user === user.id).length > 0
+                    ? scheduledUser.filter((e) => e.user === user.id)[0]
+                        .position
+                    : user.status === null ||
+                      user.status.toLowerCase() === "other/unavailable"
+                    ? "U/A"
+                    : user.status}
+                </Typography>
+              )}
+            </Box>
+          </Stack>
+        </Card>
       ))}
     </Box>
   );

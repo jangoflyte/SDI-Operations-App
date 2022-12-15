@@ -77,6 +77,7 @@ export const AddMemberModal = () => {
       email: "",
       flight: "",
       notes: "",
+      password: "$2a$10$BVPeKlpiu1.Y/G0CUJ25/OrwUascSnq/cim2l.MmQvR//YmG4Egk6",
     });
   }, [open]);
 

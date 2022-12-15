@@ -384,6 +384,9 @@ export const NotificationModal = () => {
                 }}
                 sx={{
                   color: theme.palette.mode === "light" ? "inherit" : "white",
+                  "&:hover": {
+                    backgroundColor: "#6D7AE5",
+                  },
                 }}
                 startIcon={<DeleteIcon />}
               >

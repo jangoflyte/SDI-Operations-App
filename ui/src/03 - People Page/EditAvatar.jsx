@@ -268,41 +268,62 @@ export const EditAvatar = (props) => {
               </FormControl>
             </Box>
 
-            <DialogActions>
-              <Stack
-                direction="row"
+            <DialogActions
+              sx={{
+                display: "flex",
+                gap: 2,
+                justifyContent: "space-between",
+                mt: 2,
+              }}
+            >
+              <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
+                  justifyContent: "left",
                 }}
               >
+                {" "}
                 <Button
                   onClick={() => handlePic()}
                   sx={{
                     color: theme.palette.mode === "light" ? "inherit" : "white",
+                    "&:hover": {
+                      backgroundColor: avatar.avatar_background,
+                    },
                   }}
                 >
                   Change Avatar
                 </Button>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                {" "}
                 <Button
                   onClick={() => defaultPic()}
                   sx={{
                     color: theme.palette.mode === "light" ? "inherit" : "white",
+                    "&:hover": {
+                      backgroundColor: avatar.avatar_background,
+                    },
                   }}
                 >
                   Default
                 </Button>
-                {/* <Button
-                  onClick={() => backgroundChange()}
-                  sx={{
-                    color: theme.palette.mode === "light" ? "inherit" : "white",
-                  }}
-                >
-                  Change Background Color
-                </Button> */}
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "right",
+                }}
+              >
                 <ChangeBackground avatar={avatar} memberId={memberId} />
-              </Stack>
+              </Box>
             </DialogActions>
           </DialogContent>
         </Paper>
@@ -333,7 +354,7 @@ const ChangeBackground = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  console.log(color);
+  //console.log(color);
 
   useMemo(() => {
     setColor(color);
@@ -384,6 +405,9 @@ const ChangeBackground = (props) => {
           onClick={handleClickOpen}
           sx={{
             color: theme.palette.mode === "light" ? "inherit" : "white",
+            "&:hover": {
+              backgroundColor: avatar.avatar_background,
+            },
           }}
         >
           Change Background Color
@@ -402,7 +426,7 @@ const ChangeBackground = (props) => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="customized-dialog-description">
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <ChromePicker color={color} onChange={(e) => setColor(e.hex)} />
               </Box>
             </DialogContentText>
@@ -419,6 +443,9 @@ const ChangeBackground = (props) => {
                   onClick={() => backgroundChange()}
                   sx={{
                     color: theme.palette.mode === "light" ? "inherit" : "white",
+                    "&:hover": {
+                      backgroundColor: avatar.avatar_background,
+                    },
                   }}
                 >
                   Change Background Color

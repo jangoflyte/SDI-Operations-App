@@ -135,13 +135,21 @@ export const Calendar = () => {
     // change i to start on a sunday so that the week days are allways on
     // the same column
     for (let i = 0; i < 42; i++) {
-      let workingDate = new Date("2022-10-30");
+      // let workingDate = new Date("2022-10-30");
+      let workingDate = new Date(currYear, currMonth, 1);
       // workingDate.setMonth(currMonth, -6);
-      let beforeDays = -6;
+      // let beforeDays = -6;
+      let beforeDays = 1;
 
+      while (workingDate.getDay() !== 0) {
+        workingDate.setDate(workingDate.getDate() - 1);
+        beforeDays--;
+      }
+      // let beforeDays = (7 + workingDate.getDay()) % 7;
+      console.log("This is before days ", beforeDays, " for ", currMonth);
       workingDate.setFullYear(currYear, currMonth, beforeDays);
       let newDate = new Date(workingDate.setDate(workingDate.getDate() + i));
-      //console.log('created date', newDate.toISOString());
+      // console.log("created date", newDate.toISOString());
       dateRange2.push(newDate);
     }
     setDateRange(dateRange2);
