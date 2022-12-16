@@ -7,6 +7,9 @@ import {
   Typography,
   Container,
   MenuItem,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { MemberContext } from "../MemberContext";
@@ -17,6 +20,7 @@ import { useTheme } from "@mui/material/styles";
 export default function SignUp() {
   const { API, setCookie, setUserAccount, authDomain, userDomain } =
     useContext(MemberContext);
+  const [mode, setMode] = useState("password");
   let navigate = useNavigate();
   const theme = useTheme();
   const [failedRegister, setFailedRegister] = useState(false);
@@ -86,6 +90,14 @@ export default function SignUp() {
           navigate("/");
         }
       });
+  };
+
+  const togglePassword = (mode) => {
+    if (mode === "password") {
+      setMode("text");
+    } else {
+      setMode("password");
+    }
   };
 
   return (
@@ -263,7 +275,7 @@ export default function SignUp() {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={mode}
                   id="password"
                   autoComplete="new-password"
                   sx={{
@@ -283,6 +295,12 @@ export default function SignUp() {
                     }
                   }}
                 />
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox onClick={() => togglePassword(mode)} />}
+                    label="Show Password"
+                  />
+                </FormGroup>
               </Grid>
             </Grid>
           </Box>

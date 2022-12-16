@@ -8,16 +8,14 @@ import {
   Icon,
   Tooltip,
   Card,
-  Chip,
-  ListItem,
-  List,
 } from "@mui/material/";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import { PrintTable } from "./PrintTable";
 
 export const Roster = (props) => {
-  const { rows, positions } = props;
+  const { rows, positions, schedDate } = props;
   const { data } = useContext(MemberContext);
   const [roster, setRoster] = useState([]);
   const [scheduledUser, setScheduledUser] = useState([]);
@@ -76,10 +74,22 @@ export const Roster = (props) => {
 
   return (
     <Box sx={{ borderRadius: "5px", width: "100%", mb: 1 }} p={2}>
-      <Typography sx={{ fontWeight: "bold" }} variant="h5">
-        Personnel - {flightName}
-        <br></br>[{shiftTime}]
-      </Typography>
+      <Stack
+        direction="row"
+        sx={{ display: "flex" }}
+        justifyContent="space-between"
+      >
+        <Box sx={{ display: "flex", justifyContent: "left" }}>
+          <Typography sx={{ fontWeight: "bold" }} variant="h5">
+            Personnel - {flightName}
+            <br></br>Shift: [{shiftTime}]
+          </Typography>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "right" }}>
+          <PrintTable rows={rows} schedDate={schedDate} />
+        </Box>
+      </Stack>
+
       <Divider />
       <Stack
         component="span"
@@ -182,7 +192,7 @@ const RosterPeople = (props) => {
             sx={{ display: "flex" }}
           >
             {/* {console.log(user)} */}
-            <ListItem
+            <Box
               alignItems="center"
               sx={{
                 display: "flex",
@@ -202,7 +212,8 @@ const RosterPeople = (props) => {
                   }
                 />
               </Icon>
-            </ListItem>
+            </Box>
+
             <Box
               alignItems="center"
               sx={{

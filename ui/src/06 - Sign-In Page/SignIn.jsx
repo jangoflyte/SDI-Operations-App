@@ -6,6 +6,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import LinearProgress from "@mui/material/LinearProgress";
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { MemberContext } from "../MemberContext";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -15,6 +18,7 @@ import { useTheme } from "@mui/material/styles";
 export default function SignIn() {
   const { API, setCookie, setUserAccount, authDomain, userDomain } =
     useContext(MemberContext);
+  const [mode, setMode] = useState("password");
   const [loginCredentials, setLoginCredentials] = useState({
     email: "",
     password: "",
@@ -82,6 +86,14 @@ export default function SignIn() {
       .catch((err) => {
         console.log("error: ", err);
       });
+  };
+
+  const togglePassword = (mode) => {
+    if (mode === "password") {
+      setMode("text");
+    } else {
+      setMode("password");
+    }
   };
 
   return (
@@ -163,7 +175,7 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={mode}
               id="password"
               autoComplete="current-password"
               onChange={(e) => {
@@ -183,6 +195,12 @@ export default function SignIn() {
                     : theme.palette.grey[900],
               }}
             />
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox onClick={() => togglePassword(mode)} />}
+                label="Show Password"
+              />
+            </FormGroup>
           </Box>
 
           <Button

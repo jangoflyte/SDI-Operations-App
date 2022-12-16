@@ -23,6 +23,7 @@ import { EditAvatar } from "./EditAvatar";
 import { EditStatus } from "../00 - Features/EditStatus";
 import { useTheme } from "@mui/material/styles";
 import { EditMemberModal } from "./EditMemberModal";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const IndividualMember = () => {
   const { member, API, setMember, triggerFetch, userAccount } =
@@ -404,6 +405,13 @@ const IndividualMember = () => {
                 {member.first_name + `'s`} {upcoming ? "Upcoming " : "Past "}
                 Schedule
               </Typography>
+              <Tooltip title="Go to Schedule">
+                <CalendarMonthIcon
+                  onClick={() => navigate("/")}
+                  sx={{ pointer: "cursor" }}
+                />
+              </Tooltip>
+
               <Box
                 sx={{
                   display: "flex",
