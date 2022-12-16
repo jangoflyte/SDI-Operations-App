@@ -38,12 +38,12 @@ const App = () => {
   const [rows, setRows] = useState([]);
 
   //const MemberContext = React.createContext();
-  // const API = 'https://api.cyberhelm.com';
-  // const authDomain = 'api.cyberhelm.com';
-  // const userDomain = 'www.cyberhelm.com';
-  const API = "http://localhost:8080";
-  const authDomain = "localhost";
-  const userDomain = "localhost";
+  const API = "https://api.cyberhelm.com";
+  const authDomain = "api.cyberhelm.com";
+  const userDomain = "www.cyberhelm.com";
+  // const API = "http://localhost:8080";
+  // const authDomain = "localhost";
+  // const userDomain = "localhost";
 
   useMemo(() => {
     if (cookies.user) {
