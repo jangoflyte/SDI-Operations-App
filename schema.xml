@@ -142,12 +142,12 @@
 <part>weapon_id</part>
 </key>
 </table>
-<table x="833" y="474" name="position">
+<table x="760" y="436" name="position">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="name" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<row name="shift" null="1" autoincrement="0">
+<datatype>MEDIUMTEXT</datatype>
 <default>NULL</default></row>
 <row name="man_req" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -156,9 +156,6 @@
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="Certification" row="id" />
 </row>
-<row name="shift" null="1" autoincrement="0">
-<datatype>VARCHAR</datatype>
-<default>NULL</default></row>
 <row name="flight_assigned" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default><relation table="Flight" row="id" />
@@ -169,11 +166,18 @@
 <row name="end_datetime" null="1" autoincrement="0">
 <datatype>DATETIME</datatype>
 <default>NULL</default></row>
+<row name="notes" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="post_id" null="1" autoincrement="0">
+<datatype>INTEGER</datatype>
+<default>NULL</default><relation table="post" row="id" />
+</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="898" y="327" name="weapon_position">
+<table x="942" y="315" name="weapon_position">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -189,7 +193,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="489" y="343" name="post_schedule">
+<table x="486" y="342" name="post_schedule">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -262,45 +266,27 @@
 <part>id</part>
 </key>
 </table>
-<table x="334" y="583" name="shift">
+<table x="611" y="623" name="post">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="start_datetime" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
+<row name="description" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
 <default>NULL</default></row>
-<row name="end_datetime" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="flight_assigned" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="Flight" row="id" />
-</row>
-<row name="posisions" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="position" row="id" />
-</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>
 </table>
-<table x="546" y="629" name="shift_template">
+<table x="359" y="598" name="shift_template">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="name" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="shift_length" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default></row>
-<row name="positions" null="1" autoincrement="0">
-<datatype>INTEGER</datatype>
-<default>NULL</default><relation table="position" row="id" />
-</row>
 <key type="PRIMARY" name="">
 <part>id</part>
 </key>

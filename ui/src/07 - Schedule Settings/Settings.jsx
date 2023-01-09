@@ -3,7 +3,7 @@ import { MemberContext } from '../MemberContext'
 import '../styles/MembersDetail.css'
 import '../styles/Card.css'
 import { Box, LinearProgress, Typography, Stack, Button } from '@mui/material'
-import { PostCard } from './PostCard'
+import { ScheduleCard } from './ScheduleCard'
 import { AddPost } from './AddPost'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import NightlightIcon from '@mui/icons-material/Nightlight'
@@ -51,7 +51,7 @@ export const Settings = () => {
           pb={4}
           sx={{ fontWeight: 'bold' }}
         >
-          Post Settings
+          Schedule Settings
         </Typography>
         <Typography variant='h5' component='span' pb={2} sx={{}}>
           {postArray.length} {isDay ? 'Day' : 'Mid'} Posts
