@@ -1,37 +1,37 @@
-import React, { useContext } from 'react'
-import { MemberContext } from '../MemberContext'
-import '../styles/MembersDetail.css'
-import '../styles/Card.css'
-import { Box, Typography, Stack, Chip, Paper, Divider } from '@mui/material'
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
-import SecurityIcon from '@mui/icons-material/Security'
-import { EditPost } from './EditPost'
-import { WeaponQuals } from '../00 - Features/WeaponQuals'
+import React, { useContext } from "react";
+import { MemberContext } from "../MemberContext";
+import "../styles/MembersDetail.css";
+import "../styles/Card.css";
+import { Box, Typography, Stack, Chip, Paper, Divider } from "@mui/material";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+import SecurityIcon from "@mui/icons-material/Security";
+import { EditTemplate } from "./EditTemplate";
+import { WeaponQuals } from "../00 - Features/WeaponQuals";
 
-export const ScheduleCard = props => {
-  const { setPostsPage } = useContext(MemberContext)
-  const post = props.post
+export const ScheduleCard = (props) => {
+  const { setPostsPage } = useContext(MemberContext);
+  const post = props.post;
 
   //console.log('post', post);
 
-  const roleArray = postInput => {
-    let manReq = parseInt(postInput.man_req)
-    let resultArray = []
+  const roleArray = (postInput) => {
+    let manReq = parseInt(postInput.man_req);
+    let resultArray = [];
     for (let i = 1; i < manReq + 1; i++) {
       if (i === 1) {
-        resultArray.push({ name: 'Lead' })
+        resultArray.push({ name: "Lead" });
       } else if (i === 2) {
-        resultArray.push({ name: 'Alpha' })
+        resultArray.push({ name: "Alpha" });
       } else if (i === 3) {
-        resultArray.push({ name: 'Bravo' })
+        resultArray.push({ name: "Bravo" });
       } else if (i === 4) {
-        resultArray.push({ name: 'Charlie' })
+        resultArray.push({ name: "Charlie" });
       } else if (i > 4) {
-        resultArray.push({ name: 'Member' })
+        resultArray.push({ name: "Member" });
       }
     }
-    return resultArray
-  }
+    return resultArray;
+  };
 
   return (
     <Paper
@@ -39,91 +39,91 @@ export const ScheduleCard = props => {
       sx={{
         mx: 10,
         mb: 5,
-        width: '50vw',
+        width: "50vw",
         borderRadius: 3,
         // pl: 5,
         // pt: 2,
         // pb: 5,
-        p: 3
+        p: 3,
       }}
     >
       <Stack
-        component='span'
-        direction='row'
-        alignItems='center'
-        justifyContent='space-between'
-        sx={{ display: 'flex' }}
+        component="span"
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        sx={{ display: "flex" }}
       >
         <Typography
-          variant='h4'
+          variant="h4"
           pb={2}
           onClick={() => setPostsPage(true)}
           mt={2}
         >
           {post.name.charAt(0).toUpperCase() + post.name.slice(1)}
         </Typography>
-        <EditPost post={post} />
+        <EditTemplate post={post} />
       </Stack>
       <Divider />
       <Stack
-        component='span'
-        direction='row'
-        alignItems='center'
+        component="span"
+        direction="row"
+        alignItems="center"
         pt={2}
-        sx={{ display: 'flex' }}
+        sx={{ display: "flex" }}
       >
-        <Box width='33%'>
-          <Typography variant='h6'>Role</Typography>
+        <Box width="33%">
+          <Typography variant="h6">Role</Typography>
         </Box>
-        <Box width='33%'>
-          <Typography variant='h6'>Certifications</Typography>
+        <Box width="33%">
+          <Typography variant="h6">Certifications</Typography>
         </Box>
-        <Box width='33%'>
-          <Typography variant='h6'>Weapon Qualification</Typography>
+        <Box width="33%">
+          <Typography variant="h6">Weapon Qualification</Typography>
         </Box>
       </Stack>
       {roleArray(post).map((role, index) => {
-        if (index > 6) return null
-        if (index > 5) return `...Aditional Posts hidden...`
+        if (index > 6) return null;
+        if (index > 5) return `...Aditional Posts hidden...`;
         return (
           <Stack
             key={index}
-            component='span'
-            direction='row'
-            alignItems='center'
+            component="span"
+            direction="row"
+            alignItems="center"
             pt={2}
-            sx={{ display: 'flex' }}
+            sx={{ display: "flex" }}
           >
-            <Box width='33%'>
+            <Box width="33%">
               <Typography>{role.name}</Typography>
             </Box>
-            <Box width='33%'>
-              <Typography component='span' sx={{ fontWeight: 'bold' }}>
+            <Box width="33%">
+              <Typography component="span" sx={{ fontWeight: "bold" }}>
                 {post.cert_req.length === 0 ? (
                   <Chip
                     icon={<WorkspacePremiumIcon />}
-                    label='No Certs'
-                    color='success'
-                    sx={{ color: 'white' }}
+                    label="No Certs"
+                    color="success"
+                    sx={{ color: "white" }}
                   />
                 ) : (
                   <Chip
                     icon={<WorkspacePremiumIcon />}
-                    label={post.cert_req.map(cert => cert.cert)}
-                    color='success'
-                    sx={{ color: 'white' }}
+                    label={post.cert_req.map((cert) => cert.cert)}
+                    color="success"
+                    sx={{ color: "white" }}
                   />
                 )}
               </Typography>
             </Box>
-            <Box width='33%'>
-              <Typography component='span' sx={{ fontWeight: 'bold' }}>
+            <Box width="33%">
+              <Typography component="span" sx={{ fontWeight: "bold" }}>
                 {post.weapon_req.length === 0 ? (
                   <Chip
-                    color='primary'
+                    color="primary"
                     icon={<SecurityIcon />}
-                    label='No Weapons'
-                    sx={{ color: 'white' }}
+                    label="No Weapons"
+                    sx={{ color: "white" }}
                   />
                 ) : post.weapon_req.length > 3 ? (
                   <WeaponQuals weapon={post.weapon_req} />
@@ -133,16 +133,16 @@ export const ScheduleCard = props => {
                       key={index}
                       icon={<SecurityIcon />}
                       label={weapon.weapon.toUpperCase()}
-                      color='secondary'
-                      sx={{ m: 1 / 4, color: 'white' }}
+                      color="secondary"
+                      sx={{ m: 1 / 4, color: "white" }}
                     />
                   ))
                 )}
               </Typography>
             </Box>
           </Stack>
-        )
+        );
       })}
     </Paper>
-  )
-}
+  );
+};

@@ -19,6 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import { MemberContext } from "../MemberContext";
+import { EditShiftModal } from "./EditShiftModal";
 import { useNavigate } from "react-router-dom";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
@@ -639,12 +640,22 @@ export const ScheduleTable = () => {
                       {date.toDateString().split(" ")[2]}
                     </Typography>
                   </Box>
-                  <Divider
-                    flexItem={true}
-                    sx={{ color: theme.palette.grey[600] }}
-                  >
-                    SHIFT
-                  </Divider>
+
+                  {userAccount !== null && userAccount.admin ? (
+                    <Divider
+                      flexItem={true}
+                      sx={{ color: theme.palette.grey[600] }}
+                    >
+                      <EditShiftModal />
+                    </Divider>
+                  ) : (
+                    <Divider
+                      flexItem={true}
+                      sx={{ color: theme.palette.grey[600] }}
+                    >
+                      <Typography>SHIFT</Typography>
+                    </Divider>
+                  )}
 
                   <Button
                     fullWidth={true}

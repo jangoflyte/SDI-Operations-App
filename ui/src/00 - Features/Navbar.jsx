@@ -34,8 +34,9 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { NotificationModal } from "./Notification";
 import { AvatarMenu } from "./AvatarMenu";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+// import Brightness4Icon from "@mui/icons-material/Brightness4";
+// import Brightness7Icon from "@mui/icons-material/Brightness7";
+import ManageHistoryIcon from "@mui/icons-material/ManageHistory";
 
 const drawerWidth = 240;
 
@@ -295,6 +296,21 @@ export default function PersistentDrawerLeft() {
                 <SettingsIcon sx={{ color: "white" }} />
               </ListItemIcon>
               <ListItemText primary="Post Settings" sx={{ color: "white" }} />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
+            <ListItemButton
+              disabled={!(userAccount !== null && userAccount.admin)}
+              onClick={() => handleNavigate("/schedule")}
+            >
+              <ListItemIcon>
+                <ManageHistoryIcon sx={{ color: "white" }} />
+              </ListItemIcon>
+              <ListItemText
+                primary="Schedule Settings"
+                sx={{ color: "white" }}
+              />
             </ListItemButton>
           </ListItem>
         </List>

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { MemberContext } from "../MemberContext";
 import "../styles/MembersDetail.css";
 import {
@@ -11,18 +11,13 @@ import {
   MenuItem,
   Stack,
   FormControl,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
 import Select from "@mui/material/Select";
 import Checkbox from "@mui/material/Checkbox";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import ListItemText from "@mui/material/ListItemText";
+import { useTheme } from "@mui/material/styles";
 
 const style = {
   position: "absolute",
@@ -48,43 +43,26 @@ const MenuProps = {
   },
 };
 
-export const EditPost = (props) => {
-  const { post } = props;
-
-  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allWeapons } =
-    useContext(MemberContext);
+export const AddTemplate = (props) => {
+  const { API, setTriggerFetch, allWeapons } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [postName, setPostName] = useState(post.name);
-  const [weapon, setWeapon] = useState(post.weapon_req);
-  const [weaponIdArray, setWeaponIdArray] = useState(
-    post.weapon_req.map((wep) => wep.id)
-  );
-  const [manReq, setManReq] = useState(post.man_req);
-  const [cert, setCert] = useState(post.cert_id);
-  const [shift, setShift] = useState(post.shift);
-  const [openItem, setOpenItem] = React.useState(false);
 
-  useEffect(() => {
-    setPostName(post.name);
-    setWeapon(post.weapon_req);
-    setCert(post.cert_id);
-    setShift(post.shift);
-    setWeaponIdArray(post.weapon_req.map((wep) => wep.id));
-  }, [props]);
+  const [postName, setPostName] = useState("");
+  const [weapon, setWeapon] = useState([]);
+  const [weaponIdArray, setWeaponIdArray] = useState([]);
+  const [manReq, setManReq] = useState("");
+  const [cert, setCert] = useState("");
 
-  const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
-
-  const handleItemClose = () => {
-    setOpenItem(false);
-    handleClose();
-  };
+  const [schedDate, setSchedDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
+  const { isDay } = props;
+  const theme = useTheme();
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
+    const shift = isDay ? "days" : "mids";
     const newPost = {
       name: postName,
       man_req: manReq,
@@ -92,9 +70,10 @@ export const EditPost = (props) => {
       weapon_req: weaponIdArray,
       shift: shift,
     };
+    console.log("newPost ", newPost, "cert NaN ", parseInt(cert));
 
-    fetch(`${API}/position/${post.id}`, {
-      method: "PATCH",
+    fetch(`${API}/position/`, {
+      method: "POST",
       credentials: "include",
       redirect: "follow",
       body: JSON.stringify(newPost),
@@ -106,25 +85,13 @@ export const EditPost = (props) => {
       .then((res) => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        setTriggerFetch((curr) => !curr);
-        setToggleAlert(!toggleAlert);
         handleClose();
-      })
-      .catch((err) => {
-        console.log("Error: ", err);
-      });
-  };
-
-  const handleDelete = (positionId) => {
-    fetch(`${API}/position/${positionId}`, {
-      method: "DELETE",
-      credentials: "include",
-      redirect: "follow",
-    })
-      .then(() => {
         setTriggerFetch((curr) => !curr);
-        setToggleAlert(!toggleAlert);
-        handleClose();
+        setPostName(null);
+        setManReq(null);
+        setCert(null);
+        setWeapon([]);
+        // setToggleAlert(true);
       })
       .catch((err) => {
         console.log("Error: ", err);
@@ -169,13 +136,14 @@ export const EditPost = (props) => {
 
   return (
     <>
-      <BorderColorIcon
+      <Button
         onClick={handleOpen}
-        fontSize="large"
-        color="secondary"
-        cursor="pointer"
-        sx={{ mr: 5 }}
-      />
+        color={"secondary"}
+        variant="contained"
+        sx={{ borderRadius: "50px", width: 150 }}
+      >
+        Add Template
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -186,12 +154,21 @@ export const EditPost = (props) => {
           <Box sx={{ display: "flex", justifyContent: "right" }}>
             <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
           </Box>
+
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ textAlign: "center" }}
+          >
+            SCHEDULE
+          </Typography>
           <Typography
             id="modal-modal-description"
             variant="h4"
             sx={{ mt: 1, textAlign: "center", fontWeight: "bold" }}
           >
-            Edit Post
+            Add Template
           </Typography>
 
           <Stack
@@ -200,12 +177,13 @@ export const EditPost = (props) => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: "40ch" }}>
               <TextField
                 id="outlined-basic"
-                label="Post Name"
+                label="Template Name"
                 value={postName}
                 variant="outlined"
                 onChange={(e) => setPostName(e.target.value)}
@@ -214,7 +192,7 @@ export const EditPost = (props) => {
             <FormControl sx={{ width: "40ch" }}>
               <TextField
                 id="outlined-basic"
-                label="Number of Positions"
+                label="Time"
                 value={manReq}
                 variant="outlined"
                 onChange={(e) => setManReq(e.target.value)}
@@ -229,13 +207,10 @@ export const EditPost = (props) => {
               display: "flex",
               //justifyContent: 'center',
               justifyContent: "space-between",
-              gap: 2,
             }}
           >
             <FormControl sx={{ width: "40ch" }}>
-              <InputLabel id="demo-simple-select-label">
-                Certifications
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Flight</InputLabel>
               <Select
                 htmlFor="cert_id"
                 labelId="demo-simple-select-label"
@@ -251,7 +226,7 @@ export const EditPost = (props) => {
               </Select>
             </FormControl>
             <FormControl sx={{ width: "40ch" }}>
-              <InputLabel id="demo-multiple-checkbox-label">Weapons</InputLabel>
+              <InputLabel id="demo-multiple-checkbox-label">Posts</InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
@@ -289,9 +264,69 @@ export const EditPost = (props) => {
             pt={2}
             sx={{
               display: "flex",
+              //justifyContent: 'center',
               justifyContent: "space-between",
             }}
-          ></Stack>
+          >
+            <FormControl sx={{ width: "40ch" }}>
+              <TextField
+                id="date"
+                label="Start Date"
+                type="date"
+                defaultValue={startDate.toISOString().split("T")[0]}
+                sx={{
+                  width: 220,
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "white"
+                      : theme.palette.grey[900],
+                  cursor: "pointer",
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setStartDate(new Date());
+                    e.target.value = new Date().toISOString().split("T")[0];
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  } else {
+                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  }
+                }}
+              />
+            </FormControl>
+            <FormControl sx={{ width: "40ch" }}>
+              <TextField
+                id="date"
+                label="End Date"
+                type="date"
+                defaultValue={startDate.toISOString().split("T")[0]}
+                sx={{
+                  width: 220,
+                  backgroundColor:
+                    theme.palette.mode === "light"
+                      ? "white"
+                      : theme.palette.grey[900],
+                  cursor: "pointer",
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setStartDate(new Date());
+                    e.target.value = new Date().toISOString().split("T")[0];
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  } else {
+                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
+                  }
+                }}
+              />
+            </FormControl>
+          </Stack>
 
           <Stack
             direction="row"
@@ -303,49 +338,12 @@ export const EditPost = (props) => {
             }}
           >
             <Button
-              variant="contained"
-              sx={{ borderRadius: "30px", backgroundColor: "#8B0000", mr: 2 }}
-              onClick={handleItemClickOpen}
-            >
-              Delete Post
-            </Button>
-            <Dialog
-              open={openItem}
-              onClose={handleItemClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {"Are You Sure You Want to Delete?"}
-              </DialogTitle>
-              <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                  Once the Post is Deleted, it cannot be recovered. Are you sure
-                  you want to delete this Post?
-                </DialogContentText>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleItemClose}>Cancel</Button>
-                <Button
-                  sx={{
-                    borderRadius: "30px",
-                    color: "red",
-                    mr: 2,
-                  }}
-                  onClick={() => handleDelete(post.id)}
-                  autoFocus
-                >
-                  Delete Post
-                </Button>
-              </DialogActions>
-            </Dialog>
-            <Button
               onClick={() => handleAdd()}
               color="secondary"
               variant="contained"
               sx={{ borderRadius: "30px" }}
             >
-              Save Changes
+              Add Template
             </Button>
           </Stack>
         </Box>
