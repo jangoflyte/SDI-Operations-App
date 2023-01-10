@@ -50,13 +50,16 @@ export const EditShiftModal = (props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const [postName, setPostName] = useState("");
   const [weapon, setWeapon] = useState([]);
   const [weaponIdArray, setWeaponIdArray] = useState([]);
   const [manReq, setManReq] = useState("");
   const [cert, setCert] = useState("");
+
   const [schedDate, setSchedDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const { isDay } = props;
   const theme = useTheme();
 
@@ -141,8 +144,13 @@ export const EditShiftModal = (props) => {
           <Button
             onClick={handleOpen}
             // color={"secondary"}
-            // variant="contained"
-            //   sx={{ borderRadius: "50px", width: 150 }}
+            variant="text"
+            sx={{
+              color:
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[900]
+                  : "white",
+            }}
           >
             SHIFT
           </Button>
@@ -172,7 +180,7 @@ export const EditShiftModal = (props) => {
             variant="h4"
             sx={{ mt: 1, textAlign: "center", fontWeight: "bold" }}
           >
-            Add Template
+            Edit Template
           </Typography>
 
           <Stack
@@ -306,7 +314,7 @@ export const EditShiftModal = (props) => {
                 id="date"
                 label="End Date"
                 type="date"
-                defaultValue={startDate.toISOString().split("T")[0]}
+                defaultValue={endDate.toISOString().split("T")[0]}
                 sx={{
                   width: 220,
                   backgroundColor:
@@ -320,11 +328,11 @@ export const EditShiftModal = (props) => {
                 }}
                 onChange={(e) => {
                   if (e.target.value === "") {
-                    setStartDate(new Date());
+                    setEndDate(new Date());
                     e.target.value = new Date().toISOString().split("T")[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   } else {
-                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setEndDate(new Date(`${e.target.value}T00:00:00`));
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   }
                 }}
@@ -347,7 +355,7 @@ export const EditShiftModal = (props) => {
               variant="contained"
               sx={{ borderRadius: "30px" }}
             >
-              Add Template
+              Edit Template
             </Button>
           </Stack>
         </Box>

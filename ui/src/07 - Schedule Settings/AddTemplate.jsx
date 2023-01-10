@@ -57,6 +57,7 @@ export const AddTemplate = (props) => {
 
   const [schedDate, setSchedDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const { isDay } = props;
   const theme = useTheme();
 
@@ -97,29 +98,6 @@ export const AddTemplate = (props) => {
         console.log("Error: ", err);
       });
   };
-
-  // const handleChange = event => {
-  //   const {
-  //     target: { checked },
-  //   } = event;
-  //   console.log(event);
-  //   console.log(
-  //     'value: checked ',
-  //     event.target.parentNode.parentNode.id,
-  //     checked
-  //   );
-  //   let wepId = parseInt(event.target.parentNode.parentNode.id);
-  //   if (checked && !weaponIdArray.includes(wepId)) {
-  //     setWeaponIdArray(curr => [...curr, wepId]);
-  //     setWeapon(curr => [
-  //       ...curr,
-  //       allWeapons.filter(weapon => weapon.id === wepId)[0],
-  //     ]);
-  //   } else if (!checked) {
-  //     setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
-  //     setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
-  //   }
-  // };
 
   const handleWeaponBox = (wepId) => {
     if (!weaponIdArray.includes(wepId)) {
@@ -205,7 +183,6 @@ export const AddTemplate = (props) => {
             pt={2}
             sx={{
               display: "flex",
-              //justifyContent: 'center',
               justifyContent: "space-between",
             }}
           >
@@ -222,7 +199,7 @@ export const AddTemplate = (props) => {
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>
-                <MenuItem value={4}>Flight Sergreant</MenuItem>
+                <MenuItem value={4}>Flight Sergeant</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ width: "40ch" }}>
@@ -302,7 +279,7 @@ export const AddTemplate = (props) => {
                 id="date"
                 label="End Date"
                 type="date"
-                defaultValue={startDate.toISOString().split("T")[0]}
+                defaultValue={endDate.toISOString().split("T")[0]}
                 sx={{
                   width: 220,
                   backgroundColor:
@@ -316,11 +293,11 @@ export const AddTemplate = (props) => {
                 }}
                 onChange={(e) => {
                   if (e.target.value === "") {
-                    setStartDate(new Date());
+                    setEndDate(new Date());
                     e.target.value = new Date().toISOString().split("T")[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   } else {
-                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setEndDate(new Date(`${e.target.value}T00:00:00`));
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   }
                 }}

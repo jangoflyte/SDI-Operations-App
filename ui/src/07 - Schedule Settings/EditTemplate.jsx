@@ -71,6 +71,7 @@ export const EditTemplate = (props) => {
   const theme = useTheme();
   const [schedDate, setSchedDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
     setPostName(post.name);
@@ -251,7 +252,7 @@ export const EditTemplate = (props) => {
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>
-                <MenuItem value={4}>Flight Sergreant</MenuItem>
+                <MenuItem value={4}>Flight Sergeant</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ width: "40ch" }}>
@@ -331,7 +332,7 @@ export const EditTemplate = (props) => {
                 id="date"
                 label="End Date"
                 type="date"
-                defaultValue={startDate.toISOString().split("T")[0]}
+                defaultValue={endDate.toISOString().split("T")[0]}
                 sx={{
                   width: 220,
                   backgroundColor:
@@ -345,11 +346,11 @@ export const EditTemplate = (props) => {
                 }}
                 onChange={(e) => {
                   if (e.target.value === "") {
-                    setStartDate(new Date());
+                    setEndDate(new Date());
                     e.target.value = new Date().toISOString().split("T")[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   } else {
-                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setEndDate(new Date(`${e.target.value}T00:00:00`));
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   }
                 }}

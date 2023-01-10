@@ -73,13 +73,13 @@ export const ScheduleCard = (props) => {
         sx={{ display: "flex" }}
       >
         <Box width="33%">
-          <Typography variant="h6">Role</Typography>
+          <Typography variant="h6">Flight</Typography>
         </Box>
         <Box width="33%">
-          <Typography variant="h6">Certifications</Typography>
+          <Typography variant="h6">Time</Typography>
         </Box>
         <Box width="33%">
-          <Typography variant="h6">Weapon Qualification</Typography>
+          <Typography variant="h6">Posts</Typography>
         </Box>
       </Stack>
       {roleArray(post).map((role, index) => {

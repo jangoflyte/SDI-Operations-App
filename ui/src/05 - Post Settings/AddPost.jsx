@@ -218,7 +218,7 @@ export const AddPost = (props) => {
                 <MenuItem value={1}>Entry Controller</MenuItem>
                 <MenuItem value={2}>Patrol</MenuItem>
                 <MenuItem value={3}>Desk Sergeant</MenuItem>
-                <MenuItem value={4}>Flight Sergreant</MenuItem>
+                <MenuItem value={4}>Flight Sergeant</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ width: "40ch" }}>
