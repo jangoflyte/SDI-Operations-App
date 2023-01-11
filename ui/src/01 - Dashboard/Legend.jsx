@@ -1,23 +1,23 @@
-import React, { useState } from "react";
-import { Typography, Box, List, ListItem, Divider } from "@mui/material/";
+import React, { useState } from 'react'
+import { Typography, Box, List, ListItem, Divider } from '@mui/material/'
 
 export const Legend = () => {
-  const [legend, setLegend] = useState([]);
+  //const [legend, setLegend] = useState([]);
 
   // const getLegend = () => {}
 
   return (
     <Box
       sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 1,
+        display: 'flex',
+        flexWrap: 'wrap',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        p: 1
       }}
     >
-      <Typography variant="h6">Current Schedule</Typography>
+      <Typography variant='h6'>Current Schedule</Typography>
       <Divider />
       <List>
         <ListItem disablePadding>
@@ -31,5 +31,5 @@ export const Legend = () => {
         </ListItem>
       </List>
     </Box>
-  );
-};
+  )
+}

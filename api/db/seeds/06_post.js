@@ -6,7 +6,8 @@ exports.seed = async function (knex) {
   // Deletes ALL existing entries
   await knex('post').del()
   await knex('post').insert([
-    { post_name: 'BDOC' },
+    { post_name: 'BDOC', description: 'test' },
+
     {
       post_name: 'Flight Chief'
     },
