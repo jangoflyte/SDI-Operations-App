@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
-import { Typography, Box, List, ListItem, Divider } from '@mui/material/'
+import React, { useState } from 'react';
+import { Typography, Box, List, ListItem, Divider } from '@mui/material/';
 
 export const Legend = () => {
-  //const [legend, setLegend] = useState([]);
+  // const [legend, setLegend] = useState([]);
 
-  // const getLegend = () => {}
+  // const getLegend = async () => {};
 
   return (
     <Box
@@ -14,11 +14,11 @@ export const Legend = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        p: 1
+        p: 1,
       }}
     >
       <Typography variant='h6'>Current Schedule</Typography>
-      <Divider />
+      <Divider variant='middle' flexItem />
       <List>
         <ListItem disablePadding>
           <Typography>Days 0600-1400</Typography>
@@ -31,5 +31,5 @@ export const Legend = () => {
         </ListItem>
       </List>
     </Box>
-  )
-}
+  );
+};

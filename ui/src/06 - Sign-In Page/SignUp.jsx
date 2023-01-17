@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   Button,
   TextField,
@@ -8,94 +8,136 @@ import {
   Container,
   MenuItem,
   InputAdornment,
-  IconButton
-} from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { MemberContext } from '../MemberContext'
-import { useState, useContext } from 'react'
-import logo from '../passlogo.svg'
-import { useTheme } from '@mui/material/styles'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
+  IconButton,
+} from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { MemberContext } from '../MemberContext';
+import { useState, useContext } from 'react';
+import logo from '../passlogo.svg';
+import { useTheme } from '@mui/material/styles';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import PasswordStrengthBar from 'react-password-strength-bar';
 
-export default function SignUp () {
+export default function SignUp() {
   const { API, setCookie, setUserAccount, authDomain, userDomain } =
-    useContext(MemberContext)
-  let navigate = useNavigate()
-  const theme = useTheme()
-  const [failedRegister, setFailedRegister] = useState(false)
-  const [userExists, setUserExists] = useState(false)
+    useContext(MemberContext);
+  let navigate = useNavigate();
+  const theme = useTheme();
+  const [failedRegister, setFailedRegister] = useState(false);
+  const [userExists, setUserExists] = useState(false);
+  const [failedEmail, setFailedEmail] = useState();
+  const [failedPassword, setFailedPassword] = useState();
   const [userInfo, setUserInfo] = useState({
     first_name: '',
     last_name: '',
     email: '',
     password: '',
-    rank: ''
-  })
-  const [toggle, setToggle] = useState(false)
+    rank: '',
+    flight: '',
+  });
+  const [toggle, setToggle] = useState(false);
 
-  const handleClickShowPassword = () => setToggle(!toggle)
+  //variables for checks for properly formated Email and Password/////////////////////
+  const validateEmail = new RegExp(
+    /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+  );
+  const validatePassword = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/);
 
-  const handleMouseDownPassword = () => setToggle(!toggle)
+  ////verifies that all fields are filled out and that email and password are properly formatted/////////
 
-  const postUser = () => {
-    console.log('posting user')
-    setFailedRegister(false)
-    setUserExists(false)
-    const { first_name, last_name, email, password, rank } = userInfo
+  const infoValidation = () => {
+    // setFailedEmail(!validateEmail.test(userInfo.email));
+    // setFailedEmail(!validatePassword.test(userInfo.password));
+    let tempFailedRegister = false;
+    validateEmail.test(userInfo.email)
+      ? setFailedEmail(false)
+      : setFailedEmail(true);
+    validatePassword.test(userInfo.password)
+      ? setFailedPassword(false)
+      : setFailedPassword(true);
+    const { first_name, last_name, email, password, rank, flight } = userInfo;
     if (
       first_name === '' ||
       last_name === '' ||
       email === '' ||
       password === '' ||
-      rank === ''
+      rank === '' ||
+      flight === ''
     ) {
-      setFailedRegister(true)
-      return
+      setFailedRegister(true);
+      tempFailedRegister = true;
     }
+    if (
+      tempFailedRegister ||
+      !validateEmail.test(userInfo.email) ||
+      !validatePassword.test(userInfo.password)
+    ) {
+      console.log('pw email or register is incorrect', true);
+      return true;
+    } else {
+      console.log('pw email or register is incorrect', false);
+      return false;
+    }
+  };
+
+  const handleClickShowPassword = () => setToggle(!toggle);
+  const handleMouseDownPassword = () => setToggle(!toggle);
+
+  //fetch for posting new user to database////////////////////////////
+  const postUser = () => {
+    console.log('posting user');
+    setFailedRegister(false);
+    setUserExists(false);
     fetch(`${API}/register`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify(userInfo)
+      body: JSON.stringify(userInfo),
     })
       .then(res => {
         // console.log(res.status);
         if (res.status === 409) {
-          setUserExists(true)
+          setUserExists(true);
         } else if (res.status === 201) {
-          return res.json()
+          return res.json();
         } else {
-          return res.json()
+          return res.json();
         }
       })
       .then(data => {
         if (data.cookie !== undefined) {
-          let cookieInfo = data.cookie
+          let cookieInfo = data.cookie;
           setCookie('user', JSON.stringify(data.user), {
             domain: userDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
-            secure: 'true'
-          })
+            secure: 'true',
+          });
 
           setCookie(cookieInfo[0], cookieInfo[1], {
             domain: authDomain,
             path: '/',
             maxAge: cookieInfo[2].maxAge,
             sameSite: 'None',
-            secure: 'true'
-          })
+            secure: 'true',
+          });
 
-          setUserAccount(data.user)
-          navigate('/')
+          setUserAccount(data.user);
+          navigate('/');
         }
-      })
-  }
+      });
+  };
+
+  //sumbit function that calls validation before posting user to ensure proper emails and passwords are entered/////////////
+
+  const validateAndSubmit = () => {
+    infoValidation() ? null : postUser();
+  };
 
   return (
     <Box
@@ -105,7 +147,7 @@ export default function SignUp () {
         top: 0,
         width: '100vw',
         height: '100vh',
-        backgroundColor: '#212121'
+        backgroundColor: '#212121',
       }}
     >
       <Container component='main' maxWidth='xs'>
@@ -115,7 +157,7 @@ export default function SignUp () {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 3
+            gap: 3,
           }}
         >
           <Box
@@ -136,6 +178,33 @@ export default function SignUp () {
               </Typography>
             </>
           )}
+          {/* {failedEmail && (
+            <>
+              <Typography
+                component='span'
+                variant='h5'
+                align='center'
+                color='error'
+              >
+                Please ensure email is valid.
+              </Typography>
+            </>
+          )} */}
+          {/* {failedPassword && (
+            <>
+              <Typography
+                component='span'
+                variant='h5'
+                align='center'
+                color='error'
+              >
+                Password must contain numbers
+                <br /> Password must contain uppercase letters
+                <br /> Password must have at least one @#$... symbol
+                <br /> Length must be greater than 8 characters
+              </Typography>
+            </>
+          )} */}
           {userExists && (
             <span>
               <Typography
@@ -156,14 +225,19 @@ export default function SignUp () {
                   : theme.palette.grey[800],
               borderRadius: 3,
               px: 4,
-              py: 2
+              py: 2,
             }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
-                  error={failedRegister}
+                  // error={failedRegister}
+                  error={failedEmail}
+                  helperText={
+                    !failedEmail ? '' : 'Please ensure email is valid.'
+                  }
                   required
+                  placeholder='ex. john.doe@example.com'
                   fullWidth
                   id='email'
                   label='Email'
@@ -174,12 +248,12 @@ export default function SignUp () {
                     backgroundColor:
                       theme.palette.mode === 'light'
                         ? 'white'
-                        : theme.palette.grey[900]
+                        : theme.palette.grey[900],
                   }}
                   onChange={e => {
                     setUserInfo(prev => {
-                      return { ...prev, email: e.target.value }
-                    })
+                      return { ...prev, email: e.target.value };
+                    });
                   }}
                 />
               </Grid>
@@ -188,6 +262,7 @@ export default function SignUp () {
                   error={failedRegister}
                   autoComplete='given-name'
                   name='firstname'
+                  placeholder='John'
                   required
                   fullWidth
                   id='firstname'
@@ -196,12 +271,12 @@ export default function SignUp () {
                     backgroundColor:
                       theme.palette.mode === 'light'
                         ? 'white'
-                        : theme.palette.grey[900]
+                        : theme.palette.grey[900],
                   }}
                   onChange={e => {
                     setUserInfo(prev => {
-                      return { ...prev, first_name: e.target.value }
-                    })
+                      return { ...prev, first_name: e.target.value };
+                    });
                   }}
                 />
               </Grid>
@@ -213,16 +288,17 @@ export default function SignUp () {
                   id='lastname'
                   label='Last Name'
                   name='lastname'
+                  placeholder='Doe'
                   sx={{
                     backgroundColor:
                       theme.palette.mode === 'light'
                         ? 'white'
-                        : theme.palette.grey[900]
+                        : theme.palette.grey[900],
                   }}
                   onChange={e => {
                     setUserInfo(prev => {
-                      return { ...prev, last_name: e.target.value }
-                    })
+                      return { ...prev, last_name: e.target.value };
+                    });
                   }}
                 />
               </Grid>
@@ -234,18 +310,18 @@ export default function SignUp () {
                   id='rank'
                   label='Rank'
                   name='rank'
-                  defaultValue=''
+                  defaultValue='e1'
                   select
                   sx={{
                     backgroundColor:
                       theme.palette.mode === 'light'
                         ? 'white'
-                        : theme.palette.grey[900]
+                        : theme.palette.grey[900],
                   }}
                   onChange={e => {
                     setUserInfo(prev => {
-                      return { ...prev, rank: e.target.value }
-                    })
+                      return { ...prev, rank: e.target.value };
+                    });
                   }}
                 >
                   <MenuItem value='e1'>AB</MenuItem>
@@ -259,7 +335,7 @@ export default function SignUp () {
                   <MenuItem value='e9'>CMSgt</MenuItem>
                   <MenuItem value='o1'>2nd Lt</MenuItem>
                   <MenuItem value='o2'>1st Lt</MenuItem>
-                  <MenuItem value='o3'>Cpt</MenuItem>
+                  <MenuItem value='o3'>Capt</MenuItem>
                   <MenuItem value='o4'>Maj</MenuItem>
                   <MenuItem value='o5'>Lt. Col</MenuItem>
                   <MenuItem value='o6'>Colonel</MenuItem>
@@ -268,7 +344,36 @@ export default function SignUp () {
               <Grid item xs={6}>
                 <TextField
                   error={failedRegister}
+                  fullWidth
+                  //required
+                  id='flight'
+                  label='Flight'
+                  name='flight'
+                  defaultValue='a1'
+                  select
+                  sx={{
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                  }}
+                  onChange={e => {
+                    setUserInfo(prev => {
+                      return { ...prev, flight: e.target.value };
+                    });
+                  }}
+                >
+                  <MenuItem value='a1'>Alpha-1</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  error={failedPassword}
+                  helperText={
+                    !failedPassword ? '' : 'Please use a valid password'
+                  }
                   required
+                  placeholder='Min. 8 characters'
                   fullWidth
                   name='password'
                   label='Password'
@@ -292,25 +397,42 @@ export default function SignUp () {
                           )}
                         </IconButton>
                       </InputAdornment>
-                    )
+                    ),
                   }}
                   sx={{
                     backgroundColor:
                       theme.palette.mode === 'light'
                         ? 'white'
-                        : theme.palette.grey[900]
+                        : theme.palette.grey[900],
                   }}
                   onChange={e => {
                     setUserInfo(prev => {
-                      return { ...prev, password: e.target.value }
-                    })
+                      return { ...prev, password: e.target.value };
+                    });
                   }}
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') {
-                      postUser()
-                    }
-                  }}
+                  // onKeyPress={event => {
+                  //   if (event.key === 'Enter') {
+                  //     postUser();
+                  //   }
+                  // }}
                 />
+                <PasswordStrengthBar
+                  minLength={8}
+                  password={userInfo.password}
+                />
+                {failedPassword && (
+                  <Box sx={{ display: 'flex', width: '100%' }}>
+                    <ul>
+                      <li>Password must contain numbers</li>
+                      <li> Password must contain uppercase letters </li>
+                      <li>
+                        {' '}
+                        Password must have at least one special character
+                      </li>
+                      <li> Length must be greater than 8 characters</li>
+                    </ul>
+                  </Box>
+                )}
               </Grid>
             </Grid>
           </Box>
@@ -322,9 +444,10 @@ export default function SignUp () {
             size='medium'
             sx={{
               borderRadius: '30px',
-              width: 200
+              width: 200,
             }}
-            onClick={() => postUser()}
+            // onClick={() => infoValidation()}
+            onClick={() => validateAndSubmit()}
           >
             Sign Up
           </Button>
@@ -337,7 +460,7 @@ export default function SignUp () {
               borderRadius: '30px',
               width: 200,
               display: 'flex',
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
             onClick={() => navigate('/login')}
           >
@@ -346,5 +469,5 @@ export default function SignUp () {
         </Box>
       </Container>
     </Box>
-  )
+  );
 }

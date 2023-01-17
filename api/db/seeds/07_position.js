@@ -4,7 +4,7 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex('position').del()
+  await knex('position').del();
   await knex('position').insert([
     {
       post_id: 1,
@@ -13,7 +13,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 2,
@@ -22,7 +22,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 3,
@@ -31,7 +31,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 4,
@@ -40,7 +40,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 5,
@@ -49,7 +49,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 6,
@@ -58,7 +58,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 7,
@@ -67,7 +67,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 8,
@@ -76,7 +76,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 9,
@@ -85,7 +85,7 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 3,
       start_datetime: '2023-06-10T06:00',
-      end_datetime: '2023-06-10T18:00'
+      end_datetime: '2023-06-10T18:00',
     },
     {
       post_id: 1,
@@ -94,7 +94,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 2,
@@ -103,7 +103,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 3,
@@ -112,7 +112,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 4,
@@ -121,7 +121,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 5,
@@ -130,7 +130,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 6,
@@ -139,7 +139,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 7,
@@ -148,7 +148,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 8,
@@ -157,7 +157,7 @@ exports.seed = async function (knex) {
       shift: 'mids',
       flight_assigned: 3,
       start_datetime: '2023-06-10T18:00',
-      end_datetime: '2023-06-11T06:00'
+      end_datetime: '2023-06-11T06:00',
     },
     {
       post_id: 1,
@@ -166,7 +166,25 @@ exports.seed = async function (knex) {
       shift: 'days',
       flight_assigned: 1,
       start_datetime: '2023-06-11T06:00',
-      end_datetime: '2023-06-11T18:00'
-    }
-  ])
-}
+      end_datetime: '2023-06-11T18:00',
+    },
+    {
+      post_id: 2,
+      man_req: 1,
+      cert_id: 1,
+      shift: 'mids',
+      flight_assigned: 5,
+      start_datetime: '2023-06-11T18:00',
+      end_datetime: '2023-06-12T06:00',
+    },
+    {
+      post_id: 2,
+      man_req: 1,
+      cert_id: 1,
+      shift: 'swings',
+      flight_assigned: 2,
+      start_datetime: '2023-06-11T12:00',
+      end_datetime: '2023-06-12T00:00',
+    },
+  ]);
+};
