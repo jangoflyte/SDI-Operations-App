@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { MemberContext } from "../MemberContext";
+import React, { useContext, useEffect, useState } from 'react'
+import { MemberContext } from '../MemberContext'
 import {
   Stack,
   Box,
@@ -18,19 +18,19 @@ import {
   Paper,
   Divider,
   Badge,
-  Tooltip,
-} from "@mui/material";
-import "../styles/Card.css";
-import { useNavigate } from "react-router-dom";
-import { Filter } from "./Filter";
-import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
-import SecurityIcon from "@mui/icons-material/Security";
-import { WeaponQuals } from "../00 - Features/WeaponQuals";
-import { useMemo } from "react";
-import { useTheme } from "@mui/material/styles";
+  Tooltip
+} from '@mui/material'
+import '../styles/Card.css'
+import { useNavigate } from 'react-router-dom'
+import { Filter } from './Filter'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
+import SecurityIcon from '@mui/icons-material/Security'
+import { WeaponQuals } from '../00 - Features/WeaponQuals'
+import { useMemo } from 'react'
+import { useTheme } from '@mui/material/styles'
 
-const BasicCard = (props) => {
-  const { pageTrigger, filter, setFilter } = props;
+const BasicCard = props => {
+  const { pageTrigger, filter, setFilter } = props
   const {
     setMember,
     API,
@@ -38,130 +38,130 @@ const BasicCard = (props) => {
     setTriggerFetch,
     userAccount,
     page,
-    setPage,
-  } = useContext(MemberContext);
-  const navigate = useNavigate();
-  const [idArray, setIdArray] = useState([]);
+    setPage
+  } = useContext(MemberContext)
+  const navigate = useNavigate()
+  const [idArray, setIdArray] = useState([])
   //const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openItem, setOpenItem] = React.useState(false);
-  const theme = useTheme();
+  const [rowsPerPage, setRowsPerPage] = useState(5)
+  const [openItem, setOpenItem] = React.useState(false)
+  const theme = useTheme()
 
   // filter check helper functions
-  const certificationCheck = (user) => {
+  const certificationCheck = user => {
     if (filter.certification.length > 0) {
-      return filter.certification.includes(user.cert_id);
+      return filter.certification.includes(user.cert_id)
     } else {
-      return true;
+      return true
     }
-  };
-  const weaponCheck = (user) => {
+  }
+  const weaponCheck = user => {
     if (filter.weapon.length > 0) {
-      return user.weapons.some((wep) => {
+      return user.weapons.some(wep => {
         // console.log('weapon filter', filter.weapon);
-        return filter.weapon.some((filterWep) => {
-          return filterWep === wep.weapon;
-        });
+        return filter.weapon.some(filterWep => {
+          return filterWep === wep.weapon
+        })
         // return filter.weapon.includes(wep.weapon);
-      });
+      })
     } else {
-      return true;
+      return true
     }
-  };
-  const flightCheck = (user) => {
-    console.log("this is user ", user);
+  }
+  const flightCheck = user => {
+    console.log('this is user ', user)
     if (filter.flight.length > 0) {
-      return filter.flight.some((flight) => {
+      return filter.flight.some(flight => {
         // console.log('this is flight ', flight);
-        return user.flight !== null ? user.flight.flight === flight : false;
-      });
+        return user.flight !== null ? user.flight.flight === flight : false
+      })
     } else {
-      return true;
+      return true
     }
-  };
-  const armingCheck = (user) => {
+  }
+  const armingCheck = user => {
     if (filter.arming_status.length > 0) {
-      return filter.arming_status.includes(user.weapon_arming.toString());
+      return filter.arming_status.includes(user.weapon_arming.toString())
     } else {
-      return true;
+      return true
     }
-  };
-  const adminCheck = (user) => {
+  }
+  const adminCheck = user => {
     if (filter.admin !== null) {
-      return user.admin === filter.admin;
+      return user.admin === filter.admin
     } else {
-      return true;
+      return true
     }
-  };
+  }
 
   // filter users
   let filteredUsers = useMemo(() => {
     return usersArray.filter(
-      (user) =>
+      user =>
         certificationCheck(user) &&
         weaponCheck(user) &&
         armingCheck(user) &&
         adminCheck(user) &&
         flightCheck(user)
-    );
-  }, [usersArray, filter]);
+    )
+  }, [usersArray, filter])
 
   useEffect(() => {
-    setPage(0);
-  }, [pageTrigger]);
+    setPage(0)
+  }, [pageTrigger])
 
   const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
+    setOpenItem(true)
+  }
 
   const handleItemClose = () => {
-    setOpenItem(false);
-  };
+    setOpenItem(false)
+  }
 
-  const onDataPageChange = (event, page) => setPage(page - 1);
+  const onDataPageChange = (event, page) => setPage(page - 1)
 
-  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangePage = (event, newPage) => setPage(newPage)
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10))
+    setPage(0)
+  }
 
-  const handleCheck = (props) => {
-    const { event, member } = props;
+  const handleCheck = props => {
+    const { event, member } = props
     if (event.target.checked) {
-      setIdArray((curr) => [...curr, member.id]);
+      setIdArray(curr => [...curr, member.id])
     } else {
-      setIdArray(idArray.filter((id) => id !== member.id));
+      setIdArray(idArray.filter(id => id !== member.id))
     }
-  };
+  }
 
-  const navigateToMember = (member) => {
+  const navigateToMember = member => {
     // console.log('current member', member);
-    setMember(member);
-    navigate(`/sfmembers/${member.id}`);
-  };
+    setMember(member)
+    navigate(`/sfmembers/${member.id}`)
+  }
 
-  const handleDeleteUser = (inputArray) => {
+  const handleDeleteUser = inputArray => {
     for (let userId of inputArray) {
       fetch(`${API}/deleteuser/${userId}`, {
-        method: "DELETE",
-        credentials: "include",
-        redirect: "follow",
+        method: 'DELETE',
+        credentials: 'include',
+        redirect: 'follow'
       })
-        .then((res) => res.json())
+        .then(res => res.json())
         .then(() => {
-          setTriggerFetch((curr) => !curr);
-          handleItemClose();
-          setPage(0);
+          setTriggerFetch(curr => !curr)
+          handleItemClose()
+          setPage(0)
         })
-        .then(navigate("/sfmembers"))
+        .then(navigate('/sfmembers'))
 
-        .catch((err) => {
-          console.log("Error: ", err);
-        });
+        .catch(err => {
+          console.log('Error: ', err)
+        })
     }
-  };
+  }
 
   return (
     <Paper
@@ -169,79 +169,79 @@ const BasicCard = (props) => {
       sx={{
         mx: 10,
         my: 5,
-        borderRadius: 3,
+        borderRadius: 3
       }}
     >
       <Box sx={{ px: 5, py: 5 }}>
         <Stack
-          component="span"
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-          sx={{ display: "flex" }}
+          component='span'
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
+          sx={{ display: 'flex' }}
         >
-          <Box justifyContent="left" pb={2} sx={{ display: "flex" }}>
-            <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+          <Box justifyContent='left' pb={2} sx={{ display: 'flex' }}>
+            <Typography variant='h4' sx={{ fontWeight: 'bold' }}>
               Members
             </Typography>
           </Box>
 
-          <Box justifyContent="right" sx={{ display: "flex" }}>
+          <Box justifyContent='right' sx={{ display: 'flex' }}>
             <Filter filter={filter} setFilter={setFilter} />
           </Box>
         </Stack>
         <Divider />
         <Stack
-          component="span"
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
+          component='span'
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
           pt={2}
-          sx={{ display: "flex" }}
+          sx={{ display: 'flex' }}
         >
-          <Box sx={{ display: "flex", justifyContent: "center", width: "5%" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', width: '5%' }}>
             {/* leave empty */}
             <div></div>
           </Box>
           <Box
-            alignItems="center"
+            alignItems='center'
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "22%",
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%'
             }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>Rank</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
           </Box>
           <Box
-            alignItems="center"
+            alignItems='center'
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "22%",
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%'
             }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>Name</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
           </Box>
           <Box
-            alignItems="center"
+            alignItems='center'
             sx={{
-              display: "flex",
-              justifyContent: "center",
-              width: "22%",
+              display: 'flex',
+              justifyContent: 'center',
+              width: '22%'
             }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>Role</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
           </Box>
           <Box
-            sx={{ width: "22%", display: "flex", justifyContent: "flex-end" }}
+            sx={{ width: '22%', display: 'flex', justifyContent: 'flex-end' }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>Certifications</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>Certifications</Typography>
           </Box>
           <Box
-            sx={{ width: "22%", display: "flex", justifyContent: "flex-end" }}
+            sx={{ width: '22%', display: 'flex', justifyContent: 'flex-end' }}
           >
-            <Typography sx={{ fontWeight: "bold" }}>
+            <Typography sx={{ fontWeight: 'bold' }}>
               Weapon Qualification
             </Typography>
           </Box>
@@ -253,37 +253,37 @@ const BasicCard = (props) => {
             .map((member, index) => (
               <Stack
                 key={index}
-                className="card"
-                direction="row"
-                component="span"
-                alignItems="center"
+                className='card'
+                direction='row'
+                component='span'
+                alignItems='center'
                 sx={{
                   borderRadius: 3,
-                  display: "flex",
-                  justifyContent: "space-between",
+                  display: 'flex',
+                  justifyContent: 'space-between'
                 }}
               >
                 <Box
-                  alignItems="center"
+                  alignItems='center'
                   sx={{
-                    display: "flex",
-                    width: "5%",
-                    justifyContent: "center",
+                    display: 'flex',
+                    width: '5%',
+                    justifyContent: 'center'
                   }}
                 >
                   <Checkbox
-                    label="Name"
+                    label='Name'
                     checked={idArray.includes(member.id)}
-                    onChange={(e) => handleCheck({ event: e, member: member })}
+                    onChange={e => handleCheck({ event: e, member: member })}
                   />
                 </Box>
 
                 <Box
-                  alignItems="center"
+                  alignItems='center'
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "22%",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '22%'
                   }}
                 >
                   <Typography>
@@ -291,19 +291,19 @@ const BasicCard = (props) => {
                   </Typography>
                 </Box>
                 <Box
-                  alignItems="center"
+                  alignItems='center'
                   sx={{
-                    width: "22%",
+                    width: '22%'
                   }}
                 >
                   <Button fullWidth sx={{ borderRadius: 10 }}>
                     <Box
-                      alignItems="center"
+                      alignItems='center'
                       sx={{
-                        display: "flex",
-                        justifyContent: "start",
-                        width: "100%",
-                        gap: 1,
+                        display: 'flex',
+                        justifyContent: 'start',
+                        width: '100%',
+                        gap: 1
                       }}
                       onClick={() => navigateToMember(member)}
                     >
@@ -311,68 +311,68 @@ const BasicCard = (props) => {
                       <Tooltip
                         title={
                           member.status === null
-                            ? "Other/Unavailable"
+                            ? 'Other/Unavailable'
                             : member.status
                         }
                       >
                         <Badge
-                          overlap="circular"
+                          overlap='circular'
                           anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "right",
+                            vertical: 'bottom',
+                            horizontal: 'right'
                           }}
-                          variant="dot"
+                          variant='dot'
                           sx={{
-                            "& .MuiBadge-badge": {
+                            '& .MuiBadge-badge': {
                               // backgroundColor: '#44b700',
                               // color: '#44b700',
                               backgroundColor:
                                 member.status === null ||
-                                member.status !== "Available"
-                                  ? "#EE4B2B"
-                                  : "#44b700",
+                                member.status !== 'Available'
+                                  ? '#EE4B2B'
+                                  : '#44b700',
                               color:
                                 member.status === null ||
-                                member.status !== "Available"
-                                  ? "#EE4B2B"
-                                  : "#44b700",
+                                member.status !== 'Available'
+                                  ? '#EE4B2B'
+                                  : '#44b700',
                               // member.status !== null && member.status !== 'Available'
                               boxShadow: `0 0 0 1px #fafafafa`,
-                              "&::after": {
-                                position: "absolute",
+                              '&::after': {
+                                position: 'absolute',
                                 top: 0,
                                 left: 0,
-                                width: "100%",
-                                height: "100%",
-                                borderRadius: "50%",
-                                animation: "ripple 1.2s infinite ease-in-out",
-                                border: "1px solid currentColor",
-                                content: '""',
-                              },
-                            },
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '50%',
+                                animation: 'ripple 1.2s infinite ease-in-out',
+                                border: '1px solid currentColor',
+                                content: '""'
+                              }
+                            }
                           }}
                         >
                           <Avatar
                             sx={{
-                              cursor: "pointer",
+                              cursor: 'pointer',
                               // mr: 1,
                               bgcolor: member.avatar_background,
                               color:
-                                theme.palette.mode === "light"
-                                  ? "inherit"
-                                  : "white",
+                                theme.palette.mode === 'light'
+                                  ? 'inherit'
+                                  : 'white'
                             }}
                             src={member.avatar}
-                            alt="avatar"
-                            size="small"
+                            alt='avatar'
+                            size='small'
                             onClick={() => navigateToMember(member)}
                           >
                             {member.first_name
-                              ? member.first_name.charAt(0).toUpperCase()
-                              : null}
+                              ? `${member.first_name.charAt(0).toUpperCase()}`
+                              : `N`}
                             {member.last_name
-                              ? member.last_name.charAt(0).toUpperCase()
-                              : null}
+                              ? `${member.last_name.charAt(0).toUpperCase()}`
+                              : `A`}
                           </Avatar>
                         </Badge>
                       </Tooltip>
@@ -380,13 +380,13 @@ const BasicCard = (props) => {
                       <Typography
                         onClick={() => navigateToMember(member)}
                         sx={{
-                          cursor: "pointer",
-                          fontWeight: "bold",
-                          color: "#6D7AE5",
-                          ml: 1,
+                          cursor: 'pointer',
+                          fontWeight: 'bold',
+                          color: '#6D7AE5',
+                          ml: 1
                         }}
                       >
-                        {" "}
+                        {' '}
                         {member.last_name
                           ? `${member.last_name
                               .charAt(0)
@@ -401,11 +401,11 @@ const BasicCard = (props) => {
                   </Button>
                 </Box>
                 <Box
-                  alignItems="center"
+                  alignItems='center'
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    width: "22%",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    width: '22%'
                   }}
                 >
                   {member.admin === true ? (
@@ -416,42 +416,42 @@ const BasicCard = (props) => {
                 </Box>
 
                 <Box
-                  justifyContent="right"
+                  justifyContent='right'
                   sx={{
-                    display: "flex",
-                    width: "22%",
+                    display: 'flex',
+                    width: '22%'
                   }}
                 >
                   {member.certs.length === 0 ? (
                     <Chip
                       icon={<WorkspacePremiumIcon />}
-                      label="No Certs"
-                      color="primary"
-                      sx={{ color: "white" }}
+                      label='No Certs'
+                      color='primary'
+                      sx={{ color: 'white' }}
                     />
                   ) : (
                     <Chip
                       icon={<WorkspacePremiumIcon />}
-                      label={member.certs.map((cert) => cert.cert)}
-                      color="success"
-                      sx={{ color: "white" }}
+                      label={member.certs.map(cert => cert.cert)}
+                      color='success'
+                      sx={{ color: 'white' }}
                     />
                   )}
                 </Box>
 
                 <Box
-                  justifyContent="right"
+                  justifyContent='right'
                   sx={{
-                    display: "flex",
-                    width: "22%",
+                    display: 'flex',
+                    width: '22%'
                   }}
                 >
                   {member.weapons.length === 0 ? (
                     <Chip
-                      color="primary"
+                      color='primary'
                       icon={<SecurityIcon />}
-                      label="No Weapons"
-                      sx={{ color: "white" }}
+                      label='No Weapons'
+                      sx={{ color: 'white' }}
                     />
                   ) : member.weapons.length > 2 ? (
                     <WeaponQuals weapon={member.weapons} />
@@ -461,8 +461,8 @@ const BasicCard = (props) => {
                         key={index}
                         icon={<SecurityIcon />}
                         label={weapon.weapon.toUpperCase()}
-                        color="secondary"
-                        sx={{ m: 1 / 4, color: "white" }}
+                        color='secondary'
+                        sx={{ m: 1 / 4, color: 'white' }}
                       />
                     ))
                   )}
@@ -472,20 +472,20 @@ const BasicCard = (props) => {
         </Stack>
         <Divider />
         <Stack
-          component="span"
-          direction="row"
-          alignItems="center"
+          component='span'
+          direction='row'
+          alignItems='center'
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
+            display: 'flex',
+            justifyContent: 'space-between'
           }}
         >
           <Box>
             {userAccount !== null && userAccount.admin ? (
               <Button
-                variant="contained"
-                size="medium"
-                sx={{ borderRadius: "30px", bgcolor: "#8B0000" }}
+                variant='contained'
+                size='medium'
+                sx={{ borderRadius: '30px', bgcolor: '#8B0000' }}
                 onClick={handleItemClickOpen}
               >
                 Delete Users
@@ -494,14 +494,14 @@ const BasicCard = (props) => {
             <Dialog
               open={openItem}
               onClose={handleItemClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
             >
-              <DialogTitle id="alert-dialog-title">
-                {"Are You Sure You Want to Delete?"}
+              <DialogTitle id='alert-dialog-title'>
+                {'Are You Sure You Want to Delete?'}
               </DialogTitle>
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText id='alert-dialog-description'>
                   Once the Users are Deleted, they cannot be recovered. Are you
                   sure you want to delete these Users from the Database?
                 </DialogContentText>
@@ -510,14 +510,14 @@ const BasicCard = (props) => {
                 <Button onClick={handleItemClose}>Cancel</Button>
                 <Button
                   sx={{
-                    borderRadius: "30px",
-                    color: "red",
-                    mr: 2,
+                    borderRadius: '30px',
+                    color: 'red',
+                    mr: 2
                   }}
                   onClick={() => {
-                    const confirmation = true;
+                    const confirmation = true
                     if (confirmation) {
-                      handleDeleteUser(idArray);
+                      handleDeleteUser(idArray)
                     }
                   }}
                   autoFocus
@@ -532,13 +532,13 @@ const BasicCard = (props) => {
               count={Math.ceil(filteredUsers.length / rowsPerPage)}
               onChange={onDataPageChange}
               page={page + 1}
-              color="secondary"
+              color='secondary'
             />
           </Box>
           <Box>
             <TablePagination
               rowsPerPageOptions={[5, 10, 20, 30, 50]}
-              component="div"
+              component='div'
               count={filteredUsers.length}
               rowsPerPage={rowsPerPage}
               page={page}
@@ -549,7 +549,7 @@ const BasicCard = (props) => {
         </Stack>
       </Box>
     </Paper>
-  );
-};
+  )
+}
 
-export default BasicCard;
+export default BasicCard

@@ -183,6 +183,7 @@ export const RowTableSched = props => {
                               userRow={userRow}
                               delSchedule={row.delSchedule}
                               shift={row.shift}
+                              row={row}
                             />
                             {`${userRow.role}`}
                           </span>

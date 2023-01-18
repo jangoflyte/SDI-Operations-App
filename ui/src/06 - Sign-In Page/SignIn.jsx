@@ -7,7 +7,8 @@ import {
   Container,
   InputAdornment,
   IconButton,
-  LinearProgress
+  LinearProgress,
+  Paper
 } from '@mui/material'
 import { MemberContext } from '../MemberContext'
 import { useNavigate } from 'react-router-dom'
@@ -121,6 +122,19 @@ export default function SignIn () {
           >
             <img src={logo} alt='logo' style={{ width: '20rem' }} />
           </Box>
+          <Box>
+            <Typography
+              variant='h4'
+              sx={{
+                color:
+                  theme.palette.mode === 'light'
+                    ? '#FAFAFF'
+                    : theme.palette.grey[800]
+              }}
+            >
+              Login to PASS Account
+            </Typography>
+          </Box>
           {failedLogin && (
             <span>
               <Typography
@@ -133,7 +147,7 @@ export default function SignIn () {
               </Typography>
             </span>
           )}
-          <Box
+          <Paper
             sx={{
               backgroundColor:
                 theme.palette.mode === 'light'
@@ -214,7 +228,7 @@ export default function SignIn () {
                 label='Show Password'
               />
             </FormGroup> */}
-          </Box>
+          </Paper>
 
           <Button
             fullWidth

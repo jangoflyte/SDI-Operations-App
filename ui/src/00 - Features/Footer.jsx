@@ -1,27 +1,35 @@
-import React from 'react';
-import { Box, Container, Typography } from '@mui/material';
+import React from 'react'
+import { Box, Container, Typography, Paper } from '@mui/material'
 
 export const Footer = () => {
   return (
-    <Container maxWidth='lg'>
-      <Box
-        sx={{
-          flexGrow: 1,
-          justifyContent: 'center',
-          display: 'flex',
-          mb: 2,
-          mt: 3,
-        }}
-      >
-        <Typography
-          variant='caption'
+    <Paper
+      sx={{
+        marginTop: 'calc(10% + 60px)',
+        width: '100%',
+        position: 'fixed',
+        bottom: 0,
+        width: '100%'
+      }}
+    >
+      <Container maxWidth='lg'>
+        <Box
           sx={{
-            fontWeight: 'bold',
+            flexGrow: 1,
+            justifyContent: 'center',
+            display: 'flex'
           }}
         >
-          Post Assignment Scheduling System
-        </Typography>
-      </Box>
-    </Container>
-  );
-};
+          <Typography
+            variant='caption'
+            sx={{
+              fontWeight: 'bold'
+            }}
+          >
+            © Post Assignment Scheduling System
+          </Typography>
+        </Box>
+      </Container>
+    </Paper>
+  )
+}

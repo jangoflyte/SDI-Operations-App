@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../MemberContext';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../MemberContext'
 import {
   Box,
   Typography,
@@ -8,58 +8,60 @@ import {
   Icon,
   Tooltip,
   ListItem,
-  IconButton,
-} from '@mui/material/';
-import CircleIcon from '@mui/icons-material/Circle';
-import PrintIcon from '@mui/icons-material/Print';
-import { useNavigate } from 'react-router-dom';
+  IconButton
+} from '@mui/material/'
+import CircleIcon from '@mui/icons-material/Circle'
+import PrintIcon from '@mui/icons-material/Print'
+import { useNavigate } from 'react-router-dom'
 //import { useTheme } from '@mui/material/styles';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 
 export const Roster = props => {
-  const { rows, positions, schedDate } = props;
-  const { data } = useContext(MemberContext);
-  const [roster, setRoster] = useState([]);
-  const [scheduledUser, setScheduledUser] = useState([]);
-  const [unavailable, setUnavailable] = useState([]);
-  const [flightName, setFlightName] = useState('');
+  const { rows, positions, schedDate } = props
+  const { data } = useContext(MemberContext)
+  const [roster, setRoster] = useState([])
+  const [scheduledUser, setScheduledUser] = useState([])
+  const [unavailable, setUnavailable] = useState([])
+  const [flightName, setFlightName] = useState('')
 
   useEffect(() => {
     // grabs user id for scheduled users
     // console.log('inside roster this is row, ', rows);
-    let posted = [];
+    let posted = []
     rows.forEach(row => {
-      const position = row.name.post_name;
+      const position = row.name.post_name
       row.users.forEach(user => {
-        if (user.noUser) return;
-        posted.push({ user: user.user_info[0].id, position: position });
-      });
-    });
-    setScheduledUser(posted);
+        if (user.noUser) return
+        posted.push({ user: user.user_info[0].id, position: position })
+      })
+    })
+    setScheduledUser(posted)
 
     // filters out roster for current flight from user data
     if (positions.length > 0) {
-      let unavailablePersonnel = [];
+      let unavailablePersonnel = []
       let currentPersonnel = data.filter(user => {
         if (user.flight === null) {
-          return false;
+          return false
         }
-        if (user.flight.id === rows[0].position.flight_assigned) {
-          if (
-            user.status === null ||
-            user.status.toLowerCase() !== 'available'
-          ) {
-            unavailablePersonnel.push(user);
-            return false;
+        if (rows.length > 0) {
+          if (user.flight.id === rows[0].position.flight_assigned) {
+            if (
+              user.status === null ||
+              user.status.toLowerCase() !== 'available'
+            ) {
+              unavailablePersonnel.push(user)
+              return false
+            }
+            return true
           }
-          return true;
         }
-      });
-      setRoster(currentPersonnel);
-      setUnavailable(unavailablePersonnel);
+      })
+      setRoster(currentPersonnel)
+      setUnavailable(unavailablePersonnel)
     }
-  }, [rows, positions]);
+  }, [rows, positions])
   useEffect(() => {
     setFlightName(
       roster.length > 0
@@ -69,65 +71,65 @@ export const Roster = props => {
         ? unavailable[0].flight.flight.charAt(0).toUpperCase() +
           unavailable[0].flight.flight.slice(1)
         : null
-    );
-  }, [roster, rows, schedDate]);
+    )
+  }, [roster, rows, schedDate])
 
   //need to add swings
   const shiftTime =
     rows.length > 0 &&
     `${rows[0].position.start_datetime
       .split('T')[1]
-      .slice(0, 5)}-${rows[0].position.end_datetime.split('T')[1].slice(0, 5)}`;
+      .slice(0, 5)}-${rows[0].position.end_datetime.split('T')[1].slice(0, 5)}`
 
   const handleDownloadTable = () => {
-    const pdf = new jsPDF();
+    const pdf = new jsPDF()
     //pdf.text('Hello world!', 10, 10);
-    var head = [['Post', 'Position', 'Member', 'Weapon', 'Cert']];
+    var head = [['Post', 'Position', 'Member', 'Weapon', 'Cert']]
     //pdf.autoTable({ html: '#table' });
 
-    let tableBody = [];
-    console.log('rows', rows);
+    let tableBody = []
+    console.log('rows', rows)
 
     rows.forEach(row => {
       let postUsers = row.users.map(user => {
         if (user.user_info === undefined)
-          return [row.name.post_name, 'N/A', 'No one posted', 'N/A', 'N/A'];
+          return [row.name.post_name, 'N/A', 'No one posted', 'N/A', 'N/A']
         let workingRow = [
-          `${user.user_info[0].first_name} ${user.user_info[0].last_name}`,
-        ];
-        let wepResults = '';
+          `${user.user_info[0].first_name} ${user.user_info[0].last_name}`
+        ]
+        let wepResults = ''
         for (let wep of user.user_info[0].weapons) {
           if (wepResults.length > 0) {
-            wepResults += `, ${wep.weapon}`;
+            wepResults += `, ${wep.weapon}`
           } else {
-            wepResults += `${wep.weapon}`;
+            wepResults += `${wep.weapon}`
           }
         }
-        workingRow.push(wepResults);
-        let certResults = '';
+        workingRow.push(wepResults)
+        let certResults = ''
         for (let cert of user.user_info[0].certs) {
           if (certResults.length > 0) {
-            certResults += `, ${cert.cert}`;
+            certResults += `, ${cert.cert}`
           } else {
-            certResults += `${cert.cert}`;
+            certResults += `${cert.cert}`
           }
         }
-        workingRow.push(certResults);
-        workingRow.unshift(user.role);
-        workingRow.unshift(row.name.post_name);
-        return workingRow;
-      });
+        workingRow.push(certResults)
+        workingRow.unshift(user.role)
+        workingRow.unshift(row.name.post_name)
+        return workingRow
+      })
       for (let userRow of postUsers) {
-        console.log(userRow);
-        tableBody.push(userRow);
+        console.log(userRow)
+        tableBody.push(userRow)
       }
-    });
+    })
 
-    console.log('body: ', tableBody);
-    pdf.text(`Schedule for: ${schedDate.toDateString()}`, 10, 10);
-    pdf.autoTable({ head: head, body: tableBody });
-    pdf.save('schedule.pdf');
-  };
+    console.log('body: ', tableBody)
+    pdf.text(`Schedule for: ${schedDate.toDateString()}`, 10, 10)
+    pdf.autoTable({ head: head, body: tableBody })
+    pdf.save('schedule.pdf')
+  }
 
   return (
     <Box sx={{ borderRadius: '5px', width: '120%', mb: 1 }} p={2}>
@@ -166,7 +168,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'left',
-            width: '20%',
+            width: '20%'
           }}
         >
           <Typography sx={{ fontWeight: 'bold', ml: 5.6 }}>Name</Typography>
@@ -177,7 +179,7 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'center',
-            width: '20%',
+            width: '20%'
           }}
         >
           <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
@@ -188,16 +190,16 @@ export const Roster = props => {
           sx={{
             display: 'flex',
             justifyContent: 'right',
-            width: '30%',
+            width: '30%'
           }}
         >
-          <Typography sx={{ fontWeight: 'bold' }}>Status</Typography>
+          <Typography sx={{ fontWeight: 'bold', mr: 2 }}>Status</Typography>
         </Box>
       </Stack>
 
       {roster.length === 0 ? (
         <Typography variant='caption' mt={1}>
-          No Homies
+          No Personnel Available
         </Typography>
       ) : (
         <RosterPeople users={roster} scheduledUser={scheduledUser} />
@@ -205,25 +207,25 @@ export const Roster = props => {
 
       <Divider sx={{ mb: 2 }} />
       <Typography variant='caption' mt={1}>
-        Currently Unavailable Homies
+        Currently Unavailable Personnel
       </Typography>
 
       <RosterPeople users={unavailable} scheduledUser={scheduledUser} />
     </Box>
-  );
-};
+  )
+}
 
 const RosterPeople = props => {
-  const { users, scheduledUser } = props;
-  const navigate = useNavigate();
+  const { users, scheduledUser } = props
+  const navigate = useNavigate()
   //const theme = useTheme();
 
   //console.log(users);
 
   const navigateToMember = member => {
-    console.log('current member', member);
-    navigate(`/sfmembers/${member}`);
-  };
+    console.log('current member', member)
+    navigate(`/sfmembers/${member}`)
+  }
 
   return (
     <Box sx={{ width: '110%' }}>
@@ -252,7 +254,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'left',
-              width: '5%',
+              width: '5%'
             }}
           >
             <Icon>
@@ -273,7 +275,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'left',
-              width: '20%',
+              width: '20%'
             }}
           >
             <Tooltip title='Go to Account'>
@@ -308,7 +310,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '20%',
+              width: '20%'
             }}
           >
             {user.status === 'Available' ? (
@@ -325,7 +327,7 @@ const RosterPeople = props => {
             sx={{
               display: 'flex',
               justifyContent: 'right',
-              width: '30%',
+              width: '30%'
             }}
           >
             {user.status === 'Available' ? (
@@ -352,5 +354,5 @@ const RosterPeople = props => {
         // </Stack>
       ))}
     </Box>
-  );
-};
+  )
+}
