@@ -163,7 +163,7 @@ export default function SignUp () {
         backgroundColor: '#212121'
       }}
     >
-      <Container component='main'></Container>
+      <Container component='main'>
         <Box
           sx={{
             mt: 10,
