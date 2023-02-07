@@ -132,7 +132,7 @@ export const RowTableSched = props => {
         <TableCell align='right'>
           <Chip
             icon={<WorkspacePremiumIcon />}
-            label={row.cert.length > 0 ? row.cert[0].cert : null}
+            label={row.cert.length > 0 ? row.cert[0].cert : 'No Cert'}
             color='success'
             sx={{ color: 'white' }}
           />

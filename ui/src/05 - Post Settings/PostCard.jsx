@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { MemberContext } from '../MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, Typography, Stack, Chip, Paper, Divider } from '@mui/material';
+import { Typography, Stack, Paper, Divider } from '@mui/material';
 import { EditPost } from './EditPost';
 
 export const PostCard = props => {
@@ -20,6 +20,7 @@ export const PostCard = props => {
         p: 3,
       }}
     >
+      <Divider textAlign='left'>Name</Divider>
       <Stack
         component='span'
         direction='row'
@@ -38,7 +39,7 @@ export const PostCard = props => {
         </Typography>
         <EditPost post={post} />
       </Stack>
-      <Divider />
+      <Divider textAlign='left'>Description</Divider>
       <Typography variant='h5' pb={2}>
         {post.description}
       </Typography>

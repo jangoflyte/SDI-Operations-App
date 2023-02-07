@@ -20,6 +20,9 @@ import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const style = {
   position: 'absolute',
@@ -59,11 +62,15 @@ export const EditShiftModal = props => {
   const [cert, setCert] = useState('');
   const [flight, setFlight] = useState('');
   const [schedDate, setSchedDate] = useState(new Date());
+  const { currDate } = props;
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const { isDay } = props;
+  const [selectedDate, handleDateChange] = useState(new Date());
+  const [selectedDate1, handleDateChange1] = useState(new Date());
   const theme = useTheme();
+  const positions = props.positions;
 
+  console.log('This is currdate ', currDate);
   useEffect(() => {
     fetch(`${API}/post`, {
       method: 'GET',
@@ -74,23 +81,47 @@ export const EditShiftModal = props => {
       .catch(err => console.log(err));
   }, []);
 
+  // useEffect(() => {
+  //   console.log('This is end date (edit shift modal)', endDate.toISOString());
+  // }, [endDate]);
+
+  // useEffect(() => {
+  //   const newPost = {
+  //     shift: shiftName,
+  //     man_req: manReq,
+  //     cert_id: cert,
+  //     flight: flight,
+  //     // weapon_req: ,
+  //     // shift: shift,
+  //     post_array: postIdArray,
+  //     start_date: startDate.toISOString(),
+  //     end_date: endDate.toISOString(),
+  //   };
+
+  //   console.log('This is new post ', newPost);
+  // }, [postIdArray, shiftName, manReq, cert, flight, startDate, endDate]);
+
   //need to modify this so old data is persisted
   const handleAdd = () => {
-    const shift = isDay ? 'days' : 'mids';
-    const newPost = {
-      name: shiftName,
-      man_req: manReq,
-      cert_id: cert,
-      weapon_req: postIdArray,
-      shift: shift,
+    // const shift = isDay ? 'days' : 'mids';
+    const newShift = {
+      shift: shiftName.toLowerCase(),
+      // man_req: manReq,
+      // cert_id: cert,
+      flight_assigned: flight,
+      // weapon_req: ,
+      // shift: shift,
+      post_array: postIdArray,
+      start_datetime: startDate.toISOString(),
+      end_datetime: endDate.toISOString(),
     };
-    console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
+    console.log('newPost ', newShift, 'cert NaN ', parseInt(cert));
 
     fetch(`${API}/position/`, {
       method: 'POST',
       credentials: 'include',
       redirect: 'follow',
-      body: JSON.stringify(newPost),
+      body: JSON.stringify(newShift),
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
@@ -104,6 +135,8 @@ export const EditShiftModal = props => {
         setshiftName(null);
         setManReq(null);
         setCert(null);
+        setFlight(null);
+
         setSelectedPosts([]);
         // setToggleAlert(true);
       })
@@ -161,6 +194,12 @@ export const EditShiftModal = props => {
                 theme.palette.mode === 'light'
                   ? theme.palette.grey[900]
                   : 'white',
+              '&:hover': {
+                backgroundColor:
+                  theme.palette.mode === 'light'
+                    ? '#fafafa'
+                    : theme.palette.grey[900],
+              },
             }}
           >
             SHIFT
@@ -191,7 +230,7 @@ export const EditShiftModal = props => {
             variant='h4'
             sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
-            Edit Template
+            Add Shift
           </Typography>
 
           <Stack
@@ -206,22 +245,59 @@ export const EditShiftModal = props => {
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
+                label='Pick a Template (wip)'
+                // value={manReq}
+                variant='outlined'
+                // onChange={e => setManReq(e.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ width: '40ch' }}>
+              <TextField
+                id='outlined-basic'
                 label='Shift Name'
                 value={shiftName}
                 variant='outlined'
                 onChange={e => setshiftName(e.target.value)}
               />
             </FormControl>
+          </Stack>
+          {/* <Stack
+            direction='row'
+            mt={3}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 2,
+            }}
+          >
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='Time'
+                label='Manning Requirements'
                 value={manReq}
                 variant='outlined'
                 onChange={e => setManReq(e.target.value)}
               />
             </FormControl>
-          </Stack>
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>
+                Certifications
+              </InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={cert}
+                label='Certifications'
+                onChange={e => setCert(e.target.value)}
+              >
+                <MenuItem value={1}>Entry Controller</MenuItem>
+                <MenuItem value={2}>Patrol</MenuItem>
+                <MenuItem value={3}>Desk Sergeant</MenuItem>
+                <MenuItem value={4}>Flight Sergreant</MenuItem>
+              </Select>
+            </FormControl>
+          </Stack> */}
 
           <Stack
             direction='row'
@@ -298,7 +374,7 @@ export const EditShiftModal = props => {
               justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            {/* <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='date'
                 label='Start Date'
@@ -355,7 +431,31 @@ export const EditShiftModal = props => {
                   }
                 }}
               />
-            </FormControl>
+            </FormControl> */}
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <FormControl sx={{ width: '40ch' }}>
+                <DateTimePicker
+                  label='Start Date'
+                  renderInput={props => <TextField {...props} />}
+                  value={startDate}
+                  // theme={theme.palette.primary.main}
+                  onChange={setStartDate}
+
+                  //   showTodayButton
+                />
+              </FormControl>
+              <FormControl sx={{ width: '40ch' }}>
+                <DateTimePicker
+                  label='End Date'
+                  renderInput={props => <TextField {...props} />}
+                  value={endDate}
+                  // theme={theme}
+                  onChange={setEndDate}
+
+                  //   showTodayButton
+                />
+              </FormControl>
+            </LocalizationProvider>
           </Stack>
 
           <Stack
@@ -373,7 +473,7 @@ export const EditShiftModal = props => {
               variant='contained'
               sx={{ borderRadius: '30px' }}
             >
-              Edit Template
+              Add Shift
             </Button>
           </Stack>
         </Box>

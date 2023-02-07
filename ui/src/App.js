@@ -1,23 +1,23 @@
-import React, { useState, useEffect, useMemo } from "react";
-import Home from "./01 - Dashboard/Home";
-import { MemberDetails } from "./03 - People Page/MembersDetail";
-import { PostSettings } from "./05 - Post Settings/PostSettings";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { MemberContext } from "./MemberContext";
-import PersistentDrawerLeft from "./00 - Features/Navbar";
-import { DataSources } from "./04 - Data Sources/DataSources";
-import IndividualMember from "./03 - People Page/InvidualMember";
-import ForgotPass from "./00 - Features/ForgotPass";
-import ChangePass from "./00 - Features/ChangePass";
-import SignIn from "./06 - Sign-In Page/SignIn";
-import SignUp from "./06 - Sign-In Page/SignUp";
-import { useCookies } from "react-cookie";
-import { Footer } from "./00 - Features/Footer";
-import { Weather } from "./02 - Weather Page/Weather";
-import { Calendar } from "./01 - Dashboard/Calendar";
-import { ThemeProvider, createTheme } from "@mui/material/";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ScheduleSettings } from "./07 - Schedule Settings/ScheduleSettings";
+import React, { useState, useEffect, useMemo } from 'react';
+import Home from './01 - Dashboard/Home';
+import { MemberDetails } from './03 - People Page/MembersDetail';
+import { PostSettings } from './05 - Post Settings/PostSettings';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { MemberContext } from './MemberContext';
+import PersistentDrawerLeft from './00 - Features/Navbar';
+import { DataSources } from './04 - Data Sources/DataSources';
+import IndividualMember from './03 - People Page/InvidualMember';
+import ForgotPass from './00 - Features/ForgotPass';
+import ChangePass from './00 - Features/ChangePass';
+import SignIn from './06 - Sign-In Page/SignIn';
+import SignUp from './06 - Sign-In Page/SignUp';
+import { useCookies } from 'react-cookie';
+import { Footer } from './00 - Features/Footer';
+import { Weather } from './02 - Weather Page/Weather';
+import { Calendar } from './01 - Dashboard/Calendar';
+import { ThemeProvider, createTheme } from '@mui/material/';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ScheduleSettings } from './07 - Schedule Settings/ScheduleSettings';
 
 const App = () => {
   const [data, setData] = useState([]);
@@ -28,22 +28,22 @@ const App = () => {
   const [allWeapons, setAllWeapons] = useState([]);
   const [allFlights, setAllFlights] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies([
-    "auth",
-    "user",
-    "color_mode",
+    'auth',
+    'user',
+    'color_mode',
   ]);
   const [userAccount, setUserAccount] = useState(null);
   const [page, setPage] = useState(0);
-  const [darkMode, setDarkMode] = useState("light");
+  const [darkMode, setDarkMode] = useState('light');
   const [rows, setRows] = useState([]);
 
   //const MemberContext = React.createContext();
   // const API = 'https://api.cyberhelm.com';
   // const authDomain = 'cyberhelm.com';
   // const userDomain = 'cyberhelm.com';
-  const API = "http://localhost:8080";
-  const authDomain = "localhost";
-  const userDomain = "localhost";
+  const API = 'http://localhost:8080';
+  const authDomain = 'localhost';
+  const userDomain = 'localhost';
 
   useMemo(() => {
     if (cookies.user) {
@@ -56,49 +56,49 @@ const App = () => {
 
   useEffect(() => {
     fetch(`${API}/users`, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
     })
-      .then((res) => res.json())
-      .then((data) => setData(data))
-      .catch((err) => console.log(err));
+      .then(res => res.json())
+      .then(data => setData(data))
+      .catch(err => console.log(err));
   }, [API, triggerFetch, userAccount]);
 
   useEffect(() => {
     fetch(`${API}/allweapons`, {
-      method: "GET",
-      credentials: "include",
-      redirect: "follow",
+      method: 'GET',
+      credentials: 'include',
+      redirect: 'follow',
     })
-      .then((res) => res.json())
-      .then((data) => setAllWeapons(data))
-      .catch((err) => console.log(err));
+      .then(res => res.json())
+      .then(data => setAllWeapons(data))
+      .catch(err => console.log(err));
   }, [API, userAccount]);
 
   useEffect(() => {
     fetch(`${API}/flight`, {
-      method: "GET",
-      credentials: "include",
+      method: 'GET',
+      credentials: 'include',
     })
-      .then((res) => res.json())
-      .then((data) => setAllFlights(data))
-      .catch((err) => console.log(err));
+      .then(res => res.json())
+      .then(data => setAllFlights(data))
+      .catch(err => console.log(err));
   }, [API, userAccount]);
 
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#212121",
+        main: '#212121',
       },
       secondary: {
-        main: "#BD5334",
+        main: '#BD5334',
       },
       info: {
-        main: "#6D7AE5",
-        light: "#8f95c3",
+        main: '#6D7AE5',
+        light: '#8f95c3',
       },
       background: {
-        default: darkMode === "light" ? "#FAFAFF" : "#303030",
+        default: darkMode === 'light' ? '#FAFAFF' : '#303030',
       },
       mode: darkMode,
     },
@@ -142,25 +142,25 @@ const App = () => {
             <>
               <PersistentDrawerLeft />
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/date/:urlDate" element={<Home />} />
-                <Route path="/sfmembers" element={<MemberDetails />} />
-                <Route path="/changepass" element={<ChangePass />} />
+                <Route path='/' element={<Home />} />
+                <Route path='/date/:urlDate' element={<Home />} />
+                <Route path='/sfmembers' element={<MemberDetails />} />
+                <Route path='/changepass' element={<ChangePass />} />
                 <Route
-                  path="/sfmembers/:memberId"
+                  path='/sfmembers/:memberId'
                   element={<IndividualMember />}
                 />
                 {/* <Route path='/login' element={<SignIn />} /> */}
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="/weather" element={<Weather />} />
-                <Route path="*" element={<Home />} />
+                <Route path='/calendar' element={<Calendar />} />
+                <Route path='/weather' element={<Weather />} />
+                <Route path='*' element={<Home />} />
                 {userAccount.admin ? (
                   <>
                     {/* <Route path='/login' element={<SignIn />} /> */}
-                    <Route path="/data" element={<DataSources />} />
-                    <Route path="/settings" element={<PostSettings />} />
-                    <Route path="/schedule" element={<ScheduleSettings />} />
-                    <Route path="/changepass/:email" element={<ChangePass />} />
+                    <Route path='/data' element={<DataSources />} />
+                    <Route path='/settings' element={<PostSettings />} />
+                    <Route path='/schedule' element={<ScheduleSettings />} />
+                    <Route path='/changepass/:email' element={<ChangePass />} />
                   </>
                 ) : null}
               </Routes>
@@ -168,10 +168,10 @@ const App = () => {
             </>
           ) : (
             <Routes>
-              <Route path="/login" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/forgot" element={<ForgotPass />} />
-              <Route path="*" element={<SignIn />} />
+              <Route path='/login' element={<SignIn />} />
+              <Route path='/signup' element={<SignUp />} />
+              <Route path='/forgot' element={<ForgotPass />} />
+              <Route path='*' element={<SignIn />} />
             </Routes>
           )}
         </Router>

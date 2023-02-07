@@ -52,13 +52,19 @@ const MenuProps = {
 export const EditTemplate = props => {
   const { post } = props;
 
-  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allFlights } =
-    useContext(MemberContext);
+  const {
+    API,
+    setTriggerFetch,
+    toggleAlert,
+    setToggleAlert,
+    allFlights,
+    allWeapons,
+  } = useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [postName, setPostName] = useState(post.name);
+  const [postName, setPostName] = useState('');
   const [weapon, setWeapon] = useState(post.weapon_req);
   const [weaponIdArray, setWeaponIdArray] = useState(
     post.weapon_req.map(wep => wep.id)
@@ -78,7 +84,7 @@ export const EditTemplate = props => {
   const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
-    setPostName(post.name);
+    setPostName(post.name && post.name.post_name);
     setWeapon(post.weapon_req);
     setCert(post.cert_id);
     setShift(post.shift);
@@ -107,7 +113,7 @@ export const EditTemplate = props => {
   //need to modify this so old data is persisted
   const handleAdd = () => {
     const newPost = {
-      name: postName,
+      post_id: postName,
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
@@ -188,6 +194,19 @@ export const EditTemplate = props => {
     }
   };
 
+  const handleWeaponBox = wepId => {
+    if (!weaponIdArray.includes(wepId)) {
+      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeapon(curr => [
+        ...curr,
+        allWeapons.filter(weapon => weapon.id === wepId)[0],
+      ]);
+    } else if (weaponIdArray.includes(wepId)) {
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+    }
+  };
+
   return (
     <>
       <BorderColorIcon
@@ -212,7 +231,7 @@ export const EditTemplate = props => {
             variant='h4'
             sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
-            Edit Template
+            Edit Shift
           </Typography>
 
           <Stack
@@ -223,10 +242,15 @@ export const EditTemplate = props => {
               justifyContent: 'space-between',
             }}
           >
+            {/* need to set name to be array of post to choose from 
+            
+            !!
+            
+            */}
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='Template Name'
+                label='Post Name'
                 value={postName}
                 variant='outlined'
                 onChange={e => setPostName(e.target.value)}
@@ -235,7 +259,7 @@ export const EditTemplate = props => {
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='Time'
+                label='Number of Positions'
                 value={manReq}
                 variant='outlined'
                 onChange={e => setManReq(e.target.value)}
@@ -275,12 +299,62 @@ export const EditTemplate = props => {
               </Select>
             </FormControl>
             <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>
+                Certifications
+              </InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={cert}
+                label='Certifications'
+                onChange={e => setCert(e.target.value)}
+              >
+                <MenuItem value={1}>Entry Controller</MenuItem>
+                <MenuItem value={2}>Patrol</MenuItem>
+                <MenuItem value={3}>Desk Sergeant</MenuItem>
+                <MenuItem value={4}>Flight Sergreant</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-multiple-checkbox-label'>Weapons</InputLabel>
+              <Select
+                labelId='demo-multiple-checkbox-label'
+                id='demo-multiple-checkbox'
+                multiple
+                value={weapon.map(weap => weap.weapon)}
+                input={<OutlinedInput label='Tag' />}
+                renderValue={selected => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {allWeapons.map((weaponObject, index) => (
+                  <MenuItem
+                    id={weaponObject.id}
+                    key={index}
+                    value={weaponObject.id}
+                    onClick={() => handleWeaponBox(weaponObject.id)}
+                  >
+                    <Checkbox
+                      // onChange={handleChange}
+                      checked={weapon.some(wep => wep.id === weaponObject.id)}
+                      // checked={weapon.some(
+                      //   wep => wep.weapon_id === weaponObject.id
+                      // )}
+
+                      // make seperate component ?
+                    />
+                    <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {/* <FormControl sx={{ width: '40ch' }}>
               <InputLabel id='demo-multiple-checkbox-label'>Posts</InputLabel>
               <Select
                 labelId='demo-multiple-checkbox-label'
                 id='demo-multiple-checkbox'
                 multiple
-                value={selectedPosts.map(post => post.post_name)}
+                value={selectedPosts.map(post => post.name.post_name)}
                 input={<OutlinedInput label='Tag' />}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
@@ -307,7 +381,7 @@ export const EditTemplate = props => {
                   </MenuItem>
                 ))}
               </Select>
-            </FormControl>
+            </FormControl> */}
           </Stack>
 
           <Stack

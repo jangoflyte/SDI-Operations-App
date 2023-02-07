@@ -481,24 +481,44 @@ const patchPosition = async req => {
 
 const postPosition = async req => {
   console.log('this is req.body for post position: ', req.body);
-  let postObject = {
-    man_req: req.body.man_req,
-    cert_id: req.body.cert_id,
-    shift: req.body.shift,
-    flight_assigned: req.body.flight_assigned,
-    post_id: req.body.post_id,
-    start_datetime: req.body.start_datetime,
-    end_datetime: req.body.end_datetime,
-  };
 
-  // if (!postObject.post_id) {
-  //   // blah
-  // }
+  if (req.body.post_array && Array.isArray(req.body.post_array)) {
+    let result = [];
+    for (let postId of req.body.post_array) {
+      // console.log('look at me ', postId);
+      let postObject = {
+        // man_req: req.body.man_req,
+        // cert_id: req.body.cert_id,
+        shift: req.body.shift,
+        flight_assigned: req.body.flight_assigned,
+        post_id: postId,
+        start_datetime: req.body.start_datetime,
+        end_datetime: req.body.end_datetime,
+      };
 
-  let result = await knex('position').insert(postObject, ['*']);
-  console.log('result ', result);
-  await postWeaponPosition(result[0].id, req.body.weapon_req);
-  return result;
+      result.push(await knex('position').insert(postObject, ['*']));
+    }
+    return result[0];
+  } else {
+    let postObject = {
+      man_req: req.body.man_req,
+      cert_id: req.body.cert_id,
+      shift: req.body.shift,
+      flight_assigned: req.body.flight_assigned,
+      post_id: req.body.post_id,
+      start_datetime: req.body.start_datetime,
+      end_datetime: req.body.end_datetime,
+    };
+
+    // if (!postObject.post_id) {
+    //   // blah
+    // }
+
+    let result = await knex('position').insert(postObject, ['*']);
+    console.log('result ', result);
+    await postWeaponPosition(result[0].id, req.body.weapon_req);
+    return result;
+  }
 };
 
 const deletePosition = async positionId => {

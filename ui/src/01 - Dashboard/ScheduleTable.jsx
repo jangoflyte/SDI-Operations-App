@@ -26,6 +26,9 @@ import { useParams } from 'react-router';
 import { useTheme } from '@mui/material/styles';
 import { RowTableSched } from './RowTableSched';
 import { Roster } from './Roster';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const ScheduleTable = () => {
   const { API, toggleAlert, setToggleAlert, userAccount, setRows } =
@@ -281,6 +284,7 @@ export const ScheduleTable = () => {
 
   const checkboxDisplay = (date, index, shiftInfo) => {
     if (schedFilled.length > 0) {
+      console.log('schedFilled: ', schedFilled);
       if (
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
           schedFilled[index].date &&
@@ -434,10 +438,6 @@ export const ScheduleTable = () => {
             display: 'flex',
             flexWrap: 'wrap',
             minWidth: 300,
-            //height: '110vh',
-            //flexDirection: 'row',
-            //alignItems: 'end',
-            //justifyContent: 'start',
             gap: 2,
             width: '25%',
           }}
@@ -446,12 +446,10 @@ export const ScheduleTable = () => {
             <Box
               sx={{
                 display: 'flex',
-                //flexWrap: 'wrap',
                 flexDirection: 'row',
                 alignItems: 'start',
                 justifyContent: 'left',
                 width: '100%',
-                //height: '100vh',
                 gap: 2,
               }}
             >
@@ -464,8 +462,6 @@ export const ScheduleTable = () => {
           sx={{
             display: 'flex',
             flexWrap: 'wrap',
-            //flexDirection: 'row',
-            // alignItems: 'end',
             justifyContent: 'left',
             gap: 2,
             width: '75%',
@@ -477,7 +473,6 @@ export const ScheduleTable = () => {
               flexWrap: 'wrap',
               flexDirection: 'row',
               alignItems: 'end',
-              // justifyContent: 'left',
               width: '100%',
               gap: 2,
             }}
@@ -491,49 +486,59 @@ export const ScheduleTable = () => {
                 justifyContent: 'left',
                 gap: 2,
                 width: 620,
-                //width: '90%',
               }}
             >
-              <TextField
-                id='date'
-                label='Start Date'
-                type='date'
-                value={startDate.toISOString().split('T')[0]}
-                sx={{
-                  width: 220,
-                  backgroundColor:
-                    theme.palette.mode === 'light'
-                      ? 'white'
-                      : theme.palette.grey[900],
-                  cursor: 'pointer',
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onChange={e => {
-                  if (e.target.value === '') {
-                    setStartDate(new Date());
-                    e.target.value = new Date().toISOString().split('T')[0];
-                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
-                    let dateEnd = new Date(
-                      new Date(new Date(`${e.target.value}T00:00:00`))
-                    );
-                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7));
-                    setEndDate(new Date(dateEnd));
-                    navigate(`/date/${e.target.value}`);
-                  } else {
-                    console.log('textfield e.target.value: ', e.target.value);
-                    setStartDate(new Date(`${e.target.value}T00:00:00`));
-                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
-                    let dateEnd = new Date(
-                      new Date(new Date(`${e.target.value}T00:00:00`))
-                    );
-                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7));
-                    setEndDate(new Date(dateEnd));
-                    navigate(`/date/${e.target.value}`);
-                  }
-                }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  id='date'
+                  label='Start Date'
+                  renderInput={props => <TextField {...props} />}
+                  // type='date'
+                  value={startDate.toISOString().split('T')[0]}
+                  sx={{
+                    width: 220,
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? 'white'
+                        : theme.palette.grey[900],
+                    cursor: 'pointer',
+                  }}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={newValue => {
+                    if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
+                      return;
+                    newValue = newValue.$d.toISOString().split('T')[0];
+
+                    if (newValue === '') {
+                      setStartDate(new Date());
+                      newValue = new Date().toISOString().split('T')[0];
+                      setSchedDate(new Date(`${newValue}T00:00:00`));
+                      let dateEnd = new Date(
+                        new Date(new Date(`${newValue}T00:00:00`))
+                      );
+                      dateEnd = new Date(
+                        dateEnd.setDate(dateEnd.getDate() + 7)
+                      );
+                      setEndDate(new Date(dateEnd));
+                      navigate(`/date/${newValue}`);
+                    } else {
+                      console.log('textfield newValue: ', newValue);
+                      setStartDate(new Date(`${newValue}T00:00:00`));
+                      setSchedDate(new Date(`${newValue}T00:00:00`));
+                      let dateEnd = new Date(
+                        new Date(new Date(`${newValue}T00:00:00`))
+                      );
+                      dateEnd = new Date(
+                        dateEnd.setDate(dateEnd.getDate() + 7)
+                      );
+                      setEndDate(new Date(dateEnd));
+                      navigate(`/date/${newValue}`);
+                    }
+                  }}
+                />
+              </LocalizationProvider>
               <Button
                 color='info'
                 variant='outlined'
@@ -594,7 +599,9 @@ export const ScheduleTable = () => {
                     ? '#ffa726'
                     : shift === 'mids'
                     ? '#7A8AFF'
-                    : '#4caf50',
+                    : shift === 'swings'
+                    ? '#4caf50'
+                    : '#ee82ee',
                 textShadow: '1px 1px 2px #454545',
               }}
             >
@@ -611,8 +618,6 @@ export const ScheduleTable = () => {
               justifyContent: 'left',
               gap: 1,
               whiteSpace: 'no-wrap',
-              // maxWidth: '100%',
-              // overflowX: 'auto',
             }}
           >
             {dateRange.map((date, index) => (
@@ -632,17 +637,22 @@ export const ScheduleTable = () => {
                               ? '#ffa726'
                               : shift === 'mids'
                               ? '#7A8AFF'
-                              : '#00cc8f',
+                              : shift === 'swings'
+                              ? '#4caf50'
+                              : '#ee82ee',
                           borderRadius: 1,
                           minHeight: '10rem',
+                          //height: '13rem',
                         }
                       : {
                           display: 'flex',
                           flexWrap: 'wrap',
                           flexDirection: 'column',
                           alignItems: 'center',
+                          borderRadius: 1,
                           justifyContent: 'center',
                           minHeight: '10rem',
+                          //height: '13rem',
                         }
                   }
                 >
@@ -678,7 +688,10 @@ export const ScheduleTable = () => {
                       flexItem={true}
                       sx={{ color: theme.palette.grey[600] }}
                     >
-                      <EditShiftModal />
+                      <EditShiftModal
+                        positions={positions}
+                        currDate={schedDate}
+                      />
                     </Divider>
                   ) : (
                     <Divider
@@ -697,13 +710,15 @@ export const ScheduleTable = () => {
                         <Button
                           key={index}
                           fullWidth={true}
-                          color={
-                            buttonShift === 'days'
-                              ? 'warning'
-                              : buttonShift === 'mids'
-                              ? 'info'
-                              : 'success'
-                          }
+                          // color={
+                          //   buttonShift === 'days'
+                          //    ? '#ffa726'
+                          //     : buttonShift === 'mids'
+                          //     ? '#7A8AFF'
+                          //     : buttonShift === 'swings'
+                          //     ? '#4caf50'
+                          //     : '#ee82ee',
+                          //   }
                           sx={
                             shift === 'days' &&
                             buttonShift === 'days' &&
@@ -711,6 +726,7 @@ export const ScheduleTable = () => {
                               ? {
                                   backgroundColor: 'rgba(229, 115, 115, 0.2)',
                                   borderRadius: 0,
+                                  color: '#ffa726',
                                 }
                               : shift === 'mids' &&
                                 buttonShift === 'mids' &&
@@ -718,6 +734,7 @@ export const ScheduleTable = () => {
                               ? {
                                   backgroundColor: 'rgba(66, 135, 245, 0.2)',
                                   borderRadius: 0,
+                                  color: '#7A8AFF',
                                 }
                               : shift === 'swings' &&
                                 buttonShift === 'swings' &&
@@ -725,8 +742,26 @@ export const ScheduleTable = () => {
                               ? {
                                   backgroundColor: 'rgba(76, 175, 80, 0.2)',
                                   borderRadius: 0,
+                                  color: '#4caf50',
                                 }
-                              : { borderRadius: 0 }
+                              : shift === buttonShift &&
+                                schedDate.toDateString() === date.toDateString()
+                              ? {
+                                  backgroundColor: 'rgba(238, 130, 238, 0.2)',
+                                  borderRadius: 0,
+                                  color: '#ee82ee',
+                                }
+                              : {
+                                  borderRadius: 0,
+                                  color:
+                                    buttonShift === 'days'
+                                      ? '#ffa726'
+                                      : buttonShift === 'mids'
+                                      ? '#7A8AFF'
+                                      : buttonShift === 'swings'
+                                      ? '#4caf50'
+                                      : '#ee82ee',
+                                }
                           }
                           onClick={() => {
                             let splitDate = date
@@ -765,7 +800,6 @@ export const ScheduleTable = () => {
                   flexDirection: 'column',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: 2,
                   borderColor:
                     theme.palette.mode === 'light'
                       ? 'white'
@@ -773,7 +807,11 @@ export const ScheduleTable = () => {
                   borderRadius: 1,
                 }}
               >
-                <Legend schedDate={schedDate} allShifts={allShifts} />
+                <Legend
+                  schedDate={schedDate}
+                  allShifts={allShifts}
+                  rows={rows}
+                />
               </Box>
             </Paper>
           </Box>
@@ -787,7 +825,9 @@ export const ScheduleTable = () => {
                   ? '#ffa726'
                   : shift === 'mids'
                   ? '#7A8AFF'
-                  : '#00cc8f',
+                  : shift === 'swings'
+                  ? '#4caf50'
+                  : '#ee82ee',
             }}
           >
             <Table aria-label='collapsible table' stickyHeader id='table'>

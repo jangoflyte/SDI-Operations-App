@@ -155,6 +155,7 @@ export const EditPost = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 2,
             }}
           >
             <FormControl sx={{ width: '40ch' }}>

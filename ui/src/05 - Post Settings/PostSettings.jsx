@@ -2,11 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { MemberContext } from '../MemberContext';
 import '../styles/MembersDetail.css';
 import '../styles/Card.css';
-import { Box, LinearProgress, Typography, Stack, Button } from '@mui/material';
+import { Box, LinearProgress, Typography, Stack } from '@mui/material';
 import { PostCard } from './PostCard';
 import { AddPost } from './AddPost';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
-import NightlightIcon from '@mui/icons-material/Nightlight';
 
 export const PostSettings = () => {
   const { API, triggerFetch } = useContext(MemberContext);
