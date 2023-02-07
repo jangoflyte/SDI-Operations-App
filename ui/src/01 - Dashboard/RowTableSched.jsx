@@ -1,31 +1,29 @@
-import React, { useState, useContext } from 'react'
-import { Chip, Avatar, Box } from '@mui/material/'
-import Collapse from '@mui/material/Collapse'
-import IconButton from '@mui/material/IconButton'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Typography from '@mui/material/Typography'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import { MemberContext } from '../MemberContext'
-import PostMemberModal from './AddMember'
-import EditSchedule from './EditSchedule'
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
-import SecurityIcon from '@mui/icons-material/Security'
-import { WeaponQuals } from '../00 - Features/WeaponQuals'
-import { useNavigate } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
+import React, { useState } from 'react';
+import { Chip, Avatar, Box } from '@mui/material/';
+import Collapse from '@mui/material/Collapse';
+import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import PostMemberModal from './AddMember';
+import EditSchedule from './EditSchedule';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SecurityIcon from '@mui/icons-material/Security';
+import { WeaponQuals } from '../00 - Features/WeaponQuals';
+import { useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 
 export const RowTableSched = props => {
-  const { row, rows } = props
-  const [open, setOpen] = useState(false)
-  const splitArr = row.weapons.split(' ')
-  const { color } = useContext(MemberContext)
-  const navigate = useNavigate()
-  const theme = useTheme()
+  const { row } = props;
+  const [open, setOpen] = useState(false);
+  const splitArr = row.weapons.split(' ');
+  const navigate = useNavigate();
+  const theme = useTheme();
 
   return (
     <React.Fragment>
@@ -47,7 +45,7 @@ export const RowTableSched = props => {
               flexWrap: 'wrap',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
             }}
           >
             {row.name &&
@@ -62,7 +60,7 @@ export const RowTableSched = props => {
                   borderRadius: 20,
                   px: 0.5,
                   py: 0.5,
-                  color: 'white'
+                  color: 'white',
                 }}
               >
                 <svg
@@ -105,7 +103,7 @@ export const RowTableSched = props => {
                 flexWrap: 'wrap',
                 justifyContent: 'center',
                 width: '100%',
-                gap: 1
+                gap: 1,
               }}
             >
               {splitArr.map((wep, index) => (
@@ -208,7 +206,7 @@ export const RowTableSched = props => {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'start',
-                              gap: 1
+                              gap: 1,
                             }}
                           >
                             <Avatar
@@ -218,7 +216,7 @@ export const RowTableSched = props => {
                                 color:
                                   theme.palette.mode === 'light'
                                     ? 'inherit'
-                                    : 'white'
+                                    : 'white',
                               }}
                               src={userRow.user_info[0].avatar}
                               alt='avatar'
@@ -276,5 +274,5 @@ export const RowTableSched = props => {
         </TableCell>
       </TableRow>
     </React.Fragment>
-  )
-}
+  );
+};

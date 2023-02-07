@@ -1,5 +1,5 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
-import { MemberContext } from '../MemberContext'
+import React, { useContext, useState, useMemo, useEffect } from 'react';
+import { MemberContext } from '../MemberContext';
 import {
   Button,
   Modal,
@@ -15,13 +15,13 @@ import {
   InputLabel,
   Select,
   LinearProgress,
-  Avatar
-} from '@mui/material/'
-import CloseIcon from '@mui/icons-material/Close'
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
-import SecurityIcon from '@mui/icons-material/Security'
-import { WeaponQuals } from '../00 - Features/WeaponQuals'
-import { useTheme } from '@mui/material/styles'
+  Avatar,
+} from '@mui/material/';
+import CloseIcon from '@mui/icons-material/Close';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SecurityIcon from '@mui/icons-material/Security';
+import { WeaponQuals } from '../00 - Features/WeaponQuals';
+import { useTheme } from '@mui/material/styles';
 
 const ReplaceMemberModal = props => {
   const {
@@ -33,75 +33,78 @@ const ReplaceMemberModal = props => {
     fetchSchedule,
     currentDate,
     shift,
-    row
-  } = props
+  } = props;
   const { API, data, setToggleAlert, userAccount, allFlights, rows } =
-    useContext(MemberContext)
-  const [open, setOpen] = useState(false)
-  const handleClose = () => setOpen(false)
-  const [selected, setSelected] = useState({})
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [flight, setFlight] = useState('alpha-1')
-  const [flightId, setFlightId] = useState(1)
-  const [timeCheck, setTimeCheck] = useState(true)
-  const [filterFlight, setFilterFlight] = useState([])
-  const [trigerFilter, setTrigerFilter] = useState(true)
-  const [scheduledUser, setScheduledUser] = useState([])
-  const theme = useTheme()
+    useContext(MemberContext);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => setOpen(false);
+  const [selected, setSelected] = useState({});
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [flight, setFlight] = useState('alpha-1');
+  const [flightId, setFlightId] = useState(1);
+  const [timeCheck, setTimeCheck] = useState(true);
+  const [filterFlight, setFilterFlight] = useState([]);
+  const [trigerFilter, setTrigerFilter] = useState(true);
+  const [scheduledUser, setScheduledUser] = useState([]);
+  const theme = useTheme();
 
   useEffect(() => {
-    console.log('TEST flight id ', rows[0].position.flight_assigned, allFlights)
-    const tempFlightId = rows[0].position.flight_assigned
-    setFlight(allFlights[tempFlightId - 1].flight)
-    setFlightId(tempFlightId)
-  }, [rows])
+    console.log(
+      'TEST flight id ',
+      rows[0].position.flight_assigned,
+      allFlights
+    );
+    const tempFlightId = rows[0].position.flight_assigned;
+    setFlight(allFlights[tempFlightId - 1].flight);
+    setFlightId(tempFlightId);
+  }, [rows]);
 
   useMemo(() => {
     setTimeout(() => {
-      setTimeCheck(!timeCheck)
-    }, 1300)
-  }, [filterFlight])
+      setTimeCheck(!timeCheck);
+    }, 1300);
+  }, [filterFlight]);
 
-  let weaponsReq = weapon_req.split(' ')
+  let weaponsReq = weapon_req.split(' ');
   // console.log('this is rows', rows);
   /////////////// grabs user id for scheduled users //////////////////////////
   useEffect(() => {
-    let posted = []
+    let posted = [];
     rows.forEach(row => {
-      const position = row.name.post_name
+      const position = row.name.post_name;
       row.users.forEach(user => {
-        if (user.noUser) return
-        posted.push({ user: user.user_info[0].id, position: position })
-      })
-    })
+        if (user.noUser) return;
+        posted.push({ user: user.user_info[0].id, position: position });
+      });
+    });
 
-    setScheduledUser(posted)
-  }, [rows])
+    setScheduledUser(posted);
+  }, [rows]);
 
   //////////////////filters personnel by flight & no double posting///////////////
   useMemo(() => {
     let results = data.filter(user => {
-      let wepResults = [true]
+      let wepResults = [true];
       if (weaponsReq[0] !== '') {
-        filterFlight
+        filterFlight;
 
         wepResults = weaponsReq.map(wep => {
           // console.log("wep", wep);
-          let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon))
+          let tests = user.weapons.map(usrWep => wep.includes(usrWep.weapon));
 
           if (tests.includes(true)) {
-            return true
+            return true;
           } else {
-            return false
+            return false;
           }
-        })
+        });
       }
-      let certResults = user.certs.map(cert => cert.id >= cert_req[0].id)
-      let posted = scheduledUser.map(user => user.user)
+      let certResults = user.certs.map(cert => cert.id >= cert_req[0].id);
+      let posted = scheduledUser.map(user => user.user);
 
-      console.log('user flight thing ', user)
-      if (posted.includes(user.id)) return false
+      console.log('user flight thing ', user);
+      if (posted.includes(user.id)) return false;
       if (
         wepResults.includes(true) &&
         certResults.includes(true) &&
@@ -109,46 +112,46 @@ const ReplaceMemberModal = props => {
         user.flight.flight === flight &&
         user.status === 'Available'
       ) {
-        return true
+        return true;
       } else {
-        return false
+        return false;
       }
-    })
-    setFilterFlight(results)
-  }, [trigerFilter, flightId, flight])
+    });
+    setFilterFlight(results);
+  }, [trigerFilter, flightId, flight]);
 
-  const onDataPageChange = (event, page) => setPage(page - 1)
-  const handleChangePage = (event, newPage) => setPage(newPage)
+  const onDataPageChange = (event, page) => setPage(page - 1);
+  const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   ///////////////adds members to schedule//////////////////////////////
   const patchSchedule = patchInfo => {
-    console.log('patching schedule')
+    console.log('patching schedule');
     fetch(`${API}/schedule`, {
       method: 'PATCH',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify(patchInfo)
+      body: JSON.stringify(patchInfo),
     })
       .then(res => {
-        return res.json()
+        return res.json();
       })
       .then(() => {
         // call update for users
-        fetchSchedule()
-        setToggleAlert(true)
-        window.scrollTo(0, 0)
+        fetchSchedule();
+        setToggleAlert(true);
+        window.scrollTo(0, 0);
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }
+        console.log('error: ', err);
+      });
+  };
 
   // post info to post_schedule
   // position id  // post prop
@@ -167,8 +170,8 @@ const ReplaceMemberModal = props => {
     bgcolor: 'background.paper',
     border: '2px solid #000000',
     boxShadow: 24,
-    p: 4
-  }
+    p: 4,
+  };
 
   return (
     <>
@@ -177,7 +180,7 @@ const ReplaceMemberModal = props => {
           onClick={() => {
             // console.log(role)
             // console.log(post)
-            setOpen(true)
+            setOpen(true);
           }}
           variant='contained'
           color='error'
@@ -209,7 +212,7 @@ const ReplaceMemberModal = props => {
                 border: '1px solid grey',
                 borderRadius: 3,
                 width: '75%',
-                p: 3
+                p: 3,
               }}
             >
               <b>{currentDate.toDateString()}</b>
@@ -229,7 +232,7 @@ const ReplaceMemberModal = props => {
               ml: 5,
               display: 'flex',
               justifyContent: 'beginning',
-              alignItems: 'center'
+              alignItems: 'center',
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -241,9 +244,9 @@ const ReplaceMemberModal = props => {
                 value={flight}
                 label='Flight'
                 onChange={e => {
-                  setTimeCheck(!timeCheck)
-                  setFlight(e.target.value)
-                  setTrigerFilter(!trigerFilter)
+                  setTimeCheck(!timeCheck);
+                  setFlight(e.target.value);
+                  setTrigerFilter(!trigerFilter);
                 }}
               >
                 {allFlights.map((flightObject, index) => (
@@ -265,7 +268,7 @@ const ReplaceMemberModal = props => {
               flexDirection: 'column',
               gap: 1,
               mt: 3,
-              px: 5
+              px: 5,
             }}
           >
             {filterFlight.length > 0 ? (
@@ -280,7 +283,7 @@ const ReplaceMemberModal = props => {
                         : {
                             borderRadius: 2.5,
                             p: 0,
-                            border: '2px solid blue'
+                            border: '2px solid blue',
                           }
                     }
                     onClick={() => setSelected(user.id)}
@@ -295,13 +298,13 @@ const ReplaceMemberModal = props => {
                           p: 2,
                           width: '100%',
                           borderRadius: 2.5,
-                          backgroundColor: 'none'
+                          backgroundColor: 'none',
                         },
                         {
                           '&:hover': {
                             //backgroundColor: "#DCDCDC",
-                          }
-                        }
+                          },
+                        },
                       ]}
                     >
                       <Box
@@ -310,7 +313,7 @@ const ReplaceMemberModal = props => {
                           alignItems: 'center',
                           justifyContent: 'beginning',
                           gap: 1,
-                          minWidth: '30%'
+                          minWidth: '30%',
                         }}
                       >
                         <Avatar
@@ -320,7 +323,7 @@ const ReplaceMemberModal = props => {
                             color:
                               theme.palette.mode === 'light'
                                 ? 'inherit'
-                                : 'white'
+                                : 'white',
                           }}
                           src={user.avatar}
                           alt='avatar'
@@ -346,7 +349,7 @@ const ReplaceMemberModal = props => {
                             label={user.certs[0].cert}
                             color='success'
                             sx={{
-                              color: 'white'
+                              color: 'white',
                             }}
                           />
                         }
@@ -365,7 +368,7 @@ const ReplaceMemberModal = props => {
                                 label={wep.weapon.toUpperCase()}
                                 color='secondary'
                                 sx={{
-                                  color: 'white'
+                                  color: 'white',
                                 }}
                               />
                               &nbsp;
@@ -406,30 +409,30 @@ const ReplaceMemberModal = props => {
             >
               <Button
                 onClick={() => {
-                  handleClose()
-                  let shiftTime
-                  if (shift === 'Days') shiftTime = '06:00:00'
-                  if (shift === 'Mids') shiftTime = '18:00:00'
+                  handleClose();
+                  let shiftTime;
+                  if (shift === 'Days') shiftTime = '06:00:00';
+                  if (shift === 'Mids') shiftTime = '18:00:00';
                   let postUser = {
                     position_id: post_id,
                     user_id: selected,
                     date: currentDate,
                     time: shiftTime,
-                    role: role
+                    role: role,
+                  };
+                  {
+                    role === 0 && (postUser.role = 'Lead');
                   }
                   {
-                    role === 0 && (postUser.role = 'Lead')
+                    role === 1 && (postUser.role = 'Alpha');
                   }
                   {
-                    role === 1 && (postUser.role = 'Alpha')
+                    role === 2 && (postUser.role = 'Bravo');
                   }
                   {
-                    role === 2 && (postUser.role = 'Bravo')
+                    role === 3 && (postUser.role = 'Charlie');
                   }
-                  {
-                    role === 3 && (postUser.role = 'Charlie')
-                  }
-                  patchSchedule(postUser)
+                  patchSchedule(postUser);
                 }}
                 color='secondary'
                 variant='contained'
@@ -475,7 +478,7 @@ const ReplaceMemberModal = props => {
         </Box>
       </Modal>
     </>
-  )
-}
+  );
+};
 
-export default ReplaceMemberModal
+export default ReplaceMemberModal;

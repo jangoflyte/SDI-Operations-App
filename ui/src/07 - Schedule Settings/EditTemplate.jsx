@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from "react";
-import { MemberContext } from "../MemberContext";
-import "../styles/MembersDetail.css";
+import React, { useContext, useState, useEffect } from 'react';
+import { MemberContext } from '../MemberContext';
+import '../styles/MembersDetail.css';
 import {
   Box,
   Button,
@@ -16,23 +16,23 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
-import Select from "@mui/material/Select";
-import Checkbox from "@mui/material/Checkbox";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import ListItemText from "@mui/material/ListItemText";
-import { useTheme } from "@mui/material/styles";
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import ListItemText from '@mui/material/ListItemText';
+import { useTheme } from '@mui/material/styles';
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   //width: 700,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   borderRadius: 4,
@@ -49,10 +49,10 @@ const MenuProps = {
   },
 };
 
-export const EditTemplate = (props) => {
+export const EditTemplate = props => {
   const { post } = props;
 
-  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allWeapons } =
+  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allFlights } =
     useContext(MemberContext);
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -61,10 +61,14 @@ export const EditTemplate = (props) => {
   const [postName, setPostName] = useState(post.name);
   const [weapon, setWeapon] = useState(post.weapon_req);
   const [weaponIdArray, setWeaponIdArray] = useState(
-    post.weapon_req.map((wep) => wep.id)
+    post.weapon_req.map(wep => wep.id)
   );
+  const [selectedPosts, setSelectedPosts] = useState([]);
+  const [postIdArray, setPostIdArray] = useState([]);
+  const [postArray, setPostArray] = useState([]);
   const [manReq, setManReq] = useState(post.man_req);
   const [cert, setCert] = useState(post.cert_id);
+  const [flight, setFlight] = useState('');
   const [shift, setShift] = useState(post.shift);
 
   const [openItem, setOpenItem] = React.useState(false);
@@ -78,8 +82,18 @@ export const EditTemplate = (props) => {
     setWeapon(post.weapon_req);
     setCert(post.cert_id);
     setShift(post.shift);
-    setWeaponIdArray(post.weapon_req.map((wep) => wep.id));
+    setWeaponIdArray(post.weapon_req.map(wep => wep.id));
   }, [props]);
+
+  useEffect(() => {
+    fetch(`${API}/post`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => setPostArray(data))
+      .catch(err => console.log(err));
+  }, []);
 
   const handleItemClickOpen = () => {
     setOpenItem(true);
@@ -101,40 +115,40 @@ export const EditTemplate = (props) => {
     };
 
     fetch(`${API}/position/${post.id}`, {
-      method: "PATCH",
-      credentials: "include",
-      redirect: "follow",
+      method: 'PATCH',
+      credentials: 'include',
+      redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
-        "Content-Type": "application/json; charset=utf-8",
+        'Content-Type': 'application/json; charset=utf-8',
       },
     })
       // .then(window.location.reload(false))
-      .then((res) => res.json())
+      .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        setTriggerFetch((curr) => !curr);
+        setTriggerFetch(curr => !curr);
         setToggleAlert(!toggleAlert);
         handleClose();
       })
-      .catch((err) => {
-        console.log("Error: ", err);
+      .catch(err => {
+        console.log('Error: ', err);
       });
   };
 
-  const handleDelete = (positionId) => {
+  const handleDelete = positionId => {
     fetch(`${API}/position/${positionId}`, {
-      method: "DELETE",
-      credentials: "include",
-      redirect: "follow",
+      method: 'DELETE',
+      credentials: 'include',
+      redirect: 'follow',
     })
       .then(() => {
-        setTriggerFetch((curr) => !curr);
+        setTriggerFetch(curr => !curr);
         setToggleAlert(!toggleAlert);
         handleClose();
       })
-      .catch((err) => {
-        console.log("Error: ", err);
+      .catch(err => {
+        console.log('Error: ', err);
       });
   };
 
@@ -161,16 +175,16 @@ export const EditTemplate = (props) => {
   //   }
   // };
 
-  const handleWeaponBox = (wepId) => {
-    if (!weaponIdArray.includes(wepId)) {
-      setWeaponIdArray((curr) => [...curr, wepId]);
-      setWeapon((curr) => [
+  const handlePostsBox = postId => {
+    if (!postIdArray.includes(postId)) {
+      setPostIdArray(curr => [...curr, postId]);
+      setSelectedPosts(curr => [
         ...curr,
-        allWeapons.filter((weapon) => weapon.id === wepId)[0],
+        postArray.filter(post => post.id === postId)[0],
       ]);
-    } else if (weaponIdArray.includes(wepId)) {
-      setWeaponIdArray((curr) => curr.filter((wep) => wep !== wepId));
-      setWeapon((curr) => curr.filter((weapon) => weapon.id !== wepId));
+    } else if (postIdArray.includes(postId)) {
+      setPostIdArray(curr => curr.filter(post => post !== postId));
+      setSelectedPosts(curr => curr.filter(post => post.id !== postId));
     }
   };
 
@@ -178,111 +192,118 @@ export const EditTemplate = (props) => {
     <>
       <BorderColorIcon
         onClick={handleOpen}
-        fontSize="large"
-        color="secondary"
-        cursor="pointer"
+        fontSize='large'
+        color='secondary'
+        cursor='pointer'
         sx={{ mr: 5 }}
       />
       <Modal
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby='modal-modal-title'
+        aria-describedby='modal-modal-description'
       >
         <Box sx={style}>
-          <Box sx={{ display: "flex", justifyContent: "right" }}>
-            <CloseIcon onClick={handleClose} sx={{ cursor: "pointer" }} />
+          <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+            <CloseIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
           </Box>
           <Typography
-            id="modal-modal-description"
-            variant="h4"
-            sx={{ mt: 1, textAlign: "center", fontWeight: "bold" }}
+            id='modal-modal-description'
+            variant='h4'
+            sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
             Edit Template
           </Typography>
 
           <Stack
-            direction="row"
+            direction='row'
             mt={3}
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: "40ch" }}>
+            <FormControl sx={{ width: '40ch' }}>
               <TextField
-                id="outlined-basic"
-                label="Template Name"
+                id='outlined-basic'
+                label='Template Name'
                 value={postName}
-                variant="outlined"
-                onChange={(e) => setPostName(e.target.value)}
+                variant='outlined'
+                onChange={e => setPostName(e.target.value)}
               />
             </FormControl>
-            <FormControl sx={{ width: "40ch" }}>
+            <FormControl sx={{ width: '40ch' }}>
               <TextField
-                id="outlined-basic"
-                label="Time"
+                id='outlined-basic'
+                label='Time'
                 value={manReq}
-                variant="outlined"
-                onChange={(e) => setManReq(e.target.value)}
+                variant='outlined'
+                onChange={e => setManReq(e.target.value)}
               />
             </FormControl>
           </Stack>
 
           <Stack
-            direction="row"
+            direction='row'
             pt={2}
             sx={{
-              display: "flex",
+              display: 'flex',
               //justifyContent: 'center',
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
               gap: 2,
             }}
           >
-            <FormControl sx={{ width: "40ch" }}>
-              <InputLabel id="demo-simple-select-label">Flight</InputLabel>
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>Flight</InputLabel>
               <Select
-                htmlFor="cert_id"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={cert}
-                label="Certifications"
-                onChange={(e) => setCert(e.target.value)}
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={flight}
+                label='Flight'
+                onChange={e => setFlight(e.target.value)}
               >
-                <MenuItem value={1}>Entry Controller</MenuItem>
-                <MenuItem value={2}>Patrol</MenuItem>
-                <MenuItem value={3}>Desk Sergeant</MenuItem>
-                <MenuItem value={4}>Flight Sergeant</MenuItem>
+                {allFlights.map((flightObject, index) => (
+                  <MenuItem
+                    id={flightObject.id}
+                    key={index}
+                    value={flightObject.id}
+                  >
+                    {flightObject.flight}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
-            <FormControl sx={{ width: "40ch" }}>
-              <InputLabel id="demo-multiple-checkbox-label">Posts</InputLabel>
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-multiple-checkbox-label'>Posts</InputLabel>
               <Select
-                labelId="demo-multiple-checkbox-label"
-                id="demo-multiple-checkbox"
+                labelId='demo-multiple-checkbox-label'
+                id='demo-multiple-checkbox'
                 multiple
-                value={weapon.map((weap) => weap.weapon)}
-                input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected.join(", ")}
+                value={selectedPosts.map(post => post.post_name)}
+                input={<OutlinedInput label='Tag' />}
+                renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
               >
-                {allWeapons.map((weaponObject, index) => (
+                {postArray.map((postObject, index) => (
                   <MenuItem
-                    id={weaponObject.id}
+                    id={postObject.id}
                     key={index}
-                    value={weaponObject.id}
-                    onClick={() => handleWeaponBox(weaponObject.id)}
+                    value={postObject.id}
+                    onClick={() => handlePostsBox(postObject.id)}
                   >
                     <Checkbox
                       // onChange={handleChange}
-                      checked={weapon.some((wep) => wep.id === weaponObject.id)}
+                      checked={selectedPosts.some(
+                        post => post.id === postObject.id
+                      )}
                       // checked={weapon.some(
-                      //   wep => wep.weapon_id === weaponObject.id
+                      //   wep => wep.weapon_id === postObject.id
                       // )}
 
                       // make seperate component ?
                     />
-                    <ListItemText primary={weaponObject.weapon} />
+                    <ListItemText primary={postObject.post_name} />
                   </MenuItem>
                 ))}
               </Select>
@@ -290,35 +311,35 @@ export const EditTemplate = (props) => {
           </Stack>
 
           <Stack
-            direction="row"
+            direction='row'
             pt={2}
             sx={{
-              display: "flex",
+              display: 'flex',
               //justifyContent: 'center',
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: "40ch" }}>
+            <FormControl sx={{ width: '40ch' }}>
               <TextField
-                id="date"
-                label="Start Date"
-                type="date"
-                defaultValue={startDate.toISOString().split("T")[0]}
+                id='date'
+                label='Start Date'
+                type='date'
+                defaultValue={startDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
                   backgroundColor:
-                    theme.palette.mode === "light"
-                      ? "white"
+                    theme.palette.mode === 'light'
+                      ? 'white'
                       : theme.palette.grey[900],
-                  cursor: "pointer",
+                  cursor: 'pointer',
                 }}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  if (e.target.value === "") {
+                onChange={e => {
+                  if (e.target.value === '') {
                     setStartDate(new Date());
-                    e.target.value = new Date().toISOString().split("T")[0];
+                    e.target.value = new Date().toISOString().split('T')[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   } else {
                     setStartDate(new Date(`${e.target.value}T00:00:00`));
@@ -327,27 +348,27 @@ export const EditTemplate = (props) => {
                 }}
               />
             </FormControl>
-            <FormControl sx={{ width: "40ch" }}>
+            <FormControl sx={{ width: '40ch' }}>
               <TextField
-                id="date"
-                label="End Date"
-                type="date"
-                defaultValue={endDate.toISOString().split("T")[0]}
+                id='date'
+                label='End Date'
+                type='date'
+                defaultValue={endDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
                   backgroundColor:
-                    theme.palette.mode === "light"
-                      ? "white"
+                    theme.palette.mode === 'light'
+                      ? 'white'
                       : theme.palette.grey[900],
-                  cursor: "pointer",
+                  cursor: 'pointer',
                 }}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => {
-                  if (e.target.value === "") {
+                onChange={e => {
+                  if (e.target.value === '') {
                     setEndDate(new Date());
-                    e.target.value = new Date().toISOString().split("T")[0];
+                    e.target.value = new Date().toISOString().split('T')[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
                   } else {
                     setEndDate(new Date(`${e.target.value}T00:00:00`));
@@ -359,26 +380,26 @@ export const EditTemplate = (props) => {
           </Stack>
 
           <Stack
-            direction="row"
+            direction='row'
             pt={2}
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           ></Stack>
 
           <Stack
-            direction="row"
+            direction='row'
             mt={3}
             sx={{
-              borderRadius: "30px",
-              display: "flex",
-              justifyContent: "right",
+              borderRadius: '30px',
+              display: 'flex',
+              justifyContent: 'right',
             }}
           >
             <Button
-              variant="contained"
-              sx={{ borderRadius: "30px", backgroundColor: "#8B0000", mr: 2 }}
+              variant='contained'
+              sx={{ borderRadius: '30px', backgroundColor: '#8B0000', mr: 2 }}
               onClick={handleItemClickOpen}
             >
               Delete Post
@@ -386,14 +407,14 @@ export const EditTemplate = (props) => {
             <Dialog
               open={openItem}
               onClose={handleItemClose}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
+              aria-labelledby='alert-dialog-title'
+              aria-describedby='alert-dialog-description'
             >
-              <DialogTitle id="alert-dialog-title">
-                {"Are You Sure You Want to Delete?"}
+              <DialogTitle id='alert-dialog-title'>
+                {'Are You Sure You Want to Delete?'}
               </DialogTitle>
               <DialogContent>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText id='alert-dialog-description'>
                   Once the Template is Deleted, it cannot be recovered. Are you
                   sure you want to delete this Template?
                 </DialogContentText>
@@ -402,8 +423,8 @@ export const EditTemplate = (props) => {
                 <Button onClick={handleItemClose}>Cancel</Button>
                 <Button
                   sx={{
-                    borderRadius: "30px",
-                    color: "red",
+                    borderRadius: '30px',
+                    color: 'red',
                     mr: 2,
                   }}
                   onClick={() => handleDelete(post.id)}
@@ -415,9 +436,9 @@ export const EditTemplate = (props) => {
             </Dialog>
             <Button
               onClick={() => handleAdd()}
-              color="secondary"
-              variant="contained"
-              sx={{ borderRadius: "30px" }}
+              color='secondary'
+              variant='contained'
+              sx={{ borderRadius: '30px' }}
             >
               Save Changes
             </Button>

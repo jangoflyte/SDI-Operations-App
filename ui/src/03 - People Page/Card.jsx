@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { MemberContext } from '../MemberContext'
+import React, { useContext, useEffect, useState } from 'react';
+import { MemberContext } from '../MemberContext';
 import {
   Stack,
   Box,
@@ -18,19 +18,19 @@ import {
   Paper,
   Divider,
   Badge,
-  Tooltip
-} from '@mui/material'
-import '../styles/Card.css'
-import { useNavigate } from 'react-router-dom'
-import { Filter } from './Filter'
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
-import SecurityIcon from '@mui/icons-material/Security'
-import { WeaponQuals } from '../00 - Features/WeaponQuals'
-import { useMemo } from 'react'
-import { useTheme } from '@mui/material/styles'
+  Tooltip,
+} from '@mui/material';
+import '../styles/Card.css';
+import { useNavigate } from 'react-router-dom';
+import { Filter } from './Filter';
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import SecurityIcon from '@mui/icons-material/Security';
+import { WeaponQuals } from '../00 - Features/WeaponQuals';
+import { useMemo } from 'react';
+import { useTheme } from '@mui/material/styles';
 
 const BasicCard = props => {
-  const { pageTrigger, filter, setFilter } = props
+  const { pageTrigger, filter, setFilter } = props;
   const {
     setMember,
     API,
@@ -38,61 +38,61 @@ const BasicCard = props => {
     setTriggerFetch,
     userAccount,
     page,
-    setPage
-  } = useContext(MemberContext)
-  const navigate = useNavigate()
-  const [idArray, setIdArray] = useState([])
+    setPage,
+  } = useContext(MemberContext);
+  const navigate = useNavigate();
+  const [idArray, setIdArray] = useState([]);
   //const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5)
-  const [openItem, setOpenItem] = React.useState(false)
-  const theme = useTheme()
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openItem, setOpenItem] = React.useState(false);
+  const theme = useTheme();
 
   // filter check helper functions
   const certificationCheck = user => {
     if (filter.certification.length > 0) {
-      return filter.certification.includes(user.cert_id)
+      return filter.certification.includes(user.cert_id);
     } else {
-      return true
+      return true;
     }
-  }
+  };
   const weaponCheck = user => {
     if (filter.weapon.length > 0) {
       return user.weapons.some(wep => {
         // console.log('weapon filter', filter.weapon);
         return filter.weapon.some(filterWep => {
-          return filterWep === wep.weapon
-        })
+          return filterWep === wep.weapon;
+        });
         // return filter.weapon.includes(wep.weapon);
-      })
+      });
     } else {
-      return true
+      return true;
     }
-  }
+  };
   const flightCheck = user => {
-    console.log('this is user ', user)
+    // console.log('this is user ', user)
     if (filter.flight.length > 0) {
       return filter.flight.some(flight => {
         // console.log('this is flight ', flight);
-        return user.flight !== null ? user.flight.flight === flight : false
-      })
+        return user.flight !== null ? user.flight.flight === flight : false;
+      });
     } else {
-      return true
+      return true;
     }
-  }
+  };
   const armingCheck = user => {
     if (filter.arming_status.length > 0) {
-      return filter.arming_status.includes(user.weapon_arming.toString())
+      return filter.arming_status.includes(user.weapon_arming.toString());
     } else {
-      return true
+      return true;
     }
-  }
+  };
   const adminCheck = user => {
     if (filter.admin !== null) {
-      return user.admin === filter.admin
+      return user.admin === filter.admin;
     } else {
-      return true
+      return true;
     }
-  }
+  };
 
   // filter users
   let filteredUsers = useMemo(() => {
@@ -103,65 +103,65 @@ const BasicCard = props => {
         armingCheck(user) &&
         adminCheck(user) &&
         flightCheck(user)
-    )
-  }, [usersArray, filter])
+    );
+  }, [usersArray, filter]);
 
   useEffect(() => {
-    setPage(0)
-  }, [pageTrigger])
+    setPage(0);
+  }, [pageTrigger]);
 
   const handleItemClickOpen = () => {
-    setOpenItem(true)
-  }
+    setOpenItem(true);
+  };
 
   const handleItemClose = () => {
-    setOpenItem(false)
-  }
+    setOpenItem(false);
+  };
 
-  const onDataPageChange = (event, page) => setPage(page - 1)
+  const onDataPageChange = (event, page) => setPage(page - 1);
 
-  const handleChangePage = (event, newPage) => setPage(newPage)
+  const handleChangePage = (event, newPage) => setPage(newPage);
 
   const handleChangeRowsPerPage = event => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0)
-  }
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   const handleCheck = props => {
-    const { event, member } = props
+    const { event, member } = props;
     if (event.target.checked) {
-      setIdArray(curr => [...curr, member.id])
+      setIdArray(curr => [...curr, member.id]);
     } else {
-      setIdArray(idArray.filter(id => id !== member.id))
+      setIdArray(idArray.filter(id => id !== member.id));
     }
-  }
+  };
 
   const navigateToMember = member => {
     // console.log('current member', member);
-    setMember(member)
-    navigate(`/sfmembers/${member.id}`)
-  }
+    setMember(member);
+    navigate(`/sfmembers/${member.id}`);
+  };
 
   const handleDeleteUser = inputArray => {
     for (let userId of inputArray) {
       fetch(`${API}/deleteuser/${userId}`, {
         method: 'DELETE',
         credentials: 'include',
-        redirect: 'follow'
+        redirect: 'follow',
       })
         .then(res => res.json())
         .then(() => {
-          setTriggerFetch(curr => !curr)
-          handleItemClose()
-          setPage(0)
+          setTriggerFetch(curr => !curr);
+          handleItemClose();
+          setPage(0);
         })
         .then(navigate('/sfmembers'))
 
         .catch(err => {
-          console.log('Error: ', err)
-        })
+          console.log('Error: ', err);
+        });
     }
-  }
+  };
 
   return (
     <Paper
@@ -169,7 +169,7 @@ const BasicCard = props => {
       sx={{
         mx: 10,
         my: 5,
-        borderRadius: 3
+        borderRadius: 3,
       }}
     >
       <Box sx={{ px: 5, py: 5 }}>
@@ -208,7 +208,7 @@ const BasicCard = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '22%'
+              width: '22%',
             }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Rank</Typography>
@@ -218,7 +218,7 @@ const BasicCard = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '22%'
+              width: '22%',
             }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Name</Typography>
@@ -228,7 +228,7 @@ const BasicCard = props => {
             sx={{
               display: 'flex',
               justifyContent: 'center',
-              width: '22%'
+              width: '22%',
             }}
           >
             <Typography sx={{ fontWeight: 'bold' }}>Role</Typography>
@@ -260,7 +260,7 @@ const BasicCard = props => {
                 sx={{
                   borderRadius: 3,
                   display: 'flex',
-                  justifyContent: 'space-between'
+                  justifyContent: 'space-between',
                 }}
               >
                 <Box
@@ -268,7 +268,7 @@ const BasicCard = props => {
                   sx={{
                     display: 'flex',
                     width: '5%',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
                   }}
                 >
                   <Checkbox
@@ -283,7 +283,7 @@ const BasicCard = props => {
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    width: '22%'
+                    width: '22%',
                   }}
                 >
                   <Typography>
@@ -293,7 +293,7 @@ const BasicCard = props => {
                 <Box
                   alignItems='center'
                   sx={{
-                    width: '22%'
+                    width: '22%',
                   }}
                 >
                   <Button fullWidth sx={{ borderRadius: 10 }}>
@@ -303,7 +303,7 @@ const BasicCard = props => {
                         display: 'flex',
                         justifyContent: 'start',
                         width: '100%',
-                        gap: 1
+                        gap: 1,
                       }}
                       onClick={() => navigateToMember(member)}
                     >
@@ -319,7 +319,7 @@ const BasicCard = props => {
                           overlap='circular'
                           anchorOrigin={{
                             vertical: 'bottom',
-                            horizontal: 'right'
+                            horizontal: 'right',
                           }}
                           variant='dot'
                           sx={{
@@ -347,9 +347,9 @@ const BasicCard = props => {
                                 borderRadius: '50%',
                                 animation: 'ripple 1.2s infinite ease-in-out',
                                 border: '1px solid currentColor',
-                                content: '""'
-                              }
-                            }
+                                content: '""',
+                              },
+                            },
                           }}
                         >
                           <Avatar
@@ -360,7 +360,7 @@ const BasicCard = props => {
                               color:
                                 theme.palette.mode === 'light'
                                   ? 'inherit'
-                                  : 'white'
+                                  : 'white',
                             }}
                             src={member.avatar}
                             alt='avatar'
@@ -383,7 +383,7 @@ const BasicCard = props => {
                           cursor: 'pointer',
                           fontWeight: 'bold',
                           color: '#6D7AE5',
-                          ml: 1
+                          ml: 1,
                         }}
                       >
                         {' '}
@@ -405,7 +405,7 @@ const BasicCard = props => {
                   sx={{
                     display: 'flex',
                     justifyContent: 'center',
-                    width: '22%'
+                    width: '22%',
                   }}
                 >
                   {member.admin === true ? (
@@ -419,7 +419,7 @@ const BasicCard = props => {
                   justifyContent='right'
                   sx={{
                     display: 'flex',
-                    width: '22%'
+                    width: '22%',
                   }}
                 >
                   {member.certs.length === 0 ? (
@@ -443,7 +443,7 @@ const BasicCard = props => {
                   justifyContent='right'
                   sx={{
                     display: 'flex',
-                    width: '22%'
+                    width: '22%',
                   }}
                 >
                   {member.weapons.length === 0 ? (
@@ -477,7 +477,7 @@ const BasicCard = props => {
           alignItems='center'
           sx={{
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Box>
@@ -512,12 +512,12 @@ const BasicCard = props => {
                   sx={{
                     borderRadius: '30px',
                     color: 'red',
-                    mr: 2
+                    mr: 2,
                   }}
                   onClick={() => {
-                    const confirmation = true
+                    const confirmation = true;
                     if (confirmation) {
-                      handleDeleteUser(idArray)
+                      handleDeleteUser(idArray);
                     }
                   }}
                   autoFocus
@@ -549,7 +549,7 @@ const BasicCard = props => {
         </Stack>
       </Box>
     </Paper>
-  )
-}
+  );
+};
 
-export default BasicCard
+export default BasicCard;

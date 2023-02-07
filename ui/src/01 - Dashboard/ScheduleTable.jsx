@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useMemo } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react';
 import {
   Button,
   Divider,
@@ -6,43 +6,43 @@ import {
   Fade,
   TextField,
   Box,
-  Stack
-} from '@mui/material/'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Typography from '@mui/material/Typography'
-import Paper from '@mui/material/Paper'
-import { MemberContext } from '../MemberContext'
-import { EditShiftModal } from './EditShiftModal'
-import { Legend } from './Legend'
-import { useNavigate } from 'react-router-dom'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
-import { useParams } from 'react-router'
-import { useTheme } from '@mui/material/styles'
-import { RowTableSched } from './RowTableSched'
-import { Roster } from './Roster'
+  Stack,
+} from '@mui/material/';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import { MemberContext } from '../MemberContext';
+import { EditShiftModal } from './EditShiftModal';
+import { Legend } from './Legend';
+import { useNavigate } from 'react-router-dom';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { useParams } from 'react-router';
+import { useTheme } from '@mui/material/styles';
+import { RowTableSched } from './RowTableSched';
+import { Roster } from './Roster';
 
 export const ScheduleTable = () => {
   const { API, toggleAlert, setToggleAlert, userAccount, setRows } =
-    useContext(MemberContext)
-  const navigate = useNavigate()
-  const [positions, setPositions] = useState([])
-  const [schedule, setSchedule] = useState([])
-  const [shift, setShift] = useState('days')
-  const [allShifts, setAllShifts] = useState([])
-  const [schedDate, setSchedDate] = useState(new Date(Date()))
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [dateRange, setDateRange] = useState([])
-  const [postsAssigned, setPostsAssigned] = useState(0)
-  const [schedFilled, setSchedFilled] = useState([])
-  const { urlDate } = useParams()
-  const theme = useTheme()
+    useContext(MemberContext);
+  const navigate = useNavigate();
+  const [positions, setPositions] = useState([]);
+  const [schedule, setSchedule] = useState([]);
+  const [shift, setShift] = useState('days');
+  const [allShifts, setAllShifts] = useState([]);
+  const [schedDate, setSchedDate] = useState(new Date(Date()));
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [dateRange, setDateRange] = useState([]);
+  const [postsAssigned, setPostsAssigned] = useState(0);
+  const [schedFilled, setSchedFilled] = useState([]);
+  const { urlDate } = useParams();
+  const theme = useTheme();
 
   // let dateEnd = new Date(new Date(startDate).setUTCHours(0, 0, 0, 0))
   // dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
@@ -54,25 +54,25 @@ export const ScheduleTable = () => {
     // use Set to get unique shifts for the date
 
     let shiftsPerDay = dateRange.map(date => {
-      let currentDateShifts = []
-      let workingCurrentDate = date.toISOString().split('T')[0]
+      let currentDateShifts = [];
+      let workingCurrentDate = date.toISOString().split('T')[0];
 
       positions.forEach(position => {
-        let workingStartDate = position.start_datetime.split('T')[0]
+        let workingStartDate = position.start_datetime.split('T')[0];
         // let workingEndDate = position.end_datetime.split('T')[0];
 
         if (workingStartDate === workingCurrentDate) {
-          currentDateShifts.push(position.shift)
+          currentDateShifts.push(position.shift);
         }
-      })
+      });
 
-      let currentDateSet = new Set(currentDateShifts)
+      let currentDateSet = new Set(currentDateShifts);
       let resultObj = {
         shifts: Array.from(currentDateSet).sort(),
-        date: workingCurrentDate
-      }
-      return resultObj
-    })
+        date: workingCurrentDate,
+      };
+      return resultObj;
+    });
 
     // console.log('shifts per each day', shiftsPerDay);
 
@@ -87,73 +87,73 @@ export const ScheduleTable = () => {
     // let shiftsSet = new Set(positionShifts);
     // let workingArray = Array.from(shiftsSet);
     // console.log(workingArray);
-    setAllShifts(shiftsPerDay)
+    setAllShifts(shiftsPerDay);
     // need to grab and set array of shifts from position fetch
-  }, [positions])
+  }, [positions]);
 
   useEffect(() => {
     if (urlDate !== undefined) {
-      let splitDate = urlDate.split('-')
-      if (splitDate[2] < 10) splitDate[2] = `0${splitDate[2]}`
-      let workingDate = new Date(splitDate[0], splitDate[1] - 1, splitDate[2])
+      let splitDate = urlDate.split('-');
+      if (splitDate[2] < 10) splitDate[2] = `0${splitDate[2]}`;
+      let workingDate = new Date(splitDate[0], splitDate[1] - 1, splitDate[2]);
       // workingDate.setUTCHours(0, 0, 0)
-      setStartDate(new Date(splitDate[0], splitDate[1] - 1, splitDate[2]))
-      setSchedDate(new Date(workingDate))
-      let dateEnd = new Date(workingDate.setDate(workingDate.getDate() + 7))
-      setEndDate(dateEnd)
+      setStartDate(new Date(splitDate[0], splitDate[1] - 1, splitDate[2]));
+      setSchedDate(new Date(workingDate));
+      let dateEnd = new Date(workingDate.setDate(workingDate.getDate() + 7));
+      setEndDate(dateEnd);
     } else {
       // console.log('ran effect without url');
-      let dateEnd = new Date(new Date(startDate).setUTCHours(0, 0, 0, 0))
-      dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
-      setStartDate(new Date())
-      setEndDate(new Date(dateEnd))
+      let dateEnd = new Date(new Date(startDate).setUTCHours(0, 0, 0, 0));
+      dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7));
+      setStartDate(new Date());
+      setEndDate(new Date(dateEnd));
     }
-  }, [urlDate])
+  }, [urlDate]);
 
   useEffect(() => {
-    fetchSchedule()
-    fetchPosts()
-  }, [schedDate, shift, startDate])
+    fetchSchedule();
+    fetchPosts();
+  }, [schedDate, shift, startDate]);
 
   useEffect(() => {
     // console.log('fetching if schedule filled');
-    let datesToPost = []
-    if (dateRange.length === 0) return
+    let datesToPost = [];
+    if (dateRange.length === 0) return;
     for (let dateIn of dateRange) {
       let workingDate = {
         date: `${dateIn.getFullYear()}-${
           dateIn.getMonth() + 1
         }-${dateIn.getDate()}`,
         filled: null,
-        shift: 'all'
-      }
-      datesToPost.push(workingDate)
+        shift: 'all',
+      };
+      datesToPost.push(workingDate);
     }
     fetch(`${API}/schedule/filled`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify(datesToPost)
+      body: JSON.stringify(datesToPost),
     })
       .then(res => {
         //console.log(res.status);
-        return res.json()
+        return res.json();
       })
       .then(data => {
         //console.log(data);
-        setSchedFilled(data)
+        setSchedFilled(data);
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }, [dateRange, schedule])
+        console.log('error: ', err);
+      });
+  }, [dateRange, schedule]);
 
   const fetchPosts = () => {
     //console.log('fetching positions');
-    let splitStartDate = startDate.toISOString().split('T')[0].split('-')
+    let splitStartDate = startDate.toISOString().split('T')[0].split('-');
     let fetchStartDate = new Date(
       Date.UTC(
         splitStartDate[0],
@@ -163,23 +163,23 @@ export const ScheduleTable = () => {
         0,
         0
       )
-    )
+    );
 
     fetch(`${API}/position/date`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
       body: JSON.stringify({
         start_date: fetchStartDate.toISOString(),
-        end_date: endDate.toISOString()
-      })
+        end_date: endDate.toISOString(),
+      }),
     })
       .then(res => {
         // console.log(res.status);
-        return res.json()
+        return res.json();
       })
       .then(data => {
         // console.log(shift.toLowerCase(), 'this is data ', data)
@@ -188,37 +188,37 @@ export const ScheduleTable = () => {
         // )
         // console.log('this is filtered psots ', filteredPosts)
         // console.log('this is positions ', data);
-        setPositions(data)
+        setPositions(data);
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }
+        console.log('error: ', err);
+      });
+  };
 
   const fetchSchedule = () => {
     //console.log('fetching schedule');
-    let fetchDate = schedDate.toISOString().split('T')[0]
+    let fetchDate = schedDate.toISOString().split('T')[0];
     fetch(`${API}/schedule/date`, {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
-      body: JSON.stringify({ date: fetchDate, dateEnd: endDate })
+      body: JSON.stringify({ date: fetchDate, dateEnd: endDate }),
     })
       .then(res => {
         // console.log(res.status);
-        return res.json()
+        return res.json();
       })
       .then(data => {
         // console.log("THis is schedule",data);
-        setSchedule(data)
+        setSchedule(data);
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }
+        console.log('error: ', err);
+      });
+  };
 
   const delSchedule = id => {
     //console.log(`deleting schedule ${id}`);
@@ -226,22 +226,22 @@ export const ScheduleTable = () => {
       method: 'DELETE',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      redirect: 'follow'
+      redirect: 'follow',
     })
       .then(res => {
         // console.log(res.status);
-        return res.json()
+        return res.json();
       })
       .then(() => {
         // console.log(data);
-        fetchSchedule()
+        fetchSchedule();
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }
+        console.log('error: ', err);
+      });
+  };
 
   const handleFinalize = () => {
     // console.log(userAccount);
@@ -249,7 +249,7 @@ export const ScheduleTable = () => {
       method: 'POST',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       redirect: 'follow',
       body: JSON.stringify({
@@ -263,21 +263,21 @@ export const ScheduleTable = () => {
           userAccount.last_name
         } for ${
           shift === 'days' ? 'Day' : 'Mid'
-        } Shift on ${schedDate.toDateString()}`
-      })
+        } Shift on ${schedDate.toDateString()}`,
+      }),
     })
       .then(res => {
         // console.log(res.status);
-        return res.json()
+        return res.json();
       })
       .then(data => {
         // console.log(data);
-        data
+        data;
       })
       .catch(err => {
-        console.log('error: ', err)
-      })
-  }
+        console.log('error: ', err);
+      });
+  };
 
   const checkboxDisplay = (date, index, shiftInfo) => {
     if (schedFilled.length > 0) {
@@ -287,30 +287,30 @@ export const ScheduleTable = () => {
         schedFilled[index].filled.filter(item => item === shiftInfo).length ===
           schedFilled[index][`positions_${shiftInfo}`]
       ) {
-        return <CheckCircleOutlineIcon color='info' />
+        return <CheckCircleOutlineIcon color='info' />;
       } else {
-        return <HighlightOffIcon color='error' />
+        return <HighlightOffIcon color='error' />;
       }
     } else {
-      return <HighlightOffIcon color='error' />
+      return <HighlightOffIcon color='error' />;
     }
-  }
+  };
 
   useMemo(() => {
-    let dateRange2 = []
+    let dateRange2 = [];
     for (let i = 0; i < 7; i++) {
-      let workingDate = new Date(startDate)
-      let newDate = new Date(workingDate.setDate(workingDate.getDate() + i))
-      dateRange2.push(newDate)
+      let workingDate = new Date(startDate);
+      let newDate = new Date(workingDate.setDate(workingDate.getDate() + i));
+      dateRange2.push(newDate);
     }
-    setDateRange(dateRange2)
-  }, [startDate])
+    setDateRange(dateRange2);
+  }, [startDate]);
 
   useMemo(() => {
     setTimeout(() => {
-      setToggleAlert(false)
-    }, 3000)
-  }, [toggleAlert])
+      setToggleAlert(false);
+    }, 3000);
+  }, [toggleAlert]);
 
   const PostList = (
     name,
@@ -325,9 +325,9 @@ export const ScheduleTable = () => {
     shift,
     position
   ) => {
-    let weapons = weapon_req.map(weapon => weapon.weapon)
-    weapons = weapons.join(' ')
-    let cert = cert_req
+    let weapons = weapon_req.map(weapon => weapon.weapon);
+    weapons = weapons.join(' ');
+    let cert = cert_req;
 
     return {
       name,
@@ -340,16 +340,16 @@ export const ScheduleTable = () => {
       delSchedule,
       currentDate,
       shift,
-      position
-    }
-  }
+      position,
+    };
+  };
 
   const rows = useMemo(() => {
-    let numberOfAssigned = 0
-    let row = []
-    let shiftTime
-    if (shift === 'days') shiftTime = '06:00:00'
-    if (shift === 'mids') shiftTime = '18:00:00'
+    let numberOfAssigned = 0;
+    let row = [];
+    let shiftTime;
+    if (shift === 'days') shiftTime = '06:00:00';
+    if (shift === 'mids') shiftTime = '18:00:00';
 
     if (positions.length > 0) {
       row = positions
@@ -364,14 +364,14 @@ export const ScheduleTable = () => {
             sched =>
               sched.position_id === position.id &&
               sched.date.split('T')[0] === schedDate.toISOString().split('T')[0]
-          )
+          );
           while (filUsers.length < position.man_req) {
-            filUsers.push({ noUser: true })
+            filUsers.push({ noUser: true });
           }
           if (!filUsers.some(user => user.noUser === true)) {
-            numberOfAssigned += 1
+            numberOfAssigned += 1;
           }
-          setPostsAssigned(numberOfAssigned)
+          setPostsAssigned(numberOfAssigned);
 
           return PostList(
             position.name,
@@ -385,15 +385,15 @@ export const ScheduleTable = () => {
             schedDate,
             shift,
             position
-          )
-        })
+          );
+        });
     }
-    return row
-  }, [positions, schedule, schedDate, shift])
+    return row;
+  }, [positions, schedule, schedDate, shift]);
 
   useEffect(() => {
-    setRows(rows)
-  }, [positions, schedule, schedDate, shift])
+    setRows(rows);
+  }, [positions, schedule, schedDate, shift]);
 
   return (
     <Box
@@ -403,7 +403,7 @@ export const ScheduleTable = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 2
+        gap: 2,
       }}
     >
       <Fade in={toggleAlert} timeout={1000}>
@@ -412,7 +412,7 @@ export const ScheduleTable = () => {
             width: '100vw',
             position: 'absolute',
             left: 0,
-            top: '10vh'
+            top: '10vh',
           }}
         >
           <Alert severity='success' spacing={2} mb={2}>
@@ -439,7 +439,7 @@ export const ScheduleTable = () => {
             //alignItems: 'end',
             //justifyContent: 'start',
             gap: 2,
-            width: '25%'
+            width: '25%',
           }}
         >
           <Paper sx={{ width: '95%', boxShadow: 2 }}>
@@ -452,7 +452,7 @@ export const ScheduleTable = () => {
                 justifyContent: 'left',
                 width: '100%',
                 //height: '100vh',
-                gap: 2
+                gap: 2,
               }}
             >
               <Roster rows={rows} positions={positions} schedDate={schedDate} />
@@ -468,7 +468,7 @@ export const ScheduleTable = () => {
             // alignItems: 'end',
             justifyContent: 'left',
             gap: 2,
-            width: '75%'
+            width: '75%',
           }}
         >
           <Box
@@ -479,7 +479,7 @@ export const ScheduleTable = () => {
               alignItems: 'end',
               // justifyContent: 'left',
               width: '100%',
-              gap: 2
+              gap: 2,
             }}
           >
             <Box
@@ -490,7 +490,7 @@ export const ScheduleTable = () => {
                 alignItems: 'end',
                 justifyContent: 'left',
                 gap: 2,
-                width: 620
+                width: 620,
                 //width: '90%',
               }}
             >
@@ -505,32 +505,32 @@ export const ScheduleTable = () => {
                     theme.palette.mode === 'light'
                       ? 'white'
                       : theme.palette.grey[900],
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
                 InputLabelProps={{
-                  shrink: true
+                  shrink: true,
                 }}
                 onChange={e => {
                   if (e.target.value === '') {
-                    setStartDate(new Date())
-                    e.target.value = new Date().toISOString().split('T')[0]
-                    setSchedDate(new Date(`${e.target.value}T00:00:00`))
+                    setStartDate(new Date());
+                    e.target.value = new Date().toISOString().split('T')[0];
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
                     let dateEnd = new Date(
                       new Date(new Date(`${e.target.value}T00:00:00`))
-                    )
-                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
-                    setEndDate(new Date(dateEnd))
-                    navigate(`/date/${e.target.value}`)
+                    );
+                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7));
+                    setEndDate(new Date(dateEnd));
+                    navigate(`/date/${e.target.value}`);
                   } else {
-                    console.log('textfield e.target.value: ', e.target.value)
-                    setStartDate(new Date(`${e.target.value}T00:00:00`))
-                    setSchedDate(new Date(`${e.target.value}T00:00:00`))
+                    console.log('textfield e.target.value: ', e.target.value);
+                    setStartDate(new Date(`${e.target.value}T00:00:00`));
+                    setSchedDate(new Date(`${e.target.value}T00:00:00`));
                     let dateEnd = new Date(
                       new Date(new Date(`${e.target.value}T00:00:00`))
-                    )
-                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7))
-                    setEndDate(new Date(dateEnd))
-                    navigate(`/date/${e.target.value}`)
+                    );
+                    dateEnd = new Date(dateEnd.setDate(dateEnd.getDate() + 7));
+                    setEndDate(new Date(dateEnd));
+                    navigate(`/date/${e.target.value}`);
                   }
                 }}
               />
@@ -547,7 +547,7 @@ export const ScheduleTable = () => {
                   display: 'flex',
                   flexWrap: 'wrap',
                   flexDirection: 'row',
-                  alignItems: 'center'
+                  alignItems: 'center',
                 }}
               >
                 <Button
@@ -595,7 +595,7 @@ export const ScheduleTable = () => {
                     : shift === 'mids'
                     ? '#7A8AFF'
                     : '#4caf50',
-                textShadow: '1px 1px 2px #454545'
+                textShadow: '1px 1px 2px #454545',
               }}
             >
               {schedDate.toDateString()}
@@ -610,7 +610,7 @@ export const ScheduleTable = () => {
               alignItems: 'center',
               justifyContent: 'left',
               gap: 1,
-              whiteSpace: 'no-wrap'
+              whiteSpace: 'no-wrap',
               // maxWidth: '100%',
               // overflowX: 'auto',
             }}
@@ -634,7 +634,7 @@ export const ScheduleTable = () => {
                               ? '#7A8AFF'
                               : '#00cc8f',
                           borderRadius: 1,
-                          minHeight: '10rem'
+                          minHeight: '10rem',
                         }
                       : {
                           display: 'flex',
@@ -642,7 +642,7 @@ export const ScheduleTable = () => {
                           flexDirection: 'column',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          minHeight: '10rem'
+                          minHeight: '10rem',
                         }
                   }
                 >
@@ -652,7 +652,7 @@ export const ScheduleTable = () => {
                       justifyContent: 'center',
                       px: 1,
                       pt: 1,
-                      gap: 1
+                      gap: 1,
                     }}
                   >
                     <Typography
@@ -690,7 +690,7 @@ export const ScheduleTable = () => {
                   )}
                   {allShifts.reduce((accumulator, currentValue) => {
                     if (currentValue.date !== date.toISOString().split('T')[0])
-                      return accumulator
+                      return accumulator;
                     accumulator.push(
                       currentValue.shifts.map((buttonShift, index) => (
                         // can make the color change based on the index and set to the index of a color array ///////////
@@ -710,21 +710,21 @@ export const ScheduleTable = () => {
                             schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(229, 115, 115, 0.2)',
-                                  borderRadius: 0
+                                  borderRadius: 0,
                                 }
                               : shift === 'mids' &&
                                 buttonShift === 'mids' &&
                                 schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(66, 135, 245, 0.2)',
-                                  borderRadius: 0
+                                  borderRadius: 0,
                                 }
                               : shift === 'swings' &&
                                 buttonShift === 'swings' &&
                                 schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(76, 175, 80, 0.2)',
-                                  borderRadius: 0
+                                  borderRadius: 0,
                                 }
                               : { borderRadius: 0 }
                           }
@@ -732,7 +732,7 @@ export const ScheduleTable = () => {
                             let splitDate = date
                               .toISOString()
                               .split('T')[0]
-                              .split('-')
+                              .split('-');
                             setSchedDate(
                               new Date(
                                 splitDate[0],
@@ -742,17 +742,17 @@ export const ScheduleTable = () => {
                                 0,
                                 0
                               )
-                            )
-                            setShift(buttonShift)
-                            fetchSchedule()
+                            );
+                            setShift(buttonShift);
+                            fetchSchedule();
                           }}
                           endIcon={checkboxDisplay(date, index, 'days')}
                         >
                           {buttonShift}
                         </Button>
                       ))
-                    )
-                    return accumulator
+                    );
+                    return accumulator;
                   }, [])}
                 </Box>
               </Paper>
@@ -770,10 +770,10 @@ export const ScheduleTable = () => {
                     theme.palette.mode === 'light'
                       ? 'white'
                       : theme.palette.grey[900],
-                  borderRadius: 1
+                  borderRadius: 1,
                 }}
               >
-                <Legend />
+                <Legend schedDate={schedDate} allShifts={allShifts} />
               </Box>
             </Paper>
           </Box>
@@ -787,7 +787,7 @@ export const ScheduleTable = () => {
                   ? '#ffa726'
                   : shift === 'mids'
                   ? '#7A8AFF'
-                  : '#00cc8f'
+                  : '#00cc8f',
             }}
           >
             <Table aria-label='collapsible table' stickyHeader id='table'>
@@ -816,5 +816,5 @@ export const ScheduleTable = () => {
         </Box>
       </Stack>
     </Box>
-  )
-}
+  );
+};
