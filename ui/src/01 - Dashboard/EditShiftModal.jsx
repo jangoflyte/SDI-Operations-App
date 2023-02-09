@@ -63,12 +63,12 @@ export const EditShiftModal = props => {
   const [flight, setFlight] = useState('');
   const [schedDate, setSchedDate] = useState(new Date());
   const { currDate } = props;
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(currDate));
+  const [endDate, setEndDate] = useState(new Date(currDate));
   const [selectedDate, handleDateChange] = useState(new Date());
   const [selectedDate1, handleDateChange1] = useState(new Date());
   const theme = useTheme();
-  const positions = props.positions;
+  const { positions } = props;
 
   console.log('This is currdate ', currDate);
   useEffect(() => {
@@ -81,9 +81,14 @@ export const EditShiftModal = props => {
       .catch(err => console.log(err));
   }, []);
 
-  // useEffect(() => {
-  //   console.log('This is end date (edit shift modal)', endDate.toISOString());
-  // }, [endDate]);
+  useEffect(() => {
+    console.log('This is end date (edit shift modal)', endDate);
+  }, [endDate]);
+
+  useEffect(() => {
+    setStartDate(new Date(currDate));
+    setEndDate(new Date(currDate));
+  }, [currDate]);
 
   // useEffect(() => {
   //   const newPost = {

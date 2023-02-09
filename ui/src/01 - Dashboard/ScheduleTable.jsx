@@ -31,8 +31,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const ScheduleTable = () => {
-  const { API, toggleAlert, setToggleAlert, userAccount, setRows } =
-    useContext(MemberContext);
+  const {
+    API,
+    toggleAlert,
+    setToggleAlert,
+    userAccount,
+    setRows,
+    triggerFetch,
+  } = useContext(MemberContext);
   const navigate = useNavigate();
   const [positions, setPositions] = useState([]);
   const [schedule, setSchedule] = useState([]);
@@ -116,7 +122,7 @@ export const ScheduleTable = () => {
   useEffect(() => {
     fetchSchedule();
     fetchPosts();
-  }, [schedDate, shift, startDate]);
+  }, [schedDate, shift, startDate, triggerFetch]);
 
   useEffect(() => {
     // console.log('fetching if schedule filled');
@@ -351,9 +357,9 @@ export const ScheduleTable = () => {
   const rows = useMemo(() => {
     let numberOfAssigned = 0;
     let row = [];
-    let shiftTime;
-    if (shift === 'days') shiftTime = '06:00:00';
-    if (shift === 'mids') shiftTime = '18:00:00';
+    // let shiftTime;
+    // if (shift === 'days') shiftTime = '06:00:00';
+    // if (shift === 'mids') shiftTime = '18:00:00';
 
     if (positions.length > 0) {
       row = positions
@@ -688,10 +694,7 @@ export const ScheduleTable = () => {
                       flexItem={true}
                       sx={{ color: theme.palette.grey[600] }}
                     >
-                      <EditShiftModal
-                        positions={positions}
-                        currDate={schedDate}
-                      />
+                      <EditShiftModal positions={positions} currDate={date} />
                     </Divider>
                   ) : (
                     <Divider
