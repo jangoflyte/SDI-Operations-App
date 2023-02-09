@@ -9,10 +9,12 @@ import {
   LinearProgress,
   Stack,
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 
 export const Weather = () => {
   const [weather, setWeather] = useState([]);
   const weatherAPI = 'https://api.weather.gov/gridpoints/MLB/57,53/forecast';
+  const theme = useTheme();
 
   const weatherFetch = async () => {
     const response = await fetch(`${weatherAPI}`);
@@ -88,12 +90,25 @@ export const Weather = () => {
           </Box>
         </Box>
 
-        <Box ml={20} sx={{ gap: 1, display: 'flex', flexDirection: 'column' }}>
+        <Box
+          ml={20}
+          sx={{
+            gap: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
           {weather.map((item, index) => (
             <span key={index}>
               <Accordion
                 sx={{
                   width: '90%',
+                  '&:hover': {
+                    backgroundColor:
+                      theme.palette.mode === 'light'
+                        ? '#fafafa'
+                        : theme.palette.grey[900],
+                  },
                 }}
               >
                 <AccordionSummary

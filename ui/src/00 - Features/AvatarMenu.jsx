@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import {
   Box,
   Divider,
@@ -8,29 +8,29 @@ import {
   Menu,
   Tooltip,
   Badge,
-  ListItemIcon
-} from '@mui/material'
-import Logout from '@mui/icons-material/Logout'
-import Key from '@mui/icons-material/Key'
-import { useNavigate } from 'react-router-dom'
-import { MemberContext } from '../MemberContext'
-import { EditStatusNavbar } from './EditStatusNavbar'
-import { useTheme } from '@mui/material/styles'
+  ListItemIcon,
+} from '@mui/material';
+import Logout from '@mui/icons-material/Logout';
+import Key from '@mui/icons-material/Key';
+import { useNavigate } from 'react-router-dom';
+import { MemberContext } from '../MemberContext';
+import { EditStatusNavbar } from './EditStatusNavbar';
+import { useTheme } from '@mui/material/styles';
 
 export const AvatarMenu = () => {
-  const navigate = useNavigate()
-  const { userAccount, removeCookie, setUserAccount, member } =
-    useContext(MemberContext)
-  const [anchorEl, setAnchorEl] = React.useState(null)
-  const open = Boolean(anchorEl)
-  const theme = useTheme()
+  const navigate = useNavigate();
+  const { userAccount, removeCookie, setUserAccount } =
+    useContext(MemberContext);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const theme = useTheme();
 
   const handleClick = event => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -72,9 +72,9 @@ export const AvatarMenu = () => {
                     borderRadius: '50%',
                     animation: 'ripple 1.2s infinite ease-in-out',
                     border: '1px solid currentColor',
-                    content: '""'
-                  }
-                }
+                    content: '""',
+                  },
+                },
               }}
             >
               <Avatar
@@ -83,7 +83,7 @@ export const AvatarMenu = () => {
                 sx={{
                   cursor: 'pointer',
                   bgcolor: userAccount.avatar_background,
-                  color: theme.palette.mode === 'light' ? 'inherit' : 'white'
+                  color: theme.palette.mode === 'light' ? 'inherit' : 'white',
                 }}
               >
                 {userAccount.first_name
@@ -113,7 +113,7 @@ export const AvatarMenu = () => {
               width: 32,
               height: 32,
               ml: -0.5,
-              mr: 1
+              mr: 1,
             },
             '&:before': {
               content: '""',
@@ -125,17 +125,17 @@ export const AvatarMenu = () => {
               height: 10,
               bgcolor: 'background.paper',
               transform: 'translateY(-50%) rotate(45deg)',
-              zIndex: 0
-            }
-          }
+              zIndex: 0,
+            },
+          },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem
           onClick={() => {
-            navigate(`/sfmembers/${userAccount.id}`)
-            handleClose()
+            navigate(`/sfmembers/${userAccount.id}`);
+            handleClose();
           }}
         >
           <Avatar
@@ -144,7 +144,7 @@ export const AvatarMenu = () => {
             sx={{
               cursor: 'pointer',
               bgcolor: userAccount.avatar_background,
-              color: theme.palette.mode === 'light' ? 'inherit' : 'white'
+              color: theme.palette.mode === 'light' ? 'inherit' : 'white',
             }}
           >
             {userAccount.first_name.charAt(0).toUpperCase()}
@@ -154,8 +154,8 @@ export const AvatarMenu = () => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            navigate(`/changepass`)
-            handleClose()
+            navigate(`/changepass`);
+            handleClose();
           }}
         >
           <ListItemIcon>
@@ -172,12 +172,12 @@ export const AvatarMenu = () => {
 
         <MenuItem
           onClick={() => {
-            removeCookie('user')
-            removeCookie('auth')
-            removeCookie('color_mode')
-            setUserAccount(null)
-            navigate('/login')
-            location.reload()
+            removeCookie('user');
+            removeCookie('auth');
+            removeCookie('color_mode');
+            setUserAccount(null);
+            navigate('/login');
+            location.reload();
           }}
         >
           <ListItemIcon>
@@ -187,5 +187,5 @@ export const AvatarMenu = () => {
         </MenuItem>
       </Menu>
     </React.Fragment>
-  )
-}
+  );
+};

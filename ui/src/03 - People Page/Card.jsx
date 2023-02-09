@@ -296,7 +296,18 @@ const BasicCard = props => {
                     width: '22%',
                   }}
                 >
-                  <Button fullWidth sx={{ borderRadius: 10 }}>
+                  <Button
+                    fullWidth
+                    sx={{
+                      borderRadius: 10,
+                      '&:hover': {
+                        backgroundColor:
+                          theme.palette.mode === 'light'
+                            ? '#fafafa'
+                            : theme.palette.grey[900],
+                      },
+                    }}
+                  >
                     <Box
                       alignItems='center'
                       sx={{

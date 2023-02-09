@@ -13,7 +13,7 @@ import {
 import CircleIcon from '@mui/icons-material/Circle';
 import PrintIcon from '@mui/icons-material/Print';
 import { useNavigate } from 'react-router-dom';
-//import { useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
@@ -163,14 +163,6 @@ export const Roster = props => {
         pt={2}
         sx={{ display: 'flex', width: '100%' }}
       >
-        {/* <Box
-          alignItems="center"
-          sx={{
-            display: "flex",
-            justifyContent: "left",
-            width: "5%",
-          }}
-        ></Box> */}
         <Box
           alignItems='center'
           sx={{
@@ -226,7 +218,7 @@ export const Roster = props => {
 const RosterPeople = props => {
   const { users, scheduledUser } = props;
   const navigate = useNavigate();
-  //const theme = useTheme();
+  const theme = useTheme();
 
   //console.log(users);
 
@@ -238,15 +230,6 @@ const RosterPeople = props => {
   return (
     <Box sx={{ width: '110%' }}>
       {users.map((user, index) => (
-        // <Stack
-
-        //   sx={{
-        //     bgcolor: theme.palette.mode === "light" ? "inherit" : "#212121",
-        //     gap: 2,
-        //     m: 1,
-        //     boxShadow: "1px 1px 2px #454545",
-        //   }}
-        // >
         <Stack
           key={index}
           component='span'
@@ -256,7 +239,6 @@ const RosterPeople = props => {
           p={1}
           sx={{ display: 'flex', ml: -4 }}
         >
-          {/* {console.log(user)} */}
           <ListItem
             alignItems='center'
             sx={{
@@ -268,7 +250,6 @@ const RosterPeople = props => {
             <Icon>
               <CircleIcon
                 sx={
-                  // scheduledUser.includes(user.id)
                   scheduledUser.filter(e => e.user === user.id).length > 0
                     ? { color: '#25CA12' }
                     : user.status === 'Available'
@@ -289,7 +270,18 @@ const RosterPeople = props => {
             <Tooltip title='Go to Account'>
               {user.status === 'Available' ? (
                 <Typography
-                  sx={{ color: '#6D7AE5', cursor: 'pointer' }}
+                  sx={{
+                    color: '#6D7AE5',
+                    cursor: 'pointer',
+                    p: 1,
+                    '&:hover': {
+                      backgroundColor:
+                        theme.palette.mode === 'light'
+                          ? '#fafafa'
+                          : theme.palette.grey[900],
+                    },
+                    borderRadius: '20px',
+                  }}
                   onClick={() => navigateToMember(user.id)}
                 >
                   {user.last_name.charAt(0).toUpperCase() +
@@ -300,7 +292,18 @@ const RosterPeople = props => {
                 </Typography>
               ) : (
                 <Typography
-                  sx={{ color: '#63666A', cursor: 'pointer' }}
+                  sx={{
+                    color: '#63666A',
+                    cursor: 'pointer',
+                    p: 1,
+                    '&:hover': {
+                      backgroundColor:
+                        theme.palette.mode === 'light'
+                          ? '#fafafa'
+                          : theme.palette.grey[900],
+                    },
+                    borderRadius: '20px',
+                  }}
                   onClick={() => navigateToMember(user.id)}
                 >
                   {user.last_name.charAt(0).toUpperCase() +
@@ -359,7 +362,6 @@ const RosterPeople = props => {
             )}
           </Box>
         </Stack>
-        // </Stack>
       ))}
     </Box>
   );

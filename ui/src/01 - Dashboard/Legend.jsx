@@ -3,8 +3,7 @@ import { Typography, Box, List, ListItem, Divider } from '@mui/material/';
 import WbTwilightIcon from '@mui/icons-material/WbTwilight';
 import BedtimeIcon from '@mui/icons-material/Bedtime';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import AccessibleForwardIcon from '@mui/icons-material/AccessibleForward';
+import AdjustIcon from '@mui/icons-material/Adjust';
 
 export const Legend = props => {
   const { allShifts, schedDate, rows } = props;
@@ -30,19 +29,13 @@ export const Legend = props => {
       <Divider variant='middle' flexItem />
       {schedDate.toDateString()}
       <List>
-        {/* {allShifts.map((index, shift) => (
-          <ListItem disablePadding key={index}>
-            <Typography>{shift}</Typography>
-          </ListItem>
-        ))} */}
-
         {allShifts.reduce((accumulator, currentValue) => {
           if (currentValue.date !== schedDate.toISOString().split('T')[0])
             return accumulator;
           accumulator.push(
             currentValue.shifts.map((shiftName, index) => (
               // can make the color change based on the index and set to the index of a color array ///////////
-              <ListItem disablePadding key={index} sx={{ gap: 1 }}>
+              <ListItem disablePadding key={index} sx={{ gap: 1.5 }}>
                 {shiftName === 'days' ? (
                   <WbSunnyIcon />
                 ) : shiftName === 'mids' ? (
@@ -50,7 +43,7 @@ export const Legend = props => {
                 ) : shiftName === 'swings' ? (
                   <WbTwilightIcon />
                 ) : (
-                  <AccessibleForwardIcon />
+                  <AdjustIcon />
                 )}
                 <Typography
                   sx={

@@ -70,7 +70,7 @@ export const EditShiftModal = props => {
   const theme = useTheme();
   const { positions } = props;
 
-  console.log('This is currdate ', currDate);
+  // console.log('This is currdate ', currDate);
   useEffect(() => {
     fetch(`${API}/post`, {
       method: 'GET',

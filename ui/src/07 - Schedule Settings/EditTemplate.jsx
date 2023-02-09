@@ -24,6 +24,9 @@ import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 const style = {
   position: 'absolute',
@@ -51,7 +54,6 @@ const MenuProps = {
 
 export const EditTemplate = props => {
   const { post } = props;
-
   const {
     API,
     setTriggerFetch,
@@ -64,7 +66,7 @@ export const EditTemplate = props => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [postName, setPostName] = useState('');
+  const [templateName, setTemplateName] = useState('');
   const [weapon, setWeapon] = useState(post.weapon_req);
   const [weaponIdArray, setWeaponIdArray] = useState(
     post.weapon_req.map(wep => wep.id)
@@ -84,7 +86,7 @@ export const EditTemplate = props => {
   const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
-    setPostName(post.name && post.name.post_name);
+    setTemplateName(post.name && post.name.post_name);
     setWeapon(post.weapon_req);
     setCert(post.cert_id);
     setShift(post.shift);
@@ -113,7 +115,7 @@ export const EditTemplate = props => {
   //need to modify this so old data is persisted
   const handleAdd = () => {
     const newPost = {
-      post_id: postName,
+      post_id: templateName,
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
@@ -231,7 +233,7 @@ export const EditTemplate = props => {
             variant='h4'
             sx={{ mt: 1, textAlign: 'center', fontWeight: 'bold' }}
           >
-            Edit Shift
+            Edit Template
           </Typography>
 
           <Stack
@@ -250,10 +252,10 @@ export const EditTemplate = props => {
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='Post Name'
-                value={postName}
+                label='Template Name'
+                value={templateName}
                 variant='outlined'
-                onChange={e => setPostName(e.target.value)}
+                onChange={e => setTemplateName(e.target.value)}
               />
             </FormControl>
             <FormControl sx={{ width: '40ch' }}>
@@ -393,7 +395,7 @@ export const EditTemplate = props => {
               justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            {/* <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='date'
                 label='Start Date'
@@ -450,7 +452,76 @@ export const EditTemplate = props => {
                   }
                 }}
               />
-            </FormControl>
+            </FormControl> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                id='date'
+                label='Start Date'
+                renderInput={props => <TextField {...props} />}
+                // type='date'
+                value={startDate.toISOString().split('T')[0]}
+                sx={{
+                  width: 220,
+                  cursor: 'pointer',
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={newValue => {
+                  if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
+                    return;
+                  newValue = newValue.$d.toISOString().split('T')[0];
+
+                  if (newValue === '') {
+                    let newDate = new Date();
+                    setStartDate(newDate);
+                    setEndDate(newDate);
+                    newValue = newDate.toISOString().split('T')[0];
+                  } else {
+                    console.log('textfield newValue: ', newValue);
+                    setStartDate(new Date(`${newValue}T00:00:00`));
+
+                    if (newValue > endDate.toISOString().split('T')[0]) {
+                      setEndDate(new Date(`${newValue}T00:00:00`));
+                    }
+                  }
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                id='date'
+                label='End Date'
+                renderInput={props => <TextField {...props} />}
+                // type='date'
+                value={endDate.toISOString().split('T')[0]}
+                sx={{
+                  width: 220,
+                  cursor: 'pointer',
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={newValue => {
+                  if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
+                    return;
+                  newValue = newValue.$d.toISOString().split('T')[0];
+
+                  if (newValue === '') {
+                    let newDate = new Date();
+                    setEndDate(newDate);
+                    newValue = newDate.toISOString().split('T')[0];
+                  } else {
+                    console.log('textfield newValue: ', newValue);
+                    setEndDate(new Date(`${newValue}T00:00:00`));
+                    if (newValue < startDate.toISOString().split('T')[0]) {
+                      setStartDate(new Date(`${newValue}T00:00:00`));
+                    }
+                  }
+                }}
+              />
+            </LocalizationProvider>
           </Stack>
 
           <Stack

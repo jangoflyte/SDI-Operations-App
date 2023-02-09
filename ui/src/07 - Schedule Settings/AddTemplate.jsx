@@ -18,6 +18,9 @@ import Checkbox from '@mui/material/Checkbox';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import ListItemText from '@mui/material/ListItemText';
 import { useTheme } from '@mui/material/styles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 const style = {
   position: 'absolute',
@@ -49,10 +52,11 @@ export const AddTemplate = props => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const [postName, setPostName] = useState('');
+  const [templateName, setTemplateName] = useState('');
   const [selectedPosts, setSelectedPosts] = useState([]);
   const [postIdArray, setPostIdArray] = useState([]);
   const [postArray, setPostArray] = useState([]);
+
   const [manReq, setManReq] = useState('');
   const [cert, setCert] = useState('');
   const [flight, setFlight] = useState('');
@@ -76,7 +80,7 @@ export const AddTemplate = props => {
   const handleAdd = () => {
     const shift = isDay ? 'days' : 'mids';
     const newPost = {
-      name: postName,
+      name: templateName,
       man_req: manReq,
       cert_id: cert,
       weapon_req: postIdArray,
@@ -99,7 +103,7 @@ export const AddTemplate = props => {
       .then(() => {
         handleClose();
         setTriggerFetch(curr => !curr);
-        setPostName(null);
+        setTemplateName(null);
         setManReq(null);
         setCert(null);
         setSelectedPosts([]);
@@ -172,18 +176,47 @@ export const AddTemplate = props => {
               <TextField
                 id='outlined-basic'
                 label='Template Name'
-                value={postName}
+                value={templateName}
                 variant='outlined'
-                onChange={e => setPostName(e.target.value)}
+                onChange={e => setTemplateName(e.target.value)}
               />
             </FormControl>
             <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='outlined-basic'
-                label='Time'
+                label='Manning Requirements'
                 value={manReq}
                 variant='outlined'
                 onChange={e => setManReq(e.target.value)}
+              />
+            </FormControl>
+          </Stack>
+
+          <Stack
+            direction='row'
+            mt={3}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              gap: 2,
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <TextField
+                id='outlined-basic'
+                label='Weapon Requirements'
+                //value={templateName}
+                variant='outlined'
+                //onChange={e => setTemplateName(e.target.value)}
+              />
+            </FormControl>
+            <FormControl sx={{ width: '40ch' }}>
+              <TextField
+                id='outlined-basic'
+                label='Cert Requirements'
+                //value={manReq}
+                variant='outlined'
+                //onChange={e => setManReq(e.target.value)}
               />
             </FormControl>
           </Stack>
@@ -262,7 +295,7 @@ export const AddTemplate = props => {
               justifyContent: 'space-between',
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            {/* <FormControl sx={{ width: '40ch' }}>
               <TextField
                 id='date'
                 label='Start Date'
@@ -319,7 +352,76 @@ export const AddTemplate = props => {
                   }
                 }}
               />
-            </FormControl>
+            </FormControl> */}
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                id='date'
+                label='Start Date'
+                renderInput={props => <TextField {...props} />}
+                // type='date'
+                value={startDate.toISOString().split('T')[0]}
+                sx={{
+                  width: 220,
+                  cursor: 'pointer',
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={newValue => {
+                  if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
+                    return;
+                  newValue = newValue.$d.toISOString().split('T')[0];
+
+                  if (newValue === '') {
+                    let newDate = new Date();
+                    setStartDate(newDate);
+                    setEndDate(newDate);
+                    newValue = newDate.toISOString().split('T')[0];
+                  } else {
+                    console.log('textfield newValue: ', newValue);
+                    setStartDate(new Date(`${newValue}T00:00:00`));
+
+                    if (newValue > endDate.toISOString().split('T')[0]) {
+                      setEndDate(new Date(`${newValue}T00:00:00`));
+                    }
+                  }
+                }}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                id='date'
+                label='End Date'
+                renderInput={props => <TextField {...props} />}
+                // type='date'
+                value={endDate.toISOString().split('T')[0]}
+                sx={{
+                  width: 220,
+                  cursor: 'pointer',
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={newValue => {
+                  if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
+                    return;
+                  newValue = newValue.$d.toISOString().split('T')[0];
+
+                  if (newValue === '') {
+                    let newDate = new Date();
+                    setEndDate(newDate);
+                    newValue = newDate.toISOString().split('T')[0];
+                  } else {
+                    console.log('textfield newValue: ', newValue);
+                    setEndDate(new Date(`${newValue}T00:00:00`));
+                    if (newValue < startDate.toISOString().split('T')[0]) {
+                      setStartDate(new Date(`${newValue}T00:00:00`));
+                    }
+                  }
+                }}
+              />
+            </LocalizationProvider>
           </Stack>
 
           <Stack
