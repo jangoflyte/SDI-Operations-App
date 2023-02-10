@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../MemberContext';
-import '../styles/MembersDetail.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../MemberContext'
+import '../styles/MembersDetail.css'
 import {
   Box,
   Button,
@@ -13,10 +13,10 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
+  DialogTitle
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import BorderColorIcon from '@mui/icons-material/BorderColor'
 
 const style = {
   position: 'absolute',
@@ -28,61 +28,60 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
-};
+  borderRadius: 4
+}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+      width: 250
+    }
+  }
+}
 
 export const EditPost = props => {
-  const { post } = props;
-
-  const { API, setTriggerFetch, toggleAlert, setToggleAlert, allWeapons } =
-    useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const [postName, setPostName] = useState('');
-  const [postDescription, setPostDescription] = useState('');
-  const [openItem, setOpenItem] = React.useState(false);
+  const { post } = props
+  const { API, setTriggerFetch, toggleAlert, setToggleAlert } =
+    useContext(MemberContext)
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
+  const [postName, setPostName] = useState('')
+  const [postDescription, setPostDescription] = useState('')
+  const [openItem, setOpenItem] = React.useState(false)
 
   useEffect(() => {
     setPostName(() => {
       if (post.post_name) {
-        return post.post_name;
+        return post.post_name
       } else {
-        return '';
+        return ''
       }
-    });
+    })
     setPostDescription(() => {
       if (post.description) {
-        return post.description;
+        return post.description
       } else {
-        return '';
+        return ''
       }
-    });
-  }, []);
+    })
+  }, [])
 
   const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
+    setOpenItem(true)
+  }
 
   const handleItemClose = () => {
-    setOpenItem(false);
-    handleClose();
-  };
+    setOpenItem(false)
+    handleClose()
+  }
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
-    const newPost = { post_name: postName, description: postDescription };
+    const newPost = { post_name: postName, description: postDescription }
 
     fetch(`${API}/post/${post.id}`, {
       method: 'PATCH',
@@ -90,37 +89,37 @@ export const EditPost = props => {
       redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggleAlert(!toggleAlert);
-        handleClose();
+        setTriggerFetch(curr => !curr)
+        setToggleAlert(!toggleAlert)
+        handleClose()
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   const handleDelete = positionId => {
     fetch(`${API}/post/${positionId}`, {
       method: 'DELETE',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggleAlert(!toggleAlert);
-        handleClose();
+        setTriggerFetch(curr => !curr)
+        setToggleAlert(!toggleAlert)
+        handleClose()
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   return (
     <>
@@ -155,7 +154,7 @@ export const EditPost = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              gap: 2,
+              gap: 2
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -180,20 +179,11 @@ export const EditPost = props => {
 
           <Stack
             direction='row'
-            pt={2}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          ></Stack>
-
-          <Stack
-            direction='row'
             mt={3}
             sx={{
               borderRadius: '30px',
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'right'
             }}
           >
             <Button
@@ -224,7 +214,7 @@ export const EditPost = props => {
                   sx={{
                     borderRadius: '30px',
                     color: 'red',
-                    mr: 2,
+                    mr: 2
                   }}
                   onClick={() => handleDelete(post.id)}
                   autoFocus
@@ -245,5 +235,5 @@ export const EditPost = props => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}

@@ -1,37 +1,37 @@
-import React, { useContext } from 'react';
-import { MemberContext } from '../MemberContext';
-import '../styles/MembersDetail.css';
-import '../styles/Card.css';
-import { Box, Typography, Stack, Chip, Paper, Divider } from '@mui/material';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
-import SecurityIcon from '@mui/icons-material/Security';
-import { EditTemplate } from './EditTemplate';
-import { WeaponQuals } from '../00 - Features/WeaponQuals';
+import React, { useContext } from 'react'
+import { MemberContext } from '../MemberContext'
+import '../styles/MembersDetail.css'
+import '../styles/Card.css'
+import { Box, Typography, Stack, Chip, Paper, Divider } from '@mui/material'
+import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium'
+import SecurityIcon from '@mui/icons-material/Security'
+import { EditTemplate } from './EditTemplate'
+import { WeaponQuals } from '../00 - Features/WeaponQuals'
 
 export const ScheduleCard = props => {
-  const { setPostsPage } = useContext(MemberContext);
-  const { post } = props;
+  const { setPostsPage } = useContext(MemberContext)
+  const { post } = props
 
   //console.log('post', post);
 
   const roleArray = postInput => {
-    let manReq = parseInt(postInput.man_req);
-    let resultArray = [];
+    let manReq = parseInt(postInput.man_req)
+    let resultArray = []
     for (let i = 1; i < manReq + 1; i++) {
       if (i === 1) {
-        resultArray.push({ name: 'Lead' });
+        resultArray.push({ name: 'Lead' })
       } else if (i === 2) {
-        resultArray.push({ name: 'Alpha' });
+        resultArray.push({ name: 'Alpha' })
       } else if (i === 3) {
-        resultArray.push({ name: 'Bravo' });
+        resultArray.push({ name: 'Bravo' })
       } else if (i === 4) {
-        resultArray.push({ name: 'Charlie' });
+        resultArray.push({ name: 'Charlie' })
       } else if (i > 4) {
-        resultArray.push({ name: 'Member' });
+        resultArray.push({ name: 'Member' })
       }
     }
-    return resultArray;
-  };
+    return resultArray
+  }
 
   return (
     <Paper
@@ -41,10 +41,7 @@ export const ScheduleCard = props => {
         mb: 5,
         width: '50vw',
         borderRadius: 3,
-        // pl: 5,
-        // pt: 2,
-        // pb: 5,
-        p: 3,
+        p: 3
       }}
     >
       <Divider textAlign='left'>Name</Divider>
@@ -67,6 +64,14 @@ export const ScheduleCard = props => {
         </Typography>
         <EditTemplate post={post} />
       </Stack>
+      <Divider textAlign='left'>Description</Divider>
+      <Stack
+        component='span'
+        direction='row'
+        alignItems='center'
+        pt={2}
+        sx={{ display: 'flex' }}
+      ></Stack>
       <Divider textAlign='left'>Information</Divider>
       <Stack
         component='span'
@@ -86,8 +91,8 @@ export const ScheduleCard = props => {
         </Box>
       </Stack>
       {roleArray(post).map((role, index) => {
-        if (index > 6) return null;
-        if (index > 5) return `...Aditional Posts hidden...`;
+        if (index > 6) return null
+        if (index > 5) return `...Aditional Posts hidden...`
         return (
           <Stack
             key={index}
@@ -144,8 +149,8 @@ export const ScheduleCard = props => {
               </Typography>
             </Box>
           </Stack>
-        );
+        )
       })}
     </Paper>
-  );
-};
+  )
+}

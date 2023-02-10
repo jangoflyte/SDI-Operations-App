@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../MemberContext';
-import '../styles/MembersDetail.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../MemberContext'
+import '../styles/MembersDetail.css'
 import {
   Box,
   Button,
@@ -9,20 +9,21 @@ import {
   Modal,
   TextField,
   InputLabel,
+  Menu,
   MenuItem,
   Stack,
   FormControl,
-  Tooltip,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ListItemText from '@mui/material/ListItemText';
-import { useTheme } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+  Tooltip
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import Select from '@mui/material/Select'
+import Checkbox from '@mui/material/Checkbox'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import ListItemText from '@mui/material/ListItemText'
+import { useTheme } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 const style = {
   position: 'absolute',
@@ -34,61 +35,61 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
-};
+  borderRadius: 4
+}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+      width: 250
+    }
+  }
+}
 
 export const EditShiftModal = props => {
-  const { API, setTriggerFetch, allFlights } = useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { API, setTriggerFetch, allFlights, triggerFetch } =
+    useContext(MemberContext)
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  const [shiftName, setshiftName] = useState('');
-  const [selectedPosts, setSelectedPosts] = useState([]);
-  const [postIdArray, setPostIdArray] = useState([]);
-  const [postArray, setPostArray] = useState([]);
-  const [manReq, setManReq] = useState('');
-  const [cert, setCert] = useState('');
-  const [flight, setFlight] = useState('');
-  const [schedDate, setSchedDate] = useState(new Date());
-  const { currDate } = props;
-  const [startDate, setStartDate] = useState(new Date(currDate));
-  const [endDate, setEndDate] = useState(new Date(currDate));
-  const [selectedDate, handleDateChange] = useState(new Date());
-  const [selectedDate1, handleDateChange1] = useState(new Date());
-  const theme = useTheme();
-  const { positions } = props;
+  const [shiftName, setshiftName] = useState('')
+  const [selectedPosts, setSelectedPosts] = useState([])
+  const [postIdArray, setPostIdArray] = useState([])
+  const [manReq, setManReq] = useState('')
+  const [cert, setCert] = useState('')
+  const [flight, setFlight] = useState('')
+  const [schedDate, setSchedDate] = useState(new Date())
+  const { currDate, allTemplates, postArray } = props
+  const [startDate, setStartDate] = useState(new Date(currDate))
+  const [endDate, setEndDate] = useState(new Date(currDate))
+  const [selectedDate, handleDateChange] = useState(new Date())
+  const [selectedDate1, handleDateChange1] = useState(new Date())
+  // const [postArray, setPostArray] = useState([])
+  const [template, setTemplate] = useState('')
+  const theme = useTheme()
+  const { positions, allTempaltes } = props
 
-  // console.log('This is currdate ', currDate);
+  // console.log('This is new allTemplates ', allTemplates)
+  // if (allTemplates.length > 0) {
+  //   let test = new Date(allTemplates[0].start_date)
+  //   console.log('This is test ', test)
+  // }
+  const addTemplate = temp => {
+    const postIds = temp.post_array.map(post => post.post_id)
+    // handlePostsBox(postIds)
+    setshiftName(temp.name)
+    // setStartDate(new Date(temp.start_date))
+    // setEndDate(new Date(temp.end_date))
+  }
+
   useEffect(() => {
-    fetch(`${API}/post`, {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => setPostArray(data))
-      .catch(err => console.log(err));
-  }, []);
-
-  useEffect(() => {
-    console.log('This is end date (edit shift modal)', endDate);
-  }, [endDate]);
-
-  useEffect(() => {
-    setStartDate(new Date(currDate));
-    setEndDate(new Date(currDate));
-  }, [currDate]);
+    setStartDate(new Date(currDate))
+    setEndDate(new Date(currDate))
+  }, [currDate])
 
   // useEffect(() => {
   //   const newPost = {
@@ -110,6 +111,7 @@ export const EditShiftModal = props => {
   const handleAdd = () => {
     // const shift = isDay ? 'days' : 'mids';
     const newShift = {
+      template: template,
       shift: shiftName.toLowerCase(),
       // man_req: manReq,
       // cert_id: cert,
@@ -118,9 +120,9 @@ export const EditShiftModal = props => {
       // shift: shift,
       post_array: postIdArray,
       start_datetime: startDate.toISOString(),
-      end_datetime: endDate.toISOString(),
-    };
-    console.log('newPost ', newShift, 'cert NaN ', parseInt(cert));
+      end_datetime: endDate.toISOString()
+    }
+    console.log('newPost ', newShift, 'cert NaN ', parseInt(cert))
 
     fetch(`${API}/position/`, {
       method: 'POST',
@@ -128,63 +130,41 @@ export const EditShiftModal = props => {
       redirect: 'follow',
       body: JSON.stringify(newShift),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        handleClose();
-        setTriggerFetch(curr => !curr);
-        setshiftName(null);
-        setManReq(null);
-        setCert(null);
-        setFlight(null);
+        handleClose()
+        setTriggerFetch(curr => !curr)
+        setshiftName(null)
+        setManReq(null)
+        setCert(null)
+        setFlight(null)
+        setTemplate('')
 
-        setSelectedPosts([]);
+        setSelectedPosts([])
         // setToggleAlert(true);
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
-
-  // const handleChange = event => {
-  //   const {
-  //     target: { checked },
-  //   } = event;
-  //   console.log(event);
-  //   console.log(
-  //     'value: checked ',
-  //     event.target.parentNode.parentNode.id,
-  //     checked
-  //   );
-  //   let wepId = parseInt(event.target.parentNode.parentNode.id);
-  //   if (checked && !postIdArray.includes(wepId)) {
-  //     setPostIdArray(curr => [...curr, wepId]);
-  //     setSelectedPosts(curr => [
-  //       ...curr,
-  //       allWeapons.filter(weapon => weapon.id === wepId)[0],
-  //     ]);
-  //   } else if (!checked) {
-  //     setPostIdArray(curr => curr.filter(wep => wep !== wepId));
-  //     setSelectedPosts(curr => curr.filter(weapon => weapon.id !== wepId));
-  //   }
-  // };
+        console.log('Error: ', err)
+      })
+  }
 
   const handlePostsBox = postId => {
     if (!postIdArray.includes(postId)) {
-      setPostIdArray(curr => [...curr, postId]);
+      setPostIdArray(curr => [...curr, postId])
       setSelectedPosts(curr => [
         ...curr,
-        postArray.filter(post => post.id === postId)[0],
-      ]);
+        postArray.filter(post => post.id === postId)[0]
+      ])
     } else if (postIdArray.includes(postId)) {
-      setPostIdArray(curr => curr.filter(post => post !== postId));
-      setSelectedPosts(curr => curr.filter(post => post.id !== postId));
+      setPostIdArray(curr => curr.filter(post => post !== postId))
+      setSelectedPosts(curr => curr.filter(post => post.id !== postId))
     }
-  };
+  }
 
   return (
     <>
@@ -203,8 +183,8 @@ export const EditShiftModal = props => {
                 backgroundColor:
                   theme.palette.mode === 'light'
                     ? '#fafafa'
-                    : theme.palette.grey[900],
-              },
+                    : theme.palette.grey[900]
+              }
             }}
           >
             SHIFT
@@ -244,17 +224,32 @@ export const EditShiftModal = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              gap: 2,
+              gap: 2
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
-              <TextField
-                id='outlined-basic'
-                label='Pick a Template (wip)'
-                // value={manReq}
-                variant='outlined'
-                // onChange={e => setManReq(e.target.value)}
-              />
+              <InputLabel id='demo-simple-select-label'>Template</InputLabel>
+              <Select
+                htmlFor='template'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={template}
+                label='Template'
+                onChange={e => setTemplate(e.target.value)}
+              >
+                <MenuItem value=''>No Template</MenuItem>
+                {Array.isArray(allTemplates) &&
+                  allTemplates.map((temp, index) => (
+                    <MenuItem
+                      id={temp.id}
+                      key={index}
+                      value={temp.id}
+                      onClick={() => addTemplate(temp)}
+                    >
+                      {temp.name}
+                    </MenuItem>
+                  ))}
+              </Select>
             </FormControl>
             <FormControl sx={{ width: '40ch' }}>
               <TextField
@@ -310,7 +305,7 @@ export const EditShiftModal = props => {
             sx={{
               display: 'flex',
               //justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -376,7 +371,7 @@ export const EditShiftModal = props => {
             sx={{
               display: 'flex',
               //justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             {/* <FormControl sx={{ width: '40ch' }}>
@@ -469,7 +464,7 @@ export const EditShiftModal = props => {
             sx={{
               borderRadius: '30px',
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'right'
             }}
           >
             <Button
@@ -484,5 +479,5 @@ export const EditShiftModal = props => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}

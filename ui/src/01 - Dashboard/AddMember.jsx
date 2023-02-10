@@ -96,6 +96,7 @@ const PostMemberModal = props => {
           }
         })
       }
+      console.log('THis is cert req ', cert_req)
       let certResults = user.certs.map(cert => cert.id >= cert_req[0].id)
       let posted = scheduledUser.map(user => user.user)
 

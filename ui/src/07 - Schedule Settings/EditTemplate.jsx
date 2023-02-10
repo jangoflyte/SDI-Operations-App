@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../MemberContext';
-import '../styles/MembersDetail.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../MemberContext'
+import '../styles/MembersDetail.css'
 import {
   Box,
   Button,
@@ -15,18 +15,18 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import BorderColorIcon from '@mui/icons-material/BorderColor';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ListItemText from '@mui/material/ListItemText';
-import { useTheme } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+  DialogTitle
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import BorderColorIcon from '@mui/icons-material/BorderColor'
+import Select from '@mui/material/Select'
+import Checkbox from '@mui/material/Checkbox'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import ListItemText from '@mui/material/ListItemText'
+import { useTheme } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 
 const style = {
   position: 'absolute',
@@ -38,79 +38,80 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
-};
+  borderRadius: 4
+}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+      width: 250
+    }
+  }
+}
 
 export const EditTemplate = props => {
-  const { post } = props;
+  const { post } = props
   const {
     API,
     setTriggerFetch,
     toggleAlert,
     setToggleAlert,
     allFlights,
-    allWeapons,
-  } = useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+    allWeapons
+  } = useContext(MemberContext)
+  const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  const [templateName, setTemplateName] = useState('');
-  const [weapon, setWeapon] = useState(post.weapon_req);
+  const [templateName, setTemplateName] = useState('')
+  const [weapon, setWeapon] = useState(post.weapon_req)
   const [weaponIdArray, setWeaponIdArray] = useState(
     post.weapon_req.map(wep => wep.id)
-  );
-  const [selectedPosts, setSelectedPosts] = useState([]);
-  const [postIdArray, setPostIdArray] = useState([]);
-  const [postArray, setPostArray] = useState([]);
-  const [manReq, setManReq] = useState(post.man_req);
-  const [cert, setCert] = useState(post.cert_id);
-  const [flight, setFlight] = useState('');
-  const [shift, setShift] = useState(post.shift);
+  )
+  const [selectedPosts, setSelectedPosts] = useState([])
+  const [postIdArray, setPostIdArray] = useState([])
+  const [postArray, setPostArray] = useState([])
+  const [manReq, setManReq] = useState(post.man_req)
+  const [cert, setCert] = useState(post.cert_id)
+  const [flight, setFlight] = useState('')
+  const [shift, setShift] = useState(post.shift)
 
-  const [openItem, setOpenItem] = React.useState(false);
-  const theme = useTheme();
-  const [schedDate, setSchedDate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [openItem, setOpenItem] = React.useState(false)
+
+  const [schedDate, setSchedDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
   useEffect(() => {
-    setTemplateName(post.name && post.name.post_name);
-    setWeapon(post.weapon_req);
-    setCert(post.cert_id);
-    setShift(post.shift);
-    setWeaponIdArray(post.weapon_req.map(wep => wep.id));
-  }, [props]);
+    setTemplateName(post.name && post.name.post_name)
+    setWeapon(post.weapon_req)
+    setCert(post.cert_id)
+    setShift(post.shift)
+    setWeaponIdArray(post.weapon_req.map(wep => wep.id))
+  }, [props])
 
   useEffect(() => {
     fetch(`${API}/post`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include'
     })
       .then(res => res.json())
       .then(data => setPostArray(data))
-      .catch(err => console.log(err));
-  }, []);
+      .catch(err => console.log(err))
+  }, [])
 
   const handleItemClickOpen = () => {
-    setOpenItem(true);
-  };
+    setOpenItem(true)
+  }
 
   const handleItemClose = () => {
-    setOpenItem(false);
-    handleClose();
-  };
+    setOpenItem(false)
+    handleClose()
+  }
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
@@ -119,8 +120,8 @@ export const EditTemplate = props => {
       man_req: manReq,
       cert_id: cert,
       weapon_req: weaponIdArray,
-      shift: shift,
-    };
+      shift: shift
+    }
 
     fetch(`${API}/position/${post.id}`, {
       method: 'PATCH',
@@ -128,37 +129,37 @@ export const EditTemplate = props => {
       redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggleAlert(!toggleAlert);
-        handleClose();
+        setTriggerFetch(curr => !curr)
+        setToggleAlert(!toggleAlert)
+        handleClose()
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   const handleDelete = positionId => {
     fetch(`${API}/position/${positionId}`, {
       method: 'DELETE',
       credentials: 'include',
-      redirect: 'follow',
+      redirect: 'follow'
     })
       .then(() => {
-        setTriggerFetch(curr => !curr);
-        setToggleAlert(!toggleAlert);
-        handleClose();
+        setTriggerFetch(curr => !curr)
+        setToggleAlert(!toggleAlert)
+        handleClose()
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
 
   // const handleChange = event => {
   //   const {
@@ -185,29 +186,29 @@ export const EditTemplate = props => {
 
   const handlePostsBox = postId => {
     if (!postIdArray.includes(postId)) {
-      setPostIdArray(curr => [...curr, postId]);
+      setPostIdArray(curr => [...curr, postId])
       setSelectedPosts(curr => [
         ...curr,
-        postArray.filter(post => post.id === postId)[0],
-      ]);
+        postArray.filter(post => post.id === postId)[0]
+      ])
     } else if (postIdArray.includes(postId)) {
-      setPostIdArray(curr => curr.filter(post => post !== postId));
-      setSelectedPosts(curr => curr.filter(post => post.id !== postId));
+      setPostIdArray(curr => curr.filter(post => post !== postId))
+      setSelectedPosts(curr => curr.filter(post => post.id !== postId))
     }
-  };
+  }
 
   const handleWeaponBox = wepId => {
     if (!weaponIdArray.includes(wepId)) {
-      setWeaponIdArray(curr => [...curr, wepId]);
+      setWeaponIdArray(curr => [...curr, wepId])
       setWeapon(curr => [
         ...curr,
-        allWeapons.filter(weapon => weapon.id === wepId)[0],
-      ]);
+        allWeapons.filter(weapon => weapon.id === wepId)[0]
+      ])
     } else if (weaponIdArray.includes(wepId)) {
-      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId));
-      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId));
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId))
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId))
     }
-  };
+  }
 
   return (
     <>
@@ -241,7 +242,7 @@ export const EditTemplate = props => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             {/* need to set name to be array of post to choose from 
@@ -276,7 +277,7 @@ export const EditTemplate = props => {
               display: 'flex',
               //justifyContent: 'center',
               justifyContent: 'space-between',
-              gap: 2,
+              gap: 2
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -392,7 +393,7 @@ export const EditTemplate = props => {
             sx={{
               display: 'flex',
               //justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             {/* <FormControl sx={{ width: '40ch' }}>
@@ -463,27 +464,27 @@ export const EditTemplate = props => {
                 value={startDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={newValue => {
                   if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
-                    return;
-                  newValue = newValue.$d.toISOString().split('T')[0];
+                    return
+                  newValue = newValue.$d.toISOString().split('T')[0]
 
                   if (newValue === '') {
-                    let newDate = new Date();
-                    setStartDate(newDate);
-                    setEndDate(newDate);
-                    newValue = newDate.toISOString().split('T')[0];
+                    let newDate = new Date()
+                    setStartDate(newDate)
+                    setEndDate(newDate)
+                    newValue = newDate.toISOString().split('T')[0]
                   } else {
-                    console.log('textfield newValue: ', newValue);
-                    setStartDate(new Date(`${newValue}T00:00:00`));
+                    console.log('textfield newValue: ', newValue)
+                    setStartDate(new Date(`${newValue}T00:00:00`))
 
                     if (newValue > endDate.toISOString().split('T')[0]) {
-                      setEndDate(new Date(`${newValue}T00:00:00`));
+                      setEndDate(new Date(`${newValue}T00:00:00`))
                     }
                   }
                 }}
@@ -498,25 +499,25 @@ export const EditTemplate = props => {
                 value={endDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={newValue => {
                   if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
-                    return;
-                  newValue = newValue.$d.toISOString().split('T')[0];
+                    return
+                  newValue = newValue.$d.toISOString().split('T')[0]
 
                   if (newValue === '') {
-                    let newDate = new Date();
-                    setEndDate(newDate);
-                    newValue = newDate.toISOString().split('T')[0];
+                    let newDate = new Date()
+                    setEndDate(newDate)
+                    newValue = newDate.toISOString().split('T')[0]
                   } else {
-                    console.log('textfield newValue: ', newValue);
-                    setEndDate(new Date(`${newValue}T00:00:00`));
+                    console.log('textfield newValue: ', newValue)
+                    setEndDate(new Date(`${newValue}T00:00:00`))
                     if (newValue < startDate.toISOString().split('T')[0]) {
-                      setStartDate(new Date(`${newValue}T00:00:00`));
+                      setStartDate(new Date(`${newValue}T00:00:00`))
                     }
                   }
                 }}
@@ -529,7 +530,7 @@ export const EditTemplate = props => {
             pt={2}
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           ></Stack>
 
@@ -539,7 +540,7 @@ export const EditTemplate = props => {
             sx={{
               borderRadius: '30px',
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'right'
             }}
           >
             <Button
@@ -570,7 +571,7 @@ export const EditTemplate = props => {
                   sx={{
                     borderRadius: '30px',
                     color: 'red',
-                    mr: 2,
+                    mr: 2
                   }}
                   onClick={() => handleDelete(post.id)}
                   autoFocus
@@ -591,5 +592,5 @@ export const EditTemplate = props => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}

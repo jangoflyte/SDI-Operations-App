@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { MemberContext } from '../MemberContext';
-import '../styles/MembersDetail.css';
+import React, { useContext, useState, useEffect } from 'react'
+import { MemberContext } from '../MemberContext'
+import '../styles/MembersDetail.css'
 import {
   Box,
   Button,
@@ -10,17 +10,17 @@ import {
   InputLabel,
   MenuItem,
   Stack,
-  FormControl,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ListItemText from '@mui/material/ListItemText';
-import { useTheme } from '@mui/material/styles';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+  FormControl
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import Select from '@mui/material/Select'
+import Checkbox from '@mui/material/Checkbox'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import ListItemText from '@mui/material/ListItemText'
+import { useTheme } from '@mui/material/styles'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 
 const style = {
   position: 'absolute',
@@ -32,61 +32,67 @@ const style = {
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
-  borderRadius: 4,
-};
+  borderRadius: 4
+}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
 const MenuProps = {
   PaperProps: {
     style: {
       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+      width: 250
+    }
+  }
+}
 
 export const AddTemplate = props => {
-  const { API, setTriggerFetch, allFlights } = useContext(MemberContext);
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { isDay, post } = props
+  const { API, setTriggerFetch, allFlights, allWeapons } =
+    useContext(MemberContext)
+  const theme = useTheme()
 
-  const [templateName, setTemplateName] = useState('');
-  const [selectedPosts, setSelectedPosts] = useState([]);
-  const [postIdArray, setPostIdArray] = useState([]);
-  const [postArray, setPostArray] = useState([]);
+  const [open, setOpen] = React.useState(false)
+  const handleOpen = () => setOpen(true)
+  const handleClose = () => setOpen(false)
 
-  const [manReq, setManReq] = useState('');
-  const [cert, setCert] = useState('');
-  const [flight, setFlight] = useState('');
-  const [schedDate, setSchedDate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const { isDay } = props;
-  const theme = useTheme();
+  const [templateName, setTemplateName] = useState('')
+  const [manReq, setManReq] = useState('')
+  const [description, setDescription] = useState('')
+  const [cert, setCert] = useState('')
+  const [weapon, setWeapon] = useState([])
+  const [weaponIdArray, setWeaponIdArray] = useState([])
+  const [flight, setFlight] = useState('')
+  const [selectedPosts, setSelectedPosts] = useState([])
+  const [postIdArray, setPostIdArray] = useState([])
+  const [postArray, setPostArray] = useState([])
+
+  const [schedDate, setSchedDate] = useState(new Date())
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
 
   useEffect(() => {
     fetch(`${API}/post`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include'
     })
       .then(res => res.json())
       .then(data => setPostArray(data))
-      .catch(err => console.log(err));
-  }, []);
+      .catch(err => console.log(err))
+  }, [])
 
   //need to modify this so old data is persisted
   const handleAdd = () => {
-    const shift = isDay ? 'days' : 'mids';
+    const shift = isDay ? 'days' : 'mids'
     const newPost = {
       name: templateName,
       man_req: manReq,
+      descritpion: descritpion,
       cert_id: cert,
       weapon_req: postIdArray,
-      shift: shift,
-    };
-    console.log('newPost ', newPost, 'cert NaN ', parseInt(cert));
+      shift: shift
+    }
+    console.log('newPost ', newPost, 'cert NaN ', parseInt(cert))
 
     fetch(`${API}/position/`, {
       method: 'POST',
@@ -94,37 +100,51 @@ export const AddTemplate = props => {
       redirect: 'follow',
       body: JSON.stringify(newPost),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       // .then(window.location.reload(false))
       .then(res => res.json())
       // .then(window.location.reload(false))
       .then(() => {
-        handleClose();
-        setTriggerFetch(curr => !curr);
-        setTemplateName(null);
-        setManReq(null);
-        setCert(null);
-        setSelectedPosts([]);
+        handleClose()
+        setTriggerFetch(curr => !curr)
+        setTemplateName(null)
+        setManReq(null)
+        setDescription(null)
+        setCert(null)
+        setSelectedPosts([])
         // setToggleAlert(true);
       })
       .catch(err => {
-        console.log('Error: ', err);
-      });
-  };
+        console.log('Error: ', err)
+      })
+  }
   const handlePostsBox = postId => {
     if (!postIdArray.includes(postId)) {
-      setPostIdArray(curr => [...curr, postId]);
+      setPostIdArray(curr => [...curr, postId])
       setSelectedPosts(curr => [
         ...curr,
-        postArray.filter(post => post.id === postId)[0],
-      ]);
+        postArray.filter(post => post.id === postId)[0]
+      ])
     } else if (postIdArray.includes(postId)) {
-      setPostIdArray(curr => curr.filter(post => post !== postId));
-      setSelectedPosts(curr => curr.filter(post => post.id !== postId));
+      setPostIdArray(curr => curr.filter(post => post !== postId))
+      setSelectedPosts(curr => curr.filter(post => post.id !== postId))
     }
-  };
+  }
+
+  const handleWeaponBox = wepId => {
+    if (!weaponIdArray.includes(wepId)) {
+      setWeaponIdArray(curr => [...curr, wepId])
+      setWeapon(curr => [
+        ...curr,
+        allWeapons.filter(weapon => weapon.id === wepId)[0]
+      ])
+    } else if (weaponIdArray.includes(wepId)) {
+      setWeaponIdArray(curr => curr.filter(wep => wep !== wepId))
+      setWeapon(curr => curr.filter(weapon => weapon.id !== wepId))
+    }
+  }
 
   return (
     <>
@@ -169,7 +189,7 @@ export const AddTemplate = props => {
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
-              gap: 2,
+              gap: 2
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -197,36 +217,88 @@ export const AddTemplate = props => {
             mt={3}
             sx={{
               display: 'flex',
-              justifyContent: 'space-between',
-              gap: 2,
+              justifyContent: 'space-between'
             }}
           >
-            <FormControl sx={{ width: '40ch' }}>
+            <FormControl fullWidth>
               <TextField
                 id='outlined-basic'
-                label='Weapon Requirements'
-                //value={templateName}
+                label='Description'
+                value={description}
                 variant='outlined'
-                //onChange={e => setTemplateName(e.target.value)}
-              />
-            </FormControl>
-            <FormControl sx={{ width: '40ch' }}>
-              <TextField
-                id='outlined-basic'
-                label='Cert Requirements'
-                //value={manReq}
-                variant='outlined'
-                //onChange={e => setManReq(e.target.value)}
+                onChange={e => setDescription(e.target.value)}
               />
             </FormControl>
           </Stack>
 
           <Stack
             direction='row'
-            pt={2}
+            mt={3}
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              gap: 2
+            }}
+          >
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-simple-select-label'>
+                Certifications
+              </InputLabel>
+              <Select
+                htmlFor='cert_id'
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={cert}
+                label='Certifications'
+                onChange={e => setCert(e.target.value)}
+              >
+                <MenuItem value={1}>Entry Controller</MenuItem>
+                <MenuItem value={2}>Patrol</MenuItem>
+                <MenuItem value={3}>Desk Sergeant</MenuItem>
+                <MenuItem value={4}>Flight Sergreant</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ width: '40ch' }}>
+              <InputLabel id='demo-multiple-checkbox-label'>Weapons</InputLabel>
+              <Select
+                labelId='demo-multiple-checkbox-label'
+                id='demo-multiple-checkbox'
+                multiple
+                value={weapon.map(weap => weap.weapon)}
+                input={<OutlinedInput label='Tag' />}
+                renderValue={selected => selected.join(', ')}
+                MenuProps={MenuProps}
+              >
+                {allWeapons.map((weaponObject, index) => (
+                  <MenuItem
+                    id={weaponObject.id}
+                    key={index}
+                    value={weaponObject.id}
+                    onClick={() => handleWeaponBox(weaponObject.id)}
+                  >
+                    <Checkbox
+                      // onChange={handleChange}
+                      checked={weapon.some(wep => wep.id === weaponObject.id)}
+                      // checked={weapon.some(
+                      //   wep => wep.weapon_id === weaponObject.id
+                      // )}
+
+                      // make seperate component ?
+                    />
+                    <ListItemText primary={weaponObject.weapon} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Stack>
+
+          <Stack
+            direction='row'
+            mt={3}
+            //pt={2}
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between'
             }}
           >
             <FormControl sx={{ width: '40ch' }}>
@@ -288,11 +360,12 @@ export const AddTemplate = props => {
 
           <Stack
             direction='row'
-            pt={2}
+            mt={3}
+            //pt={2}
             sx={{
               display: 'flex',
               //justifyContent: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'space-between'
             }}
           >
             {/* <FormControl sx={{ width: '40ch' }}>
@@ -363,27 +436,27 @@ export const AddTemplate = props => {
                 value={startDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={newValue => {
                   if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
-                    return;
-                  newValue = newValue.$d.toISOString().split('T')[0];
+                    return
+                  newValue = newValue.$d.toISOString().split('T')[0]
 
                   if (newValue === '') {
-                    let newDate = new Date();
-                    setStartDate(newDate);
-                    setEndDate(newDate);
-                    newValue = newDate.toISOString().split('T')[0];
+                    let newDate = new Date()
+                    setStartDate(newDate)
+                    setEndDate(newDate)
+                    newValue = newDate.toISOString().split('T')[0]
                   } else {
-                    console.log('textfield newValue: ', newValue);
-                    setStartDate(new Date(`${newValue}T00:00:00`));
+                    console.log('textfield newValue: ', newValue)
+                    setStartDate(new Date(`${newValue}T00:00:00`))
 
                     if (newValue > endDate.toISOString().split('T')[0]) {
-                      setEndDate(new Date(`${newValue}T00:00:00`));
+                      setEndDate(new Date(`${newValue}T00:00:00`))
                     }
                   }
                 }}
@@ -398,25 +471,25 @@ export const AddTemplate = props => {
                 value={endDate.toISOString().split('T')[0]}
                 sx={{
                   width: 220,
-                  cursor: 'pointer',
+                  cursor: 'pointer'
                 }}
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={newValue => {
                   if (!(newValue.$d instanceof Date && !isNaN(newValue.$d)))
-                    return;
-                  newValue = newValue.$d.toISOString().split('T')[0];
+                    return
+                  newValue = newValue.$d.toISOString().split('T')[0]
 
                   if (newValue === '') {
-                    let newDate = new Date();
-                    setEndDate(newDate);
-                    newValue = newDate.toISOString().split('T')[0];
+                    let newDate = new Date()
+                    setEndDate(newDate)
+                    newValue = newDate.toISOString().split('T')[0]
                   } else {
-                    console.log('textfield newValue: ', newValue);
-                    setEndDate(new Date(`${newValue}T00:00:00`));
+                    console.log('textfield newValue: ', newValue)
+                    setEndDate(new Date(`${newValue}T00:00:00`))
                     if (newValue < startDate.toISOString().split('T')[0]) {
-                      setStartDate(new Date(`${newValue}T00:00:00`));
+                      setStartDate(new Date(`${newValue}T00:00:00`))
                     }
                   }
                 }}
@@ -430,7 +503,7 @@ export const AddTemplate = props => {
             sx={{
               borderRadius: '30px',
               display: 'flex',
-              justifyContent: 'right',
+              justifyContent: 'right'
             }}
           >
             <Button
@@ -445,5 +518,5 @@ export const AddTemplate = props => {
         </Box>
       </Modal>
     </>
-  );
-};
+  )
+}
