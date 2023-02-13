@@ -491,14 +491,21 @@ const postPosition = async req => {
     let post_array = JSON.parse(workingTemplate[0].post_array)
     let result = []
     for (let post of post_array) {
+      let workingStart =
+        req.body.start_datetime.split('T')[0] +
+        'T' +
+        post.start_datetime.split('T')[1]
+      let workingEnd = new Date(workingStart)
+      workingEnd.setHours(workingEnd.getHours() + post.shift_duration)
+      // console.log('This is working starts ', workingStart)
       let postObject = {
         man_req: post.man_req,
         cert_id: post.cert_id,
         shift: post.shift,
         flight_assigned: post.flight_assigned,
         post_id: post.post_id,
-        start_datetime: req.body.start_datetime,
-        end_datetime: req.body.end_datetime
+        start_datetime: workingStart,
+        end_datetime: workingEnd
       }
       result.push(await knex('position').insert(postObject, ['*']))
     }

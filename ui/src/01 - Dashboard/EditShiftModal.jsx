@@ -244,7 +244,7 @@ export const EditShiftModal = props => {
                       id={temp.id}
                       key={index}
                       value={temp.id}
-                      onClick={() => addTemplate(temp)}
+                      // onClick={() => addTemplate(temp)}
                     >
                       {temp.name}
                     </MenuItem>

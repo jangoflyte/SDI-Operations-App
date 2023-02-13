@@ -8,8 +8,6 @@ exports.seed = async function (knex) {
   await knex('template').insert([
     {
       name: 'Test Panama',
-      start_date: '2023-06-20T00:00',
-      end_date: '2023-06-22T00:00',
       post_array: JSON.stringify([
         {
           post_id: 1,
@@ -19,7 +17,8 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 2,
@@ -29,7 +28,8 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 3,
@@ -39,7 +39,8 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 4,
@@ -49,7 +50,8 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 5,
@@ -59,37 +61,41 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 6,
-          man_req: 2,
-          cert_id: 2,
+          man_req: 1,
+          cert_id: 4,
           shift: 'days',
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 7,
-          man_req: 2,
+          man_req: 1,
           cert_id: 2,
           shift: 'days',
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 8,
-          man_req: 2,
+          man_req: 1,
           cert_id: 2,
           shift: 'days',
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 9,
@@ -99,7 +105,8 @@ exports.seed = async function (knex) {
           weapon_req: [1, 2],
           flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 1,
@@ -108,8 +115,9 @@ exports.seed = async function (knex) {
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 2,
@@ -118,8 +126,9 @@ exports.seed = async function (knex) {
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 3,
@@ -128,8 +137,9 @@ exports.seed = async function (knex) {
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 4,
@@ -138,8 +148,9 @@ exports.seed = async function (knex) {
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 5,
@@ -148,38 +159,88 @@ exports.seed = async function (knex) {
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 6,
-          man_req: 2,
-          cert_id: 2,
+          man_req: 1,
+          cert_id: 4,
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 7,
-          man_req: 2,
+          man_req: 1,
           cert_id: 2,
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
-          start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
         },
         {
           post_id: 8,
+          man_req: 1,
+          cert_id: 2,
+          shift: 'mids',
+          weapon_req: [1, 2],
+          flight_assigned: 1,
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
+        },
+        {
+          post_id: 9,
           man_req: 2,
           cert_id: 2,
           shift: 'mids',
           weapon_req: [1, 2],
           flight_assigned: 1,
+          start_datetime: '2023-06-20T18:00',
+          shift_duration: 12
+          // end_datetime: '2023-06-20T18:00'
+        }
+      ])
+    },
+    {
+      name: '8 Hours',
+      post_array: JSON.stringify([
+        {
+          post_id: 2,
+          man_req: 1,
+          cert_id: 3,
+          shift: 'days',
+          weapon_req: [1, 2],
+          flight_assigned: 1,
           start_datetime: '2023-06-20T06:00',
-          end_datetime: '2023-06-20T18:00'
+          shift_duration: 8
+        },
+        {
+          post_id: 2,
+          man_req: 1,
+          cert_id: 3,
+          shift: 'swings',
+          weapon_req: [1, 2],
+          flight_assigned: 3,
+          start_datetime: '2023-06-20T14:00',
+          shift_duration: 8
+        },
+        {
+          post_id: 2,
+          man_req: 1,
+          cert_id: 3,
+          shift: 'mids',
+          weapon_req: [1, 2],
+          flight_assigned: 5,
+          start_datetime: '2023-06-20T22:00',
+          shift_duration: 8
         }
       ])
     }
@@ -198,7 +259,7 @@ exports.seed = async function (knex) {
   "shift":"days",
   "flight_assigned":3
   "start_datetime":"2023-06-10T06:00:00.000Z",
-  "end_datetime":"2023-06-10T18:00:00.000Z",
+  // "end_datetime":"2023-06-10T18:00:00.000Z",
   "weapon_req": [{
     "weapon_id":1,
     "position_id":1,
