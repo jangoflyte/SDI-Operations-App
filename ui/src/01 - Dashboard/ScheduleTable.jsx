@@ -889,7 +889,7 @@ export const ScheduleTable = () => {
                   <TableCell />
                   <TableCell sx={{ fontWeight: 'bold' }}>Post</TableCell>
                   <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                    Manning Requirements 1``
+                    Manning Requirements
                   </TableCell>
                   <TableCell align='center' sx={{ fontWeight: 'bold' }}>
                     Weapon Requirements
