@@ -255,6 +255,7 @@ export const EditShiftModal = props => {
               <TextField
                 id='outlined-basic'
                 label='Shift Name'
+                disabled={template !== ''}
                 value={shiftName}
                 variant='outlined'
                 onChange={e => setshiftName(e.target.value)}
@@ -315,6 +316,7 @@ export const EditShiftModal = props => {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 value={flight}
+                disabled={template !== ''}
                 label='Flight'
                 onChange={e => setFlight(e.target.value)}
               >
@@ -337,6 +339,7 @@ export const EditShiftModal = props => {
                 multiple
                 value={selectedPosts.map(post => post.post_name)}
                 input={<OutlinedInput label='Tag' />}
+                disabled={template !== ''}
                 renderValue={selected => selected.join(', ')}
                 MenuProps={MenuProps}
               >
@@ -421,7 +424,7 @@ export const EditShiftModal = props => {
                   shrink: true,
                 }}
                 onChange={e => {
-                  if (e.target.value === '') {
+                  if (e.target.value === '')js {
                     setEndDate(new Date());
                     e.target.value = new Date().toISOString().split('T')[0];
                     setSchedDate(new Date(`${e.target.value}T00:00:00`));
@@ -438,6 +441,7 @@ export const EditShiftModal = props => {
                   label='Start Date'
                   renderInput={props => <TextField {...props} />}
                   value={startDate}
+                  disabled={template !== ''}
                   // theme={theme.palette.primary.main}
                   onChange={setStartDate}
 
@@ -449,6 +453,7 @@ export const EditShiftModal = props => {
                   label='End Date'
                   renderInput={props => <TextField {...props} />}
                   value={endDate}
+                  disabled={template !== ''}
                   // theme={theme}
                   onChange={setEndDate}
 

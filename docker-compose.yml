@@ -16,7 +16,7 @@ services:
     ports:
       - '5432:5432'
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      test: [ 'CMD-SHELL', 'pg_isready -U postgres' ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -37,10 +37,10 @@ services:
       - POSTGRES_PASSWORD=docker
       - POSTGRES_PORT=5432
       - POSTGRES_DB=capstone
-    # volumes:
-    #   - type: bind
-    #     source: ./api/src
-    #     target: /app/src
+    volumes:
+      - type: bind
+        source: ./api/src
+        target: /app/src
     command: npm run start
     restart: on-failure
     healthcheck:
@@ -56,10 +56,10 @@ services:
       - 'capstone-api'
     ports:
       - '3001:3000'
-    # volumes:
-    #   - type: bind
-    #     source: ./ui/src
-    #     target: /app/src
+    volumes:
+      - type: bind
+        source: ./ui/src
+        target: /app/src
     restart: on-failure
     healthcheck:
       test: curl --fail http://localhost:3000 || exit 1

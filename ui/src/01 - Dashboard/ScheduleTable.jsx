@@ -73,17 +73,41 @@ export const ScheduleTable = () => {
         // let workingEndDate = position.end_datetime.split('T')[0];
 
         if (workingStartDate === workingCurrentDate) {
-          currentDateShifts.push(position.shift)
+          currentDateShifts.push({
+            shiftName: position.shift,
+            shiftStartDateTime: position.start_datetime,
+            shiftEndDateTime: position.end_datetime
+          })
+          // console.log('position ', position, 'array, ', currentDateShifts)
         }
       })
 
-      let currentDateSet = new Set(currentDateShifts)
+      // let currentDateSet = new Set(currentDateShifts)
+
+      let shiftNameSet = new Set(
+        currentDateShifts.map(shift => shift.shiftName)
+      )
+
+      let currentDateSet = Array.from(shiftNameSet).map(shiftName => {
+        return {
+          shiftName,
+          shiftStartDateTime: currentDateShifts.find(
+            shift => shift.shiftName === shiftName
+          ).shiftStartDateTime,
+          shiftEndDateTime: currentDateShifts.find(
+            shift => shift.shiftName === shiftName
+          ).shiftEndDateTime
+        }
+      })
+
       let resultObj = {
         shifts: Array.from(currentDateSet).sort(),
         date: workingCurrentDate
       }
+      // console.log('This is result object ', resultObj)
       return resultObj
     })
+    console.log('This is shifts per day ', shiftsPerDay)
 
     // console.log('shifts per each day', shiftsPerDay);
 
@@ -310,8 +334,9 @@ export const ScheduleTable = () => {
   }
 
   const checkboxDisplay = (date, index, shiftInfo) => {
+    console.log('DATE ', date)
     if (schedFilled.length > 0) {
-      // console.log('schedFilled: ', schedFilled);
+      console.log('schedFilled: ', schedFilled)
       if (
         `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}` ===
           schedFilled[index].date &&
@@ -325,6 +350,8 @@ export const ScheduleTable = () => {
     } else {
       return <HighlightOffIcon color='error' />
     }
+
+    // return <HighlightOffIcon color='error' />
   }
 
   useMemo(() => {
@@ -645,6 +672,7 @@ export const ScheduleTable = () => {
           >
             {dateRange.map((date, index) => (
               <Paper key={index} elevation={4}>
+                {/* {console.log('DATE LOOK AT ME ', date)} */}
                 <Box
                   sx={
                     schedDate.getUTCDay() === date.getUTCDay()
@@ -746,7 +774,7 @@ export const ScheduleTable = () => {
                           //   }
                           sx={
                             shift === 'days' &&
-                            buttonShift === 'days' &&
+                            buttonShift.shiftName === 'days' &&
                             schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(229, 115, 115, 0.2)',
@@ -754,7 +782,7 @@ export const ScheduleTable = () => {
                                   color: '#ffa726'
                                 }
                               : shift === 'mids' &&
-                                buttonShift === 'mids' &&
+                                buttonShift.shiftName === 'mids' &&
                                 schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(66, 135, 245, 0.2)',
@@ -762,7 +790,7 @@ export const ScheduleTable = () => {
                                   color: '#7A8AFF'
                                 }
                               : shift === 'swings' &&
-                                buttonShift === 'swings' &&
+                                buttonShift.shiftName === 'swings' &&
                                 schedDate.toDateString() === date.toDateString()
                               ? {
                                   backgroundColor: 'rgba(76, 175, 80, 0.2)',
@@ -779,11 +807,11 @@ export const ScheduleTable = () => {
                               : {
                                   borderRadius: 0,
                                   color:
-                                    buttonShift === 'days'
+                                    buttonShift.shiftName === 'days'
                                       ? '#ffa726'
-                                      : buttonShift === 'mids'
+                                      : buttonShift.shiftName === 'mids'
                                       ? '#7A8AFF'
-                                      : buttonShift === 'swings'
+                                      : buttonShift.shiftName === 'swings'
                                       ? '#4caf50'
                                       : '#ee82ee'
                                 }
@@ -803,12 +831,12 @@ export const ScheduleTable = () => {
                                 0
                               )
                             )
-                            setShift(buttonShift)
+                            setShift(buttonShift.shiftName)
                             fetchSchedule()
                           }}
                           endIcon={checkboxDisplay(date, index, 'days')}
                         >
-                          {buttonShift}
+                          {buttonShift.shiftName}
                         </Button>
                       ))
                     )
@@ -861,7 +889,7 @@ export const ScheduleTable = () => {
                   <TableCell />
                   <TableCell sx={{ fontWeight: 'bold' }}>Post</TableCell>
                   <TableCell align='right' sx={{ fontWeight: 'bold' }}>
-                    Manning Requirements
+                    Manning Requirements 1``
                   </TableCell>
                   <TableCell align='center' sx={{ fontWeight: 'bold' }}>
                     Weapon Requirements

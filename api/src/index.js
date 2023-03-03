@@ -1,6 +1,6 @@
-const app = require('./app');
-const PORT = process.env.PORT || 8080;
+const app = require('./app')
+const PORT = process.env.PORT || 8080
 
 app.listen(PORT, () => {
-    console.log(`Capstone application listening on ${PORT}`);
+  console.log(`PASS API listening on ${PORT}`)
 })

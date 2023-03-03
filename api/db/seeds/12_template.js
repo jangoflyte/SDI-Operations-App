@@ -7,7 +7,7 @@ exports.seed = async function (knex) {
   await knex('template').del()
   await knex('template').insert([
     {
-      name: 'Test Panama',
+      name: 'Panama 12s',
       post_array: JSON.stringify([
         {
           post_id: 1,
@@ -222,6 +222,8 @@ exports.seed = async function (knex) {
           start_datetime: '2023-06-20T06:00',
           shift_duration: 8
         },
+
+        // Swings ---------------------------------
         {
           post_id: 2,
           man_req: 1,
@@ -232,6 +234,7 @@ exports.seed = async function (knex) {
           start_datetime: '2023-06-20T14:00',
           shift_duration: 8
         },
+        // Mids ---------------------------------
         {
           post_id: 2,
           man_req: 1,
