@@ -39,15 +39,15 @@ Check Heroku Logs
 
 ## Commands:
 
-docker-compose up --build
+`docker-compose up --build`
 
-docker-compose down --rmi all
+`docker-compose down --rmi all`
 
 joins:
 
-select * from user_table full outer join certification  on cert_id = certification.id;
+`select * from user_table full outer join certification  on cert_id = certification.id;`
 
-select * from weapon_user full join user_table on user_id = user_table.id full join weapon on weapon_id = weapon.id;
+`select * from weapon_user full join user_table on user_id = user_table.id full join weapon on weapon_id = weapon.id;`
 
 ## API Dependacies
     - npm i nodemon
